@@ -11,6 +11,9 @@ interface EnvConfig {
   JWT_EXPIRES_IN: string;
   FRONTEND_URL: string;
   BACKEND_URL: string;
+  CORS_ALLOWED_ORIGINS: string;
+  COOKIE_DOMAIN?: string;
+  COOKIE_SAMESITE: 'lax' | 'none' | 'strict';
   MOLLIE_API_KEY: string;
   MOLLIE_WEBHOOK_URL: string;
   RESEND_API_KEY: string;
@@ -49,8 +52,11 @@ export const env: EnvConfig = {
   DATABASE_URL: getEnvVar('DATABASE_URL'),
   JWT_SECRET: getEnvVar('JWT_SECRET'),
   JWT_EXPIRES_IN: getEnvVar('JWT_EXPIRES_IN', '7d'),
-  FRONTEND_URL: getEnvVar('FRONTEND_URL', 'http://localhost:8080'),
-  BACKEND_URL: getEnvVar('BACKEND_URL', 'http://localhost:3000'),
+  FRONTEND_URL: getEnvVar('FRONTEND_URL'),
+  BACKEND_URL: getEnvVar('BACKEND_URL'),
+  CORS_ALLOWED_ORIGINS: getEnvVar('CORS_ALLOWED_ORIGINS', getEnvVar('FRONTEND_URL')),
+  COOKIE_DOMAIN: process.env.COOKIE_DOMAIN,
+  COOKIE_SAMESITE: (process.env.COOKIE_SAMESITE as EnvConfig['COOKIE_SAMESITE']) || 'lax',
   MOLLIE_API_KEY: getEnvVar('MOLLIE_API_KEY'),
   MOLLIE_WEBHOOK_URL: getEnvVar('MOLLIE_WEBHOOK_URL'),
   RESEND_API_KEY: getEnvVar('RESEND_API_KEY'),

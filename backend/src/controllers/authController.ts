@@ -127,15 +127,19 @@ function generateToken(customer: Customer): string {
   };
 
   return jwt.sign(payload, env.JWT_SECRET, {
-    expiresIn: env.JWT_EXPIRES_IN,
+    expiresIn: env.JWT_EXPIRES_IN as any,
   });
 }
 
 function setAuthCookie(res: Response, token: string): void {
+  const sameSite = env.COOKIE_SAMESITE;
+  const secure = env.NODE_ENV === 'production' || sameSite === 'none';
+
   res.cookie('auth_token', token, {
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure,
+    sameSite,
+    domain: env.COOKIE_DOMAIN,
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
   });
 }

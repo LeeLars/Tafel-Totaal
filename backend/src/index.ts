@@ -17,8 +17,30 @@ import adminRoutes from './routes/admin.routes';
 
 const app: Express = express();
 
+const allowedOrigins = env.CORS_ALLOWED_ORIGINS
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+function isAllowedOrigin(origin: string): boolean {
+  if (allowedOrigins.includes(origin)) return true;
+
+  try {
+    const url = new URL(origin);
+    if (url.hostname.endsWith('.netlify.app')) return true;
+  } catch {
+    return false;
+  }
+
+  return false;
+}
+
 app.use(cors({
-  origin: env.FRONTEND_URL,
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (isAllowedOrigin(origin)) return callback(null, true);
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -85,7 +107,7 @@ async function startServer(): Promise<void> {
 🚀 Tafel Totaal API Server
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📍 Environment: ${env.NODE_ENV}
-🌐 Server:      http://localhost:${env.PORT}
+🌐 Server:      ${env.BACKEND_URL}
 📦 Database:    Connected
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     `);

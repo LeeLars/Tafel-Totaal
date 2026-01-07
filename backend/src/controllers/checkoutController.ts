@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { query, queryOne } from '../config/database';
-import { Order, CartItem } from '../types';
+// import { query, queryOne } from '../config/database';
+import { CartItem } from '../types';
 
 export async function createOrder(req: Request, res: Response): Promise<void> {
   try {
-    const { deliveryMethod, customer, deliveryAddress } = req.body;
+    const { deliveryMethod: _deliveryMethod, customer: _customer, deliveryAddress: _deliveryAddress } = req.body;
     
     // TODO: Implement full checkout logic
     // 1. Get cart from session

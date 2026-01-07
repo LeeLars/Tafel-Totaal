@@ -29,7 +29,7 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
   }
 }
 
-export function optionalAuth(req: Request, res: Response, next: NextFunction): void {
+export function optionalAuth(req: Request, _res: Response, next: NextFunction): void {
   const token = req.cookies?.auth_token;
 
   if (token) {

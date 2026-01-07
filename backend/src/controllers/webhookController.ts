@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { query, queryOne } from '../config/database';
-import { Order } from '../types';
+// import { query, queryOne } from '../config/database';
+// import { Order } from '../types';
 
 export async function handleMollieWebhook(req: Request, res: Response): Promise<void> {
   try {

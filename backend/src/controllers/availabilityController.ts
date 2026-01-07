@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { query, queryOne } from '../config/database';
+// import { query, queryOne } from '../config/database';
 
 export async function checkAvailability(req: Request, res: Response): Promise<void> {
   try {
-    const { type, id, quantity, startDate, endDate, persons } = req.body;
+    const { type: _type, id: _id, quantity, startDate: _startDate, endDate: _endDate, persons: _persons } = req.body;
 
     // TODO: Implement full availability check
     // 1. Get product/package stock

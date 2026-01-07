@@ -116,7 +116,7 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
 
 export async function generatePickingList(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id: _id } = req.params;
 
     // TODO: Implement PDF generation
     res.status(501).json({ 
@@ -130,7 +130,7 @@ export async function generatePickingList(req: Request, res: Response): Promise<
   }
 }
 
-export async function getDashboardStats(req: Request, res: Response): Promise<void> {
+export async function getDashboardStats(_req: Request, res: Response): Promise<void> {
   try {
     const [
       todayOrders,
