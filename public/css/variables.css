@@ -1,0 +1,94 @@
+:root {
+  /* ============================================
+     KLEUREN - Tafel Totaal Huisstijl
+     ============================================ */
+  
+  /* Primaire Kleuren */
+  --color-primary: #903D3E;
+  --color-primary-dark: #7A3233;
+  --color-primary-light: #B56B6C;
+  
+  /* Neutrale Kleuren */
+  --color-black: #1A1A1A;
+  --color-dark-gray: #4A4A4A;
+  --color-gray: #666666;
+  --color-light-gray: #E0E0E0;
+  --color-off-white: #F5F5F5;
+  --color-white: #FFFFFF;
+  
+  /* Status Kleuren */
+  --color-success: #2E7D32;
+  --color-error: #D32F2F;
+  --color-warning: #ED6C02;
+  
+  /* ============================================
+     TYPOGRAFIE - Fluid Scale
+     ============================================ */
+  
+  /* Font Families */
+  --font-display: 'Righteous', cursive;
+  --font-body: 'Roboto', sans-serif;
+  
+  /* Fluid Font Sizes (Major Third - 1.25) */
+  --font-size-sm: clamp(0.8rem, 0.17vw + 0.76rem, 0.89rem);
+  --font-size-base: clamp(1rem, 0.34vw + 0.91rem, 1.19rem);
+  --font-size-md: clamp(1.25rem, 0.61vw + 1.1rem, 1.58rem);
+  --font-size-lg: clamp(1.56rem, 1vw + 1.31rem, 2.11rem);
+  --font-size-xl: clamp(1.95rem, 1.56vw + 1.56rem, 2.81rem);
+  --font-size-xxl: clamp(2.44rem, 2.38vw + 1.85rem, 3.75rem);
+  --font-size-xxxl: clamp(3.05rem, 3.54vw + 2.17rem, 5rem);
+  
+  /* ============================================
+     SPACING - Consistent Scale
+     ============================================ */
+  
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+  --space-xxxl: 64px;
+  
+  /* ============================================
+     LAYOUT
+     ============================================ */
+  
+  --container-max: 1200px;
+  --container-narrow: 800px;
+  --container-padding: 20px;
+  
+  /* ============================================
+     BORDERS & SHADOWS
+     ============================================ */
+  
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-xl: 16px;
+  --border-radius-full: 9999px;
+  
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  
+  /* ============================================
+     TRANSITIONS
+     ============================================ */
+  
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+  
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+  
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+}
