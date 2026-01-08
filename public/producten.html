@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Bekijk onze complete collectie losse producten. Servies, bestek, glaswerk en decoratie voor verhuur.">
+  
+  <title>Producten | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/site/favicon.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/producten.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main>
+    <!-- Page Header -->
+    <section class="page-header">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/">Home</a></li>
+            <li aria-current="page">Producten</li>
+          </ol>
+        </nav>
+        <h1>Losse Producten</h1>
+        <p>Huur losse items voor jouw evenement. Van servies tot decoratie.</p>
+      </div>
+    </section>
+
+    <!-- Filters & Results -->
+    <section class="products-section">
+      <div class="container">
+        <div class="products-layout">
+          <!-- Sidebar Filters -->
+          <aside class="filters">
+            <div class="filters__header">
+              <h2>Filters</h2>
+              <button class="filters__reset" id="reset-filters">Reset</button>
+            </div>
+
+            <!-- Category Filter -->
+            <div class="filter-group">
+              <h3 class="filter-group__title">Categorie</h3>
+              <div class="filter-group__options">
+                <label class="filter-checkbox">
+                  <input type="checkbox" name="category" value="servies">
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">Servies</span>
+                </label>
+                <label class="filter-checkbox">
+                  <input type="checkbox" name="category" value="bestek">
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">Bestek</span>
+                </label>
+                <label class="filter-checkbox">
+                  <input type="checkbox" name="category" value="glaswerk">
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">Glaswerk</span>
+                </label>
+                <label class="filter-checkbox">
+                  <input type="checkbox" name="category" value="decoratie">
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">Decoratie</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Price Filter -->
+            <div class="filter-group">
+              <h3 class="filter-group__title">Prijs per stuk</h3>
+              <div class="filter-group__options">
+                <label class="filter-checkbox">
+                  <input type="checkbox" name="price" value="0-1">
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">€0 - €1</span>
+                </label>
+                <label class="filter-checkbox">
+                  <input type="checkbox" name="price" value="1-2">
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">€1 - €2</span>
+                </label>
+                <label class="filter-checkbox">
+                  <input type="checkbox" name="price" value="2-5">
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">€2 - €5</span>
+                </label>
+                <label class="filter-checkbox">
+                  <input type="checkbox" name="price" value="5+">
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">€5+</span>
+                </label>
+              </div>
+            </div>
+          </aside>
+
+          <!-- Main Content -->
+          <div class="products-content">
+            <!-- Toolbar -->
+            <div class="products-toolbar">
+              <div class="products-toolbar__info">
+                <span id="products-count">Laden...</span>
+              </div>
+              <div class="products-toolbar__actions">
+                <label for="sort-select" class="sr-only">Sorteer op</label>
+                <select id="sort-select" class="form-select">
+                  <option value="name-asc">Naam (A-Z)</option>
+                  <option value="name-desc">Naam (Z-A)</option>
+                  <option value="price-asc">Prijs (Laag-Hoog)</option>
+                  <option value="price-desc">Prijs (Hoog-Laag)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="products-grid">
+              <div class="products-loading">
+                <div class="spinner"></div>
+                <p>Producten laden...</p>
+              </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/pages/producten.js"></script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 /* ============================================
    BASE STYLES - Tafel Totaal
+   Brutalist Corporate Design System
    ============================================ */
 
 /* Reset */
@@ -15,41 +16,67 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  scroll-padding-top: var(--header-height);
 }
 
 body {
   font-family: var(--font-body);
   font-size: var(--font-size-base);
-  line-height: 1.6;
-  color: var(--color-black);
-  background-color: var(--color-off-white);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--color-charcoal);
+  background-color: var(--color-white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Typography */
-h1, h2, h3 {
+/* Brutalist Typography */
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 400;
-  line-height: 1.2;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
   color: var(--color-black);
+  text-wrap: balance;
 }
 
-h4, h5, h6 {
-  font-family: var(--font-body);
-  font-weight: 700;
-  line-height: 1.4;
+h1 { 
+  font-size: var(--font-size-display);
+  line-height: var(--line-height-none);
 }
-
-h1 { font-size: var(--font-size-xxxl); }
-h2 { font-size: var(--font-size-xxl); }
-h3 { font-size: var(--font-size-xl); }
-h4 { font-size: var(--font-size-lg); }
-h5 { font-size: var(--font-size-md); }
-h6 { font-size: var(--font-size-base); }
+h2 { font-size: var(--font-size-xxxl); }
+h3 { font-size: var(--font-size-xxl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-md); }
 
 p {
   margin-bottom: var(--space-md);
+  max-width: 65ch;
+}
+
+/* Labels & Small Text - Uppercase Brutalist */
+.label,
+.overline {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+.overline {
+  display: block;
+  margin-bottom: var(--space-sm);
+}
+
+/* Lead Text */
+.lead {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-dark-gray);
 }
 
 /* Links */
@@ -115,9 +142,159 @@ button {
   padding: 0 var(--container-padding);
 }
 
+.container--wide {
+  max-width: var(--container-wide);
+}
+
 .container--narrow {
   max-width: var(--container-narrow);
 }
+
+.container--full {
+  max-width: none;
+  padding: 0;
+}
+
+/* ============================================
+   BENTO GRID SYSTEM (12 Column)
+   ============================================ */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--grid-gap);
+}
+
+.bento-grid--dense {
+  grid-auto-flow: dense;
+}
+
+/* Column spans */
+.col-1 { grid-column: span 1; }
+.col-2 { grid-column: span 2; }
+.col-3 { grid-column: span 3; }
+.col-4 { grid-column: span 4; }
+.col-5 { grid-column: span 5; }
+.col-6 { grid-column: span 6; }
+.col-7 { grid-column: span 7; }
+.col-8 { grid-column: span 8; }
+.col-9 { grid-column: span 9; }
+.col-10 { grid-column: span 10; }
+.col-11 { grid-column: span 11; }
+.col-12 { grid-column: span 12; }
+
+/* Row spans */
+.row-2 { grid-row: span 2; }
+.row-3 { grid-row: span 3; }
+
+@media (max-width: 1024px) {
+  .col-md-6 { grid-column: span 6; }
+  .col-md-12 { grid-column: span 12; }
+}
+
+@media (max-width: 768px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+  .col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
+  .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+    grid-column: span 1;
+  }
+}
+
+/* ============================================
+   SECTION SPACING
+   ============================================ */
+
+.section {
+  padding: var(--space-5xl) 0;
+  position: relative;
+}
+
+.section--sm {
+  padding: var(--space-3xl) 0;
+}
+
+.section--lg {
+  padding: var(--space-6xl) 0;
+}
+
+.section--dark {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.section--dark h1,
+.section--dark h2,
+.section--dark h3,
+.section--dark h4,
+.section--dark h5,
+.section--dark h6 {
+  color: var(--color-white);
+}
+
+.section--concrete {
+  background-color: var(--color-concrete);
+}
+
+.section--bordered {
+  border-top: var(--border-width) solid var(--border-color);
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+/* Section Header */
+.section__header {
+  margin-bottom: var(--space-3xl);
+}
+
+.section__header--center {
+  text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   SCROLL ANIMATIONS
+   ============================================ */
+
+[data-animate] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+}
+
+[data-animate].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-animate="fade"] {
+  transform: none;
+}
+
+[data-animate="slide-left"] {
+  transform: translateX(-40px);
+}
+
+[data-animate="slide-right"] {
+  transform: translateX(40px);
+}
+
+[data-animate="scale"] {
+  transform: scale(0.95);
+}
+
+/* Stagger delays */
+[data-delay="1"] { transition-delay: 0.1s; }
+[data-delay="2"] { transition-delay: 0.2s; }
+[data-delay="3"] { transition-delay: 0.3s; }
+[data-delay="4"] { transition-delay: 0.4s; }
+[data-delay="5"] { transition-delay: 0.5s; }
+
+/* ============================================
+   UTILITIES
+   ============================================ */
 
 /* Screen Reader Only */
 .sr-only {
@@ -145,14 +322,54 @@ button {
 .text-primary { color: var(--color-primary); }
 .text-gray { color: var(--color-gray); }
 .text-white { color: var(--color-white); }
+.text-black { color: var(--color-black); }
+
+.text-uppercase {
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+}
 
 /* Spacing Utilities */
 .mt-sm { margin-top: var(--space-sm); }
 .mt-md { margin-top: var(--space-md); }
 .mt-lg { margin-top: var(--space-lg); }
 .mt-xl { margin-top: var(--space-xl); }
+.mt-2xl { margin-top: var(--space-2xl); }
+.mt-3xl { margin-top: var(--space-3xl); }
 
 .mb-sm { margin-bottom: var(--space-sm); }
 .mb-md { margin-bottom: var(--space-md); }
 .mb-lg { margin-bottom: var(--space-lg); }
 .mb-xl { margin-bottom: var(--space-xl); }
+.mb-2xl { margin-bottom: var(--space-2xl); }
+.mb-3xl { margin-bottom: var(--space-3xl); }
+
+/* Display Utilities */
+.d-none { display: none; }
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+@media (min-width: 768px) {
+  .d-md-none { display: none; }
+  .d-md-block { display: block; }
+  .d-md-flex { display: flex; }
+}
+
+@media (min-width: 1024px) {
+  .d-lg-none { display: none; }
+  .d-lg-block { display: block; }
+  .d-lg-flex { display: flex; }
+}
+
+/* Divider */
+.divider {
+  width: 100%;
+  height: var(--border-width);
+  background-color: var(--border-color);
+  margin: var(--space-2xl) 0;
+}
+
+.divider--dark {
+  background-color: var(--border-color-dark);
+}

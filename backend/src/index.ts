@@ -14,6 +14,7 @@ import ordersRoutes from './routes/orders.routes';
 import availabilityRoutes from './routes/availability.routes';
 import webhooksRoutes from './routes/webhooks.routes';
 import adminRoutes from './routes/admin.routes';
+import bezorgzonesRoutes from './routes/bezorgzones.routes';
 
 const app: Express = express();
 
@@ -72,6 +73,7 @@ app.use('/api/orders', ordersRoutes);
 app.use('/api/availability', availabilityRoutes);
 app.use('/api/webhooks', webhooksRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/bezorgzones', bezorgzonesRoutes);
 
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ success: false, error: 'Endpoint not found' });

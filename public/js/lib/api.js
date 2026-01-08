@@ -3,7 +3,10 @@
  * REST API wrapper met credentials (httpOnly cookies)
  */
 
-const API_BASE_URL = 'https://api.tafeltotaal.be';
+// API Base URL - automatically detects environment
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000'
+  : 'https://tafel-totaal-production.up.railway.app';
 
 async function apiCall(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
@@ -134,4 +137,29 @@ export const availabilityAPI = {
     })
 };
 
-export { apiCall };
+export const adminAPI = {
+  getOrders: (filters = {}) => {
+    const params = new URLSearchParams(filters).toString();
+    return apiCall(`/api/admin/orders${params ? `?${params}` : ''}`);
+  },
+  
+  getOrderById: (id) => 
+    apiCall(`/api/admin/orders/${id}`),
+  
+  updateOrderStatus: (id, status) => 
+    apiCall(`/api/admin/orders/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status })
+    }),
+  
+  getPickingListUrl: (id) => 
+    `${API_BASE_URL}/api/admin/orders/${id}/picking-list`,
+  
+  getInvoiceUrl: (id) => 
+    `${API_BASE_URL}/api/admin/orders/${id}/invoice`,
+  
+  getDashboardStats: () => 
+    apiCall('/api/admin/dashboard/stats')
+};
+
+export { apiCall, API_BASE_URL };

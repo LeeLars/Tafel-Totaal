@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Rond je bestelling af en betaal veilig via Mollie.">
+  
+  <title>Checkout | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/site/favicon.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/checkout.css">
+</head>
+<body>
+  <!-- Simplified Header -->
+  <header class="checkout-header">
+    <div class="container">
+      <a href="/" class="checkout-header__logo">
+        <img src="/images/site/logo.png" alt="Tafel Totaal" width="160" height="36">
+      </a>
+      <div class="checkout-header__secure">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        Beveiligde checkout
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Progress Steps -->
+    <section class="checkout-progress">
+      <div class="container">
+        <ol class="progress-steps">
+          <li class="progress-step active" data-step="1">
+            <span class="progress-step__number">1</span>
+            <span class="progress-step__label">Gegevens</span>
+          </li>
+          <li class="progress-step" data-step="2">
+            <span class="progress-step__number">2</span>
+            <span class="progress-step__label">Levering</span>
+          </li>
+          <li class="progress-step" data-step="3">
+            <span class="progress-step__number">3</span>
+            <span class="progress-step__label">Betaling</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Checkout Content -->
+    <section class="checkout-section">
+      <div class="container">
+        <!-- Empty Cart Redirect -->
+        <div class="checkout-empty hidden" id="checkout-empty">
+          <h2>Je winkelwagen is leeg</h2>
+          <p>Voeg eerst items toe voordat je kunt afrekenen.</p>
+          <a href="/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="checkout-layout" id="checkout-layout">
+          <div class="checkout-form">
+            <!-- Step 1: Customer Details -->
+            <div class="checkout-step active" id="step-1">
+              <h2>Jouw Gegevens</h2>
+              
+              <form id="customer-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="first_name" class="form-label">Voornaam *</label>
+                    <input type="text" id="first_name" name="first_name" class="form-input" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="last_name" class="form-label">Achternaam *</label>
+                    <input type="text" id="last_name" name="last_name" class="form-input" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="email" class="form-label">E-mailadres *</label>
+                  <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="phone" class="form-label">Telefoonnummer *</label>
+                  <input type="tel" id="phone" name="phone" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="company_name" class="form-label">Bedrijfsnaam (optioneel)</label>
+                  <input type="text" id="company_name" name="company_name" class="form-input">
+                </div>
+
+                <div class="form-group">
+                  <label class="filter-checkbox">
+                    <input type="checkbox" id="create_account" name="create_account">
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">Account aanmaken voor sneller afrekenen</span>
+                  </label>
+                </div>
+
+                <div class="checkout-step__actions">
+                  <a href="/winkelwagen.html" class="btn btn--ghost">← Terug naar winkelwagen</a>
+                  <button type="submit" class="btn btn--primary">
+                    Verder naar levering
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Step 2: Delivery -->
+            <div class="checkout-step" id="step-2">
+              <h2>Levering</h2>
+
+              <form id="delivery-form">
+                <!-- Delivery Method -->
+                <div class="delivery-options">
+                  <label class="delivery-option">
+                    <input type="radio" name="delivery_method" value="DELIVERY" checked>
+                    <div class="delivery-option__content">
+                      <div class="delivery-option__header">
+                        <span class="delivery-option__title">Bezorgen</span>
+                        <span class="delivery-option__price" id="delivery-price">Vanaf €25,00</span>
+                      </div>
+                      <p class="delivery-option__desc">Wij bezorgen en halen op bij jou thuis of op locatie.</p>
+                    </div>
+                  </label>
+                  <label class="delivery-option">
+                    <input type="radio" name="delivery_method" value="PICKUP">
+                    <div class="delivery-option__content">
+                      <div class="delivery-option__header">
+                        <span class="delivery-option__title">Afhalen</span>
+                        <span class="delivery-option__price">Gratis</span>
+                      </div>
+                      <p class="delivery-option__desc">Haal je bestelling op in Beernem.</p>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Delivery Address (shown when DELIVERY selected) -->
+                <div class="delivery-address" id="delivery-address">
+                  <h3>Bezorgadres</h3>
+                  
+                  <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                      <label for="street" class="form-label">Straat *</label>
+                      <input type="text" id="street" name="street" class="form-input" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                      <label for="house_number" class="form-label">Huisnummer *</label>
+                      <input type="text" id="house_number" name="house_number" class="form-input" required>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                      <label for="postal_code" class="form-label">Postcode *</label>
+                      <input type="text" id="postal_code" name="postal_code" class="form-input" required placeholder="1234">
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                      <label for="city" class="form-label">Plaats *</label>
+                      <input type="text" id="city" name="city" class="form-input" required>
+                    </div>
+                  </div>
+
+                  <div class="delivery-zone-info" id="delivery-zone-info" style="display: none;">
+                    <div class="delivery-zone-info__icon"></div>
+                    <span class="delivery-zone-info__text"></span>
+                  </div>
+                </div>
+
+                <!-- Order Notes -->
+                <div class="form-group">
+                  <label for="notes" class="form-label">Opmerkingen (optioneel)</label>
+                  <textarea id="notes" name="notes" class="form-input" rows="3" placeholder="Bijv. speciale instructies voor levering"></textarea>
+                </div>
+
+                <div class="checkout-step__actions">
+                  <button type="button" class="btn btn--ghost" id="back-to-step-1">← Terug</button>
+                  <button type="submit" class="btn btn--primary">
+                    Verder naar betaling
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Step 3: Payment -->
+            <div class="checkout-step" id="step-3">
+              <h2>Betaling</h2>
+
+              <form id="payment-form">
+                <!-- Order Review -->
+                <div class="order-review">
+                  <h3>Besteloverzicht</h3>
+                  <div class="order-review__items" id="order-review-items">
+                    <!-- Items loaded via JS -->
+                  </div>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="form-group">
+                  <label class="filter-checkbox">
+                    <input type="checkbox" id="accept_terms" name="accept_terms" required>
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">
+                      Ik ga akkoord met de <a href="/algemene-voorwaarden.html" target="_blank">algemene voorwaarden</a> *
+                    </span>
+                  </label>
+                </div>
+
+                <div class="checkout-step__actions">
+                  <button type="button" class="btn btn--ghost" id="back-to-step-2">← Terug</button>
+                  <button type="submit" class="btn btn--primary btn--lg" id="place-order-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Bestelling plaatsen & betalen
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Order Summary Sidebar -->
+          <aside class="checkout-summary">
+            <h3 class="checkout-summary__title">Je bestelling</h3>
+            
+            <div class="checkout-summary__items" id="summary-items">
+              <!-- Items loaded via JS -->
+            </div>
+
+            <div class="checkout-summary__rows">
+              <div class="checkout-summary__row">
+                <span>Subtotaal</span>
+                <span id="checkout-subtotal">€0,00</span>
+              </div>
+              <div class="checkout-summary__row">
+                <span>Bezorgkosten</span>
+                <span id="checkout-delivery">€0,00</span>
+              </div>
+              <div class="checkout-summary__row checkout-summary__row--deposit">
+                <span>Waarborg</span>
+                <span id="checkout-deposit">€0,00</span>
+              </div>
+            </div>
+
+            <div class="checkout-summary__total">
+              <span>Totaal</span>
+              <span id="checkout-total">€0,00</span>
+            </div>
+
+            <div class="checkout-summary__secure">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
+              <div>
+                <strong>Veilig betalen</strong>
+                <p>Via Mollie met Bancontact, iDEAL, creditcard en meer.</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Simplified Footer -->
+  <footer class="checkout-footer">
+    <div class="container">
+      <p>&copy; 2024 Tafel Totaal. Alle rechten voorbehouden.</p>
+      <nav>
+        <a href="/algemene-voorwaarden.html">Algemene voorwaarden</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/pages/checkout.js"></script>
+</body>
+</html>

@@ -116,17 +116,69 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
 
 export async function generatePickingList(req: Request, res: Response): Promise<void> {
   try {
-    const { id: _id } = req.params;
+    const { id } = req.params;
 
-    // TODO: Implement PDF generation
-    res.status(501).json({ 
-      success: false, 
-      error: 'PDF generation not yet implemented',
-      message: 'This endpoint will be implemented in Phase 3'
-    });
+    const { OrderModel } = await import('../models/Order.model');
+    const { CustomerModel } = await import('../models/Customer.model');
+    const { PDFService } = await import('../services/pdfService');
+
+    const order = await OrderModel.findById(id, true);
+    if (!order) {
+      res.status(404).json({ success: false, error: 'Order not found' });
+      return;
+    }
+
+    const customer = await CustomerModel.findById(order.customer_id);
+    if (!customer) {
+      res.status(404).json({ success: false, error: 'Customer not found' });
+      return;
+    }
+
+    const pdfBuffer = await PDFService.generatePickingList(order, customer);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="picking-list-${order.order_number}.pdf"`);
+    res.send(pdfBuffer);
   } catch (error) {
     console.error('Generate picking list error:', error);
     res.status(500).json({ success: false, error: 'Failed to generate picking list' });
+  }
+}
+
+export async function generateInvoice(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+
+    const { OrderModel } = await import('../models/Order.model');
+    const { CustomerModel } = await import('../models/Customer.model');
+    const { PDFService } = await import('../services/pdfService');
+
+    const order = await OrderModel.findById(id, true);
+    if (!order) {
+      res.status(404).json({ success: false, error: 'Order not found' });
+      return;
+    }
+
+    const customer = await CustomerModel.findById(order.customer_id);
+    if (!customer) {
+      res.status(404).json({ success: false, error: 'Customer not found' });
+      return;
+    }
+
+    let deliveryAddress;
+    if (order.delivery_address_id) {
+      const addresses = await CustomerModel.getAddresses(order.customer_id);
+      deliveryAddress = addresses.find(a => a.id === order.delivery_address_id);
+    }
+
+    const pdfBuffer = await PDFService.generateInvoice(order, customer, deliveryAddress);
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="factuur-${order.order_number}.pdf"`);
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error('Generate invoice error:', error);
+    res.status(500).json({ success: false, error: 'Failed to generate invoice' });
   }
 }
 

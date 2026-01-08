@@ -24,6 +24,7 @@ const calculateValidation = [
   body('startDate').isISO8601().withMessage('Valid start date is required'),
   body('endDate').isISO8601().withMessage('Valid end date is required'),
   body('deliveryMethod').optional().isIn(['DELIVERY', 'PICKUP']),
+  body('postalCode').optional().isString(),
 ];
 
 router.use(optionalAuth);

@@ -27,6 +27,7 @@ router.get('/orders', validate(getOrdersValidation), adminController.getAllOrder
 router.get('/orders/:id', adminController.getOrderDetail);
 router.patch('/orders/:id/status', validate(updateOrderStatusValidation), adminController.updateOrderStatus);
 router.get('/orders/:id/picking-list', adminController.generatePickingList);
+router.get('/orders/:id/invoice', adminController.generateInvoice);
 
 router.get('/dashboard/stats', adminController.getDashboardStats);
 

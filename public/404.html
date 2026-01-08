@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <title>Pagina niet gevonden | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/site/favicon.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/content.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main class="success-page">
+    <div class="container">
+      <div class="success-card">
+        <div class="success-card__icon" style="background-color: #FFEBEE; color: var(--color-error);">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        
+        <h1>Pagina niet gevonden</h1>
+        <p>De pagina die je zoekt bestaat niet of is verplaatst.</p>
+        
+        <div class="success-card__actions" style="margin-top: var(--space-xl);">
+          <a href="/" class="btn btn--primary">Naar Homepage</a>
+          <a href="/pakketten.html" class="btn btn--ghost">Bekijk Pakketten</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { loadHeader } from '/js/components/header.js';
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadHeader();
+      await loadFooter();
+    });
+
+    async function loadFooter() {
+      const container = document.getElementById('footer-container');
+      if (!container) return;
+      try {
+        const response = await fetch('/components/footer.html');
+        if (response.ok) container.innerHTML = await response.text();
+      } catch (e) {}
+    }
+  </script>
+</body>
+</html>

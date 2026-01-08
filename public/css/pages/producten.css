@@ -1,0 +1,543 @@
+/* ============================================
+   PRODUCTS PAGE STYLES - Tafel Totaal
+   Brutalist Corporate Design System
+   ============================================ */
+
+/* ============================================
+   PAGE HEADER
+   ============================================ */
+
+.page-header {
+  padding: var(--space-3xl) 0;
+  background-color: var(--color-off-white);
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.page-header h1 {
+  font-size: var(--font-size-display);
+  margin-bottom: var(--space-sm);
+  line-height: var(--line-height-tight);
+}
+
+.page-header p {
+  font-size: var(--font-size-lg);
+  color: var(--color-dark-gray);
+  margin: 0;
+  max-width: 600px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  margin-bottom: var(--space-lg);
+}
+
+.breadcrumb ol {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.breadcrumb li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.breadcrumb li:not(:last-child)::after {
+  content: '/';
+  color: var(--color-gray);
+}
+
+.breadcrumb a {
+  color: var(--color-dark-gray);
+  transition: color var(--transition-base);
+}
+
+.breadcrumb a:hover {
+  color: var(--color-primary);
+}
+
+.breadcrumb [aria-current="page"] {
+  color: var(--color-black);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ============================================
+   PRODUCTS SECTION LAYOUT
+   ============================================ */
+
+.products-section {
+  padding: var(--space-3xl) 0 var(--space-5xl);
+  background-color: var(--color-white);
+}
+
+.products-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3xl);
+}
+
+@media (min-width: 1024px) {
+  .products-layout {
+    grid-template-columns: 280px 1fr;
+  }
+}
+
+/* ============================================
+   FILTERS SIDEBAR
+   ============================================ */
+
+.filters {
+  background-color: var(--color-off-white);
+  border: var(--border-width) solid var(--border-color);
+  padding: var(--space-xl);
+  height: fit-content;
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-lg));
+}
+
+/* Mobile: Hidden by default, shown as overlay */
+@media (max-width: 1023px) {
+  .filters {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 320px;
+    max-width: 85vw;
+    z-index: var(--z-modal);
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+    overflow-y: auto;
+    border-radius: 0;
+  }
+  
+  .filters.open {
+    transform: translateX(0);
+  }
+}
+
+.filters__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-md);
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.filters__header h2 {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.filters__reset {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color var(--transition-base);
+}
+
+.filters__reset:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Filter Group */
+.filter-group {
+  margin-bottom: var(--space-xl);
+}
+
+.filter-group__title {
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  margin-bottom: var(--space-md);
+}
+
+.filter-group__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* Custom Checkbox - Brutalist Style */
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-dark-gray);
+  transition: color var(--transition-base);
+}
+
+.filter-checkbox:hover {
+  color: var(--color-black);
+}
+
+.filter-checkbox input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.filter-checkbox__mark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-dark-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  background-color: var(--color-white);
+}
+
+.filter-checkbox__mark::after {
+  content: '';
+  width: 12px;
+  height: 12px;
+  background-color: var(--color-primary);
+  opacity: 0;
+  transform: scale(0);
+  transition: all var(--transition-fast);
+}
+
+.filter-checkbox input:checked + .filter-checkbox__mark {
+  border-color: var(--color-black);
+  background-color: var(--color-black);
+}
+
+.filter-checkbox input:checked + .filter-checkbox__mark::after {
+  opacity: 1;
+  transform: scale(1);
+  background-color: var(--color-white);
+}
+
+.filter-checkbox:hover .filter-checkbox__mark {
+  border-color: var(--color-black);
+}
+
+.filter-checkbox input:focus-visible + .filter-checkbox__mark {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Filters Overlay (mobile) */
+.filters-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: calc(var(--z-modal) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition: all var(--transition-base);
+}
+
+.filters-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile Filter Toggle Button */
+.filters-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  margin-bottom: var(--space-lg);
+  width: 100%;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition-base);
+}
+
+.filters-toggle:hover {
+  background-color: var(--color-primary);
+}
+
+@media (min-width: 1024px) {
+  .filters-toggle {
+    display: none;
+  }
+}
+
+/* ============================================
+   PRODUCTS CONTENT
+   ============================================ */
+
+.products-content {
+  min-width: 0;
+}
+
+/* Toolbar */
+.products-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+@media (min-width: 768px) {
+  .products-toolbar {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.products-toolbar__info {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-dark-gray);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.products-toolbar__info span {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+}
+
+.products-toolbar__actions select {
+  min-width: 200px;
+}
+
+/* Products Grid - Architectural Style */
+.products-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border-top: var(--border-width) solid var(--border-color);
+  border-left: var(--border-width) solid var(--border-color);
+}
+
+@media (min-width: 640px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1440px) {
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.products-loading,
+.products-empty,
+.products-error {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5xl);
+  text-align: center;
+  color: var(--color-dark-gray);
+  border-right: var(--border-width) solid var(--border-color);
+  border-bottom: var(--border-width) solid var(--border-color);
+}
+
+.products-loading .spinner {
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================
+   PRODUCT CARD - Architectural Grid Style
+   ============================================ */
+
+.product-card {
+  background-color: var(--color-white);
+  border-right: var(--border-width) solid var(--border-color);
+  border-bottom: var(--border-width) solid var(--border-color);
+  overflow: hidden;
+  transition: z-index 0s, transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+  position: relative;
+  z-index: 1;
+}
+
+.product-card:hover {
+  z-index: 10;
+  transform: scale(1.02);
+  box-shadow: var(--shadow-xl);
+  border-color: transparent;
+}
+
+.product-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.product-card__image {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background-color: var(--color-off-white);
+}
+
+.product-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out-quart);
+}
+
+.product-card:hover .product-card__image img {
+  transform: scale(1.1);
+}
+
+.product-card__badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: var(--space-xs) var(--space-md);
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  z-index: 2;
+}
+
+.product-card__content {
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+.product-card__category {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  margin-bottom: var(--space-xs);
+}
+
+.product-card__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  margin: 0;
+  color: var(--color-black);
+  line-height: var(--line-height-tight);
+}
+
+.product-card__description {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray);
+  margin: var(--space-sm) 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: var(--line-height-relaxed);
+}
+
+.product-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-light-gray);
+}
+
+.product-card__price {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.product-card__price span {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-gray);
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-xl);
+  border-top: var(--border-width) solid var(--border-color);
+}
+
+.pagination__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 var(--space-md);
+  background-color: var(--color-white);
+  border: var(--border-width) solid var(--border-color);
+  color: var(--color-black);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.pagination__button:hover:not(:disabled) {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.pagination__button.active {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-color: var(--color-primary);
+}
+
+.pagination__button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}

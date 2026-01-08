@@ -1,93 +1,177 @@
 /* ============================================
    COMPONENTS - Tafel Totaal
+   Brutalist Corporate Design System
    ============================================ */
 
 /* ============================================
-   BUTTONS
+   BUTTONS - Magnetic / Inverted Style
    ============================================ */
 
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
   padding: var(--space-md) var(--space-xl);
   font-family: var(--font-body);
-  font-size: var(--font-size-base);
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
   line-height: 1;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
   text-decoration: none;
-  border-radius: var(--border-radius-md);
-  transition: all var(--transition-base);
+  border: var(--border-width-thick) solid var(--color-black);
+  background-color: transparent;
+  color: var(--color-black);
   cursor: pointer;
-  min-height: 44px;
+  min-height: 52px;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.4s var(--ease-out-expo);
 }
 
+/* Magnetic fill effect */
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-black);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out-expo);
+  z-index: -1;
+}
+
+.btn:hover::before {
+  transform: scaleX(1);
+}
+
+.btn:hover {
+  color: var(--color-white);
+}
+
+/* Primary Button - Filled with Brand Color */
 .btn--primary {
   background-color: var(--color-primary);
+  border-color: var(--color-primary);
   color: var(--color-white);
-  border: 2px solid var(--color-primary);
+}
+
+.btn--primary::before {
+  background-color: var(--color-primary-dark);
 }
 
 .btn--primary:hover {
-  background-color: var(--color-primary-dark);
+  color: var(--color-white);
   border-color: var(--color-primary-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(144, 61, 62, 0.4);
 }
 
+/* Secondary Button - Outline */
 .btn--secondary {
   background-color: transparent;
-  color: var(--color-primary);
-  border: 2px solid var(--color-primary);
+  border-color: var(--color-black);
+  color: var(--color-black);
+}
+
+.btn--secondary::before {
+  background-color: var(--color-black);
 }
 
 .btn--secondary:hover {
-  background-color: var(--color-primary);
   color: var(--color-white);
 }
 
+/* Ghost Button */
 .btn--ghost {
+  border-color: transparent;
   background-color: transparent;
   color: var(--color-black);
-  border: 2px solid transparent;
+}
+
+.btn--ghost::before {
+  background-color: var(--color-concrete);
 }
 
 .btn--ghost:hover {
-  background-color: var(--color-off-white);
+  color: var(--color-black);
 }
 
+/* White Button (for dark backgrounds) */
 .btn--white {
-  background-color: transparent;
+  border-color: var(--color-white);
   color: var(--color-white);
-  border: 2px solid var(--color-white);
+}
+
+.btn--white::before {
+  background-color: var(--color-white);
 }
 
 .btn--white:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-black);
 }
 
+/* Dark Button */
+.btn--dark {
+  background-color: var(--color-black);
+  border-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.btn--dark::before {
+  background-color: var(--color-charcoal);
+}
+
+/* Button Sizes */
 .btn--sm {
-  padding: var(--space-sm) var(--space-md);
-  font-size: var(--font-size-sm);
-  min-height: 36px;
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--font-size-xs);
+  min-height: 40px;
 }
 
 .btn--lg {
-  padding: var(--space-lg) var(--space-xxl);
-  font-size: var(--font-size-md);
+  padding: var(--space-lg) var(--space-2xl);
+  font-size: var(--font-size-sm);
+  min-height: 60px;
+}
+
+.btn--xl {
+  padding: var(--space-xl) var(--space-3xl);
+  font-size: var(--font-size-base);
+  min-height: 72px;
 }
 
 .btn--full {
   width: 100%;
 }
 
+/* Button with Icon */
+.btn svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* Disabled State */
 .btn:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  pointer-events: none;
+}
+
+/* Button Group */
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.btn-group--center {
+  justify-content: center;
 }
 
 /* ============================================
@@ -153,54 +237,126 @@ select.form-input {
 }
 
 /* ============================================
-   CARDS
+   CARDS - Brutalist with Image Zoom
    ============================================ */
 
 .card {
   background-color: var(--color-white);
-  border: 1px solid var(--color-light-gray);
-  border-radius: var(--border-radius-lg);
+  border: var(--border-width) solid var(--border-color);
   overflow: hidden;
-  transition: box-shadow var(--transition-base), transform var(--transition-base);
+  transition: box-shadow var(--transition-slow);
 }
 
 .card:hover {
   box-shadow: var(--shadow-lg);
-  transform: translateY(-4px);
+}
+
+/* Image wrapper with zoom effect */
+.card__image-wrapper {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 4/3;
 }
 
 .card__image {
   width: 100%;
-  aspect-ratio: 4/3;
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.6s var(--ease-out-quart);
+}
+
+.card:hover .card__image {
+  transform: scale(1.05);
+}
+
+/* Image overlay on hover */
+.card__image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.card:hover .card__image-wrapper::after {
+  opacity: 1;
 }
 
 .card__content {
   padding: var(--space-lg);
+  border-top: var(--border-width) solid var(--border-color);
+}
+
+.card__overline {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--color-gray);
+  margin-bottom: var(--space-sm);
 }
 
 .card__title {
   font-family: var(--font-display);
   font-size: var(--font-size-lg);
   margin-bottom: var(--space-sm);
+  line-height: var(--line-height-tight);
 }
 
 .card__description {
-  color: var(--color-gray);
+  color: var(--color-dark-gray);
   font-size: var(--font-size-sm);
   margin-bottom: var(--space-md);
+  line-height: var(--line-height-relaxed);
 }
 
 .card__price {
-  font-size: var(--font-size-lg);
-  font-weight: 700;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
   color: var(--color-primary);
 }
 
 .card__price span {
   font-size: var(--font-size-sm);
-  font-weight: 400;
+  font-weight: var(--font-weight-normal);
   color: var(--color-gray);
+}
+
+/* Card Link - Full clickable */
+.card__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Card Horizontal variant */
+.card--horizontal {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.card--horizontal .card__image-wrapper {
+  aspect-ratio: auto;
+}
+
+.card--horizontal .card__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-top: none;
+  border-left: var(--border-width) solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .card--horizontal {
+    grid-template-columns: 1fr;
+  }
+  .card--horizontal .card__content {
+    border-left: none;
+    border-top: var(--border-width) solid var(--border-color);
+  }
 }
 
 /* ============================================
