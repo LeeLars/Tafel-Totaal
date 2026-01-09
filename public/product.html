@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Product details en specificaties.">
+  
+  <title>Product Details | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/pakket.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main>
+    <!-- Loading State -->
+    <div class="package-loading" id="product-loading">
+      <div class="spinner"></div>
+      <p>Product laden...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="package-error hidden" id="product-error">
+      <h2>Product niet gevonden</h2>
+      <p>Dit product bestaat niet of is niet meer beschikbaar.</p>
+      <a href="/Tafel-Totaal/producten.html" class="btn btn--primary">Bekijk alle producten</a>
+    </div>
+
+    <!-- Product Content -->
+    <div class="package-content hidden" id="product-content">
+      <!-- Breadcrumb -->
+      <section class="breadcrumb-section">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/Tafel-Totaal/">Home</a></li>
+              <li><a href="/Tafel-Totaal/producten.html">Producten</a></li>
+              <li id="breadcrumb-product">Product</li>
+            </ol>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Product Detail -->
+      <section class="package-detail">
+        <div class="container">
+          <div class="package-detail__grid">
+            <!-- Images -->
+            <div class="package-detail__images">
+              <div class="package-gallery">
+                <div class="package-gallery__main">
+                  <img id="main-image" src="" alt="Product afbeelding">
+                </div>
+                <div class="package-gallery__thumbs" id="image-thumbs">
+                  <!-- Thumbnails will be inserted here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Info -->
+            <div class="package-detail__info">
+              <h1 class="package-detail__title" id="product-name">Product naam</h1>
+              <p class="package-detail__description" id="product-description">Product beschrijving</p>
+
+              <!-- Price -->
+              <div class="package-detail__price">
+                <span class="package-detail__price-label">Prijs per dag:</span>
+                <span class="package-detail__price-value" id="product-price">€0,00</span>
+              </div>
+
+              <!-- Specifications -->
+              <div class="package-detail__specs">
+                <h3>Specificaties</h3>
+                <ul>
+                  <li><strong>SKU:</strong> <span id="product-sku">-</span></li>
+                  <li><strong>Categorie:</strong> <span id="product-category">-</span></li>
+                  <li><strong>Beschikbaar:</strong> <span id="product-stock">-</span></li>
+                  <li><strong>Borg per stuk:</strong> <span id="product-deposit">€0,00</span></li>
+                </ul>
+              </div>
+
+              <!-- Quantity Selector -->
+              <div class="package-detail__quantity">
+                <label for="quantity">Aantal:</label>
+                <div class="quantity-selector">
+                  <button type="button" class="quantity-btn" id="qty-minus">-</button>
+                  <input type="number" id="quantity" value="1" min="1" max="100">
+                  <button type="button" class="quantity-btn" id="qty-plus">+</button>
+                </div>
+              </div>
+
+              <!-- Date Selection -->
+              <div class="package-detail__dates">
+                <div class="form-group">
+                  <label for="start-date">Startdatum:</label>
+                  <input type="date" id="start-date" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="end-date">Einddatum:</label>
+                  <input type="date" id="end-date" class="form-input" required>
+                </div>
+              </div>
+
+              <!-- Days Display -->
+              <div class="package-detail__days hidden" id="days-display">
+                <span id="days-count">0</span> dagen
+              </div>
+
+              <!-- Total Price -->
+              <div class="package-detail__total">
+                <span>Totaalprijs:</span>
+                <span class="package-detail__total-price" id="total-price">€0,00</span>
+              </div>
+
+              <!-- Add to Cart -->
+              <button class="btn btn--primary btn--lg btn--full" id="add-to-cart-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                Toevoegen aan winkelwagen
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/Tafel-Totaal/js/pages/product.js"></script>
+</body>
+</html>

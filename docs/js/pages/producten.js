@@ -230,7 +230,7 @@ function createProductCard(product) {
   
   return `
     <article class="product-card">
-      <a href="/Tafel-Totaal/product/${product.slug || product.id}" class="product-card__link">
+      <a href="/Tafel-Totaal/product.html?id=${product.id}" class="product-card__link">
         <div class="product-card__image">
           <img src="${imageUrl}" 
                alt="${product.name}" 
