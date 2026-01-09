@@ -118,7 +118,7 @@ function initLogoutButtons() {
     e.preventDefault();
     const result = await logout();
     if (result.success) {
-      window.location.href = '/';
+      window.location.href = '/Tafel-Totaal/';
     }
   };
 

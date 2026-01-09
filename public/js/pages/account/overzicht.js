@@ -31,7 +31,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/components/footer.html');
+    const response = await fetch('/Tafel-Totaal/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -99,7 +99,7 @@ async function loadRecentOrders() {
           </div>
           <h3>Nog geen bestellingen</h3>
           <p>Je hebt nog geen bestellingen geplaatst.</p>
-          <a href="/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
+          <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
         </div>
       `;
       return;
@@ -128,7 +128,7 @@ function createOrderItem(order) {
     : '';
   
   return `
-    <a href="/account/bestelling.html?id=${order.id}" class="order-item">
+    <a href="/Tafel-Totaal/account/bestelling.html?id=${order.id}" class="order-item">
       <div class="order-item__info">
         <div class="order-item__number">${order.order_number}</div>
         <div class="order-item__date">
@@ -178,7 +178,7 @@ function initLogout() {
     try {
       await authAPI.logout();
       showToast('Je bent uitgelogd', 'success');
-      window.location.href = '/';
+      window.location.href = '/Tafel-Totaal/';
     } catch (error) {
       showToast('Uitloggen mislukt', 'error');
     }

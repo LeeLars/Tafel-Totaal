@@ -60,7 +60,7 @@ export async function requireAuth(returnUrl = window.location.pathname + window.
  * Require admin role - redirects if not admin
  * @param {string} redirectUrl - URL to redirect to if not admin
  */
-export async function requireAdmin(redirectUrl = '/') {
+export async function requireAdmin(redirectUrl = '/Tafel-Totaal/') {
   const user = await checkAuth();
   
   if (!user) {

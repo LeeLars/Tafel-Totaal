@@ -44,7 +44,7 @@ export function initCSVUpload() {
   if (templateLink) {
     templateLink.href = window.location.hostname.includes('github.io')
       ? '/Tafel-Totaal/templates/products-template.csv'
-      : '/templates/products-template.csv';
+      : '/Tafel-Totaal/templates/products-template.csv';
   }
 }
 

@@ -26,7 +26,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/components/footer.html');
+    const response = await fetch('/Tafel-Totaal/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -85,7 +85,7 @@ function renderCart() {
  * Create cart item HTML
  */
 function createCartItemHTML(item) {
-  const imageUrl = item.image || '/images/packages/placeholder.jpg';
+  const imageUrl = item.image || '/Tafel-Totaal/images/packages/placeholder.jpg';
   const itemType = item.type === 'package' ? 'Pakket' : 'Product';
   const personsText = item.persons ? `${item.persons} personen` : '';
   
@@ -96,7 +96,7 @@ function createCartItemHTML(item) {
       </div>
       <div class="cart-item__info">
         <h3 class="cart-item__title">
-          <a href="/${item.type === 'package' ? 'pakket' : 'product'}.html?id=${item.product_id || item.package_id}">${item.name}</a>
+          <a href="/Tafel-Totaal/${item.type === 'package' ? 'pakket' : 'product'}.html?id=${item.product_id || item.package_id}">${item.name}</a>
         </h3>
         <p class="cart-item__meta">${itemType}${personsText ? ` • ${personsText}` : ''}</p>
         ${item.start_date && item.end_date ? `

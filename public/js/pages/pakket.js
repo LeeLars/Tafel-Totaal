@@ -28,7 +28,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/components/footer.html');
+    const response = await fetch('/Tafel-Totaal/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -143,7 +143,7 @@ function renderGallery() {
   const mainImg = document.getElementById('gallery-main');
   const thumbsContainer = document.getElementById('gallery-thumbs');
   
-  const images = currentPackage.images || ['/images/packages/placeholder.jpg'];
+  const images = currentPackage.images || ['/Tafel-Totaal/images/packages/placeholder.jpg'];
   
   if (mainImg) {
     mainImg.src = images[0];
