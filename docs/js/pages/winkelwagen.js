@@ -85,7 +85,7 @@ function renderCart() {
  * Create cart item HTML
  */
 function createCartItemHTML(item) {
-  const imageUrl = item.image || '/Tafel-Totaal/images/packages/placeholder.jpg';
+  const imageUrl = getItemImageUrl(item);
   const itemType = item.type === 'package' ? 'Pakket' : 'Product';
   const personsText = item.persons ? `${item.persons} personen` : '';
   
@@ -102,7 +102,7 @@ function createCartItemHTML(item) {
         ${item.start_date && item.end_date ? `
           <p class="cart-item__dates">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <rect x="3" y="4" width="18" height="18"></rect>
               <line x1="16" y1="2" x2="16" y2="6"></line>
               <line x1="8" y1="2" x2="8" y2="6"></line>
               <line x1="3" y1="10" x2="21" y2="10"></line>
@@ -139,6 +139,29 @@ function createCartItemHTML(item) {
       </div>
     </article>
   `;
+}
+
+function getItemImageUrl(item) {
+  // If item has a valid specific image, use it
+  if (item.image && !item.image.includes('placeholder')) {
+    return item.image;
+  }
+
+  // Use deterministic fallback from site images
+  const fallbacks = [
+    '/Tafel-Totaal/images/site/hero-table-setting.jpg',
+    '/Tafel-Totaal/images/site/gala-theme.jpg',
+    '/Tafel-Totaal/images/site/corporate-dinner.jpg',
+    '/Tafel-Totaal/images/site/garden-dinner.jpg',
+    '/Tafel-Totaal/images/site/hero-homepage.jpg'
+  ];
+
+  const key = String(item.id || item.product_id || item.package_id || item.name);
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) {
+    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  }
+  return fallbacks[hash % fallbacks.length];
 }
 
 /**
