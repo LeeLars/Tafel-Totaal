@@ -6,7 +6,7 @@ export async function loadCTA() {
   if (!container) return;
 
   try {
-    const response = await fetch('./components/cta.html');
+    const response = await fetch('/components/cta.html');
     if (!response.ok) throw new Error('Failed to load CTA');
     container.innerHTML = await response.text();
   } catch (error) {

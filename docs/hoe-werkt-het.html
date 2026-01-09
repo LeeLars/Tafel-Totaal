@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <base href="/">
   <meta name="description" content="Ontdek hoe eenvoudig het is om servies en tafeldecoratie te huren bij Tafel Totaal. Van bestellen tot leveren en retour.">
   
   <title>Hoe werkt het? | Tafel Totaal</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="./images/site/Favicon-tafel-totaal.png">
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +18,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="./css/variables.css">
-  <link rel="stylesheet" href="./css/base.css">
-  <link rel="stylesheet" href="./css/components.css">
-  <link rel="stylesheet" href="./css/utilities.css">
-  <link rel="stylesheet" href="./css/pages/content.css">
-  <link rel="stylesheet" href="./css/pages/home.css">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/content.css">
+  <link rel="stylesheet" href="/css/pages/home.css">
 </head>
 <body>
   <!-- Header -->
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Block 2: Image -->
-        <div class="hero-cell hero-cell--visual" style="background-image: url('./images/site/hero-hwh.png'); background-size: cover; background-position: center;">
+        <div class="hero-cell hero-cell--visual" style="background-image: url('/images/site/hero-hwh.png'); background-size: cover; background-position: center;">
           <div class="hero-overlay"></div>
         </div>
 
@@ -214,7 +214,7 @@
             <details class="faq-item">
               <summary>Wat als er iets kapot gaat?</summary>
               <div class="faq-content">
-                <p>Kleine ongelukjes horen erbij. Bij normale slijtage of een enkel gebroken glas rekenen we niets extra. Bij grotere schade nemen we altijd eerst contact op om de situatie te bespreken. Bekijk onze <a href="./borg-schade.html">borg & schade pagina</a> voor meer details.</p>
+                <p>Kleine ongelukjes horen erbij. Bij normale slijtage of een enkel gebroken glas rekenen we niets extra. Bij grotere schade nemen we altijd eerst contact op om de situatie te bespreken. Bekijk onze <a href="/borg-schade.html">borg & schade pagina</a> voor meer details.</p>
               </div>
             </details>
             <details class="faq-item">
@@ -313,8 +313,8 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { loadHeader } from './js/components/header.js';
-    import { loadCTA } from './js/components/cta.js';
+    import { loadHeader } from '/js/components/header.js';
+    import { loadCTA } from '/js/components/cta.js';
     import '/js/lib/animations.js';
     
     document.addEventListener('DOMContentLoaded', async () => {
@@ -327,7 +327,7 @@
       const container = document.getElementById('footer-container');
       if (!container) return;
       try {
-        const response = await fetch('./components/footer.html');
+        const response = await fetch('/components/footer.html');
         if (response.ok) container.innerHTML = await response.text();
       } catch (e) {}
     }

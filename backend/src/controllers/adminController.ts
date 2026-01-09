@@ -377,3 +377,323 @@ export async function getCustomerById(req: Request, res: Response): Promise<void
     res.status(500).json({ success: false, error: 'Failed to fetch customer' });
   }
 }
+
+// ============================================
+// INVENTORY MANAGEMENT
+// ============================================
+
+export async function getInventory(req: Request, res: Response): Promise<void> {
+  try {
+    const inventory = await query<{
+      id: string;
+      sku: string;
+      name: string;
+      category_id: string;
+      category_name: string;
+      stock_total: number;
+      stock_buffer: number;
+      reserved: number;
+      images: string[];
+      is_active: boolean;
+    }>(`
+      SELECT 
+        p.id, p.sku, p.name, p.category_id, c.name as category_name,
+        p.stock_total, p.stock_buffer, p.images, p.is_active,
+        COALESCE(
+          (SELECT SUM(ir.quantity) 
+           FROM inventory_reservations ir 
+           WHERE ir.product_id = p.id 
+           AND ir.status IN ('PENDING', 'ACTIVE')
+           AND ir.end_date >= CURRENT_DATE), 0
+        )::integer as reserved
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      ORDER BY p.name ASC
+    `);
+
+    res.json({
+      success: true,
+      data: inventory.map(item => ({
+        ...item,
+        available: item.stock_total - item.stock_buffer - item.reserved,
+        rented: item.reserved
+      }))
+    });
+  } catch (error) {
+    console.error('Get inventory error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch inventory' });
+  }
+}
+
+export async function getInventoryStats(req: Request, res: Response): Promise<void> {
+  try {
+    const stats = await queryOne<{
+      total_products: string;
+      total_stock: string;
+      total_reserved: string;
+      low_stock_count: string;
+    }>(`
+      SELECT 
+        COUNT(DISTINCT p.id)::text as total_products,
+        COALESCE(SUM(p.stock_total), 0)::text as total_stock,
+        COALESCE(
+          (SELECT SUM(ir.quantity) 
+           FROM inventory_reservations ir 
+           WHERE ir.status IN ('PENDING', 'ACTIVE')
+           AND ir.end_date >= CURRENT_DATE), 0
+        )::text as total_reserved,
+        COUNT(DISTINCT CASE WHEN p.stock_total - p.stock_buffer <= 10 THEN p.id END)::text as low_stock_count
+      FROM products p
+    `);
+
+    res.json({
+      success: true,
+      data: {
+        totalProducts: parseInt(stats?.total_products || '0'),
+        totalStock: parseInt(stats?.total_stock || '0'),
+        totalReserved: parseInt(stats?.total_reserved || '0'),
+        lowStockCount: parseInt(stats?.low_stock_count || '0')
+      }
+    });
+  } catch (error) {
+    console.error('Get inventory stats error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch inventory stats' });
+  }
+}
+
+// ============================================
+// REPORTS & ANALYTICS
+// ============================================
+
+export async function getRevenueReport(req: Request, res: Response): Promise<void> {
+  try {
+    const { days = '30' } = req.query;
+    const daysNum = parseInt(days as string, 10);
+
+    // Revenue by day
+    const dailyRevenue = await query<{ date: string; revenue: string; orders: string }>(`
+      SELECT 
+        DATE(created_at) as date,
+        COALESCE(SUM(total), 0)::text as revenue,
+        COUNT(*)::text as orders
+      FROM orders
+      WHERE created_at >= NOW() - INTERVAL '${daysNum} days'
+        AND status NOT IN ('cancelled', 'payment_failed')
+      GROUP BY DATE(created_at)
+      ORDER BY date ASC
+    `);
+
+    // Total revenue
+    const totals = await queryOne<{ 
+      total_revenue: string; 
+      total_orders: string;
+      avg_order_value: string;
+    }>(`
+      SELECT 
+        COALESCE(SUM(total), 0)::text as total_revenue,
+        COUNT(*)::text as total_orders,
+        COALESCE(AVG(total), 0)::text as avg_order_value
+      FROM orders
+      WHERE created_at >= NOW() - INTERVAL '${daysNum} days'
+        AND status NOT IN ('cancelled', 'payment_failed')
+    `);
+
+    // Previous period for comparison
+    const prevTotals = await queryOne<{ 
+      total_revenue: string; 
+      total_orders: string;
+    }>(`
+      SELECT 
+        COALESCE(SUM(total), 0)::text as total_revenue,
+        COUNT(*)::text as total_orders
+      FROM orders
+      WHERE created_at >= NOW() - INTERVAL '${daysNum * 2} days'
+        AND created_at < NOW() - INTERVAL '${daysNum} days'
+        AND status NOT IN ('cancelled', 'payment_failed')
+    `);
+
+    res.json({
+      success: true,
+      data: {
+        dailyRevenue: dailyRevenue.map(d => ({
+          date: d.date,
+          revenue: parseFloat(d.revenue),
+          orders: parseInt(d.orders)
+        })),
+        totals: {
+          revenue: parseFloat(totals?.total_revenue || '0'),
+          orders: parseInt(totals?.total_orders || '0'),
+          avgOrderValue: parseFloat(totals?.avg_order_value || '0')
+        },
+        previousPeriod: {
+          revenue: parseFloat(prevTotals?.total_revenue || '0'),
+          orders: parseInt(prevTotals?.total_orders || '0')
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Get revenue report error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch revenue report' });
+  }
+}
+
+export async function getOrdersReport(req: Request, res: Response): Promise<void> {
+  try {
+    const { days = '30' } = req.query;
+    const daysNum = parseInt(days as string, 10);
+
+    // Orders by status
+    const byStatus = await query<{ status: string; count: string }>(`
+      SELECT status, COUNT(*)::text as count
+      FROM orders
+      WHERE created_at >= NOW() - INTERVAL '${daysNum} days'
+      GROUP BY status
+    `);
+
+    // Orders by day
+    const byDay = await query<{ date: string; count: string }>(`
+      SELECT DATE(created_at) as date, COUNT(*)::text as count
+      FROM orders
+      WHERE created_at >= NOW() - INTERVAL '${daysNum} days'
+      GROUP BY DATE(created_at)
+      ORDER BY date ASC
+    `);
+
+    res.json({
+      success: true,
+      data: {
+        byStatus: byStatus.reduce((acc, item) => {
+          acc[item.status] = parseInt(item.count);
+          return acc;
+        }, {} as Record<string, number>),
+        byDay: byDay.map(d => ({
+          date: d.date,
+          count: parseInt(d.count)
+        }))
+      }
+    });
+  } catch (error) {
+    console.error('Get orders report error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch orders report' });
+  }
+}
+
+export async function getTopProducts(req: Request, res: Response): Promise<void> {
+  try {
+    const { days = '30', limit = '10' } = req.query;
+    const daysNum = parseInt(days as string, 10);
+    const limitNum = parseInt(limit as string, 10);
+
+    const topProducts = await query<{
+      product_id: string;
+      product_name: string;
+      total_quantity: string;
+      total_revenue: string;
+    }>(`
+      SELECT 
+        oi.product_id,
+        p.name as product_name,
+        SUM(oi.quantity)::text as total_quantity,
+        SUM(oi.line_total)::text as total_revenue
+      FROM order_items oi
+      JOIN orders o ON oi.order_id = o.id
+      JOIN products p ON oi.product_id = p.id
+      WHERE o.created_at >= NOW() - INTERVAL '${daysNum} days'
+        AND o.status NOT IN ('cancelled', 'payment_failed')
+        AND oi.product_id IS NOT NULL
+      GROUP BY oi.product_id, p.name
+      ORDER BY total_quantity DESC
+      LIMIT ${limitNum}
+    `);
+
+    res.json({
+      success: true,
+      data: topProducts.map(p => ({
+        productId: p.product_id,
+        name: p.product_name,
+        quantity: parseInt(p.total_quantity),
+        revenue: parseFloat(p.total_revenue)
+      }))
+    });
+  } catch (error) {
+    console.error('Get top products error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch top products' });
+  }
+}
+
+export async function getTopCustomers(req: Request, res: Response): Promise<void> {
+  try {
+    const { days = '30', limit = '10' } = req.query;
+    const daysNum = parseInt(days as string, 10);
+    const limitNum = parseInt(limit as string, 10);
+
+    const topCustomers = await query<{
+      customer_id: string;
+      first_name: string;
+      last_name: string;
+      email: string;
+      order_count: string;
+      total_spent: string;
+    }>(`
+      SELECT 
+        c.id as customer_id,
+        c.first_name,
+        c.last_name,
+        c.email,
+        COUNT(o.id)::text as order_count,
+        COALESCE(SUM(o.total), 0)::text as total_spent
+      FROM customers c
+      JOIN orders o ON c.id = o.customer_id
+      WHERE o.created_at >= NOW() - INTERVAL '${daysNum} days'
+        AND o.status NOT IN ('cancelled', 'payment_failed')
+      GROUP BY c.id, c.first_name, c.last_name, c.email
+      ORDER BY total_spent DESC
+      LIMIT ${limitNum}
+    `);
+
+    res.json({
+      success: true,
+      data: topCustomers.map(c => ({
+        customerId: c.customer_id,
+        name: `${c.first_name} ${c.last_name}`.trim(),
+        email: c.email,
+        orderCount: parseInt(c.order_count),
+        totalSpent: parseFloat(c.total_spent)
+      }))
+    });
+  } catch (error) {
+    console.error('Get top customers error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch top customers' });
+  }
+}
+
+export async function getNewCustomersReport(req: Request, res: Response): Promise<void> {
+  try {
+    const { days = '30' } = req.query;
+    const daysNum = parseInt(days as string, 10);
+
+    const newCustomers = await queryOne<{ count: string }>(`
+      SELECT COUNT(*)::text as count
+      FROM customers
+      WHERE created_at >= NOW() - INTERVAL '${daysNum} days'
+    `);
+
+    const prevNewCustomers = await queryOne<{ count: string }>(`
+      SELECT COUNT(*)::text as count
+      FROM customers
+      WHERE created_at >= NOW() - INTERVAL '${daysNum * 2} days'
+        AND created_at < NOW() - INTERVAL '${daysNum} days'
+    `);
+
+    res.json({
+      success: true,
+      data: {
+        current: parseInt(newCustomers?.count || '0'),
+        previous: parseInt(prevNewCustomers?.count || '0')
+      }
+    });
+  } catch (error) {
+    console.error('Get new customers report error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch new customers report' });
+  }
+}

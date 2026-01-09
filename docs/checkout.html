@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <base href="/">
   <meta name="description" content="Rond je bestelling af en betaal veilig via Mollie.">
   
   <title>Checkout | Tafel Totaal</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="./images/site/Favicon-tafel-totaal.png">
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,18 +17,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="./css/variables.css">
-  <link rel="stylesheet" href="./css/base.css">
-  <link rel="stylesheet" href="./css/components.css">
-  <link rel="stylesheet" href="./css/utilities.css">
-  <link rel="stylesheet" href="./css/pages/checkout.css">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/checkout.css">
 </head>
 <body>
   <!-- Simplified Header -->
   <header class="checkout-header">
     <div class="container">
-      <a href="./" class="checkout-header__logo">
-        <img src="./images/site/logo.png" alt="Tafel Totaal" width="160" height="36">
+      <a href="/" class="checkout-header__logo">
+        <img src="/images/site/logo.png" alt="Tafel Totaal" width="160" height="36">
       </a>
       <div class="checkout-header__secure">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -68,7 +68,7 @@
         <div class="checkout-empty hidden" id="checkout-empty">
           <h2>Je winkelwagen is leeg</h2>
           <p>Voeg eerst items toe voordat je kunt afrekenen.</p>
-          <a href="./pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
+          <a href="/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
         </div>
 
         <!-- Checkout Form -->
@@ -114,7 +114,7 @@
                 </div>
 
                 <div class="checkout-step__actions">
-                  <a href="./winkelwagen.html" class="btn btn--ghost">← Terug naar winkelwagen</a>
+                  <a href="/winkelwagen.html" class="btn btn--ghost">← Terug naar winkelwagen</a>
                   <button type="submit" class="btn btn--primary">
                     Verder naar levering
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -233,7 +233,7 @@
                     <input type="checkbox" id="accept_terms" name="accept_terms" required>
                     <span class="filter-checkbox__mark"></span>
                     <span class="filter-checkbox__label">
-                      Ik ga akkoord met de <a href="./algemene-voorwaarden.html" target="_blank">algemene voorwaarden</a> *
+                      Ik ga akkoord met de <a href="/algemene-voorwaarden.html" target="_blank">algemene voorwaarden</a> *
                     </span>
                   </label>
                 </div>
@@ -301,9 +301,9 @@
     <div class="container">
       <p>&copy; 2024 Tafel Totaal. Alle rechten voorbehouden.</p>
       <nav>
-        <a href="./algemene-voorwaarden.html">Algemene voorwaarden</a>
-        <a href="./privacy.html">Privacy</a>
-        <a href="./contact.html">Contact</a>
+        <a href="/algemene-voorwaarden.html">Algemene voorwaarden</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/contact.html">Contact</a>
       </nav>
     </div>
   </footer>
@@ -312,6 +312,6 @@
   <div class="toast-container"></div>
 
   <!-- Scripts -->
-  <script type="module" src="./js/pages/checkout.js"></script>
+  <script type="module" src="/js/pages/checkout.js"></script>
 </body>
 </html>

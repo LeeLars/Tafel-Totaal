@@ -28,7 +28,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('./components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -143,7 +143,7 @@ function renderGallery() {
   const mainImg = document.getElementById('gallery-main');
   const thumbsContainer = document.getElementById('gallery-thumbs');
   
-  const images = currentPackage.images || ['./images/packages/placeholder.jpg'];
+  const images = currentPackage.images || ['/images/packages/placeholder.jpg'];
   
   if (mainImg) {
     mainImg.src = images[0];
@@ -517,7 +517,7 @@ document.getElementById('add-to-cart-btn')?.addEventListener('click', async () =
       showToast('Pakket toegevoegd aan winkelwagen!', 'success');
       
       // Optional: redirect to cart
-      // window.location.href = './winkelwagen.html';
+      // window.location.href = '/winkelwagen.html';
     } else {
       showToast(result.error || 'Kon niet toevoegen aan winkelwagen', 'error');
     }

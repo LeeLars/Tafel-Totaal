@@ -80,4 +80,15 @@ router.get('/products/csv/export', csvController.exportProductsCSV);
 router.post('/products/bulk/delete', csvController.bulkDeleteProducts);
 router.post('/products/bulk/status', csvController.bulkUpdateStatus);
 
+// Inventory Management
+router.get('/inventory', adminController.getInventory);
+router.get('/inventory/stats', adminController.getInventoryStats);
+
+// Reports & Analytics
+router.get('/reports/revenue', adminController.getRevenueReport);
+router.get('/reports/orders', adminController.getOrdersReport);
+router.get('/reports/top-products', adminController.getTopProducts);
+router.get('/reports/top-customers', adminController.getTopCustomers);
+router.get('/reports/new-customers', adminController.getNewCustomersReport);
+
 export default router;

@@ -26,7 +26,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('./components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -85,7 +85,7 @@ function renderCart() {
  * Create cart item HTML
  */
 function createCartItemHTML(item) {
-  const imageUrl = item.image || './images/packages/placeholder.jpg';
+  const imageUrl = item.image || '/images/packages/placeholder.jpg';
   const itemType = item.type === 'package' ? 'Pakket' : 'Product';
   const personsText = item.persons ? `${item.persons} personen` : '';
   
