@@ -64,8 +64,8 @@ function initModals() {
   const locationClose = document.getElementById('location-modal-close');
   
   if (locationModal && locationClose) {
-    locationClose.addEventListener('click', () => locationModal.classList.remove('open'));
-    locationModal.querySelector('.modal__backdrop')?.addEventListener('click', () => locationModal.classList.remove('open'));
+    locationClose.addEventListener('click', () => locationModal.classList.remove('active'));
+    locationModal.querySelector('.modal__backdrop')?.addEventListener('click', () => locationModal.classList.remove('active'));
   }
 
   // Stock adjustment modal
@@ -75,9 +75,9 @@ function initModals() {
   const stockSave = document.getElementById('stock-save-btn');
 
   if (stockModal) {
-    stockClose?.addEventListener('click', () => stockModal.classList.remove('open'));
-    stockCancel?.addEventListener('click', () => stockModal.classList.remove('open'));
-    stockModal.querySelector('.modal__backdrop')?.addEventListener('click', () => stockModal.classList.remove('open'));
+    stockClose?.addEventListener('click', () => stockModal.classList.remove('active'));
+    stockCancel?.addEventListener('click', () => stockModal.classList.remove('active'));
+    stockModal.querySelector('.modal__backdrop')?.addEventListener('click', () => stockModal.classList.remove('active'));
     stockSave?.addEventListener('click', saveStockAdjustment);
   }
 }
@@ -478,7 +478,7 @@ function showLocationModal(productId) {
     </div>
   `;
 
-  modal.classList.add('open');
+  modal.classList.add('active');
 }
 
 /**
@@ -497,7 +497,7 @@ function showStockModal(productId) {
   document.getElementById('stock-reason').value = 'purchase';
   document.getElementById('stock-note').value = '';
 
-  modal.classList.add('open');
+  modal.classList.add('active');
 }
 
 /**
@@ -539,7 +539,7 @@ async function saveStockAdjustment() {
 
     if (result.success) {
       showToast('Voorraad aangepast', 'success');
-      document.getElementById('stock-modal').classList.remove('open');
+      document.getElementById('stock-modal').classList.remove('active');
       await loadInventory();
     } else {
       showToast(result.error || 'Kon voorraad niet aanpassen', 'error');

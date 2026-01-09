@@ -117,8 +117,8 @@ function initModal() {
   const closeBtn = document.getElementById('customer-modal-close');
 
   if (modal) {
-    closeBtn?.addEventListener('click', () => modal.classList.remove('open'));
-    modal.querySelector('.modal__backdrop')?.addEventListener('click', () => modal.classList.remove('open'));
+    closeBtn?.addEventListener('click', () => modal.classList.remove('active'));
+    modal.querySelector('.modal__backdrop')?.addEventListener('click', () => modal.classList.remove('active'));
   }
 }
 
@@ -220,7 +220,7 @@ async function showCustomerDetail(customerId) {
       <p>Klantgegevens laden...</p>
     </div>
   `;
-  modal.classList.add('open');
+  modal.classList.add('active');
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/admin/customers/${customerId}`, {

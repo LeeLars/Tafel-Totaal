@@ -87,9 +87,9 @@ function initModal() {
   const closeBtn2 = document.getElementById('event-close-btn');
 
   if (modal) {
-    closeBtn?.addEventListener('click', () => modal.classList.remove('open'));
-    closeBtn2?.addEventListener('click', () => modal.classList.remove('open'));
-    modal.querySelector('.modal__backdrop')?.addEventListener('click', () => modal.classList.remove('open'));
+    closeBtn?.addEventListener('click', () => modal.classList.remove('active'));
+    closeBtn2?.addEventListener('click', () => modal.classList.remove('active'));
+    modal.querySelector('.modal__backdrop')?.addEventListener('click', () => modal.classList.remove('active'));
   }
 }
 
@@ -433,7 +433,7 @@ function showEventModal(eventId) {
   `;
 
   viewBtn.href = `order.html?id=${event.orderId}`;
-  modal.classList.add('open');
+  modal.classList.add('active');
 }
 
 /**

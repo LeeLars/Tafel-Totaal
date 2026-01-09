@@ -80,7 +80,7 @@ function initModal() {
   const newProductBtn = document.getElementById('new-product-btn');
 
   const closeModal = () => {
-    modal?.classList.remove('open');
+    modal?.classList.remove('active');
     editingProduct = null;
     isNewProduct = false;
     clearImages();
@@ -141,7 +141,7 @@ function openNewProductModal() {
   
   const modal = document.getElementById('edit-modal');
   if (modal) {
-    modal.classList.add('open');
+    modal.classList.add('active');
     console.log('Modal opened for new product');
   } else {
     console.error('Modal element not found!');
@@ -299,7 +299,7 @@ function openEditModal(product) {
   
   const modal = document.getElementById('edit-modal');
   if (modal) {
-    modal.classList.add('open');
+    modal.classList.add('active');
     console.log('Modal opened');
   } else {
     console.error('Modal element not found');
@@ -342,7 +342,7 @@ async function saveProduct() {
       showToast('Product bijgewerkt', 'success');
     }
     
-    document.getElementById('edit-modal').classList.remove('open');
+    document.getElementById('edit-modal').classList.remove('active');
     editingProduct = null;
     isNewProduct = false;
     clearImages();
