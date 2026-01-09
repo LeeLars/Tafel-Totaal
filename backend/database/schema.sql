@@ -95,14 +95,10 @@ CREATE TABLE products (
   stock_buffer INTEGER NOT NULL DEFAULT 5,
   turnaround_days INTEGER NOT NULL DEFAULT 1,
   images JSONB DEFAULT '[]'::jsonb,
-  specs JSONB DEFAULT '{}'::jsonb,
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
-
-ALTER TABLE products
-  ADD COLUMN IF NOT EXISTS specs JSONB DEFAULT '{}'::jsonb;
 
 CREATE INDEX idx_products_category ON products(category_id);
 CREATE INDEX idx_products_subcategory ON products(subcategory_id);

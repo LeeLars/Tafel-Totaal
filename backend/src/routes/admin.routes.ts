@@ -39,7 +39,6 @@ const updateProductValidation = [
   body('stock_total').optional().isInt({ min: 0 }),
   body('stock_buffer').optional().isInt({ min: 0 }),
   body('turnaround_days').optional().isInt({ min: 0 }),
-  body('specs').optional().isObject(),
   body('is_active').optional().isBoolean(),
 ];
 
