@@ -56,7 +56,13 @@ async function loadProduct() {
     const response = await productsAPI.getById(productId);
     
     if (!response.success || !response.data) {
-      showError();
+      // Fallback to mock data if API fails (e.g., on GitHub Pages)
+      console.warn('API failed, using mock product data');
+      currentProduct = createMockProduct(productId);
+      renderProduct(currentProduct);
+      
+      document.getElementById('product-loading').classList.add('hidden');
+      document.getElementById('product-content').classList.remove('hidden');
       return;
     }
 
@@ -71,8 +77,36 @@ async function loadProduct() {
     loadRelatedProducts(currentProduct);
   } catch (error) {
     console.error('Error loading product:', error);
-    showError();
+    // Fallback to mock data instead of showing error
+    console.warn('API error, using mock product data');
+    currentProduct = createMockProduct(productId);
+    renderProduct(currentProduct);
+    
+    document.getElementById('product-loading').classList.add('hidden');
+    document.getElementById('product-content').classList.remove('hidden');
   }
+}
+
+/**
+ * Create mock product for demo/fallback purposes
+ */
+function createMockProduct(productId) {
+  return {
+    id: productId,
+    name: 'Champagneflute Kristal',
+    description: 'Elegante kristallen champagneflute voor een stijlvolle presentatie. Perfect voor bruiloften, galas en zakelijke evenementen.',
+    price_per_day: 1.50,
+    deposit_per_item: 5.00,
+    sku: 'CHAMP-KRIS-001',
+    category: 'glaswerk',
+    category_name: 'Glaswerk',
+    stock_total: 250,
+    stock_buffer: 50,
+    images: [
+      'https://res.cloudinary.com/dchrgzyb4/image/upload/v1767985412/tafel-totaal/products/f5vufoadhi58ff1ta52c.webp',
+      '/Tafel-Totaal/images/products/placeholder.jpg'
+    ]
+  };
 }
 
 /**
