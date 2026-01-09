@@ -209,7 +209,7 @@ function renderProducts() {
 
   if (filteredProducts.length === 0) {
     grid.innerHTML = `
-      <div class="packages-empty">
+      <div class="products-empty">
         <h3>Geen producten gevonden</h3>
         <p>Probeer andere filters te selecteren.</p>
       </div>
@@ -224,32 +224,40 @@ function renderProducts() {
  * Create product card HTML
  */
 function createProductCard(product) {
+  // Map backend category names to display names if needed
+  const categoryName = product.category_name || product.category || 'Overig';
+  const imageUrl = product.image_url || product.images?.[0] || './images/products/placeholder.jpg';
+  
   return `
-    <article class="package-card product-card">
-      <div class="package-card__image">
-        <img src="${product.image_url || './images/products/placeholder.jpg'}" 
-             alt="${product.name}" 
-             loading="lazy">
-        <div class="package-card__badges">
-          <span class="badge badge--category">${product.category}</span>
+    <article class="product-card">
+      <a href="/product/${product.slug || product.id}" class="product-card__link">
+        <div class="product-card__image">
+          <img src="${imageUrl}" 
+               alt="${product.name}" 
+               loading="lazy">
+          <div class="product-card__badge">${categoryName}</div>
         </div>
-      </div>
-      <div class="package-card__content">
-        <h3 class="package-card__title">${product.name}</h3>
-        <p class="package-card__desc">${product.description || ''}</p>
-        
-        <div class="package-card__footer">
-          <div class="package-card__price">
-            <span class="price-amount">${formatPrice(product.price)}</span>
-            <span class="price-period">per stuk / 3 dagen</span>
+        <div class="product-card__content">
+          <div class="product-card__header">
+            <span class="product-card__category">${categoryName}</span>
+            <h3 class="product-card__title">${product.name}</h3>
           </div>
-          <button class="btn btn--primary btn--sm add-to-cart-btn" 
-                  data-id="${product.id}"
-                  onclick="addToCart('${product.id}')">
-            Toevoegen
-          </button>
+          
+          <div class="product-card__footer">
+            <div class="product-card__price-wrapper">
+              <span class="product-card__price-label">Prijs per dag</span>
+              <span class="product-card__price">${formatPrice(product.price_per_day || product.price)}</span>
+            </div>
+            <button class="product-card__action" 
+                    onclick="event.preventDefault(); addToCart('${product.id}')"
+                    aria-label="Toevoegen aan winkelwagen">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l14 0"></path>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+      </a>
     </article>
   `;
 }
@@ -258,9 +266,9 @@ function createProductCard(product) {
  * Update results count
  */
 function updateResultsCount() {
-  const countEl = document.getElementById('results-count');
+  const countEl = document.getElementById('products-count');
   if (countEl) {
-    countEl.textContent = filteredProducts.length;
+    countEl.innerHTML = `<span>${filteredProducts.length}</span> RESULTATEN`;
   }
 }
 
