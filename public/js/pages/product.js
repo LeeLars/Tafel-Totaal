@@ -118,7 +118,10 @@ function renderRelatedProducts(products) {
       </div>
       <div class="product-card__content">
         <h3 class="product-card__title">${p.name}</h3>
-        <p class="product-card__price">${formatPrice(p.price_per_day)}</p>
+        <div class="product-card__footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: auto;">
+          <p class="product-card__price" style="margin: 0;">${formatPrice(p.price_per_day)}</p>
+          <span class="btn btn--primary btn--sm">Bekijk</span>
+        </div>
       </div>
     </a>
   `).join('');
@@ -141,7 +144,7 @@ function renderProduct(product) {
   document.getElementById('product-description').textContent = product.description || 'Geen beschrijving beschikbaar.';
   document.getElementById('product-price').textContent = formatPrice(product.price_per_day);
   document.getElementById('product-sku').textContent = product.sku || '-';
-  document.getElementById('product-category').textContent = product.category_name || '-';
+  document.getElementById('product-category-badge').textContent = product.category_name || product.category || 'Overig';
   document.getElementById('product-deposit').textContent = formatPrice(product.deposit_per_item || 0);
   
   // Stock

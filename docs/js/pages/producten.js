@@ -248,13 +248,7 @@ function createProductCard(product) {
               <span class="product-card__price-label">Prijs per dag</span>
               <span class="product-card__price">${formatPrice(product.price_per_day || product.price)}</span>
             </div>
-            <button class="product-card__action" 
-                    onclick="event.preventDefault(); addToCart('${product.id}')"
-                    aria-label="Toevoegen aan winkelwagen">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 5v14M5 12l14 0"></path>
-              </svg>
-            </button>
+            <span class="btn btn--primary btn--sm">Bekijk</span>
           </div>
         </div>
       </a>

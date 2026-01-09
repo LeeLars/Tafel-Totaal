@@ -60,82 +60,95 @@
       <section class="package-detail">
         <div class="container">
           <div class="package-detail__grid">
-            <!-- Images -->
-            <div class="package-detail__images">
-              <div class="package-gallery">
-                <div class="package-gallery__main">
-                  <img id="main-image" src="" alt="Product afbeelding">
-                </div>
-                <div class="package-gallery__thumbs" id="image-thumbs">
-                  <!-- Thumbnails will be inserted here -->
-                </div>
+            <!-- Left: Images -->
+            <div class="package-gallery">
+              <div class="package-gallery__main">
+                <img id="main-image" src="" alt="Product afbeelding" loading="lazy">
+              </div>
+              <div class="package-gallery__thumbs" id="image-thumbs">
+                <!-- Thumbnails will be inserted here -->
               </div>
             </div>
 
-            <!-- Info -->
-            <div class="package-detail__info">
-              <h1 class="package-detail__title" id="product-name">Product naam</h1>
-              <p class="package-detail__description" id="product-description">Product beschrijving</p>
-
-              <!-- Price -->
-              <div class="package-detail__price">
-                <span class="package-detail__price-label">Prijs per dag:</span>
-                <span class="package-detail__price-value" id="product-price">€0,00</span>
+            <!-- Right: Info & Configurator -->
+            <div class="package-info">
+              <div class="package-info__header">
+                <span class="badge badge--secondary" id="product-category-badge">Categorie</span>
+                <h1 id="product-name">Product naam</h1>
+                <p class="package-info__description" id="product-description">Product beschrijving</p>
               </div>
 
-              <!-- Specifications -->
-              <div class="package-detail__specs">
-                <h3>Specificaties</h3>
-                <ul>
-                  <li><strong>SKU:</strong> <span id="product-sku">-</span></li>
-                  <li><strong>Categorie:</strong> <span id="product-category">-</span></li>
-                  <li><strong>Beschikbaar:</strong> <span id="product-stock">-</span></li>
-                  <li><strong>Borg per stuk:</strong> <span id="product-deposit">€0,00</span></li>
-                </ul>
-              </div>
+              <!-- Configurator -->
+              <div class="configurator">
+                <h2 class="configurator__title">Product huren</h2>
 
-              <!-- Quantity Selector -->
-              <div class="package-detail__quantity">
-                <label for="quantity">Aantal:</label>
-                <div class="quantity-selector">
-                  <button type="button" class="quantity-btn" id="qty-minus">-</button>
-                  <input type="number" id="quantity" value="1" min="1" max="100">
-                  <button type="button" class="quantity-btn" id="qty-plus">+</button>
+                <!-- Specifications -->
+                <div class="configurator__section">
+                  <label class="configurator__label">Specificaties</label>
+                  <ul style="list-style: none; padding: 0; margin: 0; font-size: var(--font-size-sm); color: var(--color-dark-gray);">
+                    <li style="display: flex; justify-content: space-between; padding-bottom: 4px; border-bottom: 1px dashed var(--color-light-gray); margin-bottom: 4px;">
+                      <span>SKU:</span> <strong id="product-sku" style="color: var(--color-black);">-</strong>
+                    </li>
+                    <li style="display: flex; justify-content: space-between; padding-bottom: 4px; border-bottom: 1px dashed var(--color-light-gray); margin-bottom: 4px;">
+                      <span>Beschikbaar:</span> <strong id="product-stock" style="color: var(--color-black);">-</strong>
+                    </li>
+                  </ul>
                 </div>
-              </div>
 
-              <!-- Date Selection -->
-              <div class="package-detail__dates">
-                <div class="form-group">
-                  <label for="start-date">Startdatum:</label>
-                  <input type="date" id="start-date" class="form-input" required>
+                <!-- Date Selection -->
+                <div class="configurator__section">
+                  <label class="configurator__label">Verhuurperiode</label>
+                  <div class="configurator__dates">
+                    <div class="form-group">
+                      <label for="start-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Startdatum</label>
+                      <input type="date" id="start-date" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="end-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Einddatum</label>
+                      <input type="date" id="end-date" class="form-input" required>
+                    </div>
+                  </div>
+                  <div class="package-detail__days hidden" id="days-display" style="margin-top: 8px; font-size: 0.9rem; color: var(--color-primary); font-weight: 500;">
+                    <span id="days-count">0</span> dagen geselecteerd
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="end-date">Einddatum:</label>
-                  <input type="date" id="end-date" class="form-input" required>
+
+                <!-- Quantity Selector -->
+                <div class="configurator__section">
+                  <label class="configurator__label" for="quantity">Aantal stuks</label>
+                  <div class="quantity-selector" style="width: 100%;">
+                    <button type="button" class="quantity-btn" id="qty-minus" style="flex: 1;">-</button>
+                    <input type="number" id="quantity" value="1" min="1" max="100" style="flex: 1;">
+                    <button type="button" class="quantity-btn" id="qty-plus" style="flex: 1;">+</button>
+                  </div>
                 </div>
-              </div>
 
-              <!-- Days Display -->
-              <div class="package-detail__days hidden" id="days-display">
-                <span id="days-count">0</span> dagen
-              </div>
+                <!-- Price Summary -->
+                <div class="price-summary">
+                  <div class="price-summary__row">
+                    <span>Prijs per stuk/dag</span>
+                    <span id="product-price">€0,00</span>
+                  </div>
+                  <div class="price-summary__row price-summary__row--deposit">
+                    <span>Borg per stuk (terugbetaalbaar)</span>
+                    <span id="product-deposit">€0,00</span>
+                  </div>
+                  <div class="price-summary__total">
+                    <span>Totaal</span>
+                    <span id="total-price">€0,00</span>
+                  </div>
+                </div>
 
-              <!-- Total Price -->
-              <div class="package-detail__total">
-                <span>Totaalprijs:</span>
-                <span class="package-detail__total-price" id="total-price">€0,00</span>
+                <!-- Add to Cart -->
+                <button class="btn btn--primary btn--lg btn--full" id="add-to-cart-btn">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                  Toevoegen aan winkelwagen
+                </button>
               </div>
-
-              <!-- Add to Cart -->
-              <button class="btn btn--primary btn--lg btn--full" id="add-to-cart-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                Toevoegen aan winkelwagen
-              </button>
             </div>
           </div>
         </div>
