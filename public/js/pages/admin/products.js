@@ -17,14 +17,25 @@ let isNewProduct = false; // Track if we're creating a new product
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
-  const user = await requireAdmin();
-  if (!user) return;
-
+  console.log('Products page initializing...');
+  
+  // Initialize UI components first (before auth check)
   initFilters();
   initModal();
   initCSVUpload();
   initBulkActions();
   initImageUpload();
+  
+  console.log('UI components initialized');
+  
+  // Then check authentication
+  const user = await requireAdmin();
+  if (!user) {
+    console.log('User not authenticated or not admin, redirecting...');
+    return;
+  }
+  
+  console.log('User authenticated, loading products...');
   await loadProducts();
 });
 
