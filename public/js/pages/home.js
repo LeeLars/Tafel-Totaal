@@ -80,7 +80,7 @@ async function loadFeaturedPackages() {
  * Create package card HTML
  */
 function createPackageCard(pkg) {
-  const imageUrl = pkg.images?.[0] || '/Tafel-Totaal/images/packages/placeholder.jpg';
+  const imageUrl = getPackageImageUrl(pkg);
   const serviceLevelBadge = getServiceLevelBadge(pkg.service_level);
   
   return `
@@ -104,6 +104,26 @@ function createPackageCard(pkg) {
       </a>
     </article>
   `;
+}
+
+function getPackageImageUrl(pkg) {
+  const direct = pkg.images?.[0];
+  if (direct) return direct;
+
+  const fallbacks = [
+    '/Tafel-Totaal/images/site/hero-table-setting.jpg',
+    '/Tafel-Totaal/images/site/gala-theme.jpg',
+    '/Tafel-Totaal/images/site/corporate-dinner.jpg',
+    '/Tafel-Totaal/images/site/garden-dinner.jpg',
+    '/Tafel-Totaal/images/site/hero-homepage.jpg'
+  ];
+
+  const key = String(pkg.id || pkg.slug || pkg.name || 'package');
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) {
+    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  }
+  return fallbacks[hash % fallbacks.length];
 }
 
 /**
