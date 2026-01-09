@@ -133,7 +133,7 @@
   color: var(--color-dark-gray);
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  margin: 0 0 var(--space-md) 0;
+  margin: 0;
   max-width: 600px;
   display: flex;
   align-items: center;
@@ -815,6 +815,91 @@
   font-size: var(--font-size-xl);
   margin-top: var(--space-sm);
   text-transform: uppercase;
+}
+
+/* ============================================
+   STATEMENT SECTION - USP Highlight (No Dishwashing)
+   ============================================ */
+
+.statement-section {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-bottom: var(--border-width) solid var(--color-black);
+  position: relative;
+  z-index: 5;
+}
+
+.statement-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (min-width: 1024px) {
+  .statement-grid {
+    grid-template-columns: 1.5fr 1fr;
+  }
+}
+
+.statement-cell {
+  padding: var(--space-3xl) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@media (min-width: 1024px) {
+  .statement-cell {
+    border-bottom: none;
+    padding: var(--space-4xl) var(--space-3xl);
+  }
+  
+  .statement-cell--main {
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+.statement-title {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 7rem);
+  line-height: 0.85;
+  margin: 0;
+  text-transform: uppercase;
+  color: var(--color-white);
+}
+
+.text-stroke-white {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--color-white);
+  display: block;
+}
+
+.statement-text {
+  font-size: var(--font-size-lg);
+  line-height: 1.5;
+  color: var(--color-light-gray);
+  max-width: 500px;
+  margin: 0;
+}
+
+.statement-text strong {
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+/* Override tech markers for dark bg */
+.statement-section .tech-marker {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.statement-section .tech-marker--tl {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.statement-section .tech-marker--tr {
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 /* ============================================

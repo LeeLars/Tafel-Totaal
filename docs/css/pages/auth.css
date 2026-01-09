@@ -235,6 +235,14 @@
   cursor: pointer;
 }
 
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
 .checkbox__mark {
   width: 18px;
   height: 18px;
