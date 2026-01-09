@@ -39,7 +39,7 @@ async function checkAlreadyLoggedIn() {
     const response = await authAPI.me();
     if (response.success && response.data) {
       // Already logged in, redirect
-      const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
+      const returnUrl = getQueryParam('returnUrl') || './account/overzicht.html';
       window.location.href = returnUrl;
     }
   } catch (error) {
@@ -105,9 +105,9 @@ function initLoginForm() {
         if (!redirectUrl) {
           // Default redirect based on user role
           if (response.data?.role === 'admin') {
-            redirectUrl = '/admin/index.html';
+            redirectUrl = './admin/index.html';
           } else {
-            redirectUrl = '/account/overzicht.html';
+            redirectUrl = './account/overzicht.html';
           }
         }
         
