@@ -13,7 +13,6 @@
   color: var(--color-white);
   padding: var(--space-sm) 0;
   overflow: hidden;
-  border-bottom: var(--border-width) solid var(--color-black);
   z-index: 10;
   position: relative;
 }

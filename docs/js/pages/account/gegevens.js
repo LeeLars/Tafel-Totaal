@@ -6,6 +6,7 @@ import { authAPI } from '../../lib/api.js';
 import { showToast } from '../../lib/utils.js';
 import { requireAuth } from '../../lib/guards.js';
 import { loadHeader } from '../../components/header.js';
+import { initBillingAddressForm } from './gegevens-billing.js';
 
 let currentUser = null;
 
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderUserInfo();
   fillProfileForm();
   initProfileForm();
+  initBillingAddressForm();
   initPasswordForm();
   initLogout();
 });
@@ -64,6 +66,7 @@ function fillProfileForm() {
   document.getElementById('email').value = currentUser.email || '';
   document.getElementById('phone').value = currentUser.phone || '';
   document.getElementById('company_name').value = currentUser.company_name || '';
+  document.getElementById('vat_number').value = currentUser.vat_number || '';
 }
 
 /**
@@ -81,6 +84,7 @@ function initProfileForm() {
     const lastName = form.last_name.value.trim();
     const phone = form.phone.value.trim();
     const companyName = form.company_name.value.trim();
+    const vatNumber = form.vat_number.value.trim();
 
     if (!firstName || !lastName) {
       showToast('Vul je voor- en achternaam in', 'error');
@@ -95,7 +99,8 @@ function initProfileForm() {
         first_name: firstName,
         last_name: lastName,
         phone: phone,
-        company_name: companyName
+        company_name: companyName,
+        vat_number: vatNumber
       });
 
       showToast('Gegevens bijgewerkt', 'success');

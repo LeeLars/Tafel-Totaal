@@ -114,9 +114,59 @@
                 <input type="text" id="company_name" name="company_name" class="form-input">
               </div>
 
+              <div class="form-group">
+                <label for="vat_number" class="form-label">BTW-nummer (optioneel)</label>
+                <input type="text" id="vat_number" name="vat_number" class="form-input" placeholder="BE0123456789">
+                <p class="form-hint">Enkel voor zelfstandigen en bedrijven.</p>
+              </div>
+
               <div class="profile-form__actions">
                 <button type="submit" class="btn btn--primary" id="save-btn">Wijzigingen opslaan</button>
               </div>
+            </form>
+          </div>
+
+          <!-- Billing Address -->
+          <div class="account-card">
+            <div class="account-card__header">
+              <h2 class="account-card__title">Factuuradres (optioneel)</h2>
+              <p style="font-size: 0.875rem; color: var(--color-gray); margin-top: var(--space-xs);">Indien verschillend van leveradres</p>
+            </div>
+            <form class="profile-form" id="billing-address-form">
+              <div class="form-row">
+                <div class="form-group" style="flex: 2;">
+                  <label for="billing_street" class="form-label">Straat</label>
+                  <input type="text" id="billing_street" name="street" class="form-input">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                  <label for="billing_house_number" class="form-label">Huisnummer</label>
+                  <input type="text" id="billing_house_number" name="house_number" class="form-input">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="billing_postal_code" class="form-label">Postcode</label>
+                  <input type="text" id="billing_postal_code" name="postal_code" class="form-input">
+                </div>
+                <div class="form-group">
+                  <label for="billing_city" class="form-label">Stad</label>
+                  <input type="text" id="billing_city" name="city" class="form-input">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="billing_country" class="form-label">Land</label>
+                <select id="billing_country" name="country" class="form-input">
+                  <option value="BE">België</option>
+                  <option value="NL">Nederland</option>
+                  <option value="LU">Luxemburg</option>
+                  <option value="FR">Frankrijk</option>
+                  <option value="DE">Duitsland</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn--primary">Factuuradres opslaan</button>
             </form>
           </div>
 

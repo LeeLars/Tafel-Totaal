@@ -5,6 +5,7 @@
 import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
+import { initCSVUpload, initBulkActions, handleCheckboxChange, updateBulkToolbar } from './products-csv-bulk.js';
 
 let currentPage = 1;
 let currentSearch = '';
@@ -18,6 +19,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   initFilters();
   initModal();
+  initCSVUpload();
+  initBulkActions();
   await loadProducts();
 });
 
@@ -131,6 +134,11 @@ async function loadProducts() {
         if (product) openEditModal(product);
       });
     });
+    
+    // Add checkbox handlers
+    tbody.querySelectorAll('.product-checkbox').forEach(cb => {
+      cb.addEventListener('change', () => handleCheckboxChange(cb));
+    });
   } catch (error) {
     console.error('Error loading products:', error);
     tbody.innerHTML = `
@@ -152,6 +160,9 @@ function createProductRow(product) {
   
   return `
     <tr>
+      <td>
+        <input type="checkbox" class="product-checkbox" data-id="${product.id}" style="cursor: pointer;">
+      </td>
       <td>
         <strong>${product.name}</strong>
       </td>

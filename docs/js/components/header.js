@@ -286,6 +286,8 @@ export async function loadHeader(containerId = 'header-container') {
     const html = await response.text();
     container.innerHTML = html;
     
+    // Wait for DOM to be ready before initializing
+    await new Promise(resolve => setTimeout(resolve, 0));
     initHeader();
   } catch (error) {
     console.error('Error loading header:', error);
