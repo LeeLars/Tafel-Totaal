@@ -91,7 +91,7 @@ export async function parseProductsCSV(req: Request, res: Response): Promise<voi
       }
 
       // Find category ID
-      const category = await query(
+      const category = await query<{ id: string }>(
         'SELECT id FROM categories WHERE LOWER(name) = LOWER($1) OR LOWER(slug) = LOWER($1)',
         [row.category.trim()]
       );
@@ -102,9 +102,9 @@ export async function parseProductsCSV(req: Request, res: Response): Promise<voi
       }
 
       // Find subcategory ID if provided
-      let subcategoryId = null;
+      let subcategoryId: string | null = null;
       if (row.subcategory?.trim()) {
-        const subcategory = await query(
+        const subcategory = await query<{ id: string }>(
           'SELECT id FROM subcategories WHERE LOWER(name) = LOWER($1) OR LOWER(slug) = LOWER($1)',
           [row.subcategory.trim()]
         );
