@@ -382,7 +382,7 @@ export async function getCustomerById(req: Request, res: Response): Promise<void
 // INVENTORY MANAGEMENT
 // ============================================
 
-export async function getInventory(req: Request, res: Response): Promise<void> {
+export async function getInventory(_req: Request, res: Response): Promise<void> {
   try {
     const inventory = await query<{
       id: string;
@@ -425,7 +425,7 @@ export async function getInventory(req: Request, res: Response): Promise<void> {
   }
 }
 
-export async function getInventoryStats(req: Request, res: Response): Promise<void> {
+export async function getInventoryStats(_req: Request, res: Response): Promise<void> {
   try {
     const stats = await queryOne<{
       total_products: string;
