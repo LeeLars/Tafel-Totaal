@@ -14,7 +14,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="/css/variables.css">
@@ -22,137 +22,271 @@
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/utilities.css">
   <link rel="stylesheet" href="/css/pages/content.css">
+  <link rel="stylesheet" href="/css/pages/home.css">
 </head>
 <body>
   <!-- Header -->
   <div id="header-container"></div>
 
   <main>
-    <!-- Page Hero -->
-    <section class="page-hero">
-      <div class="container">
-        <nav class="page-hero__breadcrumb" aria-label="Breadcrumb">
-          <ol>
-            <li><a href="/">Home</a></li>
-            <li aria-current="page">Hoe werkt het?</li>
-          </ol>
-        </nav>
-        <h1>Hoe werkt het?</h1>
-        <p class="page-hero__subtitle">
-          Verhuur van servies en tafeldecoratie in 4 eenvoudige stappen.
-        </p>
+    <!-- Brutalist Hero (Matches Over Ons) -->
+    <section class="hero-section" style="min-height: 60vh;">
+      <div class="hero-grid">
+        <!-- Block 1: Title -->
+        <div class="hero-cell hero-cell--title">
+           <p class="hero-subtitle">PROCES • WERKWIJZE</p>
+          <h1 class="hero-title">
+            HOE <br>
+            <span class="text-stroke">WERKT HET?</span>
+          </h1>
+        </div>
+
+        <!-- Block 2: Image -->
+        <div class="hero-cell hero-cell--visual" style="background-image: url('/images/site/table-setting-process.jpg'); background-size: cover; background-position: center;">
+          <div class="hero-overlay"></div>
+        </div>
+
+        <!-- Block 3: Intro -->
+        <div class="hero-cell hero-cell--intro">
+          <p class="hero-lead">
+            Van bestelling tot retour: <br>
+            <strong>wij maken het je makkelijk.</strong>
+          </p>
+        </div>
+
+        <!-- Block 4: Stats/Deco -->
+        <div class="hero-cell hero-cell--cta" style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: var(--color-primary); color: var(--color-white);">
+          <div style="font-family: var(--font-heading); font-size: 4rem; line-height: 1;">4</div>
+          <div style="font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase;">STAPPEN</div>
+        </div>
       </div>
     </section>
 
-    <!-- Steps Section -->
-    <section class="content-section">
+    <!-- Steps Section (How It Works Layout) -->
+    <section class="how-it-works" style="background-color: var(--color-white); border-top: 1px solid var(--color-charcoal); border-bottom: 1px solid var(--color-charcoal);">
       <div class="container">
-        <div class="steps-grid">
+        <div class="how-it-works__header">
+          <div class="tech-label">STAP VOOR STAP</div>
+          <h2 style="text-transform: uppercase;">HET PROCES</h2>
+          <p>In 4 eenvoudige stappen naar een perfect gedekte tafel.</p>
+        </div>
+        
+        <div class="how-it-works__steps">
           <!-- Step 1 -->
-          <div class="step-card" data-animate>
-            <div class="step-card__number">01</div>
-            <div class="step-card__content">
-              <h2>Kies je producten</h2>
-              <p>Browse door ons uitgebreid assortiment aan servies, bestek, glaswerk, decoratie en tafels & stoelen. Kies een compleet pakket of stel je eigen selectie samen met losse producten.</p>
-              <ul class="step-list">
-                <li>Bekijk onze pakketten voor complete oplossingen</li>
-                <li>Of kies losse producten naar wens</li>
-                <li>Bepaal zelf de hoeveelheden</li>
-              </ul>
-            </div>
+          <div class="step">
+            <div class="step__number">1</div>
+            <h3 class="step__title">Kies je producten</h3>
+            <p class="step__text">Browse door ons assortiment en selecteer een compleet pakket of stel je eigen selectie samen. Bepaal de hoeveelheden op basis van je aantal gasten.</p>
           </div>
 
           <!-- Step 2 -->
-          <div class="step-card" data-animate>
-            <div class="step-card__number">02</div>
-            <div class="step-card__content">
-              <h2>Selecteer datum & levering</h2>
-              <p>Geef de datum van je evenement op en kies je bezorgmoment. Wij controleren de beschikbaarheid en zorgen dat alles op tijd bij je is.</p>
-              <ul class="step-list">
-                <li>Kies je evenementdatum</li>
-                <li>Selecteer bezorging of ophaling</li>
-                <li>Wij leveren 1 dag voor je evenement</li>
-              </ul>
-            </div>
+          <div class="step">
+            <div class="step__number">2</div>
+            <h3 class="step__title">Selecteer datum & levering</h3>
+            <p class="step__text">Levering (min. €150) de dag voor je event of dag zelf. Zelf afhalen is altijd mogelijk, tot 3 dagen vooraf (enkel namiddag).</p>
           </div>
 
           <!-- Step 3 -->
-          <div class="step-card" data-animate>
-            <div class="step-card__number">03</div>
-            <div class="step-card__content">
-              <h2>Vier je feest</h2>
-              <p>Geniet van je evenement met stijlvol servies en decoratie. Het belangrijkste: <strong>je hoeft niet af te wassen!</strong> Lever alles gewoon vuil weer in.</p>
-              <ul class="step-list">
-                <li>Gebruik het servies tijdens je feest</li>
-                <li>Geen afwas nodig - lever vuil in</li>
-                <li>Wij zorgen voor de reiniging</li>
-              </ul>
-            </div>
+          <div class="step">
+            <div class="step__number">3</div>
+            <h3 class="step__title">Vier je feest</h3>
+            <p class="step__text">Geniet van je evenement met stijlvol servies. Het belangrijkste: je hoeft niet af te wassen! Lever alles gewoon vuil weer in.</p>
           </div>
 
           <!-- Step 4 -->
-          <div class="step-card" data-animate>
-            <div class="step-card__number">04</div>
-            <div class="step-card__content">
-              <h2>Retour & borg</h2>
-              <p>De dag na je evenement halen wij alles weer op. Na controle krijg je je borg terug. Zo simpel is het!</p>
-              <ul class="step-list">
-                <li>Wij halen alles op de dag na je event op</li>
-                <li>Controle op schade en volledigheid</li>
-                <li>Borg wordt teruggestort binnen 5 werkdagen</li>
-              </ul>
+          <div class="step">
+            <div class="step__number">4</div>
+            <h3 class="step__title">Retour & borg terug</h3>
+            <p class="step__text">De dag na je evenement halen wij alles op. Na controle krijg je je borg binnen 5 werkdagen terug. Zo simpel is het!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline Section (Detailed Process) -->
+    <section class="content-section" style="background: var(--color-off-white); border-bottom: 1px solid var(--color-charcoal);">
+      <div class="container">
+        <div class="content-section__header" style="text-align: left; max-width: 100%; margin-bottom: var(--space-2xl);">
+          <div class="tech-label">TIJDLIJN</div>
+          <h2 style="font-family: var(--font-heading); font-size: var(--font-size-3xl); text-transform: uppercase;">WAT GEBEURT WANNEER?</h2>
+        </div>
+
+        <div style="display: grid; gap: 0; border: 1px solid var(--color-charcoal);">
+          <!-- Timeline Item 1 -->
+          <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
+            <div style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--color-gray); margin-bottom: 4px;">MOMENT</div>
+              <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Bestelling</div>
+            </div>
+            <div style="padding: var(--space-lg); background: var(--color-white);">
+              <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Online bestellen</h4>
+              <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Plaats je bestelling via onze webshop. Je betaalt de huurprijs + borg. Je ontvangt direct een bevestigingsmail met alle details.</p>
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Directe bevestiging per e-mail</div>
+            </div>
+          </div>
+
+          <!-- Timeline Item 2 -->
+          <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
+            <div style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--color-gray); margin-bottom: 4px;">MOMENT</div>
+              <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">1 dag voor / dag zelf</div>
+            </div>
+            <div style="padding: var(--space-lg); background: var(--color-white);">
+              <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Levering (min. €150)</h4>
+              <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Wij bezorgen alles schoon en compleet in handige kratten. Levering is mogelijk vanaf €150 bestelling, de dag voor je event of op de dag zelf.</p>
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Levering vanaf €150 • Afhalen altijd mogelijk (namiddag, tot 3 dagen vooraf)</div>
+            </div>
+          </div>
+
+          <!-- Timeline Item 3 -->
+          <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
+            <div style="background: var(--color-primary); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 4px;">MOMENT</div>
+              <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Je evenement</div>
+            </div>
+            <div style="padding: var(--space-lg); background: var(--color-white);">
+              <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Genieten!</h4>
+              <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Dek je tafel, ontvang je gasten en geniet van je feest. Na afloop: schraap de borden leeg en zet alles terug in de kratten. Klaar!</p>
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Geen afwas nodig - lever vuil in</div>
+            </div>
+          </div>
+
+          <!-- Timeline Item 4 -->
+          <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
+            <div style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--color-gray); margin-bottom: 4px;">MOMENT</div>
+              <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">1 dag na</div>
+            </div>
+            <div style="padding: var(--space-lg); background: var(--color-white);">
+              <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Ophaling</h4>
+              <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">De dag na je evenement halen wij de kratten op. Zorg dat alles klaarstaat op een bereikbare plek.</p>
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Flexibele ophaalafspraken</div>
+            </div>
+          </div>
+
+          <!-- Timeline Item 5 -->
+          <div style="display: grid; grid-template-columns: 200px 1fr;">
+            <div style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--color-gray); margin-bottom: 4px;">MOMENT</div>
+              <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Binnen 5 dagen</div>
+            </div>
+            <div style="padding: var(--space-lg); background: var(--color-white);">
+              <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Borg terugbetaling</h4>
+              <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Na controle op schade en volledigheid storten wij je borg terug. Bij eventuele schade nemen we contact op voordat we iets inhouden.</p>
+              <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Transparante schaderegeling</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- USP Section -->
-    <section class="highlight-section" data-animate>
+    <!-- FAQ Section (Process Specific) -->
+    <section class="faq-snippet" style="background: var(--color-white); border-bottom: 1px solid var(--color-charcoal);">
       <div class="container">
-        <div class="highlight-content">
-          <h2>Waarom Tafel Totaal?</h2>
-          <div class="highlight-grid">
-            <div class="highlight-item">
-              <div class="highlight-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                  <polyline points="9 12 11 14 15 10"></polyline>
-                </svg>
+        <div class="faq-layout">
+          <div class="faq-header">
+            <div class="tech-label">FAQ</div>
+            <h2 style="text-transform: uppercase;">VEELGESTELDE VRAGEN</h2>
+            <p>Antwoord op de meest gestelde vragen over ons verhuurproces.</p>
+          </div>
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>Moet ik het servies afwassen voor retour?</summary>
+              <div class="faq-content">
+                <p><strong>Nee!</strong> Dat is juist het mooie van huren bij ons. Je mag het servies "bezemschoon" retourneren: verwijder de grove etensresten en zet alles terug in de kratten. Wij doen de rest.</p>
               </div>
-              <h3>Geen afwas</h3>
-              <p>Lever alles vuil in. Wij zorgen voor de reiniging.</p>
-            </div>
-            <div class="highlight-item">
-              <div class="highlight-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                  <line x1="1" y1="10" x2="23" y2="10"></line>
-                </svg>
+            </details>
+            <details class="faq-item">
+              <summary>Hoeveel kost de levering?</summary>
+              <div class="faq-content">
+                <p>De leveringskosten worden berekend op basis van de afstand vanaf ons magazijn in Beernem. Bij het afrekenen zie je direct de exacte kosten. Afhalen is altijd gratis!</p>
               </div>
-              <h3>Veilige betaling</h3>
-              <p>Betaal online via Mollie. Borg wordt teruggestort.</p>
-            </div>
-            <div class="highlight-item">
-              <div class="highlight-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
+            </details>
+            <details class="faq-item">
+              <summary>Wat als er iets kapot gaat?</summary>
+              <div class="faq-content">
+                <p>Kleine ongelukjes horen erbij. Bij normale slijtage of een enkel gebroken glas rekenen we niets extra. Bij grotere schade nemen we altijd eerst contact op om de situatie te bespreken. Bekijk onze <a href="/borg-schade.html">borg & schade pagina</a> voor meer details.</p>
               </div>
-              <h3>Levering & ophaling</h3>
-              <p>Wij leveren en halen op in heel België.</p>
-            </div>
-            <div class="highlight-item">
-              <div class="highlight-icon">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                  <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                </svg>
+            </details>
+            <details class="faq-item">
+              <summary>Kan ik mijn bestelling nog wijzigen?</summary>
+              <div class="faq-content">
+                <p>Tot 48 uur voor levering kun je aantallen nog kosteloos wijzigen, zolang de voorraad het toelaat. Neem contact met ons op via e-mail of telefoon.</p>
               </div>
-              <h3>Kwaliteit</h3>
-              <p>Stijlvol servies en decoratie voor elk evenement.</p>
+            </details>
+            <details class="faq-item">
+              <summary>Leveren jullie ook in het weekend?</summary>
+              <div class="faq-content">
+                <p>Ja! Wij leveren 7 dagen per week. Zaterdag is zelfs onze drukste dag. Zondaglevering is mogelijk op aanvraag.</p>
+              </div>
+            </details>
+            <details class="faq-item">
+              <summary>Hoe lang mag ik het servies houden?</summary>
+              <div class="faq-content">
+                <p>De standaard huurperiode is 3 dagen: levering dag voor event of dag zelf, eventdag, ophaling dag na event. Zelf afhalen kan tot 3 dagen vooraf (enkel namiddag) en is altijd mogelijk. Levering vanaf €150 bestelling.</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- USP Section (Brutalist Grid) -->
+    <section class="content-section" style="background: var(--color-black); color: var(--color-white); border-bottom: 1px solid var(--color-charcoal);">
+      <div class="container">
+        <div class="content-section__header" style="text-align: left; max-width: 100%; margin-bottom: var(--space-2xl);">
+          <div class="tech-label" style="color: var(--color-primary);">VOORDELEN</div>
+          <h2 style="font-family: var(--font-heading); font-size: var(--font-size-3xl); text-transform: uppercase; color: var(--color-white);">WAAROM TAFEL TOTAAL?</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--color-charcoal);">
+          <!-- USP 1 -->
+          <div style="padding: var(--space-xl); border-right: 1px solid var(--color-charcoal); text-align: center;">
+            <div style="width: 64px; height: 64px; background: var(--color-primary); margin: 0 auto var(--space-md); display: flex; align-items: center; justify-content: center;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
             </div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.1rem; text-transform: uppercase; margin-bottom: var(--space-sm);">Geen afwas</h3>
+            <p style="font-family: var(--font-mono); font-size: 12px; color: var(--color-gray);">Lever alles vuil in. Wij zorgen voor de reiniging.</p>
+          </div>
+
+          <!-- USP 2 -->
+          <div style="padding: var(--space-xl); border-right: 1px solid var(--color-charcoal); text-align: center;">
+            <div style="width: 64px; height: 64px; background: var(--color-primary); margin: 0 auto var(--space-md); display: flex; align-items: center; justify-content: center;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="1" y="4" width="22" height="16" rx="0" ry="0"></rect>
+                <line x1="1" y1="10" x2="23" y2="10"></line>
+              </svg>
+            </div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.1rem; text-transform: uppercase; margin-bottom: var(--space-sm);">Veilig betalen</h3>
+            <p style="font-family: var(--font-mono); font-size: 12px; color: var(--color-gray);">Online via Mollie. Borg wordt teruggestort.</p>
+          </div>
+
+          <!-- USP 3 -->
+          <div style="padding: var(--space-xl); border-right: 1px solid var(--color-charcoal); text-align: center;">
+            <div style="width: 64px; height: 64px; background: var(--color-primary); margin: 0 auto var(--space-md); display: flex; align-items: center; justify-content: center;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+              </svg>
+            </div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.1rem; text-transform: uppercase; margin-bottom: var(--space-sm);">Levering & ophaling</h3>
+            <p style="font-family: var(--font-mono); font-size: 12px; color: var(--color-gray);">In heel België. Afhalen kan ook gratis.</p>
+          </div>
+
+          <!-- USP 4 -->
+          <div style="padding: var(--space-xl); text-align: center;">
+            <div style="width: 64px; height: 64px; background: var(--color-primary); margin: 0 auto var(--space-md); display: flex; align-items: center; justify-content: center;">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+            </div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.1rem; text-transform: uppercase; margin-bottom: var(--space-sm);">Topkwaliteit</h3>
+            <p style="font-family: var(--font-mono); font-size: 12px; color: var(--color-gray);">Stijlvol servies voor elk type evenement.</p>
           </div>
         </div>
       </div>
@@ -178,6 +312,15 @@
       await loadFooter();
       await loadCTA();
     });
+
+    async function loadFooter() {
+      const container = document.getElementById('footer-container');
+      if (!container) return;
+      try {
+        const response = await fetch('/components/footer.html');
+        if (response.ok) container.innerHTML = await response.text();
+      } catch (e) {}
+    }
   </script>
 </body>
 </html>

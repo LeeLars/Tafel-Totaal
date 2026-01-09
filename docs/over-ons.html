@@ -31,7 +31,7 @@
   <main>
     <!-- Brutalist Hero -->
     <section class="hero-section" style="min-height: 60vh;">
-      <div class="hero-grid" style="gap: 0; background-color: var(--color-black);"> <!-- Fix white line by setting bg to black -->
+      <div class="hero-grid">
         <!-- Block 1: Title -->
         <div class="hero-cell hero-cell--title">
            <p class="hero-subtitle">EST. 2026 • BELGIË</p>
@@ -42,7 +42,7 @@
         </div>
 
         <!-- Block 2: Image -->
-        <div class="hero-cell hero-cell--visual" style="background-image: url('/Tafel-Totaal/images/site/corporate-dinner.jpg'); background-size: cover; background-position: center; border-left: 1px solid var(--color-black);"> <!-- Fix border -->
+        <div class="hero-cell hero-cell--visual" style="background-image: url('/Tafel-Totaal/images/site/corporate-dinner.jpg'); background-size: cover; background-position: center;">
           <div class="hero-overlay"></div>
         </div>
 
@@ -55,7 +55,7 @@
         </div>
 
         <!-- Block 4: Empty/Deco -->
-        <div class="hero-cell hero-cell--cta" style="display: flex; align-items: center; justify-content: center; background-color: var(--color-primary); color: var(--color-white); border-right: none;"> <!-- Fix border -->
+        <div class="hero-cell hero-cell--cta" style="display: flex; align-items: center; justify-content: center; background-color: var(--color-primary); color: var(--color-white);">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <path d="M12 5v14M5 12l7 7 7-7"/>
           </svg>
@@ -95,24 +95,9 @@
           <p>Onze kernwaarden bepalen alles wat we doen.</p>
         </div>
         
-        <style>
-          .value-step:hover {
-            background-color: var(--color-primary-light) !important;
-            border-color: var(--color-primary) !important;
-          }
-          .value-step:hover .step__icon {
-            background-color: var(--color-primary) !important;
-            transform: scale(1.1);
-          }
-          .value-step:hover .step__title {
-            color: var(--color-primary) !important;
-          }
-          .step__icon { transition: all 0.3s ease; }
-        </style>
-
         <div class="how-it-works__steps" style="display: grid; grid-template-columns: 1fr; gap: 0; border: 1px solid var(--color-charcoal);">
           <!-- Value 1 -->
-          <div class="step value-step" style="border: none; border-bottom: 1px solid var(--color-charcoal); transition: all 0.3s ease;">
+          <div class="step" style="border: none; border-bottom: 1px solid var(--color-charcoal);">
             <div class="step__icon" style="width: 48px; height: 48px; background: var(--color-black); color: var(--color-white); display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
@@ -125,7 +110,7 @@
           </div>
 
           <!-- Value 2 -->
-          <div class="step value-step" style="border: none; border-bottom: 1px solid var(--color-charcoal); transition: all 0.3s ease;">
+          <div class="step" style="border: none; border-bottom: 1px solid var(--color-charcoal);">
             <div class="step__icon" style="width: 48px; height: 48px; background: var(--color-black); color: var(--color-white); display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -141,7 +126,7 @@
           </div>
 
           <!-- Value 3 -->
-          <div class="step value-step" style="border: none; border-bottom: 1px solid var(--color-charcoal); transition: all 0.3s ease;">
+          <div class="step" style="border: none; border-bottom: 1px solid var(--color-charcoal);">
             <div class="step__icon" style="width: 48px; height: 48px; background: var(--color-black); color: var(--color-white); display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10"></circle>
@@ -157,7 +142,7 @@
           </div>
 
           <!-- Value 4 -->
-          <div class="step value-step" style="border: none; border-bottom: 1px solid var(--color-charcoal); transition: all 0.3s ease;">
+          <div class="step" style="border: none; border-bottom: 1px solid var(--color-charcoal);">
             <div class="step__icon" style="width: 48px; height: 48px; background: var(--color-black); color: var(--color-white); display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -170,7 +155,7 @@
           </div>
 
           <!-- Value 5 -->
-          <div class="step value-step" style="border: none; border-bottom: 1px solid var(--color-charcoal); transition: all 0.3s ease;">
+          <div class="step" style="border: none; border-bottom: 1px solid var(--color-charcoal);">
             <div class="step__icon" style="width: 48px; height: 48px; background: var(--color-black); color: var(--color-white); display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
@@ -185,7 +170,7 @@
           </div>
 
           <!-- Value 6 -->
-          <div class="step value-step" style="border: none; transition: all 0.3s ease;">
+          <div class="step" style="border: none;">
             <div class="step__icon" style="width: 48px; height: 48px; background: var(--color-black); color: var(--color-white); display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -197,6 +182,9 @@
               <p class="step__text">Transparante prijzen zonder verborgen kosten. Je weet vooraf precies wat je betaalt.</p>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
 
     <!-- Numbers Section (Technical Grid) -->
     <section class="content-section">
