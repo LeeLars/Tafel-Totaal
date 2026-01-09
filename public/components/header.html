@@ -467,23 +467,13 @@
   width: 100%;
   height: 100%;
   background-color: var(--color-primary);
-  transform: translateX(-101%);
+  transform: translateX(var(--fill-from, -101%));
   transition: transform 0.4s var(--ease-out-expo);
   z-index: -1;
 }
 
-/* Default: from left */
-.category-link.from-left::before {
-  transform: translateX(-101%);
-}
-
-/* From right */
-.category-link.from-right::before {
-  transform: translateX(101%);
-}
-
 /* On hover: fill to center */
-.category-link:hover::before,
+.category-link.is-hovering::before,
 .category-link.active::before {
   transform: translateX(0);
 }

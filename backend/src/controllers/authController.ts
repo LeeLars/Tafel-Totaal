@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { query, queryOne } from '../config/database';
-import { Customer, JwtPayload } from '../types';
+import { Customer, JwtPayload, User } from '../types';
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
@@ -43,6 +43,46 @@ export async function register(req: Request, res: Response): Promise<void> {
   } catch (error) {
     console.error('Register error:', error);
     res.status(500).json({ success: false, error: 'Registration failed' });
+  }
+}
+
+export async function adminLogin(req: Request, res: Response): Promise<void> {
+  try {
+    const { email, password } = req.body;
+
+    const user = await queryOne<User & { password_hash: string }>(
+      'SELECT * FROM users WHERE email = $1 AND is_active = true',
+      [email.toLowerCase()]
+    );
+
+    if (!user) {
+      res.status(401).json({ success: false, error: 'Invalid email or password' });
+      return;
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password_hash);
+
+    if (!validPassword) {
+      res.status(401).json({ success: false, error: 'Invalid email or password' });
+      return;
+    }
+
+    const token = generateAdminToken(user);
+    setAuthCookie(res, token);
+
+    res.json({
+      success: true,
+      data: {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        role: 'admin',
+      },
+    });
+  } catch (error) {
+    console.error('Admin login error:', error);
+    res.status(500).json({ success: false, error: 'Login failed' });
   }
 }
 
@@ -102,6 +142,21 @@ export async function getCurrentUser(req: Request, res: Response): Promise<void>
       return;
     }
 
+    if (req.user.role === 'admin') {
+      const user = await queryOne<User>(
+        'SELECT id, email, first_name, last_name, role, is_active, created_at FROM users WHERE id = $1 AND is_active = true',
+        [req.user.userId]
+      );
+
+      if (!user) {
+        res.status(404).json({ success: false, error: 'User not found' });
+        return;
+      }
+
+      res.json({ success: true, data: user });
+      return;
+    }
+
     const customer = await queryOne<Customer>(
       'SELECT id, email, first_name, last_name, phone, company_name, created_at FROM customers WHERE id = $1',
       [req.user.userId]
@@ -124,6 +179,18 @@ function generateToken(customer: Customer): string {
     userId: customer.id,
     email: customer.email,
     role: 'customer',
+  };
+
+  return jwt.sign(payload, env.JWT_SECRET, {
+    expiresIn: env.JWT_EXPIRES_IN as any,
+  });
+}
+
+function generateAdminToken(user: User): string {
+  const payload: JwtPayload = {
+    userId: user.id,
+    email: user.email,
+    role: 'admin',
   };
 
   return jwt.sign(payload, env.JWT_SECRET, {
