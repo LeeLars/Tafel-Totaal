@@ -105,9 +105,9 @@ function initLoginForm() {
         if (!redirectUrl) {
           // Default redirect based on user role
           if (response.data?.role === 'admin') {
-            redirectUrl = './admin/index.html';
+            redirectUrl = '/Tafel-Totaal/admin/index.html';
           } else {
-            redirectUrl = './account/overzicht.html';
+            redirectUrl = '/Tafel-Totaal/account/overzicht.html';
           }
         }
         

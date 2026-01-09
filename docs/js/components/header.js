@@ -137,6 +137,7 @@ function initLogoutButtons() {
  */
 function initDirectionAwareHover() {
   const categoryLinks = document.querySelectorAll('.category-link');
+  const categoryCards = document.querySelectorAll('.category-card');
   
   categoryLinks.forEach(link => {
     link.addEventListener('mouseenter', (e) => {
@@ -164,6 +165,71 @@ function initDirectionAwareHover() {
       
       // Update direction for exit animation
       link.style.setProperty('--fill-from', exitLeft ? '-101%' : '101%');
+    });
+  });
+
+  categoryCards.forEach(card => {
+    card.addEventListener('mouseenter', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Calculate distances from each edge
+      const distLeft = x;
+      const distRight = rect.width - x;
+      const distTop = y;
+      const distBottom = rect.height - y;
+      
+      // Find which edge is closest (entry direction)
+      const minDist = Math.min(distLeft, distRight, distTop, distBottom);
+      
+      let fillX = '0';
+      let fillY = '0';
+      if (minDist === distLeft) {
+        fillX = '-101%'; // from left
+      } else if (minDist === distRight) {
+        fillX = '101%'; // from right
+      } else if (minDist === distTop) {
+        fillY = '-101%'; // from top
+      } else {
+        fillY = '101%'; // from bottom
+      }
+      
+      card.style.setProperty('--fill-x', fillX);
+      card.style.setProperty('--fill-y', fillY);
+      void card.offsetWidth;
+      card.classList.add('is-hovering');
+    });
+
+    card.addEventListener('mouseleave', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Calculate distances from each edge
+      const distLeft = x;
+      const distRight = rect.width - x;
+      const distTop = y;
+      const distBottom = rect.height - y;
+      
+      // Find which edge is closest (exit direction)
+      const minDist = Math.min(distLeft, distRight, distTop, distBottom);
+      
+      let fillX = '0';
+      let fillY = '0';
+      if (minDist === distLeft) {
+        fillX = '-101%'; // exit left
+      } else if (minDist === distRight) {
+        fillX = '101%'; // exit right
+      } else if (minDist === distTop) {
+        fillY = '-101%'; // exit top
+      } else {
+        fillY = '101%'; // exit bottom
+      }
+      
+      card.classList.remove('is-hovering');
+      card.style.setProperty('--fill-x', fillX);
+      card.style.setProperty('--fill-y', fillY);
     });
   });
 }
