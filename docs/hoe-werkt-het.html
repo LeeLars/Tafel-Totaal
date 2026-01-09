@@ -159,46 +159,24 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-section" data-animate>
-      <div class="container">
-        <div class="cta-section__content">
-          <div>
-            <h2>Klaar om te beginnen?</h2>
-            <p>Bekijk onze pakketten en start met het samenstellen van je bestelling.</p>
-          </div>
-          <div>
-            <a href="/Tafel-Totaal/pakketten.html" class="btn btn--white btn--lg">Bekijk Pakketten</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div id="cta-container"></div>
   </main>
 
   <!-- Footer -->
   <div id="footer-container"></div>
 
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
   <!-- Scripts -->
-  <script src="/Tafel-Totaal/js/lib/api.js"></script>
-  <script src="/Tafel-Totaal/js/lib/animations.js"></script>
-  <script>
-    // Load header and footer
+  <script type="module">
+    import { loadHeader } from '/js/components/header.js';
+    import { loadCTA } from '/js/components/cta.js';
+    
     document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const headerResponse = await fetch('/Tafel-Totaal/components/header.html');
-        const headerHTML = await headerResponse.text();
-        document.getElementById('header-container').innerHTML = headerHTML;
-
-        const footerResponse = await fetch('/Tafel-Totaal/components/footer.html');
-        const footerHTML = await footerResponse.text();
-        document.getElementById('footer-container').innerHTML = footerHTML;
-
-        // Initialize header script
-        const headerScript = document.createElement('script');
-        headerScript.src = '/js/components/header.js';
-        document.body.appendChild(headerScript);
-      } catch (error) {
-        console.error('Error loading components:', error);
-      }
+      await loadHeader();
+      await loadFooter();
+      await loadCTA();
     });
   </script>
 </body>

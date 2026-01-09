@@ -293,7 +293,6 @@
     <section class="statement-section" data-animate>
       <div class="statement-grid">
         <div class="statement-cell statement-cell--main">
-          <div class="tech-marker tech-marker--tl">SERVICE_POLICY_01</div>
           <div class="status-dot"></div>
           <h2 class="statement-title">
             STOP MET <br>
@@ -301,7 +300,6 @@
           </h2>
         </div>
         <div class="statement-cell statement-cell--desc">
-          <div class="tech-marker tech-marker--tr">INFO</div>
           <p class="statement-text">
             Bij Tafel Totaal mag alles <strong>vuil retour</strong>. 
             Schuif de borden zo de krat in, zet de glazen weg en geniet na van je feest.
@@ -337,6 +335,9 @@
         <div class="how-it-works__header">
           <h2>Hoe werkt het?</h2>
           <p>In 4 simpele stappen naar een perfect gedekte tafel</p>
+          <div class="how-it-works__cta">
+            <a href="/Tafel-Totaal/hoe-werkt-het.html" class="btn btn--secondary">Meer informatie</a>
+          </div>  
         </div>
         <div class="how-it-works__steps">
           <div class="step">
@@ -357,11 +358,8 @@
           <div class="step">
             <div class="step__number">4</div>
             <h3 class="step__title">Geniet & Vuil Retour</h3>
-            <p class="step__text">Geen afwasstress! Schraap de borden leeg en plaats alles vuil terug in de kratten. Wij doen de rest.</p>
+            <p class="step__text">Geen afwasstress! Schraap de borden leeg en plaats alles vuil terug in de kratten. Wij doen de rest.</p>         
           </div>
-        </div>
-        <div class="how-it-works__cta">
-          <a href="/Tafel-Totaal/hoe-werkt-het.html" class="btn btn--secondary">Meer informatie</a>
         </div>
       </div>
     </section>
@@ -406,15 +404,7 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta-section">
-      <div class="container">
-        <div class="cta-section__content">
-          <h2>Klaar om je tafel te dekken?</h2>
-          <p>Start vandaag nog met het samenstellen van jouw perfecte tafelsetting.</p>
-          <a href="/Tafel-Totaal/pakketten.html" class="btn btn--white btn--lg">Start Nu</a>
-        </div>
-      </div>
-    </section>
+    <div id="cta-container"></div>
   </main>
 
   <!-- Footer -->
@@ -424,7 +414,25 @@
   <div class="toast-container"></div>
 
   <!-- Scripts -->
-  <script type="module" src="/Tafel-Totaal/js/lib/animations.js"></script>
+  <script type="module">
+    import { loadHeader } from '/js/components/header.js';
+    import { loadCTA } from '/js/components/cta.js';
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadHeader();
+      await loadFooter();
+      await loadCTA();
+    });
+
+    async function loadFooter() {
+      const container = document.getElementById('footer-container');
+      if (!container) return;
+      try {
+        const response = await fetch('/Tafel-Totaal/components/footer.html');
+        if (response.ok) container.innerHTML = await response.text();
+      } catch (e) {}
+    }
+  </script>
   <script type="module" src="/Tafel-Totaal/js/pages/home.js"></script>
 </body>
 </html>

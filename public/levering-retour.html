@@ -127,26 +127,25 @@
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="cta-section">
-      <div class="container">
-        <h2>Klaar om te reserveren?</h2>
-        <p>Bekijk onze pakketten en plan je perfecte tafel.</p>
-        <a href="/pakketten.html" class="btn btn--white btn--lg">Bekijk Pakketten</a>
-      </div>
-    </section>
+    <!-- CTA Section -->
+    <div id="cta-container"></div>
   </main>
 
   <!-- Footer -->
   <div id="footer-container"></div>
 
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
   <!-- Scripts -->
   <script type="module">
     import { loadHeader } from '/js/components/header.js';
+    import { loadCTA } from '/js/components/cta.js';
     
     document.addEventListener('DOMContentLoaded', async () => {
       await loadHeader();
       await loadFooter();
+      await loadCTA();
     });
 
     async function loadFooter() {
