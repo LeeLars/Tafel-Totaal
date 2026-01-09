@@ -118,7 +118,10 @@
 
     <!-- Footer Bottom -->
     <div class="footer__bottom">
-      <p>&copy; 2024 Tafel Totaal. Alle rechten voorbehouden.</p>
+      <div class="footer__bottom-left">
+        <p>&copy; 2024 Tafel Totaal. Alle rechten voorbehouden.</p>
+        <p class="footer__credit">Gemaakt door <a href="https://grafixstudio.io/" target="_blank" rel="noopener" class="footer__credit-link">Grafix Studio</a></p>
+      </div>
       <div class="footer__payment">
         <span>Betaalmethodes:</span>
         <img src="/Tafel-Totaal/images/site/payment-bancontact.svg" alt="Bancontact" width="40" height="24">
@@ -383,6 +386,45 @@
 
 .footer__payment img:hover {
   opacity: 1;
+}
+
+/* Footer Credit */
+.footer__bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.footer__credit {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-medium-gray);
+}
+
+.footer__credit-link {
+  color: var(--color-primary-light);
+  font-weight: var(--font-weight-medium);
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.footer__credit-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--color-primary);
+  transition: width var(--transition-base) var(--ease-out-expo);
+}
+
+.footer__credit-link:hover {
+  color: var(--color-white);
+}
+
+.footer__credit-link:hover::after {
+  width: 100%;
 }
 
 /* Mobile Accordion */
