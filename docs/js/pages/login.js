@@ -99,10 +99,20 @@ function initLoginForm() {
       if (response.success) {
         showToast('Succesvol ingelogd!', 'success');
         
-        // Redirect to return URL or account
-        const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
+        // Redirect based on role
+        let redirectUrl = getQueryParam('returnUrl');
+        
+        if (!redirectUrl) {
+          // Default redirect based on user role
+          if (response.data?.role === 'admin') {
+            redirectUrl = '/admin/index.html';
+          } else {
+            redirectUrl = '/account/overzicht.html';
+          }
+        }
+        
         setTimeout(() => {
-          window.location.href = returnUrl;
+          window.location.href = redirectUrl;
         }, 500);
       } else {
         showToast(response.error || 'Inloggen mislukt', 'error');
