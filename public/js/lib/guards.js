@@ -7,6 +7,12 @@ import { authAPI } from './api.js';
 
 let cachedUser = null;
 
+function getSiteBasePath() {
+  // GitHub Pages project site is served from /<repo>/
+  // For local dev / normal hosting, keep it root.
+  return window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+}
+
 /**
  * Check if user is authenticated
  * Returns user data if authenticated, null otherwise
@@ -42,7 +48,8 @@ export async function requireAuth(returnUrl = window.location.pathname + window.
   
   if (!user) {
     const encodedReturn = encodeURIComponent(returnUrl);
-    window.location.href = `/login.html?returnUrl=${encodedReturn}`;
+    const base = getSiteBasePath();
+    window.location.href = `${base}/login.html?returnUrl=${encodedReturn}`;
     return null;
   }
   
@@ -58,7 +65,8 @@ export async function requireAdmin(redirectUrl = '/') {
   
   if (!user) {
     const encodedReturn = encodeURIComponent(window.location.pathname);
-    window.location.href = `/login.html?returnUrl=${encodedReturn}`;
+    const base = getSiteBasePath();
+    window.location.href = `${base}/login.html?returnUrl=${encodedReturn}`;
     return null;
   }
   

@@ -4,13 +4,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <base id="site-base" href="./">
+  <script>
+    (function() {
+      var base = document.getElementById('site-base');
+      if (!base) return;
+      if (window.location.hostname && window.location.hostname.indexOf('github.io') !== -1) {
+        base.setAttribute('href', '/Tafel-Totaal/');
+      }
+    })();
+  </script>
   <meta name="description" content="Log in op je Tafel Totaal account.">
   
   <title>Inloggen | Tafel Totaal</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="./images/site/Favicon-tafel-totaal.png">
+  <link rel="icon" type="image/png" href="images/site/Favicon-tafel-totaal.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,11 +27,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="./css/variables.css">
-  <link rel="stylesheet" href="./css/base.css">
-  <link rel="stylesheet" href="./css/components.css">
-  <link rel="stylesheet" href="./css/utilities.css">
-  <link rel="stylesheet" href="./css/pages/auth.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/utilities.css">
+  <link rel="stylesheet" href="css/pages/auth.css">
 </head>
 <body>
   <!-- Header -->
@@ -65,7 +74,7 @@
               <span class="checkbox__mark"></span>
               <span class="checkbox__label">Onthoud mij</span>
             </label>
-            <a href="./wachtwoord-vergeten.html" class="auth-link">Wachtwoord vergeten?</a>
+            <a href="wachtwoord-vergeten.html" class="auth-link">Wachtwoord vergeten?</a>
           </div>
 
           <button type="submit" class="btn btn--primary btn--lg btn--full" id="login-btn">
@@ -74,7 +83,7 @@
         </form>
 
         <div class="auth-card__footer">
-          <p>Nog geen account? <a href="./registreren.html">Registreer hier</a></p>
+          <p>Nog geen account? <a href="registreren.html">Registreer hier</a></p>
         </div>
       </div>
     </div>
@@ -87,6 +96,6 @@
   <div class="toast-container"></div>
 
   <!-- Scripts -->
-  <script type="module" src="./js/pages/login.js"></script>
+  <script type="module" src="js/pages/login.js"></script>
 </body>
 </html>

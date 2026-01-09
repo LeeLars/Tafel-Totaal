@@ -169,67 +169,84 @@ function initDirectionAwareHover() {
   });
 
   categoryCards.forEach(card => {
-    card.addEventListener('mouseenter', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      // Calculate distances from each edge
-      const distLeft = x;
-      const distRight = rect.width - x;
-      const distTop = y;
-      const distBottom = rect.height - y;
-      
-      // Find which edge is closest (entry direction)
+    let rafId = null;
+
+    const setDirectionVars = (el, clientX, clientY) => {
+      const rect = el.getBoundingClientRect();
+
+      // Relative mouse position inside element (CSS pixels)
+      const relX = clientX - rect.left;
+      const relY = clientY - rect.top;
+
+      // Pixel-accurate edge distances
+      const distLeft = relX;
+      const distRight = rect.width - relX;
+      const distTop = relY;
+      const distBottom = rect.height - relY;
+
+      // Snap to an edge if we are within a small pixel threshold.
+      // This removes ambiguity near corners/edges where angle methods can feel "half working".
+      const edgeSnapPx = 12;
+
+      let direction = null; // 'top' | 'right' | 'bottom' | 'left'
       const minDist = Math.min(distLeft, distRight, distTop, distBottom);
-      
+
+      if (minDist <= edgeSnapPx) {
+        if (minDist === distTop) direction = 'top';
+        else if (minDist === distRight) direction = 'right';
+        else if (minDist === distBottom) direction = 'bottom';
+        else direction = 'left';
+      } else {
+        // Stable fallback: compare dominant axis from center (no rounding/angle boundaries)
+        const dx = relX - rect.width / 2;
+        const dy = relY - rect.height / 2;
+        if (Math.abs(dx) > Math.abs(dy)) {
+          direction = dx > 0 ? 'right' : 'left';
+        } else {
+          direction = dy > 0 ? 'bottom' : 'top';
+        }
+      }
+
       let fillX = '0';
       let fillY = '0';
-      if (minDist === distLeft) {
-        fillX = '-101%'; // from left
-      } else if (minDist === distRight) {
-        fillX = '101%'; // from right
-      } else if (minDist === distTop) {
-        fillY = '-101%'; // from top
-      } else {
-        fillY = '101%'; // from bottom
+      if (direction === 'top') fillY = '-101%';
+      else if (direction === 'right') fillX = '101%';
+      else if (direction === 'bottom') fillY = '101%';
+      else if (direction === 'left') fillX = '-101%';
+
+      el.style.setProperty('--fill-x', fillX);
+      el.style.setProperty('--fill-y', fillY);
+    };
+
+    card.addEventListener('pointerenter', (e) => {
+      // Hard reset: ensure we always start from correct side even on rapid re-entry
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
       }
-      
-      card.style.setProperty('--fill-x', fillX);
-      card.style.setProperty('--fill-y', fillY);
+      card.classList.remove('is-hovering');
+      setDirectionVars(card, e.clientX, e.clientY);
+
+      // Force reflow so browser applies the new direction vars before we animate in
       void card.offsetWidth;
-      card.classList.add('is-hovering');
+      rafId = requestAnimationFrame(() => {
+        card.classList.add('is-hovering');
+        rafId = null;
+      });
     });
 
-    card.addEventListener('mouseleave', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      // Calculate distances from each edge
-      const distLeft = x;
-      const distRight = rect.width - x;
-      const distTop = y;
-      const distBottom = rect.height - y;
-      
-      // Find which edge is closest (exit direction)
-      const minDist = Math.min(distLeft, distRight, distTop, distBottom);
-      
-      let fillX = '0';
-      let fillY = '0';
-      if (minDist === distLeft) {
-        fillX = '-101%'; // exit left
-      } else if (minDist === distRight) {
-        fillX = '101%'; // exit right
-      } else if (minDist === distTop) {
-        fillY = '-101%'; // exit top
-      } else {
-        fillY = '101%'; // exit bottom
+    card.addEventListener('pointerleave', (e) => {
+      // Set exit direction first, then remove hovering in next frame
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
       }
-      
-      card.classList.remove('is-hovering');
-      card.style.setProperty('--fill-x', fillX);
-      card.style.setProperty('--fill-y', fillY);
+      setDirectionVars(card, e.clientX, e.clientY);
+      void card.offsetWidth;
+      rafId = requestAnimationFrame(() => {
+        card.classList.remove('is-hovering');
+        rafId = null;
+      });
     });
   });
 }
