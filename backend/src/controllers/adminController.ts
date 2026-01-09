@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { query, queryOne } from '../config/database';
-import { Order, Product, Customer } from '../types';
+import type { Order, Customer } from '../types';
 import { ProductModel } from '../models/Product.model';
 import { CustomerModel } from '../models/Customer.model';
 
