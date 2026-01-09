@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Railway Connection Test</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #1a1a1a;
+      color: #00ff00;
+    }
+    h1 { color: #00ff00; }
+    .test { 
+      margin: 20px 0; 
+      padding: 15px; 
+      border: 1px solid #333;
+      background: #0a0a0a;
+    }
+    .success { color: #00ff00; }
+    .error { color: #ff0000; }
+    .warning { color: #ffaa00; }
+    button {
+      background: #00ff00;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      margin: 5px;
+    }
+    button:hover { background: #00cc00; }
+    pre {
+      background: #000;
+      padding: 10px;
+      overflow-x: auto;
+      border: 1px solid #333;
+    }
+    .loading {
+      display: inline-block;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 Railway Backend Connection Test</h1>
+  <p>Test de verbinding tussen je browser en de Railway backend.</p>
+
+  <div class="test">
+    <h2>Test 1: Health Check</h2>
+    <p>Test of de Railway backend online is.</p>
+    <button onclick="testHealth()">▶ Run Test</button>
+    <div id="health-result"></div>
+  </div>
+
+  <div class="test">
+    <h2>Test 2: CORS Check</h2>
+    <p>Test of CORS correct geconfigureerd is.</p>
+    <button onclick="testCORS()">▶ Run Test</button>
+    <div id="cors-result"></div>
+  </div>
+
+  <div class="test">
+    <h2>Test 3: Login Test</h2>
+    <p>Test de login flow met je admin credentials.</p>
+    <input type="email" id="test-email" placeholder="Email" style="width: 300px; padding: 8px; margin: 5px; background: #000; color: #00ff00; border: 1px solid #333;">
+    <input type="password" id="test-password" placeholder="Password" style="width: 300px; padding: 8px; margin: 5px; background: #000; color: #00ff00; border: 1px solid #333;">
+    <br>
+    <button onclick="testLogin()">▶ Run Test</button>
+    <div id="login-result"></div>
+  </div>
+
+  <div class="test">
+    <h2>Test 4: Auth Check</h2>
+    <p>Test of je ingelogd bent (na succesvolle login).</p>
+    <button onclick="testAuth()">▶ Run Test</button>
+    <div id="auth-result"></div>
+  </div>
+
+  <script>
+    const API_BASE_URL = 'https://tafel-totaal-production.up.railway.app';
+
+    function log(elementId, message, type = 'info') {
+      const el = document.getElementById(elementId);
+      const className = type === 'success' ? 'success' : type === 'error' ? 'error' : type === 'warning' ? 'warning' : '';
+      el.innerHTML += `<div class="${className}">${message}</div>`;
+    }
+
+    function clearLog(elementId) {
+      document.getElementById(elementId).innerHTML = '<div class="loading">Running test...</div>';
+    }
+
+    async function testHealth() {
+      const resultId = 'health-result';
+      clearLog(resultId);
+      
+      try {
+        const start = Date.now();
+        const response = await fetch(`${API_BASE_URL}/health`);
+        const duration = Date.now() - start;
+        
+        if (response.ok) {
+          const data = await response.json();
+          log(resultId, `✅ SUCCESS: Backend is online!`, 'success');
+          log(resultId, `Response time: ${duration}ms`);
+          log(resultId, `<pre>${JSON.stringify(data, null, 2)}</pre>`);
+        } else {
+          log(resultId, `❌ ERROR: Backend returned ${response.status}`, 'error');
+        }
+      } catch (error) {
+        log(resultId, `❌ ERROR: ${error.message}`, 'error');
+        log(resultId, `Dit betekent waarschijnlijk dat Railway offline is of CORS blokkeert.`, 'warning');
+      }
+    }
+
+    async function testCORS() {
+      const resultId = 'cors-result';
+      clearLog(resultId);
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}/health`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          log(resultId, `✅ SUCCESS: CORS is correct geconfigureerd!`, 'success');
+          log(resultId, `Je browser kan requests maken naar Railway.`);
+          
+          // Check response headers
+          const corsHeader = response.headers.get('access-control-allow-origin');
+          if (corsHeader) {
+            log(resultId, `CORS header: ${corsHeader}`);
+          }
+        } else {
+          log(resultId, `⚠️ WARNING: Response ${response.status}`, 'warning');
+          log(resultId, `CORS werkt, maar endpoint heeft een probleem.`);
+        }
+      } catch (error) {
+        log(resultId, `❌ ERROR: CORS is NIET correct geconfigureerd!`, 'error');
+        log(resultId, `Error: ${error.message}`);
+        log(resultId, `<br><strong>FIX:</strong> Zet op Railway:`, 'warning');
+        log(resultId, `<pre>CORS_ALLOWED_ORIGINS=https://leelars.github.io,http://localhost:3000</pre>`);
+      }
+    }
+
+    async function testLogin() {
+      const resultId = 'login-result';
+      clearLog(resultId);
+      
+      const email = document.getElementById('test-email').value;
+      const password = document.getElementById('test-password').value;
+      
+      if (!email || !password) {
+        log(resultId, `❌ ERROR: Vul email en wachtwoord in`, 'error');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          log(resultId, `✅ SUCCESS: Login succesvol!`, 'success');
+          log(resultId, `User: ${data.data.email} (${data.data.role})`);
+          
+          // Check if cookie was set
+          const cookies = document.cookie;
+          if (cookies.includes('auth_token')) {
+            log(resultId, `✅ Cookie is gezet!`, 'success');
+          } else {
+            log(resultId, `⚠️ WARNING: Cookie is NIET gezet!`, 'warning');
+            log(resultId, `Dit betekent dat COOKIE_SAMESITE waarschijnlijk niet op 'none' staat.`, 'warning');
+            log(resultId, `<br><strong>FIX:</strong> Zet op Railway:`, 'warning');
+            log(resultId, `<pre>COOKIE_SAMESITE=none\nNODE_ENV=production</pre>`);
+          }
+          
+          log(resultId, `<pre>${JSON.stringify(data, null, 2)}</pre>`);
+        } else {
+          log(resultId, `❌ ERROR: Login failed`, 'error');
+          log(resultId, `Status: ${response.status}`);
+          log(resultId, `Message: ${data.error || 'Unknown error'}`);
+          log(resultId, `<pre>${JSON.stringify(data, null, 2)}</pre>`);
+        }
+      } catch (error) {
+        log(resultId, `❌ ERROR: ${error.message}`, 'error');
+        log(resultId, `Kan geen verbinding maken met de server.`, 'error');
+      }
+    }
+
+    async function testAuth() {
+      const resultId = 'auth-result';
+      clearLog(resultId);
+      
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          log(resultId, `✅ SUCCESS: Je bent ingelogd!`, 'success');
+          log(resultId, `User: ${data.data.email} (${data.data.role})`);
+          log(resultId, `<pre>${JSON.stringify(data, null, 2)}</pre>`);
+        } else {
+          log(resultId, `❌ ERROR: Niet ingelogd`, 'error');
+          log(resultId, `Status: ${response.status}`);
+          log(resultId, `Dit betekent dat de cookie niet wordt meegestuurd.`, 'warning');
+        }
+      } catch (error) {
+        log(resultId, `❌ ERROR: ${error.message}`, 'error');
+      }
+    }
+
+    // Auto-run health check on load
+    window.addEventListener('load', () => {
+      setTimeout(testHealth, 500);
+    });
+  </script>
+</body>
+</html>

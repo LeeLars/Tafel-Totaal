@@ -168,13 +168,55 @@ function initDirectionAwareHover() {
     });
   });
 
+  // Track mouse movement globally for accurate direction detection
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+  let prevMouseX = 0;
+  let prevMouseY = 0;
+  
+  document.addEventListener('pointermove', (e) => {
+    prevMouseX = lastMouseX;
+    prevMouseY = lastMouseY;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+  }, { passive: true });
+
   categoryCards.forEach(card => {
-    const getDirection = (e, rect) => {
+    let isInside = false;
+    
+    card.addEventListener('pointerenter', (e) => {
+      isInside = true;
+      const rect = card.getBoundingClientRect();
+      
+      // Calculate movement vector (from previous position to current)
+      const dx = lastMouseX - prevMouseX;
+      const dy = lastMouseY - prevMouseY;
+      
+      // Determine entry direction from movement vector
+      let direction;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        // Horizontal movement dominant
+        direction = dx > 0 ? 'left' : 'right';
+      } else {
+        // Vertical movement dominant
+        direction = dy > 0 ? 'top' : 'bottom';
+      }
+      
+      card.setAttribute('data-hover-from', direction);
+      card.classList.add('is-hovering');
+    });
+
+    card.addEventListener('pointerleave', (e) => {
+      isInside = false;
+      const rect = card.getBoundingClientRect();
+      
+      // Calculate exit direction from mouse position relative to element
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
       const w = rect.width;
       const h = rect.height;
       
+      // Determine which edge the mouse is closest to (exit point)
       const distTop = y;
       const distBottom = h - y;
       const distLeft = x;
@@ -182,26 +224,12 @@ function initDirectionAwareHover() {
       
       const min = Math.min(distTop, distBottom, distLeft, distRight);
       
-      if (min === distTop) return 'top';
-      if (min === distBottom) return 'bottom';
-      if (min === distLeft) return 'left';
-      return 'right';
-    };
-
-    card.addEventListener('pointerenter', (e) => {
-      const rect = card.getBoundingClientRect();
-      const direction = getDirection(e, rect);
+      let direction;
+      if (min === distTop) direction = 'top';
+      else if (min === distBottom) direction = 'bottom';
+      else if (min === distLeft) direction = 'left';
+      else direction = 'right';
       
-      // Set entry direction and add hovering state
-      card.setAttribute('data-hover-from', direction);
-      card.classList.add('is-hovering');
-    });
-
-    card.addEventListener('pointerleave', (e) => {
-      const rect = card.getBoundingClientRect();
-      const direction = getDirection(e, rect);
-      
-      // Update direction for exit animation, then remove hovering state
       card.setAttribute('data-hover-from', direction);
       card.classList.remove('is-hovering');
     });
