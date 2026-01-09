@@ -17,29 +17,23 @@ concurrency:
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       
-      - name: Prepare files for deployment
+      - name: Prepare files
         run: |
-          # Remove base tags that cause 404s
+          # Remove base tags
           find public -name "*.html" -type f -exec sed -i 's|<base href="/Tafel-Totaal/">||g' {} \;
-          # Create .nojekyll to prevent Jekyll processing
+          # Add .nojekyll
           touch public/.nojekyll
-      
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'public'
+          # List files to verify
+          ls -la public/
       
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          force_orphan: true
