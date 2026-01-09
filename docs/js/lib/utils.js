@@ -2,6 +2,13 @@
  * Tafel Totaal - Utility Functions
  */
 
+/**
+ * Get base path for GitHub Pages compatibility
+ */
+export function getBasePath() {
+  return window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+}
+
 export function formatPrice(amount) {
   return new Intl.NumberFormat('nl-BE', {
     style: 'currency',

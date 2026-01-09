@@ -23,7 +23,9 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/components/footer.html');
+    // Use base path for GitHub Pages compatibility
+    const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+    const response = await fetch(`${basePath}/components/footer.html`);
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {

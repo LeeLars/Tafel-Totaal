@@ -306,7 +306,7 @@
 @media (min-width: 1024px) {
   .hero__categories {
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3xl);
+    gap: var(--space-xl);
   }
 }
 
@@ -338,7 +338,7 @@
   z-index: 0;
 }
 
-/* Direction-aware initial positions */
+/* Direction-aware positions (default: from top) */
 .category-card::before {
   transform: translateY(-100%);
 }
@@ -359,12 +359,12 @@
   transform: translateX(-100%);
 }
 
-/* Hover state */
-.category-card:hover::before {
+/* Hovering state - overlay slides to center */
+.category-card.is-hovering::before {
   transform: translate(0, 0);
 }
 
-.category-card:hover {
+.category-card.is-hovering {
   color: var(--color-white);
   transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);

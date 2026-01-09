@@ -169,24 +169,41 @@ function initDirectionAwareHover() {
   });
 
   categoryCards.forEach(card => {
-    const getDirection = (clientX, clientY) => {
-      const rect = card.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = clientX - centerX;
-      const dy = clientY - centerY;
+    const getDirection = (e, rect) => {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const w = rect.width;
+      const h = rect.height;
       
-      // Determine direction based on dominant axis
-      if (Math.abs(dy) > Math.abs(dx)) {
-        return dy < 0 ? 'top' : 'bottom';
-      } else {
-        return dx < 0 ? 'left' : 'right';
-      }
+      const distTop = y;
+      const distBottom = h - y;
+      const distLeft = x;
+      const distRight = w - x;
+      
+      const min = Math.min(distTop, distBottom, distLeft, distRight);
+      
+      if (min === distTop) return 'top';
+      if (min === distBottom) return 'bottom';
+      if (min === distLeft) return 'left';
+      return 'right';
     };
 
     card.addEventListener('pointerenter', (e) => {
-      const direction = getDirection(e.clientX, e.clientY);
+      const rect = card.getBoundingClientRect();
+      const direction = getDirection(e, rect);
+      
+      // Set entry direction and add hovering state
       card.setAttribute('data-hover-from', direction);
+      card.classList.add('is-hovering');
+    });
+
+    card.addEventListener('pointerleave', (e) => {
+      const rect = card.getBoundingClientRect();
+      const direction = getDirection(e, rect);
+      
+      // Update direction for exit animation, then remove hovering state
+      card.setAttribute('data-hover-from', direction);
+      card.classList.remove('is-hovering');
     });
   });
 }
@@ -234,7 +251,8 @@ export async function loadHeader(containerId = 'header-container') {
   if (!container) return;
 
   try {
-    const response = await fetch('/components/header.html');
+    const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+    const response = await fetch(`${basePath}/components/header.html`);
     if (!response.ok) throw new Error('Failed to load header');
     
     const html = await response.text();
