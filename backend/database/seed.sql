@@ -181,7 +181,7 @@ INSERT INTO customers (email, password_hash, first_name, last_name, phone, compa
 
 -- Test Admin (password: Admin1234!)
 INSERT INTO users (email, password_hash, first_name, last_name, role) VALUES
-('admin@tafeltotaal.be', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/X4.VTtYWCqNXJqKHe', 'Admin', 'Tafel Totaal', 'admin');
+('admin@tafeltotaal.be', '$2b$12$6FP0KjtF0up72NuevKaSL.fcL7OFDV6vncV.d.iN5g0qz3A2kZpV.', 'Admin', 'Tafel Totaal', 'admin');
 
 -- Test Customer Address
 INSERT INTO customer_addresses (customer_id, type, street, house_number, postal_code, city, country, is_default) VALUES

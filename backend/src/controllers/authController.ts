@@ -3,15 +3,17 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { query, queryOne } from '../config/database';
-import { Customer, JwtPayload } from '../types';
+import { Customer, User, JwtPayload, UserRole } from '../types';
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
     const { email, password, first_name, last_name, phone } = req.body;
 
+     const normalizedEmail = String(email || '').trim().toLowerCase();
+
     const existingCustomer = await queryOne<Customer>(
-      'SELECT id FROM customers WHERE email = $1',
-      [email]
+      'SELECT id FROM customers WHERE LOWER(email) = LOWER($1)',
+      [normalizedEmail]
     );
 
     if (existingCustomer) {
@@ -25,10 +27,10 @@ export async function register(req: Request, res: Response): Promise<void> {
       `INSERT INTO customers (email, password_hash, first_name, last_name, phone)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, email, first_name, last_name, phone, created_at`,
-      [email, password_hash, first_name, last_name, phone || null]
+      [normalizedEmail, password_hash, first_name, last_name, phone || null]
     );
 
-    const token = generateToken(customer);
+    const token = generateTokenForUser(customer.id, customer.email, 'customer');
     setAuthCookie(res, token);
 
     res.status(201).json({
@@ -38,6 +40,7 @@ export async function register(req: Request, res: Response): Promise<void> {
         email: customer.email,
         first_name: customer.first_name,
         last_name: customer.last_name,
+        role: 'customer',
       },
     });
   } catch (error) {
@@ -49,10 +52,38 @@ export async function register(req: Request, res: Response): Promise<void> {
 export async function login(req: Request, res: Response): Promise<void> {
   try {
     const { email, password } = req.body;
+    const normalizedEmail = String(email || '').trim().toLowerCase();
 
+    // First, try to find an admin user in the users table
+    const adminUser = await queryOne<User & { password_hash: string }>(
+      'SELECT * FROM users WHERE LOWER(email) = LOWER($1)',
+      [normalizedEmail]
+    );
+
+    if (adminUser) {
+      const validPassword = await bcrypt.compare(password, adminUser.password_hash);
+      if (validPassword) {
+        const token = generateTokenForUser(adminUser.id, adminUser.email, adminUser.role);
+        setAuthCookie(res, token);
+
+        res.json({
+          success: true,
+          data: {
+            id: adminUser.id,
+            email: adminUser.email,
+            first_name: adminUser.first_name,
+            last_name: adminUser.last_name,
+            role: adminUser.role,
+          },
+        });
+        return;
+      }
+    }
+
+    // If not found or password invalid, try customers table
     const customer = await queryOne<Customer>(
-      'SELECT * FROM customers WHERE email = $1',
-      [email]
+      'SELECT * FROM customers WHERE LOWER(email) = LOWER($1)',
+      [normalizedEmail]
     );
 
     if (!customer) {
@@ -67,7 +98,7 @@ export async function login(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const token = generateToken(customer);
+    const token = generateTokenForUser(customer.id, customer.email, 'customer');
     setAuthCookie(res, token);
 
     res.json({
@@ -77,6 +108,7 @@ export async function login(req: Request, res: Response): Promise<void> {
         email: customer.email,
         first_name: customer.first_name,
         last_name: customer.last_name,
+        role: 'customer',
       },
     });
   } catch (error) {
@@ -102,6 +134,23 @@ export async function getCurrentUser(req: Request, res: Response): Promise<void>
       return;
     }
 
+    // Check if user is admin
+    if (req.user.role === 'admin') {
+      const adminUser = await queryOne<User>(
+        'SELECT id, email, first_name, last_name, role, created_at FROM users WHERE id = $1',
+        [req.user.userId]
+      );
+
+      if (!adminUser) {
+        res.status(404).json({ success: false, error: 'User not found' });
+        return;
+      }
+
+      res.json({ success: true, data: { ...adminUser, role: 'admin' } });
+      return;
+    }
+
+    // Otherwise, check customers table
     const customer = await queryOne<Customer>(
       'SELECT id, email, first_name, last_name, phone, company_name, created_at FROM customers WHERE id = $1',
       [req.user.userId]
@@ -112,18 +161,18 @@ export async function getCurrentUser(req: Request, res: Response): Promise<void>
       return;
     }
 
-    res.json({ success: true, data: customer });
+    res.json({ success: true, data: { ...customer, role: 'customer' } });
   } catch (error) {
     console.error('Get current user error:', error);
     res.status(500).json({ success: false, error: 'Failed to get user' });
   }
 }
 
-function generateToken(customer: Customer): string {
+function generateTokenForUser(userId: string, email: string, role: UserRole): string {
   const payload: JwtPayload = {
-    userId: customer.id,
-    email: customer.email,
-    role: 'customer',
+    userId,
+    email,
+    role,
   };
 
   return jwt.sign(payload, env.JWT_SECRET, {
