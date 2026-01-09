@@ -3,6 +3,10 @@ import { body, param, query } from 'express-validator';
 import { validate } from '../middleware/validate.middleware';
 import { authenticateToken, requireAdmin } from '../middleware/auth.middleware';
 import * as adminController from '../controllers/adminController';
+import * as csvController from '../controllers/csvController';
+import multer from 'multer';
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = Router();
 
@@ -66,5 +70,14 @@ router.get('/customers/:id', adminController.getCustomerById);
 
 // Dashboard
 router.get('/dashboard/stats', adminController.getDashboardStats);
+
+// CSV Import/Export
+router.post('/products/csv/parse', upload.single('file'), csvController.parseProductsCSV);
+router.post('/products/csv/import', csvController.importProducts);
+router.get('/products/csv/export', csvController.exportProductsCSV);
+
+// Bulk Operations
+router.post('/products/bulk/delete', csvController.bulkDeleteProducts);
+router.post('/products/bulk/status', csvController.bulkUpdateStatus);
 
 export default router;

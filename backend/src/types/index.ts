@@ -59,6 +59,18 @@ export interface Product {
   turnaround_days: number;
   images: string[];
   is_active: boolean;
+  // Specifications
+  length_cm: number | null;
+  width_cm: number | null;
+  height_cm: number | null;
+  weight_kg: number | null;
+  color: string | null;
+  material: string | null;
+  units_per_pack: number;
+  pack_type: string | null;
+  supplier: string | null;
+  supplier_sku: string | null;
+  notes: string | null;
   created_at: Date;
   updated_at: Date;
 }

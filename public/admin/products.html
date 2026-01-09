@@ -103,6 +103,41 @@
           </div>
         </div>
 
+        <!-- CSV Upload Section -->
+        <div class="admin-card" style="margin-bottom: var(--space-lg);">
+          <div class="admin-card__header">
+            <h2 class="admin-card__title">CSV Import/Export</h2>
+          </div>
+          <div class="admin-card__body">
+            <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap;">
+              <button class="btn btn--primary" id="csv-upload-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                CSV Uploaden
+              </button>
+              <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
+              <button class="btn btn--ghost" id="csv-export-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Exporteren
+              </button>
+              <a href="#" id="csv-template-link" class="btn btn--ghost" style="margin-left: auto;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                </svg>
+                CSV Template
+              </a>
+            </div>
+          </div>
+        </div>
+
         <!-- Products Card -->
         <div class="admin-card">
           <div class="admin-card__header">
@@ -116,10 +151,25 @@
               </select>
             </div>
           </div>
+          
+          <!-- Bulk Actions Toolbar -->
+          <div id="bulk-toolbar" style="display: none; padding: var(--space-md) var(--space-lg); background: var(--color-off-white); border-bottom: 1px solid var(--color-light-gray);">
+            <div style="display: flex; gap: var(--space-md); align-items: center;">
+              <span id="bulk-count" style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600;">0 geselecteerd</span>
+              <button class="btn btn--sm btn--ghost" id="bulk-activate">Activeren</button>
+              <button class="btn btn--sm btn--ghost" id="bulk-deactivate">Deactiveren</button>
+              <button class="btn btn--sm btn--ghost" id="bulk-delete" style="color: var(--color-error);">Verwijderen</button>
+              <button class="btn btn--sm btn--ghost" id="bulk-clear" style="margin-left: auto;">Deselecteren</button>
+            </div>
+          </div>
+
           <div class="admin-table-wrapper">
             <table class="admin-table">
               <thead>
                 <tr>
+                  <th style="width: 40px;">
+                    <input type="checkbox" id="select-all" style="cursor: pointer;">
+                  </th>
                   <th>Product</th>
                   <th>SKU</th>
                   <th>Categorie</th>
