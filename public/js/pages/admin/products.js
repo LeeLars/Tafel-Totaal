@@ -5,7 +5,6 @@
 import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
-import { loadHeader } from '../../components/header.js';
 
 let currentPage = 1;
 let currentSearch = '';
@@ -17,7 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const user = await requireAdmin();
   if (!user) return;
 
-  await loadHeader();
   initFilters();
   initModal();
   await loadProducts();

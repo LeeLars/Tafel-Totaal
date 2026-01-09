@@ -35,8 +35,10 @@ const updateProductValidation = [
   param('id').isUUID().withMessage('Valid product ID is required'),
   body('name').optional().trim().notEmpty(),
   body('price_per_day').optional().isFloat({ min: 0 }),
+  body('deposit_per_item').optional().isFloat({ min: 0 }),
   body('stock_total').optional().isInt({ min: 0 }),
   body('stock_buffer').optional().isInt({ min: 0 }),
+  body('turnaround_days').optional().isInt({ min: 0 }),
   body('is_active').optional().isBoolean(),
 ];
 
