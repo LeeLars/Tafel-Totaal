@@ -91,10 +91,18 @@ function initModal() {
   backdrop?.addEventListener('click', closeModal);
 
   // New product button
-  newProductBtn?.addEventListener('click', () => {
-    isNewProduct = true;
-    openNewProductModal();
-  });
+  if (newProductBtn) {
+    console.log('New product button found, attaching click handler');
+    newProductBtn.addEventListener('click', (e) => {
+      console.log('New product button clicked!');
+      e.preventDefault();
+      e.stopPropagation();
+      isNewProduct = true;
+      openNewProductModal();
+    });
+  } else {
+    console.error('New product button not found!');
+  }
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -106,11 +114,15 @@ function initModal() {
  * Open modal for new product
  */
 function openNewProductModal() {
+  console.log('openNewProductModal called');
   editingProduct = null;
   
   // Update modal title
   const modalTitle = document.getElementById('modal-title');
-  if (modalTitle) modalTitle.textContent = 'Nieuw Product';
+  if (modalTitle) {
+    modalTitle.textContent = 'Nieuw Product';
+    console.log('Modal title set to Nieuw Product');
+  }
   
   // Clear all fields
   document.getElementById('edit-id').value = '';
@@ -127,7 +139,13 @@ function openNewProductModal() {
   // Clear images
   clearImages();
   
-  document.getElementById('edit-modal').classList.add('open');
+  const modal = document.getElementById('edit-modal');
+  if (modal) {
+    modal.classList.add('open');
+    console.log('Modal opened for new product');
+  } else {
+    console.error('Modal element not found!');
+  }
 }
 
 /**
