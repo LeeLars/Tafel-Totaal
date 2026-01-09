@@ -118,7 +118,7 @@ function initLogoutButtons() {
     e.preventDefault();
     const result = await logout();
     if (result.success) {
-      window.location.href = '/Tafel-Totaal/';
+      window.location.href = './';
     }
   };
 
@@ -211,7 +211,7 @@ export async function loadHeader(containerId = 'header-container') {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/header.html');
+    const response = await fetch('./components/header.html');
     if (!response.ok) throw new Error('Failed to load header');
     
     const html = await response.text();

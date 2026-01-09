@@ -66,7 +66,7 @@ function renderSummary() {
     itemsContainer.innerHTML = cart.map(item => `
       <div class="checkout-summary__item">
         <div class="checkout-summary__item-image">
-          <img src="${item.image || '/images/packages/placeholder.jpg'}" alt="${item.name}">
+          <img src="${item.image || './images/packages/placeholder.jpg'}" alt="${item.name}">
         </div>
         <div class="checkout-summary__item-info">
           <div class="checkout-summary__item-name">${item.name}</div>

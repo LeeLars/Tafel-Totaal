@@ -23,7 +23,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('./components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     
     const html = await response.text();
@@ -80,12 +80,12 @@ async function loadFeaturedPackages() {
  * Create package card HTML
  */
 function createPackageCard(pkg) {
-  const imageUrl = pkg.images?.[0] || '/images/packages/placeholder.jpg';
+  const imageUrl = pkg.images?.[0] || './images/packages/placeholder.jpg';
   const serviceLevelBadge = getServiceLevelBadge(pkg.service_level);
   
   return `
     <article class="package-card">
-      <a href="/Tafel-Totaal/pakket.html?id=${pkg.id}" class="package-card__link">
+      <a href="/pakket.html?id=${pkg.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${imageUrl}" alt="${pkg.name}" loading="lazy">
           ${serviceLevelBadge ? `<span class="package-card__badge">${serviceLevelBadge}</span>` : ''}

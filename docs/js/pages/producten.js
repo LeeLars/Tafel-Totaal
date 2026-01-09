@@ -37,7 +37,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('./components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -227,7 +227,7 @@ function createProductCard(product) {
   return `
     <article class="package-card product-card">
       <div class="package-card__image">
-        <img src="${product.image_url || '/images/products/placeholder.jpg'}" 
+        <img src="${product.image_url || './images/products/placeholder.jpg'}" 
              alt="${product.name}" 
              loading="lazy">
         <div class="package-card__badges">

@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="/Tafel-Totaal/">
+  
   <meta name="description" content="Ontdek hoe eenvoudig het is om servies en tafeldecoratie te huren bij Tafel Totaal. Van bestellen tot leveren en retour.">
   
   <title>Hoe werkt het? | Tafel Totaal</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  <link rel="icon" type="image/png" href="./images/site/Favicon-tafel-totaal.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,12 +17,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/content.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/home.css">
+  <link rel="stylesheet" href="./css/variables.css">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/components.css">
+  <link rel="stylesheet" href="./css/utilities.css">
+  <link rel="stylesheet" href="./css/pages/content.css">
+  <link rel="stylesheet" href="./css/pages/home.css">
 </head>
 <body>
   <!-- Header -->
@@ -42,7 +42,7 @@
         </div>
 
         <!-- Block 2: Image -->
-        <div class="hero-cell hero-cell--visual" style="background-image: url('/Tafel-Totaal/images/site/table-setting-process.jpg'); background-size: cover; background-position: center;">
+        <div class="hero-cell hero-cell--visual" style="background-image: url('./images/site/table-setting-process.jpg'); background-size: cover; background-position: center;">
           <div class="hero-overlay"></div>
         </div>
 
@@ -119,14 +119,14 @@
           <h2 style="font-family: var(--font-heading); font-size: var(--font-size-3xl); text-transform: uppercase;">WAT GEBEURT WANNEER?</h2>
         </div>
 
-        <div class="timeline-grid" style="display: grid; gap: 0; border: 1px solid var(--color-charcoal);">
+        <div class="timeline-grid">
           <!-- Timeline Item 1 -->
-          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
-            <div class="timeline-item__time" style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+          <div class="timeline-item" data-animate>
+            <div class="timeline-item__time">
               <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.7;">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Bestelling</div>
             </div>
-            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Online bestellen</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Plaats je bestelling via onze webshop. Je betaalt de huurprijs + borg. Je ontvangt direct een bevestigingsmail met alle details.</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Directe bevestiging per e-mail</div>
@@ -134,12 +134,12 @@
           </div>
 
           <!-- Timeline Item 2 -->
-          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
-            <div class="timeline-item__time" style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+          <div class="timeline-item" data-animate>
+            <div class="timeline-item__time">
               <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.7;">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">1 dag voor / dag zelf</div>
             </div>
-            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Levering (min. €150)</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Wij bezorgen alles schoon en compleet in handige kratten. Levering is mogelijk vanaf €150 bestelling, de dag voor je event of op de dag zelf.</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Levering vanaf €150 • Afhalen altijd mogelijk (namiddag, tot 3 dagen vooraf)</div>
@@ -147,12 +147,12 @@
           </div>
 
           <!-- Timeline Item 3 -->
-          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
-            <div class="timeline-item__time" style="background: var(--color-primary); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+          <div class="timeline-item" data-animate>
+            <div class="timeline-item__time" style="background: var(--color-primary);">
               <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.9; color: var(--color-white);">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Je evenement</div>
             </div>
-            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Genieten!</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Dek je tafel, ontvang je gasten en geniet van je feest. Na afloop: schraap de borden leeg en zet alles terug in de kratten. Klaar!</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Geen afwas nodig - lever vuil in</div>
@@ -160,12 +160,12 @@
           </div>
 
           <!-- Timeline Item 4 -->
-          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
-            <div class="timeline-item__time" style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+          <div class="timeline-item" data-animate>
+            <div class="timeline-item__time">
               <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.7;">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">1 dag na</div>
             </div>
-            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Ophaling</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">De dag na je evenement halen wij de kratten op. Zorg dat alles klaarstaat op een bereikbare plek.</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Flexibele ophaalafspraken</div>
@@ -173,12 +173,12 @@
           </div>
 
           <!-- Timeline Item 5 -->
-          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr;">
-            <div class="timeline-item__time" style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+          <div class="timeline-item" data-animate>
+            <div class="timeline-item__time">
               <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.7;">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Binnen 5 dagen</div>
             </div>
-            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Borg terugbetaling</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Na controle op schade en volledigheid storten wij je borg terug. Bij eventuele schade nemen we contact op voordat we iets inhouden.</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Transparante schaderegeling</div>
@@ -213,7 +213,7 @@
             <details class="faq-item">
               <summary>Wat als er iets kapot gaat?</summary>
               <div class="faq-content">
-                <p>Kleine ongelukjes horen erbij. Bij normale slijtage of een enkel gebroken glas rekenen we niets extra. Bij grotere schade nemen we altijd eerst contact op om de situatie te bespreken. Bekijk onze <a href="/Tafel-Totaal/borg-schade.html">borg & schade pagina</a> voor meer details.</p>
+                <p>Kleine ongelukjes horen erbij. Bij normale slijtage of een enkel gebroken glas rekenen we niets extra. Bij grotere schade nemen we altijd eerst contact op om de situatie te bespreken. Bekijk onze <a href="./borg-schade.html">borg & schade pagina</a> voor meer details.</p>
               </div>
             </details>
             <details class="faq-item">
@@ -312,8 +312,9 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { loadHeader } from '/js/components/header.js';
-    import { loadCTA } from '/js/components/cta.js';
+    import { loadHeader } from './js/components/header.js';
+    import { loadCTA } from './js/components/cta.js';
+    import '/js/lib/animations.js';
     
     document.addEventListener('DOMContentLoaded', async () => {
       await loadHeader();
@@ -325,7 +326,7 @@
       const container = document.getElementById('footer-container');
       if (!container) return;
       try {
-        const response = await fetch('/Tafel-Totaal/components/footer.html');
+        const response = await fetch('./components/footer.html');
         if (response.ok) container.innerHTML = await response.text();
       } catch (e) {}
     }
