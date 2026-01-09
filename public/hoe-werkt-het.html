@@ -75,29 +75,37 @@
           <!-- Step 1 -->
           <div class="step">
             <div class="step__number">1</div>
-            <h3 class="step__title">Kies je producten</h3>
-            <p class="step__text">Browse door ons assortiment en selecteer een compleet pakket of stel je eigen selectie samen. Bepaal de hoeveelheden op basis van je aantal gasten.</p>
+            <div class="step__content">
+              <h3 class="step__title">Kies je producten</h3>
+              <p class="step__text">Browse door ons assortiment en selecteer een compleet pakket of stel je eigen selectie samen. Bepaal de hoeveelheden op basis van je aantal gasten.</p>
+            </div>
           </div>
 
           <!-- Step 2 -->
           <div class="step">
             <div class="step__number">2</div>
-            <h3 class="step__title">Selecteer datum & levering</h3>
-            <p class="step__text">Levering (min. €150) de dag voor je event of dag zelf. Zelf afhalen is altijd mogelijk, tot 3 dagen vooraf (enkel namiddag).</p>
+            <div class="step__content">
+              <h3 class="step__title">Selecteer datum van ophaling/levering</h3>
+              <p class="step__text">Levering (min. €150) de dag voor je event of dag zelf. Zelf afhalen is altijd mogelijk, tot 3 dagen vooraf (enkel namiddag).</p>
+            </div>
           </div>
 
           <!-- Step 3 -->
           <div class="step">
             <div class="step__number">3</div>
-            <h3 class="step__title">Vier je feest</h3>
-            <p class="step__text">Geniet van je evenement met stijlvol servies. Het belangrijkste: je hoeft niet af te wassen! Lever alles gewoon vuil weer in.</p>
+            <div class="step__content">
+              <h3 class="step__title">Vier je feest</h3>
+              <p class="step__text">Geniet van je evenement met stijlvol servies. Het belangrijkste: je hoeft niet af te wassen! Lever alles gewoon vuil weer in.</p>
+            </div>
           </div>
 
           <!-- Step 4 -->
           <div class="step">
             <div class="step__number">4</div>
-            <h3 class="step__title">Retour & borg terug</h3>
-            <p class="step__text">De dag na je evenement halen wij alles op. Na controle krijg je je borg binnen 5 werkdagen terug. Zo simpel is het!</p>
+            <div class="step__content">
+              <h3 class="step__title">Retour & borg terug</h3>
+              <p class="step__text">De dag na je evenement halen wij alles op. Na controle krijg je je borg binnen 5 werkdagen terug. Indien je hebt gekozen om zelf het materiaal terug te brengen dan dien je het terug te brengen binnen de 48h.</p>
+            </div>
           </div>
         </div>
       </div>
@@ -111,14 +119,14 @@
           <h2 style="font-family: var(--font-heading); font-size: var(--font-size-3xl); text-transform: uppercase;">WAT GEBEURT WANNEER?</h2>
         </div>
 
-        <div style="display: grid; gap: 0; border: 1px solid var(--color-charcoal);">
+        <div class="timeline-grid" style="display: grid; gap: 0; border: 1px solid var(--color-charcoal);">
           <!-- Timeline Item 1 -->
-          <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
-            <div style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
-              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--color-gray); margin-bottom: 4px;">MOMENT</div>
+          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
+            <div class="timeline-item__time" style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.7;">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Bestelling</div>
             </div>
-            <div style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Online bestellen</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Plaats je bestelling via onze webshop. Je betaalt de huurprijs + borg. Je ontvangt direct een bevestigingsmail met alle details.</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Directe bevestiging per e-mail</div>
@@ -126,12 +134,12 @@
           </div>
 
           <!-- Timeline Item 2 -->
-          <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
-            <div style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
-              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--color-gray); margin-bottom: 4px;">MOMENT</div>
+          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
+            <div class="timeline-item__time" style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.7;">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">1 dag voor / dag zelf</div>
             </div>
-            <div style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Levering (min. €150)</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Wij bezorgen alles schoon en compleet in handige kratten. Levering is mogelijk vanaf €150 bestelling, de dag voor je event of op de dag zelf.</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Levering vanaf €150 • Afhalen altijd mogelijk (namiddag, tot 3 dagen vooraf)</div>
@@ -139,12 +147,12 @@
           </div>
 
           <!-- Timeline Item 3 -->
-          <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
-            <div style="background: var(--color-primary); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
-              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 4px;">MOMENT</div>
+          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
+            <div class="timeline-item__time" style="background: var(--color-primary); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.9; color: var(--color-white);">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Je evenement</div>
             </div>
-            <div style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Genieten!</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Dek je tafel, ontvang je gasten en geniet van je feest. Na afloop: schraap de borden leeg en zet alles terug in de kratten. Klaar!</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Geen afwas nodig - lever vuil in</div>
@@ -152,12 +160,12 @@
           </div>
 
           <!-- Timeline Item 4 -->
-          <div style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
-            <div style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
-              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--color-gray); margin-bottom: 4px;">MOMENT</div>
+          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr; border-bottom: 1px solid var(--color-charcoal);">
+            <div class="timeline-item__time" style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.7;">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">1 dag na</div>
             </div>
-            <div style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Ophaling</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">De dag na je evenement halen wij de kratten op. Zorg dat alles klaarstaat op een bereikbare plek.</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Flexibele ophaalafspraken</div>
@@ -165,12 +173,12 @@
           </div>
 
           <!-- Timeline Item 5 -->
-          <div style="display: grid; grid-template-columns: 200px 1fr;">
-            <div style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
-              <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; color: var(--color-gray); margin-bottom: 4px;">MOMENT</div>
+          <div class="timeline-item" style="display: grid; grid-template-columns: 200px 1fr;">
+            <div class="timeline-item__time" style="background: var(--color-black); color: var(--color-white); padding: var(--space-lg); display: flex; flex-direction: column; justify-content: center;">
+              <div class="tech-label" style="margin: 0 0 4px; font-size: 11px; opacity: 0.7;">MOMENT</div>
               <div style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: uppercase;">Binnen 5 dagen</div>
             </div>
-            <div style="padding: var(--space-lg); background: var(--color-white);">
+            <div class="timeline-item__content" style="padding: var(--space-lg); background: var(--color-white);">
               <h4 style="font-family: var(--font-heading); margin-bottom: var(--space-sm); text-transform: uppercase;">Borg terugbetaling</h4>
               <p style="font-family: var(--font-body); color: var(--color-dark-gray); margin-bottom: var(--space-sm);">Na controle op schade en volledigheid storten wij je borg terug. Bij eventuele schade nemen we contact op voordat we iets inhouden.</p>
               <div style="font-family: var(--font-mono); font-size: 12px; color: var(--color-primary);">✓ Transparante schaderegeling</div>
@@ -239,10 +247,10 @@
           <h2 style="font-family: var(--font-heading); font-size: var(--font-size-3xl); text-transform: uppercase; color: var(--color-white);">WAAROM TAFEL TOTAAL?</h2>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--color-charcoal);">
+        <div class="icon-grid">
           <!-- USP 1 -->
-          <div style="padding: var(--space-xl); border-right: 1px solid var(--color-charcoal); text-align: center;">
-            <div style="width: 64px; height: 64px; background: var(--color-primary); margin: 0 auto var(--space-md); display: flex; align-items: center; justify-content: center;">
+          <div class="icon-item" data-animate>
+            <div class="icon-item__icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 <polyline points="9 12 11 14 15 10"></polyline>
@@ -253,8 +261,8 @@
           </div>
 
           <!-- USP 2 -->
-          <div style="padding: var(--space-xl); border-right: 1px solid var(--color-charcoal); text-align: center;">
-            <div style="width: 64px; height: 64px; background: var(--color-primary); margin: 0 auto var(--space-md); display: flex; align-items: center; justify-content: center;">
+          <div class="icon-item" data-animate>
+            <div class="icon-item__icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <rect x="1" y="4" width="22" height="16" rx="0" ry="0"></rect>
                 <line x1="1" y1="10" x2="23" y2="10"></line>
@@ -265,8 +273,8 @@
           </div>
 
           <!-- USP 3 -->
-          <div style="padding: var(--space-xl); border-right: 1px solid var(--color-charcoal); text-align: center;">
-            <div style="width: 64px; height: 64px; background: var(--color-primary); margin: 0 auto var(--space-md); display: flex; align-items: center; justify-content: center;">
+          <div class="icon-item" data-animate>
+            <div class="icon-item__icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <rect x="1" y="3" width="15" height="13"></rect>
                 <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
@@ -279,8 +287,8 @@
           </div>
 
           <!-- USP 4 -->
-          <div style="padding: var(--space-xl); text-align: center;">
-            <div style="width: 64px; height: 64px; background: var(--color-primary); margin: 0 auto var(--space-md); display: flex; align-items: center; justify-content: center;">
+          <div class="icon-item" data-animate>
+            <div class="icon-item__icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
               </svg>

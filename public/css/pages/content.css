@@ -606,3 +606,137 @@
 .legal-toc a:hover {
   color: var(--color-primary);
 }
+
+/* ============================================
+   TIMELINE (Process Page)
+   ============================================ */
+
+.timeline-grid {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--color-charcoal);
+}
+
+.timeline-item {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-bottom: 1px solid var(--color-charcoal);
+  transition: transform 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .timeline-item {
+    grid-template-columns: 200px 1fr;
+  }
+}
+
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.timeline-item__time {
+  background: var(--color-black);
+  color: var(--color-white);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+/* Connecting line for timeline visual if desired, but sticking to blocks for now */
+
+.timeline-item__content {
+  padding: var(--space-lg);
+  background: var(--color-white);
+  transition: background-color 0.3s ease;
+}
+
+.timeline-item:hover .timeline-item__content {
+  background-color: var(--color-off-white);
+}
+
+.timeline-item:hover .timeline-item__time {
+  background-color: var(--color-primary);
+}
+
+/* ============================================
+   ICON GRID (Dark)
+   ============================================ */
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  border: 1px solid var(--color-charcoal);
+  background-color: var(--color-black);
+}
+
+@media (min-width: 640px) {
+  .icon-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .icon-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.icon-item {
+  padding: var(--space-xl);
+  text-align: center;
+  border-bottom: 1px solid var(--color-charcoal);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .icon-item {
+    border-right: 1px solid var(--color-charcoal);
+  }
+  
+  .icon-item:nth-child(2n) {
+    border-right: none;
+  }
+  
+  .icon-item:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .icon-item {
+    border-right: 1px solid var(--color-charcoal);
+    border-bottom: none;
+  }
+  
+  .icon-item:nth-child(2n) {
+    border-right: 1px solid var(--color-charcoal);
+  }
+  
+  .icon-item:last-child {
+    border-right: none;
+  }
+}
+
+.icon-item:hover {
+  background-color: var(--color-charcoal);
+}
+
+.icon-item__icon {
+  width: 64px; 
+  height: 64px; 
+  background: var(--color-primary); 
+  margin: 0 auto var(--space-md); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.icon-item:hover .icon-item__icon {
+  transform: scale(1.1) rotate(5deg);
+}
