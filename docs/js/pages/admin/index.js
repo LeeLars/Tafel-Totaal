@@ -5,14 +5,12 @@
 import { adminAPI } from '../../lib/api.js';
 import { formatPrice, formatDateShort, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
-import { loadHeader } from '../../components/header.js';
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   const user = await requireAdmin();
   if (!user) return;
 
-  await loadHeader();
   await loadDashboardStats();
   await loadRecentOrders();
 });
