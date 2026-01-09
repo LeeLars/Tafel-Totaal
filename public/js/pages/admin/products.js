@@ -6,6 +6,7 @@ import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
 import { initCSVUpload, initBulkActions, handleCheckboxChange, updateBulkToolbar } from './products-csv-bulk.js';
+import { initImageUpload, setCurrentImages, getCurrentImages, clearImages } from './product-images.js';
 
 let currentPage = 1;
 let currentSearch = '';
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initModal();
   initCSVUpload();
   initBulkActions();
+  initImageUpload();
   await loadProducts();
 });
 
@@ -66,6 +68,7 @@ function initModal() {
   const closeModal = () => {
     modal?.classList.remove('open');
     editingProduct = null;
+    clearImages();
   };
 
   closeBtn?.addEventListener('click', closeModal);
@@ -202,6 +205,9 @@ function openEditModal(product) {
   document.getElementById('edit-turnaround').value = product.turnaround_days || 1;
   document.getElementById('edit-active').checked = product.is_active;
   
+  // Load existing images
+  setCurrentImages(product.images || []);
+  
   document.getElementById('edit-modal').classList.add('open');
 }
 
@@ -218,7 +224,8 @@ async function saveProduct() {
     stock_total: parseInt(document.getElementById('edit-stock').value),
     stock_buffer: parseInt(document.getElementById('edit-buffer').value),
     turnaround_days: parseInt(document.getElementById('edit-turnaround').value),
-    is_active: document.getElementById('edit-active').checked
+    is_active: document.getElementById('edit-active').checked,
+    images: getCurrentImages()
   };
   
   try {
@@ -226,6 +233,7 @@ async function saveProduct() {
     showToast('Product bijgewerkt', 'success');
     document.getElementById('edit-modal').classList.remove('open');
     editingProduct = null;
+    clearImages();
     await loadProducts();
   } catch (error) {
     console.error('Error updating product:', error);
