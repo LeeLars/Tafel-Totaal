@@ -417,8 +417,7 @@
 }
 
 .partners__label {
-  padding: var(--space-md) var(--space-xl);
-  margin: 0;
+  width:13rem;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
@@ -465,6 +464,7 @@
 @media (min-width: 1024px) {
   .partner-cell {
     border-bottom: none;
+    padding: 1rem;
   }
   .partner-cell:last-child {
     border-right: none;

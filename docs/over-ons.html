@@ -9,7 +9,7 @@
   <title>Over Ons | Tafel Totaal</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
+  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,11 +17,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="/css/variables.css">
-  <link rel="stylesheet" href="/css/base.css">
-  <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/utilities.css">
-  <link rel="stylesheet" href="/css/pages/content.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/content.css">
 </head>
 <body>
   <!-- Header -->
@@ -33,7 +33,7 @@
       <div class="container">
         <nav class="page-hero__breadcrumb" aria-label="Breadcrumb">
           <ol>
-            <li><a href="/">Home</a></li>
+            <li><a href="/Tafel-Totaal/">Home</a></li>
             <li aria-current="page">Over Ons</li>
           </ol>
         </nav>
@@ -186,8 +186,8 @@
         <h2>Klaar om samen te werken?</h2>
         <p>Ontdek onze collectie of neem contact op voor persoonlijk advies.</p>
         <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
-          <a href="/pakketten.html" class="btn btn--white btn--lg">Bekijk Pakketten</a>
-          <a href="/contact.html" class="btn btn--outline-white btn--lg">Neem Contact Op</a>
+          <a href="/Tafel-Totaal/pakketten.html" class="btn btn--white btn--lg">Bekijk Pakketten</a>
+          <a href="/Tafel-Totaal/contact.html" class="btn btn--outline-white btn--lg">Neem Contact Op</a>
         </div>
       </div>
     </section>
@@ -212,7 +212,7 @@
       const container = document.getElementById('footer-container');
       if (!container) return;
       try {
-        const response = await fetch('/components/footer.html');
+        const response = await fetch('/Tafel-Totaal/components/footer.html');
         if (response.ok) container.innerHTML = await response.text();
       } catch (e) {}
     }

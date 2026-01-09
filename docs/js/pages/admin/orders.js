@@ -120,7 +120,7 @@ function createOrderRow(order) {
       <td class="admin-table__amount">${formatPrice(order.total)}</td>
       <td>
         <div class="admin-table__actions">
-          <a href="/admin/order.html?id=${order.id}" class="btn btn--ghost btn--sm">Details</a>
+          <a href="/Tafel-Totaal/admin/order.html?id=${order.id}" class="btn btn--ghost btn--sm">Details</a>
         </div>
       </td>
     </tr>
