@@ -225,7 +225,7 @@ async function loadProducts() {
     console.error('Error loading products:', error);
     tbody.innerHTML = `
       <tr>
-        <td colspan="8" style="text-align: center; padding: 40px; color: var(--color-error);">
+        <td colspan="10" style="text-align: center; padding: 40px; color: var(--color-error);">
           Kon producten niet laden
         </td>
       </tr>
@@ -240,10 +240,26 @@ function createProductRow(product) {
   const availableStock = product.stock_total - product.stock_buffer;
   const stockClass = availableStock <= 0 ? 'text-error' : availableStock < 10 ? 'text-warning' : '';
   
+  // Get first image or use placeholder
+  const imageUrl = product.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg';
+  const hasImage = product.images && product.images.length > 0;
+  
   return `
     <tr>
       <td>
         <input type="checkbox" class="product-checkbox" data-id="${product.id}" style="cursor: pointer;">
+      </td>
+      <td>
+        <div class="product-thumbnail" style="width: 60px; height: 60px; border: 1px solid var(--color-light-gray); display: flex; align-items: center; justify-content: center; overflow: hidden; background: ${hasImage ? 'transparent' : 'var(--color-off-white)'};">
+          ${hasImage 
+            ? `<img src="${imageUrl}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">` 
+            : `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: var(--color-gray);">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+              </svg>`
+          }
+        </div>
       </td>
       <td>
         <strong>${product.name}</strong>
