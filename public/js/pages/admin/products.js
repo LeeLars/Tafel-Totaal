@@ -168,15 +168,22 @@ async function loadProducts() {
     renderPagination(pagination);
     
     // Add edit button handlers
-    tbody.querySelectorAll('.edit-btn').forEach(btn => {
+    const editButtons = tbody.querySelectorAll('.edit-btn');
+    console.log('Found edit buttons:', editButtons.length);
+    
+    editButtons.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
+        console.log('Edit button clicked, product ID:', btn.dataset.id);
         const productId = btn.dataset.id;
         const product = allProducts.find(p => p.id === productId);
+        console.log('Found product:', product);
         if (product) {
           isNewProduct = false;
           openEditModal(product);
+        } else {
+          console.error('Product not found in allProducts array');
         }
       });
     });
@@ -237,11 +244,15 @@ function createProductRow(product) {
  * Open edit modal
  */
 function openEditModal(product) {
+  console.log('openEditModal called with product:', product);
   editingProduct = product;
   
   // Update modal title
   const modalTitle = document.getElementById('modal-title');
-  if (modalTitle) modalTitle.textContent = 'Product Bewerken';
+  if (modalTitle) {
+    modalTitle.textContent = 'Product Bewerken';
+    console.log('Modal title updated');
+  }
   
   document.getElementById('edit-id').value = product.id;
   document.getElementById('edit-name').value = product.name;
@@ -257,7 +268,13 @@ function openEditModal(product) {
   // Load existing images
   setCurrentImages(product.images || []);
   
-  document.getElementById('edit-modal').classList.add('open');
+  const modal = document.getElementById('edit-modal');
+  if (modal) {
+    modal.classList.add('open');
+    console.log('Modal opened');
+  } else {
+    console.error('Modal element not found');
+  }
 }
 
 /**
