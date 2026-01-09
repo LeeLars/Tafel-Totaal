@@ -25,13 +25,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       
+      - name: Prepare files for deployment
+        run: |
+          # Remove base tags that cause 404s
+          find public -name "*.html" -type f -exec sed -i 's|<base href="/Tafel-Totaal/">||g' {} \;
+          # Create .nojekyll to prevent Jekyll processing
+          touch public/.nojekyll
+      
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './public'
+          path: 'public'
       
       - name: Deploy to GitHub Pages
         id: deployment
