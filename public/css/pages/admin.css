@@ -9,7 +9,7 @@
 
 .admin-page {
   min-height: 100vh;
-  background-color: var(--color-white);
+  background-color: var(--color-concrete); /* Changed to concrete for contrast */
 }
 
 .admin-layout {
@@ -49,25 +49,25 @@
 .admin-sidebar__header {
   padding-bottom: var(--space-xl);
   margin-bottom: var(--space-xl);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid var(--color-white); /* High contrast border */
 }
 
 .admin-sidebar__title {
-  font-family: var(--font-heading);
+  font-family: var(--font-display); /* Righteous */
   font-size: var(--font-size-xl);
   color: var(--color-white);
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
 }
 
 .admin-sidebar__subtitle {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); /* Roboto Mono */
   font-size: var(--font-size-xs);
-  color: var(--color-gray);
+  color: var(--color-light-gray); /* Lighter for contrast on black */
   margin-top: var(--space-xs);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
 }
 
 .admin-nav {
@@ -81,10 +81,10 @@
   align-items: center;
   gap: var(--space-md);
   padding: var(--space-md);
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); /* Roboto Mono */
   font-size: var(--font-size-sm);
   font-weight: 500;
-  color: var(--color-gray);
+  color: var(--color-light-gray);
   border: 1px solid transparent;
   transition: all var(--transition-base);
   text-transform: uppercase;
@@ -94,13 +94,13 @@
 .admin-nav__link:hover {
   background-color: var(--color-white);
   color: var(--color-black);
-  border-color: var(--color-white);
+  border: 1px solid var(--color-white); /* Visible border on hover */
 }
 
 .admin-nav__link.active {
   background-color: var(--color-primary);
   color: var(--color-white);
-  border-color: var(--color-primary);
+  border: 1px solid var(--color-primary);
 }
 
 .admin-nav__link svg {
@@ -111,8 +111,9 @@
 
 .admin-nav__divider {
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--color-white);
   margin: var(--space-lg) 0;
+  opacity: 0.3;
 }
 
 /* ============================================
@@ -122,7 +123,7 @@
 .admin-content {
   padding: var(--space-xl);
   min-width: 0;
-  background-color: var(--color-off-white);
+  background-color: var(--color-concrete);
 }
 
 .admin-content__header {
@@ -131,7 +132,7 @@
   gap: var(--space-md);
   margin-bottom: var(--space-xl);
   padding-bottom: var(--space-lg);
-  border-bottom: 1px solid var(--color-charcoal);
+  border-bottom: 2px solid var(--color-black); /* Thicker border */
 }
 
 @media (min-width: 768px) {
@@ -144,14 +145,15 @@
 
 .admin-content__header h1 {
   margin: 0;
-  font-family: var(--font-heading);
+  font-family: var(--font-display); /* Righteous */
   font-size: var(--font-size-3xl);
   text-transform: uppercase;
   line-height: 0.9;
+  color: var(--color-black);
 }
 
 .admin-content__header p {
-  font-family: var(--font-mono);
+  font-family: var(--font-mono); /* Roboto Mono */
   font-size: var(--font-size-sm);
   color: var(--color-dark-gray);
   margin: var(--space-xs) 0 0 0;
@@ -183,34 +185,41 @@
 
 .stat-card {
   background-color: var(--color-white);
-  border: 1px solid var(--color-charcoal);
+  border: 1px solid var(--color-black); /* Solid black border */
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 140px;
-  transition: transform var(--transition-base);
+  min-height: 160px; /* Slightly taller */
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  position: relative;
 }
 
 .stat-card:hover {
   transform: translate(-4px, -4px);
-  box-shadow: 4px 4px 0 var(--color-black);
+  box-shadow: 4px 4px 0 var(--color-black); /* Hard shadow */
+  z-index: 10;
 }
 
 .stat-card__icon {
   margin-bottom: var(--space-md);
   color: var(--color-black);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .stat-card__icon svg {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
+  stroke-width: 1.5;
 }
 
+/* Icon colors - using borders/backgrounds instead of just color */
 .stat-card__icon--primary { color: var(--color-primary); }
 .stat-card__icon--success { color: var(--color-success); }
 .stat-card__icon--warning { color: var(--color-warning); }
-.stat-card__icon--info { color: var(--color-info); }
+.stat-card__icon--info { color: var(--color-black); }
 
 .stat-card__content {
   display: flex;
@@ -218,19 +227,20 @@
 }
 
 .stat-card__value {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-3xl);
+  font-family: var(--font-display); /* Righteous */
+  font-size: 3rem; /* Larger */
   color: var(--color-black);
-  line-height: 1;
+  line-height: 0.9;
   margin-bottom: var(--space-xs);
 }
 
 .stat-card__label {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-dark-gray);
+  font-family: var(--font-mono); /* Roboto Mono */
+  font-size: 0.75rem;
+  color: var(--color-gray);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 /* ============================================
@@ -239,8 +249,9 @@
 
 .admin-card {
   background-color: var(--color-white);
-  border: 1px solid var(--color-charcoal);
+  border: 1px solid var(--color-black);
   margin-bottom: var(--space-xl);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-card__header {
@@ -248,8 +259,8 @@
   flex-direction: column;
   gap: var(--space-md);
   padding: var(--space-lg);
-  border-bottom: 1px solid var(--color-charcoal);
-  background-color: var(--color-white);
+  border-bottom: 1px solid var(--color-black);
+  background-color: var(--color-off-white); /* Slightly different bg */
 }
 
 @media (min-width: 768px) {
@@ -261,10 +272,11 @@
 }
 
 .admin-card__title {
-  font-family: var(--font-heading);
+  font-family: var(--font-display); /* Righteous */
   font-size: var(--font-size-xl);
   margin: 0;
   text-transform: uppercase;
+  color: var(--color-black);
 }
 
 .admin-card__body {
@@ -293,20 +305,22 @@
 }
 
 .admin-table th {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-family: var(--font-mono); /* Roboto Mono */
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-dark-gray);
+  color: var(--color-black);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  background-color: var(--color-off-white);
-  border-bottom: 1px solid var(--color-charcoal);
+  background-color: var(--color-white);
+  border-bottom: 2px solid var(--color-black); /* Thicker header border */
 }
 
 .admin-table td {
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: var(--color-black);
   background-color: var(--color-white);
+  vertical-align: middle;
 }
 
 .admin-table tbody tr:hover td {
@@ -327,20 +341,21 @@
   font-weight: 700;
   color: var(--color-black);
   text-transform: uppercase;
-  font-family: var(--font-heading);
-  font-size: var(--font-size-md);
+  font-family: var(--font-display); /* Righteous */
+  font-size: 1rem;
 }
 
 .admin-table__customer-email {
   font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-dark-gray);
+  font-size: 0.75rem;
+  color: var(--color-gray);
 }
 
 .admin-table__amount {
   font-family: var(--font-mono);
   font-weight: 700;
   color: var(--color-black);
+  font-size: 1rem;
 }
 
 .admin-table__actions {
@@ -360,11 +375,18 @@
 }
 
 .filters-bar .form-input {
-  border: 1px solid var(--color-charcoal);
+  border: 1px solid var(--color-black); /* Black border */
   border-radius: 0;
   padding: var(--space-sm) var(--space-md);
   font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
+  font-size: 0.85rem;
+  background-color: var(--color-white);
+  box-shadow: none;
+}
+
+.filters-bar .form-input:focus {
+  outline: 2px solid var(--color-primary);
+  border-color: var(--color-primary);
 }
 
 /* ============================================
@@ -376,9 +398,21 @@
   flex-direction: column;
   gap: var(--space-lg);
   padding: var(--space-lg);
-  border: 1px solid var(--color-charcoal);
+  border: 1px solid var(--color-black);
   background-color: var(--color-white);
   margin-bottom: var(--space-xl);
+  position: relative;
+}
+
+/* Decorative stripe */
+.admin-order-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--color-primary);
 }
 
 @media (min-width: 768px) {
@@ -390,17 +424,20 @@
 }
 
 .admin-order-header__info h2 {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-2xl);
+  font-family: var(--font-display);
+  font-size: 2rem;
   margin-bottom: var(--space-xs);
   text-transform: uppercase;
+  color: var(--color-black);
 }
 
 .admin-order-header__meta {
   font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
+  font-size: 0.85rem;
   color: var(--color-dark-gray);
   text-transform: uppercase;
+  display: flex;
+  gap: var(--space-md);
 }
 
 .admin-order-header__actions {
@@ -418,16 +455,24 @@
 
 .status-select label {
   font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
+  color: var(--color-gray);
 }
 
 .status-select select {
-  border: 1px solid var(--color-charcoal);
+  border: 1px solid var(--color-black);
   border-radius: 0;
   padding: var(--space-xs) var(--space-md);
   font-family: var(--font-mono);
+  font-size: 0.85rem;
+  background-color: var(--color-white);
+  cursor: pointer;
+}
+
+.status-select select:hover {
+  background-color: var(--color-off-white);
 }
 
 /* PDF Buttons */
@@ -440,6 +485,20 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
+  border: 1px solid var(--color-black);
+  background: white;
+  color: black;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn--pdf:hover {
+  background: black;
+  color: white;
 }
 
 .btn--pdf svg {
@@ -462,19 +521,21 @@
 
 .customer-info__section h4 {
   font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-dark-gray);
+  color: var(--color-black);
   margin-bottom: var(--space-md);
   text-transform: uppercase;
-  border-bottom: 1px solid var(--color-light-gray);
+  border-bottom: 2px solid var(--color-black);
   padding-bottom: var(--space-xs);
+  display: inline-block;
 }
 
 .customer-info__section p {
   margin: 0;
   line-height: 1.6;
-  font-size: var(--font-size-md);
+  font-size: 1rem;
+  font-family: var(--font-body);
 }
 
 /* ============================================
@@ -484,9 +545,12 @@
 .admin-mobile-nav {
   display: flex;
   background-color: var(--color-black);
-  border-bottom: 1px solid var(--color-charcoal);
+  border-bottom: 1px solid var(--color-black);
   overflow-x: auto;
   padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 @media (min-width: 1024px) {
@@ -503,12 +567,13 @@
   gap: var(--space-sm);
   padding: var(--space-md);
   font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   font-weight: 600;
-  color: var(--color-gray);
+  color: var(--color-light-gray);
   white-space: nowrap;
   text-transform: uppercase;
   border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--color-black);
 }
 
 .admin-mobile-nav a:last-child {
@@ -530,7 +595,8 @@
   justify-content: center;
   gap: var(--space-xs);
   padding: var(--space-lg);
-  border-top: 1px solid var(--color-charcoal);
+  border-top: 1px solid var(--color-black);
+  background-color: var(--color-white);
 }
 
 .pagination__btn {
@@ -540,23 +606,26 @@
   width: 40px;
   height: 40px;
   font-family: var(--font-mono);
-  font-size: var(--font-size-sm);
+  font-size: 0.85rem;
   color: var(--color-black);
   background-color: var(--color-white);
-  border: 1px solid var(--color-charcoal);
+  border: 1px solid var(--color-black);
   border-radius: 0;
   transition: all var(--transition-base);
+  cursor: pointer;
 }
 
 .pagination__btn:hover:not(:disabled) {
   background-color: var(--color-black);
   color: var(--color-white);
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0 var(--color-gray);
 }
 
 .pagination__btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
-  border-color: var(--color-light-gray);
+  border-color: var(--color-gray);
 }
 
 .pagination__btn.active {
@@ -567,7 +636,7 @@
 
 .pagination__info {
   font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
+  font-size: 0.75rem;
   color: var(--color-dark-gray);
   padding: 0 var(--space-md);
   text-transform: uppercase;

@@ -37,6 +37,7 @@
   /* Font Families (ORIGINEEL BEHOUDEN) */
   --font-display: 'Righteous', cursive;
   --font-body: 'Roboto', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
   
   /* Font Weights */
   --font-weight-normal: 400;
