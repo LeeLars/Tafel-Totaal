@@ -1,0 +1,268 @@
+/* ============================================
+   AUTH PAGES STYLES - Tafel Totaal
+   Login & Register pages
+   ============================================ */
+
+.auth-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) 0;
+  background-color: var(--color-off-white);
+}
+
+/* ============================================
+   AUTH CARD
+   ============================================ */
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-xl);
+}
+
+.auth-card--wide {
+  max-width: 520px;
+}
+
+.auth-card__header {
+  text-align: center;
+  margin-bottom: var(--space-xl);
+}
+
+.auth-card__header h1 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.auth-card__header p {
+  color: var(--color-dark-gray);
+  margin: 0;
+}
+
+.auth-card__footer {
+  text-align: center;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-light-gray);
+}
+
+.auth-card__footer p {
+  margin: 0;
+  color: var(--color-dark-gray);
+}
+
+.auth-card__footer a {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+/* ============================================
+   AUTH FORM
+   ============================================ */
+
+.auth-form .form-group {
+  margin-bottom: var(--space-lg);
+}
+
+.auth-form .form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 480px) {
+  .auth-form .form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-group--inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.form-hint {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray);
+  margin-top: var(--space-xs);
+  margin-bottom: 0;
+}
+
+.auth-link {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+}
+
+/* ============================================
+   PASSWORD INPUT
+   ============================================ */
+
+.password-input {
+  position: relative;
+}
+
+.password-input .form-input {
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--color-gray);
+  border-radius: var(--border-radius-sm);
+  transition: color var(--transition-fast);
+}
+
+.password-toggle:hover {
+  color: var(--color-primary);
+}
+
+.password-toggle .icon-hide {
+  display: none;
+}
+
+.password-toggle.active .icon-show {
+  display: none;
+}
+
+.password-toggle.active .icon-hide {
+  display: block;
+}
+
+/* ============================================
+   CHECKBOX
+   ============================================ */
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-dark-gray);
+}
+
+.checkbox input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox__mark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-light-gray);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkbox__mark::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  opacity: 0;
+  transform: scale(0);
+  transition: all var(--transition-fast);
+}
+
+.checkbox input:checked + .checkbox__mark {
+  border-color: var(--color-primary);
+}
+
+.checkbox input:checked + .checkbox__mark::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.checkbox:hover .checkbox__mark {
+  border-color: var(--color-primary-light);
+}
+
+.checkbox input:focus-visible + .checkbox__mark {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.checkbox__label {
+  line-height: 1.4;
+}
+
+.checkbox__label a {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+/* ============================================
+   SOCIAL LOGIN (future)
+   ============================================ */
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin: var(--space-xl) 0;
+  color: var(--color-gray);
+  font-size: var(--font-size-sm);
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background-color: var(--color-light-gray);
+}
+
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.btn--social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-black);
+  transition: all var(--transition-fast);
+}
+
+.btn--social:hover {
+  background-color: var(--color-off-white);
+  border-color: var(--color-gray);
+}
+
+.btn--social img {
+  width: 20px;
+  height: 20px;
+}

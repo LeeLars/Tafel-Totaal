@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/Tafel-Totaal/">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <title>Bestellingen | Admin | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/admin.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <!-- Mobile Nav -->
+  <nav class="admin-mobile-nav">
+    <a href="/Tafel-Totaal/admin/index.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      </svg>
+      Dashboard
+    </a>
+    <a href="/Tafel-Totaal/admin/orders.html" class="active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+      </svg>
+      Bestellingen
+    </a>
+  </nav>
+
+  <main class="admin-page">
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar__header">
+          <h2 class="admin-sidebar__title">Admin Panel</h2>
+          <p class="admin-sidebar__subtitle">Tafel Totaal</p>
+        </div>
+        <nav class="admin-nav">
+          <a href="/Tafel-Totaal/admin/index.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Dashboard
+          </a>
+          <a href="/Tafel-Totaal/admin/orders.html" class="admin-nav__link active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            Bestellingen
+          </a>
+          <div class="admin-nav__divider"></div>
+          <a href="/Tafel-Totaal/" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Naar website
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Content -->
+      <div class="admin-content">
+        <div class="admin-content__header">
+          <div>
+            <h1>Bestellingen</h1>
+            <p>Beheer alle bestellingen en verhuur.</p>
+          </div>
+        </div>
+
+        <!-- Orders Card -->
+        <div class="admin-card">
+          <div class="admin-card__header">
+            <h2 class="admin-card__title">Alle Bestellingen</h2>
+            <div class="filters-bar">
+              <select id="status-filter" class="form-input">
+                <option value="">Alle statussen</option>
+                <option value="pending_payment">Wacht op betaling</option>
+                <option value="confirmed">Bevestigd</option>
+                <option value="preparing">In voorbereiding</option>
+                <option value="ready_for_delivery">Klaar voor levering</option>
+                <option value="delivered">Geleverd</option>
+                <option value="returned">Retour ontvangen</option>
+                <option value="completed">Afgerond</option>
+                <option value="cancelled">Geannuleerd</option>
+              </select>
+            </div>
+          </div>
+          <div class="admin-table-wrapper">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Bestelling</th>
+                  <th>Klant</th>
+                  <th>Verhuurperiode</th>
+                  <th>Status</th>
+                  <th>Totaal</th>
+                  <th>Acties</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 40px;">
+                    <div class="spinner"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/Tafel-Totaal/js/pages/admin/orders.js"></script>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/Tafel-Totaal/">
+  <meta name="description" content="Configureer je pakket en voeg toe aan winkelwagen.">
+  
+  <title>Pakket Details | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/pakket.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main>
+    <!-- Loading State -->
+    <div class="package-loading" id="package-loading">
+      <div class="spinner"></div>
+      <p>Pakket laden...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="package-error hidden" id="package-error">
+      <h2>Pakket niet gevonden</h2>
+      <p>Dit pakket bestaat niet of is niet meer beschikbaar.</p>
+      <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary">Bekijk alle pakketten</a>
+    </div>
+
+    <!-- Package Content -->
+    <div class="package-content hidden" id="package-content">
+      <!-- Breadcrumb -->
+      <section class="breadcrumb-section">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/Tafel-Totaal/">Home</a></li>
+              <li><a href="/Tafel-Totaal/pakketten.html">Pakketten</a></li>
+              <li aria-current="page" id="breadcrumb-name">-</li>
+            </ol>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Package Detail -->
+      <section class="package-detail">
+        <div class="container">
+          <div class="package-detail__grid">
+            <!-- Left: Images -->
+            <div class="package-gallery">
+              <div class="package-gallery__main">
+                <img src="/Tafel-Totaal/images/packages/placeholder.jpg" alt="" id="gallery-main" loading="lazy">
+              </div>
+              <div class="package-gallery__thumbs" id="gallery-thumbs">
+                <!-- Thumbnails loaded via JS -->
+              </div>
+            </div>
+
+            <!-- Right: Info & Configurator -->
+            <div class="package-info">
+              <div class="package-info__header">
+                <span class="badge badge--primary" id="package-badge"></span>
+                <h1 id="package-title">-</h1>
+                <p class="package-info__description" id="package-description">-</p>
+              </div>
+
+              <!-- Configurator -->
+              <div class="configurator">
+                <h2 class="configurator__title">Configureer je pakket</h2>
+
+                <!-- Date Selection -->
+                <div class="configurator__section">
+                  <label class="configurator__label">Verhuurperiode</label>
+                  <div class="configurator__dates">
+                    <div class="form-group">
+                      <label for="start-date" class="form-label">Startdatum</label>
+                      <input type="date" id="start-date" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="end-date" class="form-label">Einddatum</label>
+                      <input type="date" id="end-date" class="form-input" required>
+                    </div>
+                  </div>
+                  <p class="configurator__hint" id="rental-days-hint">Selecteer je datums</p>
+                </div>
+
+                <!-- Persons Selection -->
+                <div class="configurator__section">
+                  <label class="configurator__label" for="persons-select">Aantal personen</label>
+                  <select id="persons-select" class="form-input">
+                    <!-- Options loaded via JS -->
+                  </select>
+                </div>
+
+                <!-- Add-ons -->
+                <div class="configurator__section" id="addons-section" style="display: none;">
+                  <label class="configurator__label">Extra's toevoegen</label>
+                  <div class="addons-list" id="addons-list">
+                    <!-- Add-ons loaded via JS -->
+                  </div>
+                </div>
+
+                <!-- Availability Status -->
+                <div class="availability-status" id="availability-status" style="display: none;">
+                  <div class="availability-status__icon"></div>
+                  <span class="availability-status__text"></span>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="price-summary">
+                  <div class="price-summary__row">
+                    <span>Pakket (<span id="summary-persons">0</span> pers.)</span>
+                    <span id="summary-base-price">€0,00</span>
+                  </div>
+                  <div class="price-summary__row" id="summary-extra-days-row" style="display: none;">
+                    <span>Extra dagen (<span id="summary-extra-days">0</span>)</span>
+                    <span id="summary-extra-days-price">€0,00</span>
+                  </div>
+                  <div class="price-summary__row" id="summary-addons-row" style="display: none;">
+                    <span>Extra's</span>
+                    <span id="summary-addons-price">€0,00</span>
+                  </div>
+                  <div class="price-summary__row price-summary__row--deposit">
+                    <span>Waarborg (terugbetaalbaar)</span>
+                    <span id="summary-deposit">€0,00</span>
+                  </div>
+                  <div class="price-summary__total">
+                    <span>Totaal</span>
+                    <span id="summary-total">€0,00</span>
+                  </div>
+                </div>
+
+                <!-- Add to Cart Button -->
+                <button class="btn btn--primary btn--lg btn--full" id="add-to-cart-btn" disabled>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                  Toevoegen aan winkelwagen
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Package Contents -->
+      <section class="package-contents">
+        <div class="container">
+          <h2>Wat zit er in dit pakket?</h2>
+          <div class="package-contents__grid" id="package-contents">
+            <!-- Contents loaded via JS -->
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/Tafel-Totaal/js/pages/pakket.js"></script>
+</body>
+</html>

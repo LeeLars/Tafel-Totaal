@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/Tafel-Totaal/">
+  <meta name="description" content="Neem contact op met Tafel Totaal. Vragen over servies verhuur? We helpen je graag.">
+  
+  <title>Contact | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/content.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main>
+    <!-- Page Hero -->
+    <section class="page-hero">
+      <div class="container">
+        <nav class="page-hero__breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            <li><a href="/Tafel-Totaal/">Home</a></li>
+            <li aria-current="page">Contact</li>
+          </ol>
+        </nav>
+        <h1>Contact</h1>
+        <p class="page-hero__subtitle">
+          Heb je een vraag of wil je advies? We staan voor je klaar.
+        </p>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="content-section">
+      <div class="container">
+        <div class="contact-grid">
+          <!-- Contact Form -->
+          <div class="contact-form">
+            <h2>Stuur ons een bericht</h2>
+            <form id="contact-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="name" class="form-label">Naam *</label>
+                  <input type="text" id="name" name="name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="phone" class="form-label">Telefoon</label>
+                  <input type="tel" id="phone" name="phone" class="form-input">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email" class="form-label">E-mailadres *</label>
+                <input type="email" id="email" name="email" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="subject" class="form-label">Onderwerp *</label>
+                <select id="subject" name="subject" class="form-input" required>
+                  <option value="">Selecteer een onderwerp</option>
+                  <option value="vraag">Algemene vraag</option>
+                  <option value="offerte">Offerte aanvragen</option>
+                  <option value="bestelling">Vraag over bestelling</option>
+                  <option value="schade">Schade melden</option>
+                  <option value="anders">Anders</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="message" class="form-label">Bericht *</label>
+                <textarea id="message" name="message" class="form-input" rows="5" required placeholder="Hoe kunnen we je helpen?"></textarea>
+              </div>
+              <button type="submit" class="btn btn--primary btn--lg" id="submit-btn">
+                Verstuur bericht
+              </button>
+            </form>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="contact-info">
+            <div class="contact-info__item">
+              <div class="contact-info__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+              </div>
+              <div class="contact-info__content">
+                <h3>Adres</h3>
+                <p>
+                  Tafel Totaal<br>
+                  Parkstraat 44<br>
+                  8730 Beernem<br>
+                  België
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-info__item">
+              <div class="contact-info__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <path d="M7 15h0M12 15h0M17 15h0M7 10h0M12 10h0M17 10h0"></path>
+                </svg>
+              </div>
+              <div class="contact-info__content">
+                <h3>BTW-nummer</h3>
+                <p>
+                  BE0797 745 420
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-info__item">
+              <div class="contact-info__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+              </div>
+              <div class="contact-info__content">
+                <h3>E-mail</h3>
+                <p>
+                  <a href="mailto:info@tafeltotaal.be">info@tafeltotaal.be</a><br>
+                  <small>We reageren binnen 24 uur</small>
+                </p>
+              </div>
+            </div>
+
+            <div class="contact-info__item">
+              <div class="contact-info__icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div class="contact-info__content">
+                <h3>Openingstijden</h3>
+                <p>
+                  Maandag - Vrijdag: 9:00 - 17:00<br>
+                  Zaterdag: 10:00 - 14:00 (alleen afhalen)<br>
+                  Zondag: Gesloten
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="content-section content-section--gray">
+      <div class="container">
+        <div class="content-section__header">
+          <h2>Waar vind je ons?</h2>
+          <p>Makkelijk bereikbaar in het centrum van Antwerpen.</p>
+        </div>
+        <div style="border-radius: var(--border-radius-lg); overflow: hidden; height: 400px; background-color: var(--color-light-gray);">
+          <!-- Placeholder for Google Maps -->
+          <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--color-gray);">
+            <p>Google Maps wordt hier geladen</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { loadHeader } from '/js/components/header.js';
+    import { showToast, isValidEmail } from '/js/lib/utils.js';
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadHeader();
+      await loadFooter();
+      initContactForm();
+    });
+
+    async function loadFooter() {
+      const container = document.getElementById('footer-container');
+      if (!container) return;
+      try {
+        const response = await fetch('/Tafel-Totaal/components/footer.html');
+        if (response.ok) container.innerHTML = await response.text();
+      } catch (e) {}
+    }
+
+    function initContactForm() {
+      const form = document.getElementById('contact-form');
+      if (!form) return;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const subject = form.subject.value;
+        const message = form.message.value.trim();
+        const btn = document.getElementById('submit-btn');
+
+        if (!name || !email || !subject || !message) {
+          showToast('Vul alle verplichte velden in', 'error');
+          return;
+        }
+
+        if (!isValidEmail(email)) {
+          showToast('Vul een geldig e-mailadres in', 'error');
+          return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Versturen...';
+
+        // Simulate form submission (would connect to backend or Formspree in production)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        showToast('Bericht verzonden! We nemen snel contact op.', 'success');
+        form.reset();
+        
+        btn.disabled = false;
+        btn.textContent = 'Verstuur bericht';
+      });
+    }
+  </script>
+</body>
+</html>

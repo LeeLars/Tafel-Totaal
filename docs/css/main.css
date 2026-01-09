@@ -1,0 +1,16 @@
+/**
+ * Tafel Totaal - Main Stylesheet
+ * Import all CSS files in correct order
+ */
+
+/* 1. Variables - CSS Custom Properties */
+@import 'variables.css';
+
+/* 2. Base - Reset & Typography */
+@import 'base.css';
+
+/* 3. Components - Reusable UI Elements */
+@import 'components.css';
+
+/* 4. Utilities - Helper Classes */
+@import 'utilities.css';
