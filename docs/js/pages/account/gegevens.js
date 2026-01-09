@@ -32,7 +32,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -166,7 +166,7 @@ function initLogout() {
     try {
       await authAPI.logout();
       showToast('Je bent uitgelogd', 'success');
-      window.location.href = '/Tafel-Totaal/';
+      window.location.href = '/';
     } catch (error) {
       showToast('Uitloggen mislukt', 'error');
     }

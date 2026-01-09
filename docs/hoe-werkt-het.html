@@ -9,7 +9,7 @@
   <title>Hoe werkt het? | Tafel Totaal</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,11 +17,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/content.css">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/content.css">
 </head>
 <body>
   <!-- Header -->
@@ -33,7 +33,7 @@
       <div class="container">
         <nav class="page-hero__breadcrumb" aria-label="Breadcrumb">
           <ol>
-            <li><a href="/Tafel-Totaal/">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li aria-current="page">Hoe werkt het?</li>
           </ol>
         </nav>
@@ -167,7 +167,7 @@
             <p>Bekijk onze pakketten en start met het samenstellen van je bestelling.</p>
           </div>
           <div>
-            <a href="/Tafel-Totaal/pakketten.html" class="btn btn--white btn--lg">Bekijk Pakketten</a>
+            <a href="/pakketten.html" class="btn btn--white btn--lg">Bekijk Pakketten</a>
           </div>
         </div>
       </div>
@@ -178,17 +178,17 @@
   <div id="footer-container"></div>
 
   <!-- Scripts -->
-  <script src="/Tafel-Totaal/js/lib/api.js"></script>
-  <script src="/Tafel-Totaal/js/lib/animations.js"></script>
+  <script src="/js/lib/api.js"></script>
+  <script src="/js/lib/animations.js"></script>
   <script>
     // Load header and footer
     document.addEventListener('DOMContentLoaded', async () => {
       try {
-        const headerResponse = await fetch('/Tafel-Totaal/components/header.html');
+        const headerResponse = await fetch('/components/header.html');
         const headerHTML = await headerResponse.text();
         document.getElementById('header-container').innerHTML = headerHTML;
 
-        const footerResponse = await fetch('/Tafel-Totaal/components/footer.html');
+        const footerResponse = await fetch('/components/footer.html');
         const footerHTML = await footerResponse.text();
         document.getElementById('footer-container').innerHTML = footerHTML;
 

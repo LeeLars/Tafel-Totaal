@@ -28,7 +28,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -517,7 +517,7 @@ document.getElementById('add-to-cart-btn')?.addEventListener('click', async () =
       showToast('Pakket toegevoegd aan winkelwagen!', 'success');
       
       // Optional: redirect to cart
-      // window.location.href = '/Tafel-Totaal/winkelwagen.html';
+      // window.location.href = '/winkelwagen.html';
     } else {
       showToast(result.error || 'Kon niet toevoegen aan winkelwagen', 'error');
     }

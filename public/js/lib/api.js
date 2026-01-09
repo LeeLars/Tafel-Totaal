@@ -50,12 +50,6 @@ export const authAPI = {
       method: 'POST',
       body: JSON.stringify({ email, password })
     }),
-
-  adminLogin: (email, password) =>
-    apiCall('/api/auth/admin/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password })
-    }),
   
   register: (userData) => 
     apiCall('/api/auth/register', {

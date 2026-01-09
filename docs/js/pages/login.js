@@ -94,17 +94,13 @@ function initLoginForm() {
     btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Inloggen...';
 
     try {
-      const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
-      const isAdminLogin = returnUrl.startsWith('/admin/');
-
-      const response = isAdminLogin
-        ? await authAPI.adminLogin(email, password)
-        : await authAPI.login(email, password);
+      const response = await authAPI.login(email, password);
 
       if (response.success) {
         showToast('Succesvol ingelogd!', 'success');
         
         // Redirect to return URL or account
+        const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
         setTimeout(() => {
           window.location.href = returnUrl;
         }, 500);
