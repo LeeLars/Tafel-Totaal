@@ -98,9 +98,9 @@ function rewritePaths(content, ext) {
     content = content.replace(/from\s+'\/([^']+)'/g, "from './$1'");
     content = content.replace(/from\s+"\/([^"]+)"/g, 'from "./$1"');
     
-    // Rewrite string paths like '/images/...'
-    content = content.replace(/'\/(images|css|js|components|api)\//g, "'./$1/");
-    content = content.replace(/"\/(images|css|js|components|api)\//g, '"./$1/');
+    // Rewrite string paths like '/images/...' (NOT /api/ - those go to external backend)
+    content = content.replace(/'\/(images|css|js|components)\//g, "'./$1/");
+    content = content.replace(/"\/(images|css|js|components)\//g, '"./$1/');
     
     // Rewrite redirects
     content = content.replace(/location\s*=\s*'\//g, "location = './");

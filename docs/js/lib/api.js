@@ -46,31 +46,31 @@ async function apiCall(endpoint, options = {}) {
 
 export const authAPI = {
   login: (email, password) => 
-    apiCall('./api/auth/login', {
+    apiCall('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password })
     }),
   
   register: (userData) => 
-    apiCall('./api/auth/register', {
+    apiCall('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData)
     }),
   
   logout: () => 
-    apiCall('./api/auth/logout', { method: 'POST' }),
+    apiCall('/api/auth/logout', { method: 'POST' }),
   
   me: () => 
-    apiCall('./api/auth/me'),
+    apiCall('/api/auth/me'),
 
   updateProfile: (data) =>
-    apiCall('./api/auth/profile', {
+    apiCall('/api/auth/profile', {
       method: 'PATCH',
       body: JSON.stringify(data)
     }),
 
   changePassword: (currentPassword, newPassword) =>
-    apiCall('./api/auth/password', {
+    apiCall('/api/auth/password', {
       method: 'PUT',
       body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
     })
@@ -98,10 +98,10 @@ export const productsAPI = {
 
 export const cartAPI = {
   get: () => 
-    apiCall('./api/cart'),
+    apiCall('/api/cart'),
   
   addItem: (item) => 
-    apiCall('./api/cart/items', {
+    apiCall('/api/cart/items', {
       method: 'POST',
       body: JSON.stringify(item)
     }),
@@ -116,18 +116,18 @@ export const cartAPI = {
     apiCall(`/api/cart/items/${itemId}`, { method: 'DELETE' }),
   
   clear: () => 
-    apiCall('./api/cart', { method: 'DELETE' })
+    apiCall('/api/cart', { method: 'DELETE' })
 };
 
 export const checkoutAPI = {
   createOrder: (orderData) => 
-    apiCall('./api/checkout', {
+    apiCall('/api/checkout', {
       method: 'POST',
       body: JSON.stringify(orderData)
     }),
   
   calculatePrice: (items, startDate, endDate, deliveryMethod) => 
-    apiCall('./api/checkout/calculate', {
+    apiCall('/api/checkout/calculate', {
       method: 'POST',
       body: JSON.stringify({ items, startDate, endDate, deliveryMethod })
     })
@@ -135,7 +135,7 @@ export const checkoutAPI = {
 
 export const ordersAPI = {
   getMyOrders: () => 
-    apiCall('./api/orders'),
+    apiCall('/api/orders'),
   
   getById: (id) => 
     apiCall(`/api/orders/${id}`)
@@ -143,7 +143,7 @@ export const ordersAPI = {
 
 export const availabilityAPI = {
   check: (type, id, quantity, startDate, endDate, persons) => 
-    apiCall('./api/availability/check', {
+    apiCall('/api/availability/check', {
       method: 'POST',
       body: JSON.stringify({ type, id, quantity, startDate, endDate, persons })
     })
@@ -197,7 +197,7 @@ export const adminAPI = {
   
   // Dashboard
   getDashboardStats: () => 
-    apiCall('./api/admin/dashboard/stats')
+    apiCall('/api/admin/dashboard/stats')
 };
 
 export { apiCall, API_BASE_URL };
