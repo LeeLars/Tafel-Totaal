@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { query, queryOne } from '../config/database';
-import { Order } from '../types';
+import { Order, Product, Customer } from '../types';
+import { ProductModel } from '../models/Product.model';
+import { CustomerModel } from '../models/Customer.model';
 
 export async function getAllOrders(req: Request, res: Response): Promise<void> {
   try {
@@ -208,5 +210,170 @@ export async function getDashboardStats(_req: Request, res: Response): Promise<v
   } catch (error) {
     console.error('Get dashboard stats error:', error);
     res.status(500).json({ success: false, error: 'Failed to fetch dashboard stats' });
+  }
+}
+
+// ============================================
+// PRODUCT MANAGEMENT
+// ============================================
+
+export async function getAllProducts(req: Request, res: Response): Promise<void> {
+  try {
+    const { search, category_id, is_active, page = '1', limit = '20' } = req.query;
+
+    const pageNum = parseInt(page as string, 10);
+    const limitNum = Math.min(parseInt(limit as string, 10), 100);
+    const offset = (pageNum - 1) * limitNum;
+
+    const filters: any = {};
+    if (search) filters.search = search;
+    if (category_id) filters.category_id = category_id;
+    if (is_active !== undefined) filters.is_active = is_active === 'true';
+
+    const [products, total] = await Promise.all([
+      ProductModel.findAll(filters, limitNum, offset),
+      ProductModel.count(filters)
+    ]);
+
+    res.json({
+      success: true,
+      data: products,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        totalPages: Math.ceil(total / limitNum),
+      },
+    });
+  } catch (error) {
+    console.error('Get all products error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch products' });
+  }
+}
+
+export async function getProductById(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const product = await ProductModel.findById(id);
+
+    if (!product) {
+      res.status(404).json({ success: false, error: 'Product not found' });
+      return;
+    }
+
+    res.json({ success: true, data: product });
+  } catch (error) {
+    console.error('Get product by ID error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch product' });
+  }
+}
+
+export async function updateProduct(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const product = await ProductModel.update(id, updateData);
+
+    if (!product) {
+      res.status(404).json({ success: false, error: 'Product not found' });
+      return;
+    }
+
+    res.json({ success: true, data: product });
+  } catch (error) {
+    console.error('Update product error:', error);
+    res.status(500).json({ success: false, error: 'Failed to update product' });
+  }
+}
+
+// ============================================
+// CUSTOMER MANAGEMENT
+// ============================================
+
+export async function getAllCustomers(req: Request, res: Response): Promise<void> {
+  try {
+    const { search, page = '1', limit = '20' } = req.query;
+
+    const pageNum = parseInt(page as string, 10);
+    const limitNum = Math.min(parseInt(limit as string, 10), 100);
+    const offset = (pageNum - 1) * limitNum;
+
+    let sql = `
+      SELECT c.*, 
+        (SELECT COUNT(*) FROM orders WHERE customer_id = c.id) as order_count,
+        (SELECT COALESCE(SUM(total), 0) FROM orders WHERE customer_id = c.id AND status = 'completed') as total_spent
+      FROM customers c
+      WHERE 1=1
+    `;
+
+    const params: unknown[] = [];
+    let paramIndex = 1;
+
+    if (search) {
+      sql += ` AND (c.email ILIKE $${paramIndex} OR c.first_name ILIKE $${paramIndex} OR c.last_name ILIKE $${paramIndex})`;
+      params.push(`%${search}%`);
+      paramIndex++;
+    }
+
+    sql += ` ORDER BY c.created_at DESC LIMIT $${paramIndex++} OFFSET $${paramIndex++}`;
+    params.push(limitNum, offset);
+
+    const customers = await query<Customer & { order_count: string; total_spent: string }>(sql, params);
+
+    const countResult = await queryOne<{ total: string }>(
+      `SELECT COUNT(*) as total FROM customers` + (search ? ` WHERE email ILIKE $1 OR first_name ILIKE $1 OR last_name ILIKE $1` : ''),
+      search ? [`%${search}%`] : []
+    );
+
+    const total = parseInt(countResult?.total || '0', 10);
+
+    res.json({
+      success: true,
+      data: customers.map(c => ({
+        ...c,
+        order_count: parseInt(c.order_count || '0', 10),
+        total_spent: parseFloat(c.total_spent || '0')
+      })),
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        totalPages: Math.ceil(total / limitNum),
+      },
+    });
+  } catch (error) {
+    console.error('Get all customers error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch customers' });
+  }
+}
+
+export async function getCustomerById(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+
+    const customer = await CustomerModel.findById(id);
+
+    if (!customer) {
+      res.status(404).json({ success: false, error: 'Customer not found' });
+      return;
+    }
+
+    // Get customer's orders
+    const orders = await query<Order>(
+      `SELECT * FROM orders WHERE customer_id = $1 ORDER BY created_at DESC`,
+      [id]
+    );
+
+    res.json({
+      success: true,
+      data: {
+        ...customer,
+        orders
+      }
+    });
+  } catch (error) {
+    console.error('Get customer by ID error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch customer' });
   }
 }

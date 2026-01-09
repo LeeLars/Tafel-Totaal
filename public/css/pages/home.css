@@ -821,7 +821,7 @@
    ============================================ */
 
 .statement-section {
-  background-color: var(--color-black);
+  background-color: var(--color-primary);
   color: var(--color-white);
   border-bottom: var(--border-width) solid var(--color-black);
   position: relative;

@@ -6,7 +6,7 @@
   
   <meta name="robots" content="noindex, nofollow">
   
-  <title>Bestellingen | Admin | Tafel Totaal</title>
+  <title>Producten | Admin | Tafel Totaal</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="./images/site/Favicon-tafel-totaal.png">
@@ -35,11 +35,17 @@
       </svg>
       Dashboard
     </a>
-    <a href="./admin/orders.html" class="active">
+    <a href="./admin/orders.html">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
       </svg>
       Bestellingen
+    </a>
+    <a href="./admin/products.html" class="active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+      </svg>
+      Producten
     </a>
   </nav>
 
@@ -59,7 +65,7 @@
             </svg>
             Dashboard
           </a>
-          <a href="./admin/orders.html" class="admin-nav__link active">
+          <a href="./admin/orders.html" class="admin-nav__link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
               <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -67,7 +73,7 @@
             </svg>
             Bestellingen
           </a>
-          <a href="./admin/products.html" class="admin-nav__link">
+          <a href="./admin/products.html" class="admin-nav__link active">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
               <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
@@ -100,26 +106,21 @@
       <div class="admin-content">
         <div class="admin-content__header">
           <div>
-            <h1>Bestellingen</h1>
-            <p>Beheer alle bestellingen en verhuur.</p>
+            <h1>Producten</h1>
+            <p>Beheer voorraad en productinstellingen.</p>
           </div>
         </div>
 
-        <!-- Orders Card -->
+        <!-- Products Card -->
         <div class="admin-card">
           <div class="admin-card__header">
-            <h2 class="admin-card__title">Alle Bestellingen</h2>
+            <h2 class="admin-card__title">Alle Producten</h2>
             <div class="filters-bar">
-              <select id="status-filter" class="form-input">
-                <option value="">Alle statussen</option>
-                <option value="pending_payment">Wacht op betaling</option>
-                <option value="confirmed">Bevestigd</option>
-                <option value="preparing">In voorbereiding</option>
-                <option value="ready_for_delivery">Klaar voor levering</option>
-                <option value="delivered">Geleverd</option>
-                <option value="returned">Retour ontvangen</option>
-                <option value="completed">Afgerond</option>
-                <option value="cancelled">Geannuleerd</option>
+              <input type="text" id="search-input" class="form-input" placeholder="Zoek product..." style="max-width: 200px;">
+              <select id="status-filter" class="form-input" style="max-width: 150px;">
+                <option value="">Alle</option>
+                <option value="true">Actief</option>
+                <option value="false">Inactief</option>
               </select>
             </div>
           </div>
@@ -127,17 +128,19 @@
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th>Bestelling</th>
-                  <th>Klant</th>
-                  <th>Verhuurperiode</th>
+                  <th>Product</th>
+                  <th>SKU</th>
+                  <th>Categorie</th>
+                  <th>Prijs/dag</th>
+                  <th>Voorraad</th>
+                  <th>Buffer</th>
                   <th>Status</th>
-                  <th>Totaal</th>
                   <th>Acties</th>
                 </tr>
               </thead>
-              <tbody id="orders-table">
+              <tbody id="products-table">
                 <tr>
-                  <td colspan="6" style="text-align: center; padding: 40px;">
+                  <td colspan="8" style="text-align: center; padding: 40px;">
                     <div class="spinner"></div>
                   </td>
                 </tr>
@@ -150,10 +153,70 @@
     </div>
   </main>
 
+  <!-- Edit Product Modal -->
+  <div class="modal" id="edit-modal">
+    <div class="modal__backdrop"></div>
+    <div class="modal__content" style="max-width: 500px;">
+      <div class="modal__header">
+        <h3 class="modal__title">Product Bewerken</h3>
+        <button class="modal__close" id="modal-close">&times;</button>
+      </div>
+      <div class="modal__body">
+        <form id="edit-form">
+          <input type="hidden" id="edit-id">
+          
+          <div class="form-group">
+            <label class="form-label">Productnaam</label>
+            <input type="text" id="edit-name" class="form-input" readonly style="background: var(--color-off-white);">
+          </div>
+          
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+            <div class="form-group">
+              <label class="form-label">Prijs per dag (€)</label>
+              <input type="number" id="edit-price" class="form-input" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Borg per stuk (€)</label>
+              <input type="number" id="edit-deposit" class="form-input" step="0.01" min="0">
+            </div>
+          </div>
+          
+          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+            <div class="form-group">
+              <label class="form-label">Totale voorraad</label>
+              <input type="number" id="edit-stock" class="form-input" min="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Buffer (reserve)</label>
+              <input type="number" id="edit-buffer" class="form-input" min="0">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Doorlooptijd (dagen)</label>
+            <input type="number" id="edit-turnaround" class="form-input" min="0">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" style="display: flex; align-items: center; gap: var(--space-sm);">
+              <input type="checkbox" id="edit-active">
+              Product is actief (zichtbaar op website)
+            </label>
+          </div>
+          
+          <div class="form-actions" style="display: flex; gap: var(--space-md); margin-top: var(--space-xl);">
+            <button type="button" class="btn btn--ghost" id="cancel-edit">Annuleren</button>
+            <button type="submit" class="btn btn--primary">Opslaan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Container -->
   <div class="toast-container"></div>
 
   <!-- Scripts -->
-  <script type="module" src="./js/pages/admin/orders.js"></script>
+  <script type="module" src="./js/pages/admin/products.js"></script>
 </body>
 </html>

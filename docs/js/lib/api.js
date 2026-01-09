@@ -138,6 +138,7 @@ export const availabilityAPI = {
 };
 
 export const adminAPI = {
+  // Orders
   getOrders: (filters = {}) => {
     const params = new URLSearchParams(filters).toString();
     return apiCall(`/api/admin/orders${params ? `?${params}` : ''}`);
@@ -158,6 +159,31 @@ export const adminAPI = {
   getInvoiceUrl: (id) => 
     `${API_BASE_URL}/api/admin/orders/${id}/invoice`,
   
+  // Products
+  getProducts: (filters = {}) => {
+    const params = new URLSearchParams(filters).toString();
+    return apiCall(`/api/admin/products${params ? `?${params}` : ''}`);
+  },
+  
+  getProductById: (id) => 
+    apiCall(`/api/admin/products/${id}`),
+  
+  updateProduct: (id, data) => 
+    apiCall(`/api/admin/products/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    }),
+  
+  // Customers
+  getCustomers: (filters = {}) => {
+    const params = new URLSearchParams(filters).toString();
+    return apiCall(`/api/admin/customers${params ? `?${params}` : ''}`);
+  },
+  
+  getCustomerById: (id) => 
+    apiCall(`/api/admin/customers/${id}`),
+  
+  // Dashboard
   getDashboardStats: () => 
     apiCall('./api/admin/dashboard/stats')
 };

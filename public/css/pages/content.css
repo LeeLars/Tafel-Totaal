@@ -740,3 +740,143 @@
 .icon-item:hover .icon-item__icon {
   transform: scale(1.1) rotate(5deg);
 }
+
+/* ============================================
+   CONTACT PAGE SPECIFIC STYLES
+   ============================================ */
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3xl);
+  margin-top: var(--space-xl);
+}
+
+@media (min-width: 1024px) {
+  .contact-layout {
+    grid-template-columns: 1fr 1.5fr;
+  }
+}
+
+/* Trust Badges (Sidebar) */
+.trust-badge-container {
+  border: 1px solid var(--color-black);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-xl);
+  background-color: var(--color-off-white);
+}
+
+.trust-list {
+  list-style: none;
+  padding: 0;
+}
+
+.trust-list li {
+  margin-bottom: var(--space-md);
+  display: flex;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+
+.check-icon {
+  color: var(--color-primary);
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.trust-list p {
+  font-size: 0.9rem;
+  margin-top: 0.2rem;
+  color: var(--color-dark-gray);
+  margin-bottom: 0;
+}
+
+/* Company Details (Sidebar) */
+.company-details {
+  margin-top: var(--space-xl);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+.label-mono {
+  font-family: var(--font-mono);
+  color: var(--color-gray);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+}
+
+/* Contact Form Container */
+.form-container {
+  background-color: var(--color-white);
+  padding: var(--space-2xl);
+  border: 1px solid var(--color-light-gray);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-row-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 768px) {
+  .form-row-split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Form Input Overrides for Brutalist Style */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--color-gray);
+  background: white;
+  border-radius: 0;
+}
+
+.form-input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -1px;
+  border-color: var(--color-primary);
+}
+
+/* Map Section (Brutalist Placeholder) */
+.map-section {
+  margin-top: var(--space-3xl);
+  border: 1px solid var(--color-black);
+  height: 400px;
+  position: relative;
+  background-color: var(--color-concrete);
+}
+
+.map-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: var(--space-md);
+  background: var(--color-white);
+  border-right: 1px solid var(--color-black);
+  border-bottom: 1px solid var(--color-black);
+}
+
+.map-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex-direction: column;
+}
+
+.map-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--color-gray);
+  margin-bottom: var(--space-xs);
+  text-align: center;
+}
