@@ -192,6 +192,32 @@ export const adminAPI = {
       body: JSON.stringify(data)
     }),
   
+  // Packages
+  getPackages: (filters = {}) => {
+    const params = new URLSearchParams(filters).toString();
+    return apiCall(`/api/admin/packages${params ? `?${params}` : ''}`);
+  },
+  
+  getPackageById: (id) => 
+    apiCall(`/api/admin/packages/${id}`),
+  
+  createPackage: (data) => 
+    apiCall('/api/admin/packages', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+  
+  updatePackage: (id, data) => 
+    apiCall(`/api/admin/packages/${id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    }),
+  
+  deletePackage: (id) => 
+    apiCall(`/api/admin/packages/${id}`, {
+      method: 'DELETE'
+    }),
+  
   // Customers
   getCustomers: (filters = {}) => {
     const params = new URLSearchParams(filters).toString();

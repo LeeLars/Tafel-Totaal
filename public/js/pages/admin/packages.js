@@ -1,0 +1,559 @@
+/**
+ * Tafel Totaal - Admin Packages Page
+ */
+
+import { adminAPI } from '../../lib/api.js';
+import { formatPrice, showToast } from '../../lib/utils.js';
+import { requireAdmin } from '../../lib/guards.js';
+
+let currentPage = 1;
+let currentSearch = '';
+let currentStatus = '';
+let currentFeatured = '';
+let editingPackage = null;
+let allPackages = [];
+let isNewPackage = false;
+let packageProducts = [];
+let availableProducts = [];
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('Packages page initializing...');
+  
+  // Initialize UI components first
+  initFilters();
+  initModal();
+  initAddProductModal();
+  
+  console.log('UI components initialized');
+  
+  // Then check authentication
+  const user = await requireAdmin();
+  if (!user) {
+    console.log('User not authenticated or not admin, redirecting...');
+    return;
+  }
+  
+  console.log('User authenticated, loading packages...');
+  await loadPackages();
+  await loadAvailableProducts();
+});
+
+/**
+ * Initialize filters
+ */
+function initFilters() {
+  const searchInput = document.getElementById('search-input');
+  const statusFilter = document.getElementById('status-filter');
+  const featuredFilter = document.getElementById('featured-filter');
+  
+  searchInput?.addEventListener('input', (e) => {
+    currentSearch = e.target.value;
+    currentPage = 1;
+    loadPackages();
+  });
+
+  statusFilter?.addEventListener('change', (e) => {
+    currentStatus = e.target.value;
+    currentPage = 1;
+    loadPackages();
+  });
+
+  featuredFilter?.addEventListener('change', (e) => {
+    currentFeatured = e.target.value;
+    currentPage = 1;
+    loadPackages();
+  });
+}
+
+/**
+ * Initialize modal
+ */
+function initModal() {
+  const modal = document.getElementById('edit-modal');
+  const closeBtn = document.getElementById('modal-close');
+  const cancelBtn = document.getElementById('cancel-edit');
+  const form = document.getElementById('edit-form');
+  const backdrop = modal?.querySelector('.modal__backdrop');
+  const newPackageBtn = document.getElementById('new-package-btn');
+
+  const closeModal = () => {
+    modal?.classList.remove('active');
+    editingPackage = null;
+    isNewPackage = false;
+    packageProducts = [];
+  };
+
+  closeBtn?.addEventListener('click', closeModal);
+  cancelBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', closeModal);
+
+  // New package button
+  if (newPackageBtn) {
+    console.log('New package button found, attaching click handler');
+    newPackageBtn.addEventListener('click', (e) => {
+      console.log('New package button clicked!');
+      e.preventDefault();
+      e.stopPropagation();
+      isNewPackage = true;
+      openNewPackageModal();
+    });
+  } else {
+    console.error('New package button not found!');
+  }
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await savePackage();
+  });
+}
+
+/**
+ * Initialize add product modal
+ */
+function initAddProductModal() {
+  const modal = document.getElementById('add-product-modal');
+  const closeBtn = document.getElementById('add-product-close');
+  const backdrop = modal?.querySelector('.modal__backdrop');
+  const addBtn = document.getElementById('add-product-btn');
+  const searchInput = document.getElementById('product-search');
+
+  const closeModal = () => {
+    modal?.classList.remove('active');
+    searchInput.value = '';
+    document.getElementById('product-results').innerHTML = '';
+  };
+
+  closeBtn?.addEventListener('click', closeModal);
+  backdrop?.addEventListener('click', closeModal);
+
+  addBtn?.addEventListener('click', () => {
+    modal?.classList.add('active');
+    renderProductSearch();
+  });
+
+  searchInput?.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase();
+    renderProductSearch(query);
+  });
+}
+
+/**
+ * Open modal for new package
+ */
+function openNewPackageModal() {
+  console.log('openNewPackageModal called');
+  editingPackage = null;
+  packageProducts = [];
+  
+  // Update modal title
+  const modalTitle = document.getElementById('modal-title');
+  if (modalTitle) {
+    modalTitle.textContent = 'Nieuw Pakket';
+    console.log('Modal title set to Nieuw Pakket');
+  }
+  
+  // Clear all fields
+  document.getElementById('edit-id').value = '';
+  document.getElementById('edit-name').value = '';
+  document.getElementById('edit-slug').value = '';
+  document.getElementById('edit-description').value = '';
+  document.getElementById('edit-price').value = '';
+  document.getElementById('edit-deposit').value = '0';
+  document.getElementById('edit-persons').value = '1';
+  document.getElementById('edit-category').value = '';
+  document.getElementById('edit-featured').checked = false;
+  document.getElementById('edit-active').checked = true;
+  
+  // Clear products
+  renderPackageProducts();
+  
+  const modal = document.getElementById('edit-modal');
+  if (modal) {
+    modal.classList.add('active');
+    console.log('Modal opened for new package');
+  } else {
+    console.error('Modal element not found!');
+  }
+}
+
+/**
+ * Load packages with current filters
+ */
+async function loadPackages() {
+  const tbody = document.getElementById('packages-table');
+  if (!tbody) return;
+
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="7" style="text-align: center; padding: 40px;">
+        <div class="spinner"></div>
+      </td>
+    </tr>
+  `;
+
+  try {
+    const filters = {
+      page: currentPage,
+      limit: 20
+    };
+    
+    if (currentSearch) {
+      filters.search = currentSearch;
+    }
+    
+    if (currentStatus) {
+      filters.is_active = currentStatus;
+    }
+
+    if (currentFeatured) {
+      filters.is_featured = currentFeatured;
+    }
+
+    const response = await adminAPI.getPackages(filters);
+    allPackages = response.data || [];
+    const pagination = response.pagination;
+
+    if (allPackages.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" style="text-align: center; padding: 40px; color: var(--color-gray);">
+            Geen pakketten gevonden
+          </td>
+        </tr>
+      `;
+      renderPagination(null);
+      return;
+    }
+
+    tbody.innerHTML = allPackages.map(pkg => createPackageRow(pkg)).join('');
+    renderPagination(pagination);
+    
+    // Add edit button handlers
+    const editButtons = tbody.querySelectorAll('.edit-btn');
+    console.log('Found edit buttons:', editButtons.length);
+    
+    editButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Edit button clicked, package ID:', btn.dataset.id);
+        const packageId = btn.dataset.id;
+        const pkg = allPackages.find(p => p.id === packageId);
+        console.log('Found package:', pkg);
+        if (pkg) {
+          isNewPackage = false;
+          openEditModal(pkg);
+        } else {
+          console.error('Package not found in allPackages array');
+        }
+      });
+    });
+
+    // Add delete button handlers
+    tbody.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const packageId = btn.dataset.id;
+        if (confirm('Weet je zeker dat je dit pakket wilt verwijderen?')) {
+          await deletePackage(packageId);
+        }
+      });
+    });
+  } catch (error) {
+    console.error('Error loading packages:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" style="text-align: center; padding: 40px; color: var(--color-error);">
+          Fout bij laden van pakketten: ${error.message}
+        </td>
+      </tr>
+    `;
+  }
+}
+
+/**
+ * Load available products for adding to package
+ */
+async function loadAvailableProducts() {
+  try {
+    const response = await adminAPI.getProducts({ limit: 1000, is_active: true });
+    availableProducts = response.data || [];
+  } catch (error) {
+    console.error('Error loading products:', error);
+    availableProducts = [];
+  }
+}
+
+/**
+ * Create package row HTML
+ */
+function createPackageRow(pkg) {
+  const productCount = pkg.products?.length || 0;
+  
+  return `
+    <tr>
+      <td>
+        <strong>${pkg.name}</strong>
+        ${pkg.slug ? `<br><small style="color: var(--color-gray);">${pkg.slug}</small>` : ''}
+      </td>
+      <td>${formatPrice(pkg.price_per_day)}</td>
+      <td>${pkg.persons || '-'}</td>
+      <td>${productCount} product${productCount !== 1 ? 'en' : ''}</td>
+      <td>
+        <span class="badge ${pkg.is_featured ? 'badge--success' : 'badge--secondary'}">
+          ${pkg.is_featured ? 'Ja' : 'Nee'}
+        </span>
+      </td>
+      <td>
+        <span class="badge ${pkg.is_active ? 'badge--success' : 'badge--secondary'}">
+          ${pkg.is_active ? 'Actief' : 'Inactief'}
+        </span>
+      </td>
+      <td>
+        <div style="display: flex; gap: var(--space-xs);">
+          <button class="btn btn--ghost btn--sm edit-btn" data-id="${pkg.id}">Bewerken</button>
+          <button class="btn btn--ghost btn--sm delete-btn" data-id="${pkg.id}" style="color: var(--color-error);">Verwijderen</button>
+        </div>
+      </td>
+    </tr>
+  `;
+}
+
+/**
+ * Open edit modal
+ */
+function openEditModal(pkg) {
+  console.log('openEditModal called with package:', pkg);
+  editingPackage = pkg;
+  packageProducts = pkg.products || [];
+  
+  // Update modal title
+  const modalTitle = document.getElementById('modal-title');
+  if (modalTitle) {
+    modalTitle.textContent = 'Pakket Bewerken';
+    console.log('Modal title updated');
+  }
+  
+  document.getElementById('edit-id').value = pkg.id;
+  document.getElementById('edit-name').value = pkg.name;
+  document.getElementById('edit-slug').value = pkg.slug || '';
+  document.getElementById('edit-description').value = pkg.description || '';
+  document.getElementById('edit-price').value = pkg.price_per_day || 0;
+  document.getElementById('edit-deposit').value = pkg.deposit_total || 0;
+  document.getElementById('edit-persons').value = pkg.persons || 1;
+  document.getElementById('edit-category').value = pkg.category || '';
+  document.getElementById('edit-featured').checked = pkg.is_featured || false;
+  document.getElementById('edit-active').checked = pkg.is_active;
+  
+  // Render products
+  renderPackageProducts();
+  
+  const modal = document.getElementById('edit-modal');
+  if (modal) {
+    modal.classList.add('active');
+    console.log('Modal opened');
+  } else {
+    console.error('Modal element not found');
+  }
+}
+
+/**
+ * Render package products list
+ */
+function renderPackageProducts() {
+  const container = document.getElementById('package-products');
+  if (!container) return;
+
+  if (packageProducts.length === 0) {
+    container.innerHTML = '<p style="color: var(--color-gray); font-size: var(--font-size-sm);">Nog geen producten toegevoegd</p>';
+    return;
+  }
+
+  container.innerHTML = packageProducts.map((item, index) => `
+    <div class="package-product-item" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm); border: 1px solid var(--color-light-gray); margin-bottom: var(--space-xs);">
+      <div style="flex: 1;">
+        <strong>${item.product_name || item.name}</strong>
+      </div>
+      <div style="width: 100px;">
+        <input type="number" class="form-input form-input--sm" value="${item.quantity}" min="1" data-index="${index}" onchange="updateProductQuantity(${index}, this.value)">
+      </div>
+      <button type="button" class="btn btn--ghost btn--sm" onclick="removeProduct(${index})" style="color: var(--color-error);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+  `).join('');
+}
+
+/**
+ * Render product search results
+ */
+function renderProductSearch(query = '') {
+  const container = document.getElementById('product-results');
+  if (!container) return;
+
+  const filtered = query 
+    ? availableProducts.filter(p => p.name.toLowerCase().includes(query))
+    : availableProducts;
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<p style="color: var(--color-gray); padding: var(--space-md);">Geen producten gevonden</p>';
+    return;
+  }
+
+  container.innerHTML = filtered.slice(0, 20).map(product => `
+    <div class="product-result-item" style="padding: var(--space-sm); border-bottom: 1px solid var(--color-light-gray); cursor: pointer;" onclick="addProductToPackage('${product.id}', '${product.name.replace(/'/g, "\\'")}')">
+      <strong>${product.name}</strong>
+      <br>
+      <small style="color: var(--color-gray);">${product.category_name || 'Geen categorie'}</small>
+    </div>
+  `).join('');
+}
+
+/**
+ * Add product to package
+ */
+window.addProductToPackage = function(productId, productName) {
+  // Check if product already exists
+  if (packageProducts.find(p => p.product_id === productId)) {
+    showToast('Product is al toegevoegd', 'error');
+    return;
+  }
+
+  packageProducts.push({
+    product_id: productId,
+    product_name: productName,
+    quantity: 1
+  });
+
+  renderPackageProducts();
+  document.getElementById('add-product-modal').classList.remove('active');
+  showToast('Product toegevoegd', 'success');
+};
+
+/**
+ * Update product quantity
+ */
+window.updateProductQuantity = function(index, quantity) {
+  if (packageProducts[index]) {
+    packageProducts[index].quantity = parseInt(quantity) || 1;
+  }
+};
+
+/**
+ * Remove product from package
+ */
+window.removeProduct = function(index) {
+  packageProducts.splice(index, 1);
+  renderPackageProducts();
+  showToast('Product verwijderd', 'success');
+};
+
+/**
+ * Save package (create or update)
+ */
+async function savePackage() {
+  const id = document.getElementById('edit-id').value;
+  const name = document.getElementById('edit-name').value.trim();
+  
+  if (!name) {
+    showToast('Naam is verplicht', 'error');
+    return;
+  }
+
+  const packageData = {
+    name,
+    slug: document.getElementById('edit-slug').value.trim() || null,
+    description: document.getElementById('edit-description').value.trim() || null,
+    price_per_day: parseFloat(document.getElementById('edit-price').value) || 0,
+    deposit_total: parseFloat(document.getElementById('edit-deposit').value) || 0,
+    persons: parseInt(document.getElementById('edit-persons').value) || 1,
+    category: document.getElementById('edit-category').value || null,
+    is_featured: document.getElementById('edit-featured').checked,
+    is_active: document.getElementById('edit-active').checked,
+    products: packageProducts.map(p => ({
+      product_id: p.product_id,
+      quantity: p.quantity
+    }))
+  };
+
+  try {
+    if (isNewPackage) {
+      await adminAPI.createPackage(packageData);
+      showToast('Pakket aangemaakt', 'success');
+    } else {
+      await adminAPI.updatePackage(id, packageData);
+      showToast('Pakket bijgewerkt', 'success');
+    }
+
+    document.getElementById('edit-modal').classList.remove('active');
+    await loadPackages();
+  } catch (error) {
+    console.error('Error saving package:', error);
+    showToast(error.message || 'Fout bij opslaan', 'error');
+  }
+}
+
+/**
+ * Delete package
+ */
+async function deletePackage(id) {
+  try {
+    await adminAPI.deletePackage(id);
+    showToast('Pakket verwijderd', 'success');
+    await loadPackages();
+  } catch (error) {
+    console.error('Error deleting package:', error);
+    showToast(error.message || 'Fout bij verwijderen', 'error');
+  }
+}
+
+/**
+ * Render pagination
+ */
+function renderPagination(pagination) {
+  const container = document.getElementById('pagination');
+  if (!container) return;
+
+  if (!pagination || pagination.totalPages <= 1) {
+    container.innerHTML = '';
+    return;
+  }
+
+  const { currentPage: page, totalPages } = pagination;
+  let html = '<div class="pagination__buttons">';
+
+  // Previous button
+  if (page > 1) {
+    html += `<button class="pagination__btn" onclick="changePage(${page - 1})">Vorige</button>`;
+  }
+
+  // Page numbers
+  for (let i = 1; i <= totalPages; i++) {
+    if (i === 1 || i === totalPages || (i >= page - 2 && i <= page + 2)) {
+      html += `<button class="pagination__btn ${i === page ? 'pagination__btn--active' : ''}" onclick="changePage(${i})">${i}</button>`;
+    } else if (i === page - 3 || i === page + 3) {
+      html += '<span class="pagination__ellipsis">...</span>';
+    }
+  }
+
+  // Next button
+  if (page < totalPages) {
+    html += `<button class="pagination__btn" onclick="changePage(${page + 1})">Volgende</button>`;
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+/**
+ * Change page
+ */
+window.changePage = function(page) {
+  currentPage = page;
+  loadPackages();
+};
