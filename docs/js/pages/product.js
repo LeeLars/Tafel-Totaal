@@ -66,10 +66,64 @@ async function loadProduct() {
     // Hide loading, show content
     document.getElementById('product-loading').classList.add('hidden');
     document.getElementById('product-content').classList.remove('hidden');
+    
+    // Load related products
+    loadRelatedProducts(currentProduct);
   } catch (error) {
     console.error('Error loading product:', error);
     showError();
   }
+}
+
+/**
+ * Load related products
+ */
+async function loadRelatedProducts(product) {
+  if (!product.category) return;
+
+  try {
+    const response = await productsAPI.getAll({ 
+      category: product.category, 
+      limit: 5 // Fetch 5 to ensure we have 4 after filtering out current
+    });
+    
+    if (!response.success || !response.data) return;
+
+    // Filter out current product and limit to 4
+    const related = response.data
+      .filter(p => p.id !== product.id)
+      .slice(0, 4);
+
+    if (related.length > 0) {
+      renderRelatedProducts(related);
+    }
+  } catch (error) {
+    console.error('Error loading related products:', error);
+  }
+}
+
+/**
+ * Render related products
+ */
+function renderRelatedProducts(products) {
+  const container = document.getElementById('related-products-grid');
+  const section = document.getElementById('related-products');
+  
+  if (!container || !section) return;
+
+  container.innerHTML = products.map(p => `
+    <a href="/Tafel-Totaal/product.html?id=${p.id}" class="product-card">
+      <div class="product-card__image">
+        <img src="${p.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg'}" alt="${p.name}" loading="lazy">
+      </div>
+      <div class="product-card__content">
+        <h3 class="product-card__title">${p.name}</h3>
+        <p class="product-card__price">${formatPrice(p.price_per_day)}</p>
+      </div>
+    </a>
+  `).join('');
+
+  section.classList.remove('hidden');
 }
 
 /**
