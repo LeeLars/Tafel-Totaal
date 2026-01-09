@@ -169,84 +169,24 @@ function initDirectionAwareHover() {
   });
 
   categoryCards.forEach(card => {
-    let rafId = null;
-
-    const setDirectionVars = (el, clientX, clientY) => {
-      const rect = el.getBoundingClientRect();
-
-      // Relative mouse position inside element (CSS pixels)
-      const relX = clientX - rect.left;
-      const relY = clientY - rect.top;
-
-      // Pixel-accurate edge distances
-      const distLeft = relX;
-      const distRight = rect.width - relX;
-      const distTop = relY;
-      const distBottom = rect.height - relY;
-
-      // Snap to an edge if we are within a small pixel threshold.
-      // This removes ambiguity near corners/edges where angle methods can feel "half working".
-      const edgeSnapPx = 12;
-
-      let direction = null; // 'top' | 'right' | 'bottom' | 'left'
-      const minDist = Math.min(distLeft, distRight, distTop, distBottom);
-
-      if (minDist <= edgeSnapPx) {
-        if (minDist === distTop) direction = 'top';
-        else if (minDist === distRight) direction = 'right';
-        else if (minDist === distBottom) direction = 'bottom';
-        else direction = 'left';
+    const getDirection = (clientX, clientY) => {
+      const rect = card.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dx = clientX - centerX;
+      const dy = clientY - centerY;
+      
+      // Determine direction based on dominant axis
+      if (Math.abs(dy) > Math.abs(dx)) {
+        return dy < 0 ? 'top' : 'bottom';
       } else {
-        // Stable fallback: compare dominant axis from center (no rounding/angle boundaries)
-        const dx = relX - rect.width / 2;
-        const dy = relY - rect.height / 2;
-        if (Math.abs(dx) > Math.abs(dy)) {
-          direction = dx > 0 ? 'right' : 'left';
-        } else {
-          direction = dy > 0 ? 'bottom' : 'top';
-        }
+        return dx < 0 ? 'left' : 'right';
       }
-
-      let fillX = '0';
-      let fillY = '0';
-      if (direction === 'top') fillY = '-101%';
-      else if (direction === 'right') fillX = '101%';
-      else if (direction === 'bottom') fillY = '101%';
-      else if (direction === 'left') fillX = '-101%';
-
-      el.style.setProperty('--fill-x', fillX);
-      el.style.setProperty('--fill-y', fillY);
     };
 
     card.addEventListener('pointerenter', (e) => {
-      // Hard reset: ensure we always start from correct side even on rapid re-entry
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
-      card.classList.remove('is-hovering');
-      setDirectionVars(card, e.clientX, e.clientY);
-
-      // Force reflow so browser applies the new direction vars before we animate in
-      void card.offsetWidth;
-      rafId = requestAnimationFrame(() => {
-        card.classList.add('is-hovering');
-        rafId = null;
-      });
-    });
-
-    card.addEventListener('pointerleave', (e) => {
-      // Set exit direction first, then remove hovering in next frame
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-        rafId = null;
-      }
-      setDirectionVars(card, e.clientX, e.clientY);
-      void card.offsetWidth;
-      rafId = requestAnimationFrame(() => {
-        card.classList.remove('is-hovering');
-        rafId = null;
-      });
+      const direction = getDirection(e.clientX, e.clientY);
+      card.setAttribute('data-hover-from', direction);
     });
   });
 }
