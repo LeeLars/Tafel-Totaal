@@ -53,7 +53,7 @@ async function loadProduct() {
   }
 
   try {
-    const response = await productsAPI.getProductById(productId);
+    const response = await productsAPI.getById(productId);
     
     if (!response.success || !response.data) {
       showError();
