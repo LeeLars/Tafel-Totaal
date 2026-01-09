@@ -10,6 +10,7 @@ let currentPage = 1;
 let currentSearch = '';
 let currentStatus = '';
 let editingProduct = null;
+let specsEditorRows = [];
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
@@ -59,6 +60,7 @@ function initModal() {
   const cancelBtn = document.getElementById('cancel-edit');
   const form = document.getElementById('edit-form');
   const backdrop = modal?.querySelector('.modal__backdrop');
+  const addSpecBtn = document.getElementById('add-spec');
 
   const closeModal = () => {
     modal?.classList.remove('open');
@@ -69,10 +71,80 @@ function initModal() {
   cancelBtn?.addEventListener('click', closeModal);
   backdrop?.addEventListener('click', closeModal);
 
+  addSpecBtn?.addEventListener('click', () => {
+    addSpecRow('', '');
+  });
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     await saveProduct();
   });
+}
+
+function normalizeSpecs(specs) {
+  if (!specs) return {};
+  if (typeof specs === 'string') {
+    try {
+      const parsed = JSON.parse(specs);
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch {
+      return {};
+    }
+  }
+  return typeof specs === 'object' ? specs : {};
+}
+
+function parseSpecValue(raw) {
+  const v = (raw ?? '').toString().trim();
+  if (v === '') return '';
+  if (v === 'true') return true;
+  if (v === 'false') return false;
+  if (!Number.isNaN(Number(v)) && /^-?\d+(\.\d+)?$/.test(v)) return Number(v);
+  return v;
+}
+
+function clearSpecsEditor() {
+  specsEditorRows = [];
+  const container = document.getElementById('specs-editor');
+  if (container) container.innerHTML = '';
+}
+
+function addSpecRow(key, value) {
+  const container = document.getElementById('specs-editor');
+  if (!container) return;
+
+  const row = document.createElement('div');
+  row.className = 'spec-row';
+  row.style.display = 'grid';
+  row.style.gridTemplateColumns = '1fr 1fr auto';
+  row.style.gap = 'var(--space-sm)';
+  row.style.marginBottom = 'var(--space-sm)';
+
+  const keyInput = document.createElement('input');
+  keyInput.className = 'form-input';
+  keyInput.placeholder = 'key (bv. gewicht_kg)';
+  keyInput.value = key || '';
+
+  const valueInput = document.createElement('input');
+  valueInput.className = 'form-input';
+  valueInput.placeholder = 'value (bv. 12.5)';
+  valueInput.value = value ?? '';
+
+  const delBtn = document.createElement('button');
+  delBtn.type = 'button';
+  delBtn.className = 'btn btn--ghost btn--sm';
+  delBtn.textContent = '×';
+  delBtn.addEventListener('click', () => {
+    row.remove();
+    specsEditorRows = specsEditorRows.filter(r => r.row !== row);
+  });
+
+  row.appendChild(keyInput);
+  row.appendChild(valueInput);
+  row.appendChild(delBtn);
+  container.appendChild(row);
+
+  specsEditorRows.push({ row, keyInput, valueInput });
 }
 
 /**
@@ -190,6 +262,12 @@ function openEditModal(product) {
   document.getElementById('edit-buffer').value = product.stock_buffer || 0;
   document.getElementById('edit-turnaround').value = product.turnaround_days || 1;
   document.getElementById('edit-active').checked = product.is_active;
+
+  clearSpecsEditor();
+  const specs = normalizeSpecs(product.specs);
+  Object.entries(specs).forEach(([k, v]) => {
+    addSpecRow(k, typeof v === 'string' ? v : JSON.stringify(v));
+  });
   
   document.getElementById('edit-modal').classList.add('open');
 }
@@ -201,12 +279,20 @@ async function saveProduct() {
   if (!editingProduct) return;
   
   const id = document.getElementById('edit-id').value;
+  const specs = {};
+  specsEditorRows.forEach(({ keyInput, valueInput }) => {
+    const k = keyInput.value.trim();
+    if (!k) return;
+    specs[k] = parseSpecValue(valueInput.value);
+  });
+
   const data = {
     price_per_day: parseFloat(document.getElementById('edit-price').value),
     deposit_per_item: parseFloat(document.getElementById('edit-deposit').value),
     stock_total: parseInt(document.getElementById('edit-stock').value),
     stock_buffer: parseInt(document.getElementById('edit-buffer').value),
     turnaround_days: parseInt(document.getElementById('edit-turnaround').value),
+    specs,
     is_active: document.getElementById('edit-active').checked
   };
   

@@ -146,14 +146,15 @@ export const ProductModel = {
     stock_buffer?: number;
     turnaround_days?: number;
     images?: string[];
+    specs?: Record<string, unknown>;
     is_active?: boolean;
   }): Promise<Product> {
     const result = await queryOne<Product>(
       `INSERT INTO products (
         sku, name, slug, description, category_id, subcategory_id, 
         service_level, price_per_day, deposit_per_item, stock_total, 
-        stock_buffer, turnaround_days, images, is_active
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        stock_buffer, turnaround_days, images, specs, is_active
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
       RETURNING *`,
       [
         data.sku,
@@ -169,6 +170,7 @@ export const ProductModel = {
         data.stock_buffer || 5,
         data.turnaround_days || 1,
         JSON.stringify(data.images || []),
+        JSON.stringify(data.specs || {}),
         data.is_active !== false
       ]
     );
@@ -190,6 +192,7 @@ export const ProductModel = {
     stock_buffer: number;
     turnaround_days: number;
     images: string[];
+    specs: Record<string, unknown>;
     is_active: boolean;
   }>): Promise<Product | null> {
     const fields: string[] = [];
@@ -198,7 +201,7 @@ export const ProductModel = {
 
     Object.entries(data).forEach(([key, value]) => {
       if (value !== undefined) {
-        if (key === 'images') {
+        if (key === 'images' || key === 'specs') {
           fields.push(`${key} = $${paramIndex++}`);
           values.push(JSON.stringify(value));
         } else {

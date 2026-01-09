@@ -58,6 +58,7 @@ export interface Product {
   stock_buffer: number;
   turnaround_days: number;
   images: string[];
+  specs: Record<string, unknown>;
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
