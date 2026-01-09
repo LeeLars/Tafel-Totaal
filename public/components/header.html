@@ -4,7 +4,7 @@
     <div class="header__inner">
       <!-- Logo -->
       <a href="/" class="header__logo">
-        <img src="/images/site/logo.png" alt="Tafel Totaal" width="180" height="40">
+        <img src="/images/site/Logo-T-T-Zwart-transparant.png" alt="Tafel Totaal" width="180" height="40">
       </a>
 
       <!-- Desktop Navigation -->
@@ -106,6 +106,17 @@
             </svg>
           </div>
           <span>Decoratie</span>
+        </a>
+        <a href="/producten.html?category=tafels-stoelen" class="category-link">
+          <div class="category-link__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="10" width="18" height="2"></rect>
+              <path d="M5 10V6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v4"></path>
+              <path d="M5 12v8"></path>
+              <path d="M19 12v8"></path>
+            </svg>
+          </div>
+          <span>Tafels &amp; Stoelen</span>
         </a>
       </nav>
     </div>
@@ -405,52 +416,92 @@
 /* Category Navigation - Brutalist */
 .header__categories {
   border-top: var(--border-width) solid var(--border-color);
-  background-color: var(--color-concrete);
+  border-bottom: var(--border-width) solid var(--border-color);
+  background-color: var(--color-white);
 }
 
 .category-nav {
   display: flex;
   justify-content: center;
-  gap: var(--space-3xl);
-  padding: var(--space-md) 0;
+  gap: 0;
+  padding: 0;
 }
 
 .category-link {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  color: var(--color-charcoal);
+  color: var(--color-black);
   font-family: var(--font-body);
-  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  letter-spacing: var(--letter-spacing-wide);
+  font-size: var(--font-size-sm);
   text-transform: uppercase;
   text-decoration: none;
-  padding: var(--space-sm) var(--space-md);
-  border: var(--border-width) solid transparent;
-  transition: all var(--transition-fast);
+  padding: var(--space-lg) var(--space-xl);
+  border-right: var(--border-width) solid var(--border-color);
+  border-radius: 0; /* Strict brutalist */
+  background-color: transparent;
+  position: relative;
+  overflow: hidden; /* For magnetic fill */
+  isolation: isolate; /* Create stacking context */
+  transition: color 0.4s var(--ease-out-expo);
+  z-index: 1;
+  letter-spacing: var(--letter-spacing-wide); /* Improved readability */
 }
 
-.category-link:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
-  background-color: var(--color-white);
+.category-link:first-child {
+  border-left: var(--border-width) solid var(--border-color);
+}
+
+.category-link:hover,
+.category-link.active {
+  color: var(--color-white); /* High contrast on hover/active */
+}
+
+/* Magnetic Fill Effect */
+.category-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s var(--ease-out-expo);
+  z-index: -1;
+}
+
+.category-link:hover::before,
+.category-link.active::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Bottom Border Accent (Removed in favor of fill effect for cleaner look) */
+.category-link::after {
+  display: none;
 }
 
 .category-link__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-gray);
-  transition: color var(--transition-fast);
+  width: 24px;
+  height: 24px;
+  color: var(--color-charcoal);
+  transition: color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
 }
 
-.category-link:hover .category-link__icon {
-  color: var(--color-primary);
+.category-link:hover .category-link__icon,
+.category-link.active .category-link__icon {
+  color: var(--color-white);
+  transform: scale(1.1);
 }
 
 .category-link__icon svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 </style>

@@ -135,14 +135,34 @@ function initLogoutButtons() {
  */
 function setActiveNavLink() {
   const currentPath = window.location.pathname;
-  const navLinks = document.querySelectorAll('.header__link, .header__mobile-menu a');
+  const urlParams = new URLSearchParams(window.location.search);
+  const currentCategory = urlParams.get('category');
   
+  // Main Nav Links
+  const navLinks = document.querySelectorAll('.header__link, .header__mobile-menu a');
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
+    // Simple path match
     if (href === currentPath || (currentPath === '/' && href === '/')) {
       link.classList.add('active');
     }
   });
+
+  // Category Nav Links
+  const categoryLinks = document.querySelectorAll('.category-link');
+  if (categoryLinks.length > 0) {
+    categoryLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href) return;
+      
+      const linkUrl = new URL(href, window.location.origin);
+      const linkCategory = linkUrl.searchParams.get('category');
+
+      if (currentCategory && linkCategory === currentCategory) {
+        link.classList.add('active');
+      }
+    });
+  }
 }
 
 /**

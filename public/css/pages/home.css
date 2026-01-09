@@ -102,6 +102,7 @@
     padding: 0;
     border-right: none;
     background-color: var(--color-black);
+    max-height: 52rem;
   }
 
   /* Block 3: Intro (Bottom Left) */

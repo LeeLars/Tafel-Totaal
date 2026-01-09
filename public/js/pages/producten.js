@@ -163,7 +163,7 @@ function applyFilters() {
   filteredProducts = products.filter(product => {
     // Filter by category
     if (filters.categories.length > 0) {
-      if (!filters.categories.includes(product.category.toLowerCase())) {
+      if (!filters.categories.includes(product.category_slug)) {
         return false;
       }
     }

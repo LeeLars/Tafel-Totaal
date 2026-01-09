@@ -15,7 +15,8 @@ INSERT INTO categories (name, slug, description, sort_order) VALUES
 ('Glazen', 'glazen', 'Wijnglazen, waterglazen en meer', 3),
 ('Linnen', 'linnen', 'Servetten en tafelkleden', 4),
 ('Buffet', 'buffet', 'Serveerschalen en buffetmateriaal', 5),
-('Koffie & Thee', 'koffie-thee', 'Kopjes, schotels en theepotten', 6);
+('Koffie & Thee', 'koffie-thee', 'Kopjes, schotels en theepotten', 6),
+('Tafels & Stoelen', 'tafels-stoelen', 'Tafels en stoelen voor elk evenement', 7);
 
 -- Subcategories
 INSERT INTO subcategories (category_id, name, slug, sort_order) VALUES
