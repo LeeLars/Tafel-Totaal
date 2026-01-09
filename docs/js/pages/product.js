@@ -144,7 +144,7 @@ function renderProduct(product) {
   document.getElementById('product-description').textContent = product.description || 'Geen beschrijving beschikbaar.';
   document.getElementById('product-price').textContent = formatPrice(product.price_per_day);
   document.getElementById('product-sku').textContent = product.sku || '-';
-  document.getElementById('product-category').textContent = product.category_name || '-';
+  document.getElementById('product-category-badge').textContent = product.category_name || product.category || 'Overig';
   document.getElementById('product-deposit').textContent = formatPrice(product.deposit_per_item || 0);
   
   // Stock
