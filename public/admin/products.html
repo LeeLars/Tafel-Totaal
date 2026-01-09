@@ -127,6 +127,13 @@
             <h1>Producten</h1>
             <p>Beheer voorraad en productinstellingen.</p>
           </div>
+          <button class="btn btn--primary" id="new-product-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Nieuw Product
+          </button>
         </div>
 
         <!-- CSV Upload Section -->
@@ -226,16 +233,27 @@
     <div class="modal__backdrop"></div>
     <div class="modal__content" style="max-width: 700px;">
       <div class="modal__header">
-        <h3 class="modal__title">Product Bewerken</h3>
+        <h3 class="modal__title" id="modal-title">Product Bewerken</h3>
         <button class="modal__close" id="modal-close">&times;</button>
       </div>
       <div class="modal__body">
         <form id="edit-form">
           <input type="hidden" id="edit-id">
           
+          <div class="form-row" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-md);">
+            <div class="form-group">
+              <label class="form-label">Productnaam *</label>
+              <input type="text" id="edit-name" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">SKU</label>
+              <input type="text" id="edit-sku" class="form-input" placeholder="AUTO">
+            </div>
+          </div>
+
           <div class="form-group">
-            <label class="form-label">Productnaam</label>
-            <input type="text" id="edit-name" class="form-input" readonly style="background: var(--color-off-white);">
+            <label class="form-label">Beschrijving</label>
+            <textarea id="edit-description" class="form-input" rows="3" placeholder="Productbeschrijving..."></textarea>
           </div>
 
           <!-- Image Upload Section -->
@@ -264,41 +282,41 @@
           
           <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
             <div class="form-group">
-              <label class="form-label">Prijs per dag (€)</label>
-              <input type="number" id="edit-price" class="form-input" step="0.01" min="0">
+              <label class="form-label">Prijs per dag (€) *</label>
+              <input type="number" id="edit-price" class="form-input" step="0.01" min="0" required>
             </div>
             <div class="form-group">
               <label class="form-label">Borg per stuk (€)</label>
-              <input type="number" id="edit-deposit" class="form-input" step="0.01" min="0">
+              <input type="number" id="edit-deposit" class="form-input" step="0.01" min="0" value="0">
             </div>
           </div>
           
           <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
             <div class="form-group">
-              <label class="form-label">Totale voorraad</label>
-              <input type="number" id="edit-stock" class="form-input" min="0">
+              <label class="form-label">Totale voorraad *</label>
+              <input type="number" id="edit-stock" class="form-input" min="0" required>
             </div>
             <div class="form-group">
               <label class="form-label">Buffer (reserve)</label>
-              <input type="number" id="edit-buffer" class="form-input" min="0">
+              <input type="number" id="edit-buffer" class="form-input" min="0" value="0">
             </div>
           </div>
           
           <div class="form-group">
             <label class="form-label">Doorlooptijd (dagen)</label>
-            <input type="number" id="edit-turnaround" class="form-input" min="0">
+            <input type="number" id="edit-turnaround" class="form-input" min="0" value="1">
           </div>
           
           <div class="form-group">
             <label class="form-label" style="display: flex; align-items: center; gap: var(--space-sm);">
-              <input type="checkbox" id="edit-active">
+              <input type="checkbox" id="edit-active" checked>
               Product is actief (zichtbaar op website)
             </label>
           </div>
           
           <div class="form-actions" style="display: flex; gap: var(--space-md); margin-top: var(--space-xl);">
             <button type="button" class="btn btn--ghost" id="cancel-edit">Annuleren</button>
-            <button type="submit" class="btn btn--primary">Opslaan</button>
+            <button type="submit" class="btn btn--primary" id="save-btn">Opslaan</button>
           </div>
         </form>
       </div>

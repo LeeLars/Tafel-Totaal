@@ -12,6 +12,8 @@ let currentPage = 1;
 let currentSearch = '';
 let currentStatus = '';
 let editingProduct = null;
+let allProducts = []; // Store products for edit button access
+let isNewProduct = false; // Track if we're creating a new product
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
@@ -64,10 +66,12 @@ function initModal() {
   const cancelBtn = document.getElementById('cancel-edit');
   const form = document.getElementById('edit-form');
   const backdrop = modal?.querySelector('.modal__backdrop');
+  const newProductBtn = document.getElementById('new-product-btn');
 
   const closeModal = () => {
     modal?.classList.remove('open');
     editingProduct = null;
+    isNewProduct = false;
     clearImages();
   };
 
@@ -75,10 +79,44 @@ function initModal() {
   cancelBtn?.addEventListener('click', closeModal);
   backdrop?.addEventListener('click', closeModal);
 
+  // New product button
+  newProductBtn?.addEventListener('click', () => {
+    isNewProduct = true;
+    openNewProductModal();
+  });
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     await saveProduct();
   });
+}
+
+/**
+ * Open modal for new product
+ */
+function openNewProductModal() {
+  editingProduct = null;
+  
+  // Update modal title
+  const modalTitle = document.getElementById('modal-title');
+  if (modalTitle) modalTitle.textContent = 'Nieuw Product';
+  
+  // Clear all fields
+  document.getElementById('edit-id').value = '';
+  document.getElementById('edit-name').value = '';
+  document.getElementById('edit-sku').value = '';
+  document.getElementById('edit-description').value = '';
+  document.getElementById('edit-price').value = '';
+  document.getElementById('edit-deposit').value = '0';
+  document.getElementById('edit-stock').value = '';
+  document.getElementById('edit-buffer').value = '0';
+  document.getElementById('edit-turnaround').value = '1';
+  document.getElementById('edit-active').checked = true;
+  
+  // Clear images
+  clearImages();
+  
+  document.getElementById('edit-modal').classList.add('open');
 }
 
 /**
@@ -111,10 +149,10 @@ async function loadProducts() {
     }
 
     const response = await adminAPI.getProducts(filters);
-    const products = response.data || [];
+    allProducts = response.data || [];
     const pagination = response.pagination;
 
-    if (products.length === 0) {
+    if (allProducts.length === 0) {
       tbody.innerHTML = `
         <tr>
           <td colspan="8" style="text-align: center; padding: 40px; color: var(--color-gray);">
@@ -126,15 +164,20 @@ async function loadProducts() {
       return;
     }
 
-    tbody.innerHTML = products.map(product => createProductRow(product)).join('');
+    tbody.innerHTML = allProducts.map(product => createProductRow(product)).join('');
     renderPagination(pagination);
     
     // Add edit button handlers
     tbody.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const productId = btn.dataset.id;
-        const product = products.find(p => p.id === productId);
-        if (product) openEditModal(product);
+        const product = allProducts.find(p => p.id === productId);
+        if (product) {
+          isNewProduct = false;
+          openEditModal(product);
+        }
       });
     });
     
@@ -196,8 +239,14 @@ function createProductRow(product) {
 function openEditModal(product) {
   editingProduct = product;
   
+  // Update modal title
+  const modalTitle = document.getElementById('modal-title');
+  if (modalTitle) modalTitle.textContent = 'Product Bewerken';
+  
   document.getElementById('edit-id').value = product.id;
   document.getElementById('edit-name').value = product.name;
+  document.getElementById('edit-sku').value = product.sku || '';
+  document.getElementById('edit-description').value = product.description || '';
   document.getElementById('edit-price').value = product.price_per_day || 0;
   document.getElementById('edit-deposit').value = product.deposit_per_item || 0;
   document.getElementById('edit-stock').value = product.stock_total || 0;
@@ -212,32 +261,49 @@ function openEditModal(product) {
 }
 
 /**
- * Save product
+ * Save product (create or update)
  */
 async function saveProduct() {
-  if (!editingProduct) return;
-  
   const id = document.getElementById('edit-id').value;
+  const name = document.getElementById('edit-name').value.trim();
+  
+  if (!name) {
+    showToast('Productnaam is verplicht', 'error');
+    return;
+  }
+  
   const data = {
-    price_per_day: parseFloat(document.getElementById('edit-price').value),
-    deposit_per_item: parseFloat(document.getElementById('edit-deposit').value),
-    stock_total: parseInt(document.getElementById('edit-stock').value),
-    stock_buffer: parseInt(document.getElementById('edit-buffer').value),
-    turnaround_days: parseInt(document.getElementById('edit-turnaround').value),
+    name: name,
+    sku: document.getElementById('edit-sku').value.trim() || undefined,
+    description: document.getElementById('edit-description').value.trim() || undefined,
+    price_per_day: parseFloat(document.getElementById('edit-price').value) || 0,
+    deposit_per_item: parseFloat(document.getElementById('edit-deposit').value) || 0,
+    stock_total: parseInt(document.getElementById('edit-stock').value) || 0,
+    stock_buffer: parseInt(document.getElementById('edit-buffer').value) || 0,
+    turnaround_days: parseInt(document.getElementById('edit-turnaround').value) || 1,
     is_active: document.getElementById('edit-active').checked,
     images: getCurrentImages()
   };
   
   try {
-    await adminAPI.updateProduct(id, data);
-    showToast('Product bijgewerkt', 'success');
+    if (isNewProduct) {
+      // Create new product
+      await adminAPI.createProduct(data);
+      showToast('Product aangemaakt', 'success');
+    } else {
+      // Update existing product
+      await adminAPI.updateProduct(id, data);
+      showToast('Product bijgewerkt', 'success');
+    }
+    
     document.getElementById('edit-modal').classList.remove('open');
     editingProduct = null;
+    isNewProduct = false;
     clearImages();
     await loadProducts();
   } catch (error) {
-    console.error('Error updating product:', error);
-    showToast('Kon product niet bijwerken', 'error');
+    console.error('Error saving product:', error);
+    showToast(isNewProduct ? 'Kon product niet aanmaken' : 'Kon product niet bijwerken', 'error');
   }
 }
 

@@ -180,6 +180,12 @@ export const adminAPI = {
   getProductById: (id) => 
     apiCall(`/api/admin/products/${id}`),
   
+  createProduct: (data) => 
+    apiCall('/api/admin/products', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+  
   updateProduct: (id, data) => 
     apiCall(`/api/admin/products/${id}`, {
       method: 'PATCH',
