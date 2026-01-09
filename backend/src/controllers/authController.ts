@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
 import { query, queryOne } from '../config/database';
 import { Customer, User, JwtPayload, UserRole } from '../types';
+import { CustomerModel } from '../models/Customer.model';
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
@@ -165,6 +166,82 @@ export async function getCurrentUser(req: Request, res: Response): Promise<void>
   } catch (error) {
     console.error('Get current user error:', error);
     res.status(500).json({ success: false, error: 'Failed to get user' });
+  }
+}
+
+export async function updateProfile(req: Request, res: Response): Promise<void> {
+  try {
+    if (!req.user || req.user.role !== 'customer') {
+      res.status(403).json({ success: false, error: 'Only customers can update profile' });
+      return;
+    }
+
+    const { first_name, last_name, phone, company_name, vat_number } = req.body;
+    const customerId = req.user.userId;
+
+    const updatedCustomer = await CustomerModel.update(customerId, {
+      first_name,
+      last_name,
+      phone,
+      company_name,
+      vat_number
+    });
+
+    if (!updatedCustomer) {
+      res.status(404).json({ success: false, error: 'Customer not found' });
+      return;
+    }
+
+    res.json({
+      success: true,
+      data: {
+        id: updatedCustomer.id,
+        email: updatedCustomer.email,
+        first_name: updatedCustomer.first_name,
+        last_name: updatedCustomer.last_name,
+        phone: updatedCustomer.phone,
+        company_name: updatedCustomer.company_name,
+        vat_number: updatedCustomer.vat_number,
+        role: 'customer'
+      }
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ success: false, error: 'Failed to update profile' });
+  }
+}
+
+export async function changePassword(req: Request, res: Response): Promise<void> {
+  try {
+    if (!req.user || req.user.role !== 'customer') {
+      res.status(403).json({ success: false, error: 'Only customers can change password' });
+      return;
+    }
+
+    const { current_password, new_password } = req.body;
+    const customerId = req.user.userId;
+
+    const customer = await CustomerModel.findById(customerId);
+    if (!customer) {
+      res.status(404).json({ success: false, error: 'Customer not found' });
+      return;
+    }
+
+    const isValid = await CustomerModel.verifyPassword(customer, current_password);
+    if (!isValid) {
+      res.status(401).json({ success: false, error: 'Incorrect current password' });
+      return;
+    }
+
+    const success = await CustomerModel.updatePassword(customerId, new_password);
+    if (!success) {
+      throw new Error('Failed to update password');
+    }
+
+    res.json({ success: true, message: 'Password updated successfully' });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ success: false, error: 'Failed to change password' });
   }
 }
 

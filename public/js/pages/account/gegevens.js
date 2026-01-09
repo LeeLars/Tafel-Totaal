@@ -91,15 +91,25 @@ function initProfileForm() {
     btn.textContent = 'Opslaan...';
 
     try {
-      // Note: This endpoint would need to be added to backend
-      // For now, show success message
+      const response = await authAPI.updateProfile({
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone,
+        company_name: companyName
+      });
+
       showToast('Gegevens bijgewerkt', 'success');
       
       // Update local user data
-      currentUser.first_name = firstName;
-      currentUser.last_name = lastName;
-      currentUser.phone = phone;
-      currentUser.company_name = companyName;
+      if (response.data) {
+        currentUser = response.data;
+      } else {
+        // Fallback if data not returned (shouldn't happen with new endpoint)
+        currentUser.first_name = firstName;
+        currentUser.last_name = lastName;
+        currentUser.phone = phone;
+        currentUser.company_name = companyName;
+      }
       
       renderUserInfo();
     } catch (error) {
@@ -141,13 +151,12 @@ function initPasswordForm() {
     btn.textContent = 'Wijzigen...';
 
     try {
-      // Note: This endpoint would need to be added to backend
-      // For now, show success message
+      await authAPI.changePassword(currentPassword, newPassword);
       showToast('Wachtwoord gewijzigd', 'success');
       form.reset();
     } catch (error) {
       console.error('Change password error:', error);
-      showToast(error.message || 'Kon wachtwoord niet wijzigen', 'error');
+      showToast(error.data?.error || error.message || 'Kon wachtwoord niet wijzigen', 'error');
     } finally {
       btn.disabled = false;
       btn.textContent = 'Wachtwoord wijzigen';

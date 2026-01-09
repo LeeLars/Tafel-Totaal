@@ -61,7 +61,19 @@ export const authAPI = {
     apiCall('./api/auth/logout', { method: 'POST' }),
   
   me: () => 
-    apiCall('./api/auth/me')
+    apiCall('./api/auth/me'),
+
+  updateProfile: (data) =>
+    apiCall('./api/auth/profile', {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    }),
+
+  changePassword: (currentPassword, newPassword) =>
+    apiCall('./api/auth/password', {
+      method: 'PUT',
+      body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
+    })
 };
 
 export const packagesAPI = {
