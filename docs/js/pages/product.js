@@ -427,34 +427,30 @@ function initDatePickers() {
   if (endDateInput) endDateInput.min = today;
   if (eventDateInput) eventDateInput.min = today;
 
-  // Single Date Picker Logic
+  // Single Date Picker Logic - for single day events, calculate rental period automatically
   if (eventDateInput) {
     eventDateInput.addEventListener('change', () => {
       const dateVal = eventDateInput.value;
       if (!dateVal) return;
 
-      const date = new Date(dateVal);
+      const eventDate = new Date(dateVal);
       
-      // Start = date - 1 day
-      const start = new Date(date);
-      start.setDate(date.getDate() - 1);
+      // Start = 2 days before event (max pickup window)
+      const start = new Date(eventDate);
+      start.setDate(eventDate.getDate() - 2);
       
-      // End = date + 1 day
-      const end = new Date(date);
-      end.setDate(date.getDate() + 1);
+      // End = 2 days after event (48h return window)
+      const end = new Date(eventDate);
+      end.setDate(eventDate.getDate() + 2);
       
       startDate = start.toISOString().split('T')[0];
       endDate = end.toISOString().split('T')[0];
-      
-      // Sync with range inputs just in case
-      if (startDateInput) startDateInput.value = startDate;
-      if (endDateInput) endDateInput.value = endDate;
       
       updateTotalPrice();
     });
   }
 
-  // Range Date Picker Logic
+  // Range Date Picker Logic (for multi-day events)
   if (startDateInput) {
     startDateInput.addEventListener('change', () => {
       startDate = startDateInput.value;

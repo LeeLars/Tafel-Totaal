@@ -132,33 +132,34 @@
 
               <form id="delivery-form">
                 <!-- Delivery Info Notice -->
-                <div class="delivery-notice" style="background: var(--color-off-white); border: 1px solid var(--color-charcoal); padding: var(--space-md); margin-bottom: var(--space-lg);">
-                  <p style="margin: 0; font-size: 14px;"><strong>Levering:</strong> Mogelijk vanaf €150 bestelling. Dag voor event of dag zelf.</p>
-                  <p style="margin: var(--space-xs) 0 0; font-size: 14px;"><strong>Afhalen:</strong> Altijd mogelijk, tot 3 dagen vooraf (enkel namiddag). Retour dag na event.</p>
+                <div class="delivery-notice" style="background: var(--color-off-white); border: 1px solid var(--border-color); padding: var(--space-md); margin-bottom: var(--space-lg);">
+                  <p style="margin: 0; font-size: 14px;"><strong>Levering:</strong> GRATIS binnen 15km (vanaf €150). Daarbuiten €0,50/km.</p>
+                  <p style="margin: var(--space-xs) 0 0; font-size: 14px;"><strong>Afhalen:</strong> Altijd gratis in Beernem. Tot 2 dagen vooraf, terugbrengen binnen 48u (borstelschoon).</p>
                 </div>
 
                 <!-- Delivery Method -->
                 <div class="delivery-options">
                   <label class="delivery-option" id="delivery-option-delivery">
-                    <input type="radio" name="delivery_method" value="DELIVERY" checked>
+                    <input type="radio" name="delivery_method" value="DELIVERY" id="delivery-radio">
                     <div class="delivery-option__content">
                       <div class="delivery-option__header">
                         <span class="delivery-option__title">Bezorgen</span>
-                        <span class="delivery-option__price" id="delivery-price">Vanaf €25,00</span>
+                        <span class="delivery-option__price" id="delivery-price">Berekend op adres</span>
                       </div>
-                      <p class="delivery-option__desc">Wij bezorgen (dag voor event of dag zelf) en halen op (dag na event).</p>
-                      <p class="delivery-option__min" id="delivery-min-notice" style="font-size: 12px; color: var(--color-primary); margin-top: 4px; font-weight: 500;">Minimum bestelling: €150</p>
+                      <p class="delivery-option__desc">Wij bezorgen tot 2 dagen voor je event en halen op binnen 48u na afloop.</p>
+                      <p class="delivery-option__min" id="delivery-min-notice" style="font-size: 12px; color: var(--color-primary); margin-top: 4px; font-weight: 500;">Min. €150 • GRATIS binnen 15km • Daarbuiten €0,50/km</p>
+                      <p class="delivery-option__disabled-notice hidden" id="delivery-disabled-notice" style="font-size: 12px; color: var(--color-error); margin-top: 4px; font-weight: 600;">Je bestelling is onder €150 - bezorgen niet beschikbaar</p>
                     </div>
                   </label>
-                  <label class="delivery-option">
-                    <input type="radio" name="delivery_method" value="PICKUP">
+                  <label class="delivery-option" id="delivery-option-pickup">
+                    <input type="radio" name="delivery_method" value="PICKUP" id="pickup-radio" checked>
                     <div class="delivery-option__content">
                       <div class="delivery-option__header">
                         <span class="delivery-option__title">Afhalen in Beernem</span>
                         <span class="delivery-option__price">Gratis</span>
                       </div>
-                      <p class="delivery-option__desc">Afhalen tot 3 dagen vooraf (enkel namiddag). Terugbrengen dag na event.</p>
-                      <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">Altijd mogelijk, geen minimum bestelbedrag</p>
+                      <p class="delivery-option__desc">Ophalen tot 2 dagen vooraf. Terugbrengen binnen 48u na evenement (borstelschoon).</p>
+                      <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">Parkstraat 44, 8730 Beernem • Altijd mogelijk</p>
                     </div>
                   </label>
                 </div>

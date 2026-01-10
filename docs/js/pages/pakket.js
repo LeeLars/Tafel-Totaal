@@ -4,18 +4,22 @@
  */
 
 import { packagesAPI, availabilityAPI, checkoutAPI } from '../lib/api.js';
-import { formatPrice, calculateDays, getQueryParam, showToast } from '../lib/utils.js';
+import { formatPrice, calculateDays, getQueryParam, showToast, formatDateShort } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
 import { addToCart } from '../services/cart.js';
 
 let currentPackage = null;
 let selectedAddons = [];
+let startDate = null;
+let endDate = null;
+let eventType = 'single'; // 'single' or 'multi'
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   await loadHeader();
   await loadFooter();
   await loadPackage();
+  initEventTypeToggle();
   initDatePickers();
   initPersonsSelector();
   initInfoTooltips();
@@ -324,47 +328,37 @@ function initEventTypeSelector() {
  * Initialize date pickers
  */
 function initDatePickers() {
-  const startDate = document.getElementById('start-date');
-  const endDate = document.getElementById('end-date');
-  const eventDate = document.getElementById('event-date');
+  const startDateInput = document.getElementById('start-date');
+  const endDateInput = document.getElementById('end-date');
+  const eventDateInput = document.getElementById('event-date');
   
-  if (!startDate || !endDate) return;
-
   // Set minimum date to tomorrow
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const minDate = tomorrow.toISOString().split('T')[0];
   
-  startDate.min = minDate;
-  endDate.min = minDate;
-  if (eventDate) eventDate.min = minDate;
+  if (startDateInput) startDateInput.min = minDate;
+  if (endDateInput) endDateInput.min = minDate;
+  if (eventDateInput) eventDateInput.min = minDate;
 
-  // Set default dates (next weekend)
-  const nextFriday = getNextFriday();
-  const nextSunday = new Date(nextFriday);
-  nextSunday.setDate(nextSunday.getDate() + 2);
-
-  startDate.value = nextFriday.toISOString().split('T')[0];
-  endDate.value = nextSunday.toISOString().split('T')[0];
-
-  // Single Date Logic
-  if (eventDate) {
-    eventDate.addEventListener('change', () => {
-      const dateVal = eventDate.value;
+  // Single Date Logic - for single day events, calculate rental period automatically
+  if (eventDateInput) {
+    eventDateInput.addEventListener('change', () => {
+      const dateVal = eventDateInput.value;
       if (!dateVal) return;
 
-      const date = new Date(dateVal);
+      const eventDate = new Date(dateVal);
       
-      // Start = date - 1 day
-      const start = new Date(date);
-      start.setDate(date.getDate() - 1);
+      // Start = 2 days before event (max pickup window)
+      const start = new Date(eventDate);
+      start.setDate(eventDate.getDate() - 2);
       
-      // End = date + 1 day
-      const end = new Date(date);
-      end.setDate(date.getDate() + 1);
+      // End = 2 days after event (48h return window)
+      const end = new Date(eventDate);
+      end.setDate(eventDate.getDate() + 2);
       
-      startDate.value = start.toISOString().split('T')[0];
-      endDate.value = end.toISOString().split('T')[0];
+      startDate = start.toISOString().split('T')[0];
+      endDate = end.toISOString().split('T')[0];
       
       updateRentalDaysHint();
       updatePriceSummary();
@@ -372,32 +366,79 @@ function initDatePickers() {
     });
   }
 
-  // Event listeners for range inputs
-  startDate.addEventListener('change', () => {
-    // Ensure end date is after start date
-    if (endDate.value < startDate.value) {
-      const newEnd = new Date(startDate.value);
-      newEnd.setDate(newEnd.getDate() + (currentPackage?.forfait_days || 3) - 1);
-      endDate.value = newEnd.toISOString().split('T')[0];
-    }
-    endDate.min = startDate.value;
-    updateRentalDaysHint();
-    updatePriceSummary();
-    checkAvailability();
-  });
+  // Event listeners for range inputs (multi-day events)
+  if (startDateInput) {
+    startDateInput.addEventListener('change', () => {
+      startDate = startDateInput.value;
+      if (endDateInput) endDateInput.min = startDate;
+      
+      if (endDate && startDate > endDate) {
+        endDate = null;
+        if (endDateInput) endDateInput.value = '';
+      }
+      
+      updateRentalDaysHint();
+      updatePriceSummary();
+      checkAvailability();
+    });
+  }
 
-  endDate.addEventListener('change', () => {
-    updateRentalDaysHint();
-    updatePriceSummary();
-    checkAvailability();
-  });
-
-  updateRentalDaysHint();
+  if (endDateInput) {
+    endDateInput.addEventListener('change', () => {
+      endDate = endDateInput.value;
+      
+      updateRentalDaysHint();
+      updatePriceSummary();
+      checkAvailability();
+    });
+  }
 }
 
 /**
- * Get next Friday date
+ * Initialize event type toggle (single/multi day)
  */
+function initEventTypeToggle() {
+  const typeButtons = document.querySelectorAll('.type-btn[data-type]');
+  const singleDateContainer = document.getElementById('single-date-container');
+  const rangeDateContainer = document.getElementById('range-date-container');
+  
+  if (!typeButtons.length) return;
+
+  typeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      eventType = type;
+      
+      // Update active state
+      typeButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Toggle date containers
+      if (type === 'single') {
+        if (singleDateContainer) singleDateContainer.classList.remove('hidden');
+        if (rangeDateContainer) rangeDateContainer.classList.add('hidden');
+        // Reset
+        startDate = null;
+        endDate = null;
+        const eventDateEl = document.getElementById('event-date');
+        if (eventDateEl) eventDateEl.value = '';
+      } else {
+        if (singleDateContainer) singleDateContainer.classList.add('hidden');
+        if (rangeDateContainer) rangeDateContainer.classList.remove('hidden');
+        // Reset
+        startDate = null;
+        endDate = null;
+        const startEl = document.getElementById('start-date');
+        const endEl = document.getElementById('end-date');
+        if (startEl) startEl.value = '';
+        if (endEl) endEl.value = '';
+      }
+      
+      updateRentalDaysHint();
+      updatePriceSummary();
+    });
+  });
+}
 
 /**
  * Get next Friday date
