@@ -112,7 +112,7 @@ function createCartItemHTML(item) {
         ` : ''}
       </div>
       <div class="cart-item__actions">
-        <div class="cart-item__price">${formatPrice(item.line_total || item.unit_price * item.quantity)}</div>
+        <div class="cart-item__price">${formatPrice(getItemTotal(item))}</div>
         ${item.type === 'product' ? `
           <div class="quantity-control">
             <button class="quantity-control__btn" data-action="decrease" data-item-id="${item.id}" ${item.quantity <= 1 ? 'disabled' : ''}>
@@ -139,6 +139,20 @@ function createCartItemHTML(item) {
       </div>
     </article>
   `;
+}
+
+/**
+ * Calculate item total from available data
+ */
+function getItemTotal(item) {
+  if (item.line_total && !isNaN(item.line_total)) {
+    return item.line_total;
+  } else if (item.unit_price && !isNaN(item.unit_price)) {
+    return item.unit_price * (item.quantity || 1);
+  } else if (item.price_per_day && item.days) {
+    return item.price_per_day * item.days * (item.quantity || 1);
+  }
+  return 0;
 }
 
 function getItemImageUrl(item) {
@@ -169,22 +183,34 @@ function getItemImageUrl(item) {
  */
 function updateSummary(cart) {
   let subtotal = 0;
-  let deposit = 0;
+  let compensation = 0;
 
   cart.forEach(item => {
-    subtotal += item.line_total || (item.unit_price * item.quantity);
-    deposit += item.deposit || 0;
+    // Calculate line total from available data
+    let itemTotal = 0;
+    if (item.line_total && !isNaN(item.line_total)) {
+      itemTotal = item.line_total;
+    } else if (item.unit_price && !isNaN(item.unit_price)) {
+      itemTotal = item.unit_price * (item.quantity || 1);
+    } else if (item.price_per_day && item.days) {
+      itemTotal = item.price_per_day * item.days * (item.quantity || 1);
+    }
+    
+    subtotal += itemTotal;
+    compensation += item.damage_compensation || 0;
   });
 
-  // Estimate deposit if not provided (30% of subtotal)
-  if (deposit === 0) {
-    deposit = Math.round(subtotal * 0.3 * 100) / 100;
+  // Estimate compensation if not provided (30% of subtotal)
+  // NOTE: This is NOT paid upfront, only shown for reference
+  if (compensation === 0 && subtotal > 0) {
+    compensation = Math.round(subtotal * 0.3 * 100) / 100;
   }
 
-  const total = subtotal + deposit;
+  // Total does NOT include compensation as it's not paid upfront
+  const total = subtotal;
 
   document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
-  document.getElementById('summary-deposit').textContent = formatPrice(deposit);
+  document.getElementById('summary-deposit').textContent = formatPrice(compensation);
   document.getElementById('summary-total').textContent = formatPrice(total);
 }
 

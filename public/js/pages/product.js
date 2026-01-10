@@ -548,16 +548,31 @@ function initAddToCart() {
       return;
     }
 
+    // Validate stock
+    const availableStock = (currentProduct.stock_total || 0) - (currentProduct.stock_buffer || 0);
+    if (selectedQuantity > availableStock) {
+      showToast(`Slechts ${availableStock} stuks beschikbaar`, 'error');
+      return;
+    }
+
     try {
       btn.disabled = true;
       btn.textContent = 'Toevoegen...';
+
+      const pricePerDay = currentProduct.price_per_day || 0;
+      const unitPrice = pricePerDay * days;
+      const lineTotal = unitPrice * selectedQuantity;
+      const damageCompensation = (currentProduct.damage_compensation_per_item || 0) * selectedQuantity;
 
       await addToCart({
         type: 'product',
         product_id: currentProduct.id,
         name: currentProduct.name,
         quantity: selectedQuantity,
-        price_per_day: currentProduct.price_per_day,
+        price_per_day: pricePerDay,
+        unit_price: unitPrice,
+        line_total: lineTotal,
+        damage_compensation: damageCompensation,
         start_date: startDate,
         end_date: endDate,
         days: days,

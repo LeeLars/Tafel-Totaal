@@ -97,6 +97,20 @@ export async function updateCartItem(itemId, quantity) {
   }
   
   cartData[itemIndex].quantity = quantity;
+  
+  // Recalculate line_total if unit_price exists
+  if (cartData[itemIndex].unit_price) {
+    cartData[itemIndex].line_total = cartData[itemIndex].unit_price * quantity;
+  } else if (cartData[itemIndex].price_per_day && cartData[itemIndex].days) {
+    cartData[itemIndex].unit_price = cartData[itemIndex].price_per_day * cartData[itemIndex].days;
+    cartData[itemIndex].line_total = cartData[itemIndex].unit_price * quantity;
+  }
+  
+  // Recalculate damage compensation if per-item value exists
+  if (cartData[itemIndex].damage_compensation_per_item) {
+    cartData[itemIndex].damage_compensation = cartData[itemIndex].damage_compensation_per_item * quantity;
+  }
+  
   saveToStorage(cartData);
   notifyListeners();
   updateCartBadge();
