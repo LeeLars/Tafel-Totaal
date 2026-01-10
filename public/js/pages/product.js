@@ -3,7 +3,7 @@
  */
 
 import { productsAPI } from '../lib/api.js';
-import { formatPrice, calculateDays, getQueryParam, showToast } from '../lib/utils.js';
+import { formatPrice, calculateDays, getQueryParam, showToast, formatDateShort } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
 import { addToCart } from '../services/cart.js';
 
@@ -11,12 +11,14 @@ let currentProduct = null;
 let selectedQuantity = 1;
 let startDate = null;
 let endDate = null;
+let eventType = 'single'; // 'single' or 'multi'
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   await loadHeader();
   await loadFooter();
   await loadProduct();
+  initEventTypeToggle();
   initQuantitySelector();
   initQuantityPresets();
   initDatePickers();
@@ -213,39 +215,93 @@ function renderProduct(product) {
 }
 
 /**
- * Update availability of preset buttons based on stock
+ * Initialize event type toggle (single day vs multi-day)
  */
-function updatePresetAvailability(availableStock) {
-  document.querySelectorAll('.preset-btn').forEach(btn => {
-    const value = parseInt(btn.dataset.value);
-    if (value > availableStock) {
-      btn.disabled = true;
-      btn.title = `Niet genoeg voorraad (max ${availableStock})`;
-    } else {
-      btn.disabled = false;
-      btn.title = '';
-    }
+function initEventTypeToggle() {
+  const typeButtons = document.querySelectorAll('.type-btn');
+  const singleDateContainer = document.getElementById('single-date-container');
+  const rangeDateContainer = document.getElementById('range-date-container');
+  
+  if (!typeButtons.length) return;
+
+  typeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const type = btn.dataset.type;
+      eventType = type;
+      
+      // Update active state
+      typeButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Toggle date containers
+      if (type === 'single') {
+        if (singleDateContainer) singleDateContainer.classList.remove('hidden');
+        if (rangeDateContainer) rangeDateContainer.classList.add('hidden');
+        // Reset dates
+        startDate = null;
+        endDate = null;
+        document.getElementById('event-date').value = '';
+      } else {
+        if (singleDateContainer) singleDateContainer.classList.add('hidden');
+        if (rangeDateContainer) rangeDateContainer.classList.remove('hidden');
+        // Reset dates
+        startDate = null;
+        endDate = null;
+        document.getElementById('start-date').value = '';
+        document.getElementById('end-date').value = '';
+      }
+      
+      updateTotalPrice();
+    });
   });
 }
 
 /**
- * Update availability of preset buttons based on stock
+ * Initialize quantity selector (+/- buttons)
  */
-function updatePresetAvailability(availableStock) {
-  document.querySelectorAll('.preset-btn').forEach(btn => {
-    const value = parseInt(btn.dataset.value);
-    if (value > availableStock) {
-      btn.disabled = true;
-      btn.title = `Niet genoeg voorraad (max ${availableStock})`;
-    } else {
-      btn.disabled = false;
-      btn.title = '';
+function initQuantitySelector() {
+  const qtyInput = document.getElementById('quantity');
+  const minusBtn = document.getElementById('qty-minus');
+  const plusBtn = document.getElementById('qty-plus');
+  
+  if (!qtyInput || !minusBtn || !plusBtn) return;
+
+  minusBtn.addEventListener('click', () => {
+    const current = parseInt(qtyInput.value) || 1;
+    const min = parseInt(qtyInput.min) || 1;
+    if (current > min) {
+      qtyInput.value = current - 1;
+      selectedQuantity = current - 1;
+      updateTotalPrice();
     }
+  });
+
+  plusBtn.addEventListener('click', () => {
+    const current = parseInt(qtyInput.value) || 1;
+    const max = parseInt(qtyInput.max) || 9999;
+    if (current < max) {
+      qtyInput.value = current + 1;
+      selectedQuantity = current + 1;
+      updateTotalPrice();
+    }
+  });
+
+  qtyInput.addEventListener('change', () => {
+    let value = parseInt(qtyInput.value) || 1;
+    const min = parseInt(qtyInput.min) || 1;
+    const max = parseInt(qtyInput.max) || 9999;
+    
+    if (value < min) value = min;
+    if (value > max) value = max;
+    
+    qtyInput.value = value;
+    selectedQuantity = value;
+    updateTotalPrice();
   });
 }
 
 /**
- * Initialize quantity presets
+ * Initialize quantity presets (25, 75, 125 buttons)
  */
 function initQuantityPresets() {
   const qtyInput = document.getElementById('quantity');
@@ -255,6 +311,8 @@ function initQuantityPresets() {
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      
       const value = parseInt(btn.dataset.value);
       const max = parseInt(qtyInput.max) || 9999;
       
@@ -262,6 +320,10 @@ function initQuantityPresets() {
         qtyInput.value = value;
         selectedQuantity = value;
         updateTotalPrice();
+        
+        // Visual feedback
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
       } else {
         showToast(`Slechts ${max} stuks beschikbaar`, 'warning');
       }
@@ -277,77 +339,13 @@ function updatePresetAvailability(availableStock) {
     const value = parseInt(btn.dataset.value);
     if (value > availableStock) {
       btn.disabled = true;
+      btn.classList.add('disabled');
       btn.title = `Niet genoeg voorraad (max ${availableStock})`;
     } else {
       btn.disabled = false;
+      btn.classList.remove('disabled');
       btn.title = '';
     }
-  });
-}
-
-/**
- * Initialize quantity presets
- */
-function initQuantityPresets() {
-  const qtyInput = document.getElementById('quantity');
-  const buttons = document.querySelectorAll('.preset-btn');
-  
-  if (!qtyInput || !buttons.length) return;
-
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const value = parseInt(btn.dataset.value);
-      const max = parseInt(qtyInput.max) || 9999;
-      
-      if (value <= max) {
-        qtyInput.value = value;
-        selectedQuantity = value;
-        updateTotalPrice();
-      } else {
-        showToast(`Slechts ${max} stuks beschikbaar`, 'warning');
-      }
-    });
-  });
-}
-
-/**
- * Update availability of preset buttons based on stock
- */
-function updatePresetAvailability(availableStock) {
-  document.querySelectorAll('.preset-btn').forEach(btn => {
-    const value = parseInt(btn.dataset.value);
-    if (value > availableStock) {
-      btn.disabled = true;
-      btn.title = `Niet genoeg voorraad (max ${availableStock})`;
-    } else {
-      btn.disabled = false;
-      btn.title = '';
-    }
-  });
-}
-
-/**
- * Initialize quantity presets
- */
-function initQuantityPresets() {
-  const qtyInput = document.getElementById('quantity');
-  const buttons = document.querySelectorAll('.preset-btn');
-  
-  if (!qtyInput || !buttons.length) return;
-
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const value = parseInt(btn.dataset.value);
-      const max = parseInt(qtyInput.max) || 9999;
-      
-      if (value <= max) {
-        qtyInput.value = value;
-        selectedQuantity = value;
-        updateTotalPrice();
-      } else {
-        showToast(`Slechts ${max} stuks beschikbaar`, 'warning');
-      }
-    });
   });
 }
 
@@ -383,52 +381,6 @@ function renderImages(images) {
     });
   }
 }
-
-/**
- * Update availability of preset buttons based on stock
- */
-function updatePresetAvailability(availableStock) {
-  document.querySelectorAll('.preset-btn').forEach(btn => {
-    const value = parseInt(btn.dataset.value);
-    if (value > availableStock) {
-      btn.disabled = true;
-      btn.title = `Niet genoeg voorraad (max ${availableStock})`;
-    } else {
-      btn.disabled = false;
-      btn.title = '';
-    }
-  });
-}
-
-/**
- * Initialize quantity presets
- */
-function initQuantityPresets() {
-  const qtyInput = document.getElementById('quantity');
-  const buttons = document.querySelectorAll('.preset-btn');
-  
-  if (!qtyInput || !buttons.length) return;
-
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const value = parseInt(btn.dataset.value);
-      const max = parseInt(qtyInput.max) || 9999;
-      
-      if (value <= max) {
-        qtyInput.value = value;
-        selectedQuantity = value;
-        updateTotalPrice();
-      } else {
-        showToast(`Slechts ${max} stuks beschikbaar`, 'warning');
-      }
-    });
-  });
-}
-
-/**
- * Initialize quantity selector
- */
-// ... (initQuantitySelector unchanged) ...
 
 /**
  * Initialize date pickers
