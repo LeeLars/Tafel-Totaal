@@ -21,6 +21,18 @@ const PRICE_PER_KM = 0.50;
 const FREE_DELIVERY_RADIUS_KM = 15;
 const ORIGIN_ADDRESS = 'Parkstraat 44, 8730 Beernem, Belgium';
 
+// Origin coordinates (Parkstraat 44, Beernem)
+const ORIGIN_COORDS = [51.1367, 3.3389]; // [lat, lng]
+
+// OpenRouteService API key (free tier - 2000 requests/day)
+const ORS_API_KEY = '5b3ce3597851110001cf6248a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6'; // Public demo key
+
+// Map variables
+let deliveryMap = null;
+let routeLayer = null;
+let carMarker = null;
+let animationFrame = null;
+
 // Comprehensive postal code database with precise distances from Beernem (Parkstraat 44)
 // Distances are calculated as driving distance in km
 const POSTAL_CODE_DISTANCES = {
@@ -478,9 +490,15 @@ function initDeliveryToggle() {
     addressSection.style.display = 'none';
   }
 
-  // Postal code change - check delivery zone
-  document.getElementById('postal_code')?.addEventListener('blur', checkDeliveryZone);
-  document.getElementById('postal_code')?.addEventListener('input', debounce(checkDeliveryZone, 500));
+  // Address field changes - trigger route calculation
+  const addressFields = ['street', 'house_number', 'postal_code', 'city'];
+  addressFields.forEach(fieldId => {
+    const field = document.getElementById(fieldId);
+    if (field) {
+      field.addEventListener('blur', checkDeliveryZone);
+      field.addEventListener('input', debounce(checkDeliveryZone, 800));
+    }
+  });
 }
 
 /**
@@ -510,26 +528,156 @@ function debounce(func, wait) {
 }
 
 /**
- * Check delivery zone based on postal code
- * Uses comprehensive postal code database with precise distances
- * Free delivery within 15km radius for orders over €150
+ * Check delivery zone and calculate real route distance
+ * Uses Nominatim for geocoding and OSRM for routing (both free, no API key needed)
  */
 async function checkDeliveryZone() {
+  const street = document.getElementById('street')?.value.trim();
+  const houseNumber = document.getElementById('house_number')?.value.trim();
   const postalCode = document.getElementById('postal_code')?.value.trim();
+  const city = document.getElementById('city')?.value.trim();
   const zoneInfo = document.getElementById('delivery-zone-info');
   const deliveryPriceEl = document.getElementById('delivery-price');
+  const mapContainer = document.getElementById('route-map-container');
   
+  // Need at least postal code and city for calculation
   if (!postalCode || postalCode.length < 4 || !zoneInfo) return;
+  
+  // Check if postal code is in delivery zone (West/Oost-Vlaanderen)
+  const prefix2 = postalCode.substring(0, 2);
+  const isInDeliveryZone = ['80', '81', '82', '83', '84', '85', '86', '87', '88', '89', 
+                            '90', '91', '92', '93', '94', '95', '96', '97', '98', '99'].includes(prefix2);
+  
+  if (!isInDeliveryZone) {
+    zoneInfo.style.display = 'flex';
+    zoneInfo.className = 'delivery-zone-info delivery-zone-info--unavailable';
+    zoneInfo.querySelector('.delivery-zone-info__text').textContent = 
+      '✗ Bezorging enkel mogelijk in West- en Oost-Vlaanderen. Kies voor afhalen of neem contact op.';
+    mapContainer.style.display = 'none';
+    checkoutData.deliveryCost = 0;
+    if (deliveryPriceEl) {
+      deliveryPriceEl.textContent = 'Niet beschikbaar';
+      deliveryPriceEl.style.color = '';
+    }
+    return;
+  }
+  
+  // Show loading state
+  zoneInfo.style.display = 'flex';
+  zoneInfo.className = 'delivery-zone-info delivery-zone-info--loading';
+  zoneInfo.querySelector('.delivery-zone-info__text').textContent = '⏳ Route berekenen...';
+  
+  try {
+    // Build address string for geocoding
+    const addressParts = [];
+    if (street && houseNumber) addressParts.push(`${street} ${houseNumber}`);
+    addressParts.push(postalCode);
+    if (city) addressParts.push(city);
+    addressParts.push('Belgium');
+    const fullAddress = addressParts.join(', ');
+    
+    // Geocode the destination address using Nominatim (free)
+    const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress)}&limit=1&countrycodes=be`;
+    const geocodeResponse = await fetch(geocodeUrl, {
+      headers: { 'User-Agent': 'TafelTotaal/1.0' }
+    });
+    const geocodeData = await geocodeResponse.json();
+    
+    if (!geocodeData || geocodeData.length === 0) {
+      // Fallback to postal code database if geocoding fails
+      await fallbackToPostalCodeDistance(postalCode, zoneInfo, deliveryPriceEl, mapContainer);
+      return;
+    }
+    
+    const destCoords = [parseFloat(geocodeData[0].lat), parseFloat(geocodeData[0].lon)];
+    const destName = geocodeData[0].display_name.split(',')[0];
+    
+    // Calculate route using OSRM (free, no API key)
+    const routeUrl = `https://router.project-osrm.org/route/v1/driving/${ORIGIN_COORDS[1]},${ORIGIN_COORDS[0]};${destCoords[1]},${destCoords[0]}?overview=full&geometries=geojson`;
+    const routeResponse = await fetch(routeUrl);
+    const routeData = await routeResponse.json();
+    
+    if (routeData.code !== 'Ok' || !routeData.routes || routeData.routes.length === 0) {
+      await fallbackToPostalCodeDistance(postalCode, zoneInfo, deliveryPriceEl, mapContainer);
+      return;
+    }
+    
+    const route = routeData.routes[0];
+    const distanceKm = Math.round(route.distance / 1000 * 10) / 10; // Convert to km with 1 decimal
+    const durationMin = Math.round(route.duration / 60); // Convert to minutes
+    const routeCoordinates = route.geometry.coordinates.map(c => [c[1], c[0]]); // Swap to [lat, lng]
+    
+    // Calculate delivery cost
+    let deliveryCost = 0;
+    let deliveryMessage = '';
+    
+    if (distanceKm <= FREE_DELIVERY_RADIUS_KM) {
+      deliveryCost = 0;
+      deliveryMessage = `✓ GRATIS levering naar ${city || destName} (${distanceKm}km)`;
+      
+      if (deliveryPriceEl) {
+        deliveryPriceEl.textContent = 'GRATIS';
+        deliveryPriceEl.style.color = 'var(--color-success)';
+      }
+    } else {
+      const chargeableKm = distanceKm - FREE_DELIVERY_RADIUS_KM;
+      deliveryCost = Math.round(chargeableKm * PRICE_PER_KM * 2 * 100) / 100;
+      deliveryCost = Math.max(deliveryCost, 5);
+      
+      deliveryMessage = `✓ Bezorging naar ${city || destName} (${distanceKm}km) - ${formatPrice(deliveryCost)}`;
+      
+      if (deliveryPriceEl) {
+        deliveryPriceEl.textContent = formatPrice(deliveryCost);
+        deliveryPriceEl.style.color = '';
+      }
+    }
+    
+    // Update zone info
+    zoneInfo.className = 'delivery-zone-info delivery-zone-info--available';
+    const textEl = zoneInfo.querySelector('.delivery-zone-info__text');
+    textEl.innerHTML = deliveryMessage;
+    
+    if (distanceKm > FREE_DELIVERY_RADIUS_KM) {
+      const breakdown = document.createElement('small');
+      breakdown.style.display = 'block';
+      breakdown.style.marginTop = '4px';
+      breakdown.style.opacity = '0.8';
+      breakdown.textContent = `Berekening: (${distanceKm}km - ${FREE_DELIVERY_RADIUS_KM}km gratis) × €0,50 × 2 (heen+terug)`;
+      textEl.appendChild(breakdown);
+    }
+    
+    // Update route info
+    document.getElementById('route-distance').textContent = formatPrice(deliveryCost);
+    document.getElementById('route-duration').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>${durationMin} min`;
+    document.getElementById('route-km').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${distanceKm} km`;
+    
+    // Show map and draw route
+    mapContainer.style.display = 'block';
+    await initializeMap(routeCoordinates, destCoords, city || destName);
+    
+    // Store data
+    checkoutData.deliveryCost = deliveryCost;
+    checkoutData.deliveryDistance = distanceKm;
+    checkoutData.deliveryDuration = durationMin;
+    checkoutData.deliveryLocation = city || destName;
+    updateTotals();
+    
+  } catch (error) {
+    console.error('Route calculation error:', error);
+    await fallbackToPostalCodeDistance(postalCode, zoneInfo, deliveryPriceEl, mapContainer);
+  }
+}
 
-  // Look up exact postal code first, then try prefix matching
+/**
+ * Fallback to postal code database when route calculation fails
+ */
+async function fallbackToPostalCodeDistance(postalCode, zoneInfo, deliveryPriceEl, mapContainer) {
   let location = POSTAL_CODE_DISTANCES[postalCode];
   
-  // If not found, try to find a nearby postal code (same first 3 digits)
   if (!location) {
     const prefix3 = postalCode.substring(0, 3);
     const prefix2 = postalCode.substring(0, 2);
     
-    // Find closest match
     for (const [code, data] of Object.entries(POSTAL_CODE_DISTANCES)) {
       if (code.startsWith(prefix3)) {
         location = { ...data, name: data.name + ' (regio)', estimated: true };
@@ -537,14 +685,7 @@ async function checkDeliveryZone() {
       }
     }
     
-    // If still not found, check if it's in West/Oost-Vlaanderen by prefix
-    if (!location && (prefix2 === '80' || prefix2 === '81' || prefix2 === '82' || 
-        prefix2 === '83' || prefix2 === '84' || prefix2 === '85' || prefix2 === '86' || 
-        prefix2 === '87' || prefix2 === '88' || prefix2 === '89' || prefix2 === '90' || 
-        prefix2 === '91' || prefix2 === '92' || prefix2 === '93' || prefix2 === '94' || 
-        prefix2 === '95' || prefix2 === '96' || prefix2 === '97' || prefix2 === '98' || 
-        prefix2 === '99')) {
-      // Estimate distance based on prefix
+    if (!location) {
       const estimatedDistances = {
         '80': 16, '81': 20, '82': 28, '83': 18, '84': 35, '85': 40, 
         '86': 48, '87': 5, '88': 35, '89': 25, '90': 42, '91': 45,
@@ -558,85 +699,169 @@ async function checkDeliveryZone() {
       };
     }
   }
-
-  if (location) {
-    const distance = location.distance;
-    let deliveryCost = 0;
-    let deliveryMessage = '';
-    
-    // Check if within free delivery radius
-    if (distance <= FREE_DELIVERY_RADIUS_KM) {
-      deliveryCost = 0;
-      deliveryMessage = `✓ GRATIS levering naar ${location.name} (${distance}km)`;
-      
-      if (deliveryPriceEl) {
-        deliveryPriceEl.textContent = 'GRATIS';
-        deliveryPriceEl.style.color = 'var(--color-success)';
-      }
-    } else {
-      // Calculate cost: €0.50 per km beyond 15km (round trip)
-      const chargeableKm = distance - FREE_DELIVERY_RADIUS_KM;
-      deliveryCost = Math.round(chargeableKm * PRICE_PER_KM * 2 * 100) / 100; // x2 for round trip
-      
-      // Ensure minimum delivery cost of €5 for paid deliveries
-      deliveryCost = Math.max(deliveryCost, 5);
-      
-      deliveryMessage = `✓ Bezorging naar ${location.name} (${distance}km) - ${formatPrice(deliveryCost)}`;
-      if (location.estimated) {
-        deliveryMessage += ' (geschat)';
-      }
-      
-      if (deliveryPriceEl) {
-        deliveryPriceEl.textContent = formatPrice(deliveryCost);
-        deliveryPriceEl.style.color = '';
-      }
-    }
-    
-    zoneInfo.style.display = 'flex';
-    zoneInfo.className = 'delivery-zone-info delivery-zone-info--available';
-    zoneInfo.querySelector('.delivery-zone-info__text').textContent = deliveryMessage;
-    
-    // Show calculation breakdown for paid deliveries
-    if (distance > FREE_DELIVERY_RADIUS_KM) {
-      const breakdown = document.createElement('small');
-      breakdown.style.display = 'block';
-      breakdown.style.marginTop = '4px';
-      breakdown.style.opacity = '0.8';
-      breakdown.textContent = `Berekening: (${distance}km - ${FREE_DELIVERY_RADIUS_KM}km gratis) × €0,50 × 2 (heen+terug)`;
-      
-      const textEl = zoneInfo.querySelector('.delivery-zone-info__text');
-      // Remove old breakdown if exists
-      const oldBreakdown = textEl.querySelector('small');
-      if (oldBreakdown) oldBreakdown.remove();
-      textEl.appendChild(breakdown);
-    }
-    
-    checkoutData.deliveryCost = deliveryCost;
-    checkoutData.deliveryDistance = distance;
-    checkoutData.deliveryLocation = location.name;
-    updateTotals();
-  } else {
-    // Postal code not in West/Oost-Vlaanderen
-    const isBelgian = postalCode.length === 4 && /^\d{4}$/.test(postalCode);
-    
-    zoneInfo.style.display = 'flex';
-    zoneInfo.className = 'delivery-zone-info delivery-zone-info--unavailable';
-    
-    if (isBelgian) {
-      zoneInfo.querySelector('.delivery-zone-info__text').textContent = 
-        '✗ Bezorging enkel mogelijk in West- en Oost-Vlaanderen. Kies voor afhalen of neem contact op.';
-    } else {
-      zoneInfo.querySelector('.delivery-zone-info__text').textContent = 
-        '✗ Voer een geldige Belgische postcode in (4 cijfers).';
-    }
-    
-    // Reset delivery cost
-    checkoutData.deliveryCost = 0;
+  
+  const distance = location.distance;
+  let deliveryCost = 0;
+  let deliveryMessage = '';
+  
+  if (distance <= FREE_DELIVERY_RADIUS_KM) {
+    deliveryCost = 0;
+    deliveryMessage = `✓ GRATIS levering naar ${location.name} (~${distance}km)`;
     if (deliveryPriceEl) {
-      deliveryPriceEl.textContent = 'Niet beschikbaar';
+      deliveryPriceEl.textContent = 'GRATIS';
+      deliveryPriceEl.style.color = 'var(--color-success)';
+    }
+  } else {
+    const chargeableKm = distance - FREE_DELIVERY_RADIUS_KM;
+    deliveryCost = Math.round(chargeableKm * PRICE_PER_KM * 2 * 100) / 100;
+    deliveryCost = Math.max(deliveryCost, 5);
+    deliveryMessage = `✓ Bezorging naar ${location.name} (~${distance}km) - ${formatPrice(deliveryCost)} (geschat)`;
+    if (deliveryPriceEl) {
+      deliveryPriceEl.textContent = formatPrice(deliveryCost);
       deliveryPriceEl.style.color = '';
     }
   }
+  
+  zoneInfo.className = 'delivery-zone-info delivery-zone-info--available';
+  zoneInfo.querySelector('.delivery-zone-info__text').textContent = deliveryMessage;
+  mapContainer.style.display = 'none';
+  
+  checkoutData.deliveryCost = deliveryCost;
+  checkoutData.deliveryDistance = distance;
+  checkoutData.deliveryLocation = location.name;
+  updateTotals();
+}
+
+/**
+ * Initialize Leaflet map with route and animated car
+ */
+async function initializeMap(routeCoordinates, destCoords, destName) {
+  const mapEl = document.getElementById('delivery-map');
+  if (!mapEl) return;
+  
+  // Initialize map if not exists
+  if (!deliveryMap) {
+    deliveryMap = L.map('delivery-map', {
+      zoomControl: true,
+      scrollWheelZoom: false
+    });
+    
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(deliveryMap);
+  }
+  
+  // Clear previous layers
+  if (routeLayer) {
+    deliveryMap.removeLayer(routeLayer);
+  }
+  if (carMarker) {
+    deliveryMap.removeLayer(carMarker);
+  }
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+  }
+  
+  // Draw route
+  routeLayer = L.layerGroup().addTo(deliveryMap);
+  
+  // Route line
+  const routeLine = L.polyline(routeCoordinates, {
+    color: '#903D3E',
+    weight: 4,
+    opacity: 0.8
+  }).addTo(routeLayer);
+  
+  // Origin marker (Tafel Totaal)
+  const originIcon = L.divIcon({
+    className: 'custom-marker origin-marker',
+    html: `<div style="background: #903D3E; color: white; padding: 6px 10px; border-radius: 0; font-size: 12px; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      Tafel Totaal
+    </div>`,
+    iconSize: [120, 30],
+    iconAnchor: [60, 30]
+  });
+  L.marker(ORIGIN_COORDS, { icon: originIcon }).addTo(routeLayer);
+  
+  // Destination marker
+  const destIcon = L.divIcon({
+    className: 'custom-marker dest-marker',
+    html: `<div style="background: #1B5E20; color: white; padding: 6px 10px; border-radius: 0; font-size: 12px; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+      ${destName}
+    </div>`,
+    iconSize: [150, 30],
+    iconAnchor: [75, 30]
+  });
+  L.marker(destCoords, { icon: destIcon }).addTo(routeLayer);
+  
+  // Fit map to route
+  deliveryMap.fitBounds(routeLine.getBounds(), { padding: [40, 40] });
+  
+  // Create car marker
+  const carIcon = L.divIcon({
+    className: 'car-marker',
+    html: `<div style="font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">🚚</div>`,
+    iconSize: [30, 30],
+    iconAnchor: [15, 15]
+  });
+  carMarker = L.marker(ORIGIN_COORDS, { icon: carIcon, zIndexOffset: 1000 }).addTo(routeLayer);
+  
+  // Animate car along route
+  animateCarAlongRoute(routeCoordinates);
+}
+
+/**
+ * Animate car marker along the route
+ */
+function animateCarAlongRoute(routeCoordinates) {
+  if (!carMarker || routeCoordinates.length < 2) return;
+  
+  const totalPoints = routeCoordinates.length;
+  const animationDuration = 5000; // 5 seconds for full route
+  let startTime = null;
+  let currentIndex = 0;
+  
+  function animate(timestamp) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    const progress = Math.min(elapsed / animationDuration, 1);
+    
+    // Calculate current position along route
+    const targetIndex = Math.floor(progress * (totalPoints - 1));
+    
+    if (targetIndex !== currentIndex && targetIndex < totalPoints) {
+      currentIndex = targetIndex;
+      const currentPos = routeCoordinates[currentIndex];
+      carMarker.setLatLng(currentPos);
+      
+      // Calculate rotation based on direction
+      if (currentIndex < totalPoints - 1) {
+        const nextPos = routeCoordinates[currentIndex + 1];
+        const angle = Math.atan2(nextPos[1] - currentPos[1], nextPos[0] - currentPos[0]) * 180 / Math.PI;
+        const carEl = carMarker.getElement();
+        if (carEl) {
+          carEl.style.transform = `rotate(${angle - 90}deg)`;
+        }
+      }
+    }
+    
+    if (progress < 1) {
+      animationFrame = requestAnimationFrame(animate);
+    } else {
+      // Reset and loop animation
+      setTimeout(() => {
+        startTime = null;
+        currentIndex = 0;
+        carMarker.setLatLng(ORIGIN_COORDS);
+        animationFrame = requestAnimationFrame(animate);
+      }, 2000);
+    }
+  }
+  
+  animationFrame = requestAnimationFrame(animate);
 }
 
 /**
