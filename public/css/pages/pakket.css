@@ -305,16 +305,23 @@
 
 .preset-btn {
   flex: 1;
-  padding: 6px 12px;
+  height: 48px;
+  padding: 0 12px;
   font-size: var(--font-size-xs);
   font-family: var(--font-mono);
-  background-color: var(--color-off-white);
+  background-color: var(--color-white);
   border: 1px solid var(--border-color);
   cursor: pointer;
   transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
-.preset-btn:hover:not(:disabled) {
+.preset-btn:hover:not(:disabled),
+.preset-btn.active {
   background-color: var(--color-black);
   color: var(--color-white);
   border-color: var(--color-black);
