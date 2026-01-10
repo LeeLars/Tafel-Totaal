@@ -140,9 +140,7 @@
                       <input type="date" id="end-date" class="form-input">
                     </div>
                   </div>
-                  <div class="package-detail__days hidden" id="days-display" style="margin-top: 8px; font-size: 0.9rem; color: var(--color-primary); font-weight: 500;">
-                    <span id="days-count">0</span> dagen geselecteerd
-                  </div>
+                  <p class="configurator__hint" id="rental-days-hint">Selecteer je datums</p>
                 </div>
 
                 <!-- Quantity Selector -->
@@ -169,7 +167,15 @@
                     <span id="product-price">€0,00</span>
                   </div>
                   <div class="price-summary__row price-summary__row--deposit">
-                    <span>Schadevergoeding per stuk</span>
+                    <span class="info-tooltip">
+                      Schadevergoeding (niet vooraf betaald)
+                      <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over schadevergoeding">?</button>
+                      <div class="info-tooltip__content">
+                        <div class="info-tooltip__title">Hoe werkt schadevergoeding?</div>
+                        <p class="info-tooltip__text">Bij Tafel Totaal betaal je geen borg vooraf. De schadevergoeding wordt alleen in rekening gebracht als er daadwerkelijk schade is aan het gehuurde materiaal.</p>
+                        <a href="/Tafel-Totaal/borg-schade.html" class="info-tooltip__link">Meer informatie →</a>
+                      </div>
+                    </span>
                     <span id="product-deposit">€0,00</span>
                   </div>
                   <div class="price-summary__total">

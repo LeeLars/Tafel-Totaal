@@ -23,7 +23,38 @@ document.addEventListener('DOMContentLoaded', async () => {
   initQuantityPresets();
   initDatePickers();
   initAddToCart();
+  initInfoTooltips();
 });
+
+/**
+ * Initialize info tooltips (click to toggle on mobile)
+ */
+function initInfoTooltips() {
+  document.querySelectorAll('.info-tooltip__btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const tooltip = btn.closest('.info-tooltip');
+      
+      // Close other tooltips
+      document.querySelectorAll('.info-tooltip.active').forEach(t => {
+        if (t !== tooltip) t.classList.remove('active');
+      });
+      
+      // Toggle this tooltip
+      tooltip.classList.toggle('active');
+    });
+  });
+
+  // Close tooltips when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.info-tooltip')) {
+      document.querySelectorAll('.info-tooltip.active').forEach(t => {
+        t.classList.remove('active');
+      });
+    }
+  });
+}
 
 /**
  * Load footer component
@@ -452,12 +483,11 @@ function initDatePickers() {
 function updateTotalPrice() {
   const addToCartBtn = document.getElementById('add-to-cart-btn');
   const quoteBtn = document.getElementById('quote-btn');
-  const daysDisplay = document.getElementById('days-display');
+  const rentalHint = document.getElementById('rental-days-hint');
   const totalPriceEl = document.getElementById('total-price');
-  const daysCountEl = document.getElementById('days-count');
 
   if (!currentProduct || !startDate || !endDate) {
-    if (daysDisplay) daysDisplay.classList.add('hidden');
+    if (rentalHint) rentalHint.textContent = 'Selecteer je datums';
     if (totalPriceEl) totalPriceEl.textContent = formatPrice(0);
     return;
   }
@@ -466,8 +496,12 @@ function updateTotalPrice() {
   const pricePerDay = currentProduct.price_per_day || 0;
   const total = days * pricePerDay * selectedQuantity;
 
-  if (daysCountEl) daysCountEl.textContent = days;
-  if (daysDisplay) daysDisplay.classList.remove('hidden');
+  // Update rental hint with days info
+  if (rentalHint) {
+    rentalHint.textContent = `${days} ${days === 1 ? 'dag' : 'dagen'} huur`;
+    rentalHint.style.color = 'var(--color-primary)';
+    rentalHint.style.fontWeight = '600';
+  }
   if (totalPriceEl) totalPriceEl.textContent = formatPrice(total);
 
   // Quote Logic: > 7 days

@@ -18,7 +18,38 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPackage();
   initDatePickers();
   initPersonsSelector();
+  initInfoTooltips();
 });
+
+/**
+ * Initialize info tooltips (click to toggle on mobile)
+ */
+function initInfoTooltips() {
+  document.querySelectorAll('.info-tooltip__btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const tooltip = btn.closest('.info-tooltip');
+      
+      // Close other tooltips
+      document.querySelectorAll('.info-tooltip.active').forEach(t => {
+        if (t !== tooltip) t.classList.remove('active');
+      });
+      
+      // Toggle this tooltip
+      tooltip.classList.toggle('active');
+    });
+  });
+
+  // Close tooltips when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.info-tooltip')) {
+      document.querySelectorAll('.info-tooltip.active').forEach(t => {
+        t.classList.remove('active');
+      });
+    }
+  });
+}
 
 /**
  * Load footer component

@@ -88,17 +88,43 @@
               <div class="configurator">
                 <h2 class="configurator__title">Configureer je pakket</h2>
 
+                <!-- Event Type Selector -->
+                <div class="configurator__section">
+                  <label class="configurator__label">Type evenement</label>
+                  <div class="event-type-toggle">
+                    <button type="button" class="type-btn active" data-type="single">
+                      Eendaags
+                      <span class="type-btn__sub">Gebruik: 1 dag</span>
+                    </button>
+                    <button type="button" class="type-btn" data-type="multi">
+                      Meerdaags
+                      <span class="type-btn__sub">Gebruik: > 1 dag</span>
+                    </button>
+                  </div>
+                </div>
+
                 <!-- Date Selection -->
                 <div class="configurator__section">
                   <label class="configurator__label">Verhuurperiode</label>
-                  <div class="configurator__dates">
+                  
+                  <!-- Single Date Picker -->
+                  <div class="configurator__single-date" id="single-date-container">
                     <div class="form-group">
-                      <label for="start-date" class="form-label">Startdatum</label>
-                      <input type="date" id="start-date" class="form-input" required>
+                      <label for="event-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Datum evenement</label>
+                      <input type="date" id="event-date" class="form-input">
+                      <p class="date-hint" style="font-size: 0.75rem; color: var(--color-gray); margin-top: 4px;">Wij rekenen 1 dag voor en na voor ophalen/bezorgen (totaal 3 dagen huur)</p>
+                    </div>
+                  </div>
+
+                  <!-- Range Date Picker -->
+                  <div class="configurator__dates hidden" id="range-date-container">
+                    <div class="form-group">
+                      <label for="start-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Startdatum</label>
+                      <input type="date" id="start-date" class="form-input">
                     </div>
                     <div class="form-group">
-                      <label for="end-date" class="form-label">Einddatum</label>
-                      <input type="date" id="end-date" class="form-input" required>
+                      <label for="end-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Einddatum</label>
+                      <input type="date" id="end-date" class="form-input">
                     </div>
                   </div>
                   <p class="configurator__hint" id="rental-days-hint">Selecteer je datums</p>
@@ -141,7 +167,15 @@
                     <span id="summary-addons-price">€0,00</span>
                   </div>
                   <div class="price-summary__row price-summary__row--deposit">
-                    <span>Schadevergoeding (niet vooraf betaald)</span>
+                    <span class="info-tooltip">
+                      Schadevergoeding (niet vooraf betaald)
+                      <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over schadevergoeding">?</button>
+                      <div class="info-tooltip__content">
+                        <div class="info-tooltip__title">Hoe werkt schadevergoeding?</div>
+                        <p class="info-tooltip__text">Bij Tafel Totaal betaal je geen borg vooraf. De schadevergoeding wordt alleen in rekening gebracht als er daadwerkelijk schade is aan het gehuurde materiaal.</p>
+                        <a href="/Tafel-Totaal/borg-schade.html" class="info-tooltip__link">Meer informatie →</a>
+                      </div>
+                    </span>
                     <span id="summary-deposit">€0,00</span>
                   </div>
                   <div class="price-summary__total">
@@ -159,6 +193,16 @@
                   </svg>
                   Toevoegen aan winkelwagen
                 </button>
+
+                <!-- Quote Button (Hidden by default) -->
+                <a href="/Tafel-Totaal/contact.html?subject=Offerte%20aanvraag%20Pakket" class="btn btn--dark btn--lg btn--full hidden" id="quote-btn">
+                  Offerte aanvragen
+                </a>
+
+                <!-- Quote Button (Hidden by default) -->
+                <a href="/Tafel-Totaal/contact.html?subject=Offerte%20aanvraag%20Pakket" class="btn btn--dark btn--lg btn--full hidden" id="quote-btn">
+                  Offerte aanvragen
+                </a>
               </div>
             </div>
           </div>

@@ -18,7 +18,38 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPackage();
   initDatePickers();
   initPersonsSelector();
+  initInfoTooltips();
 });
+
+/**
+ * Initialize info tooltips (click to toggle on mobile)
+ */
+function initInfoTooltips() {
+  document.querySelectorAll('.info-tooltip__btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const tooltip = btn.closest('.info-tooltip');
+      
+      // Close other tooltips
+      document.querySelectorAll('.info-tooltip.active').forEach(t => {
+        if (t !== tooltip) t.classList.remove('active');
+      });
+      
+      // Toggle this tooltip
+      tooltip.classList.toggle('active');
+    });
+  });
+
+  // Close tooltips when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.info-tooltip')) {
+      document.querySelectorAll('.info-tooltip.active').forEach(t => {
+        t.classList.remove('active');
+      });
+    }
+  });
+}
 
 /**
  * Load footer component
@@ -250,19 +281,43 @@ function renderContents() {
   }
 
   container.innerHTML = items.map(item => `
-    <div class="content-item">
-      <div class="content-item__icon">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="9 12 11 14 15 10"></polyline>
-        </svg>
-      </div>
-      <div class="content-item__info">
-        <div class="content-item__name">${item.product_name || item.name}</div>
-        <div class="content-item__quantity">${item.quantity_per_person || 1}x per persoon</div>
-      </div>
+    <div class="package-content__item">
+      <span class="package-content__name">${item.name}</span>
+      <span class="package-content__quantity">${item.quantity}</span>
     </div>
   `).join('');
+}
+
+/**
+ * Initialize event type selector
+ */
+function initEventTypeSelector() {
+  const buttons = document.querySelectorAll('.type-btn');
+  const singleContainer = document.getElementById('single-date-container');
+  const rangeContainer = document.getElementById('range-date-container');
+  
+  if (!buttons.length) return;
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      // Update UI
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      const type = btn.dataset.type;
+      
+      if (type === 'single') {
+        singleContainer.classList.remove('hidden');
+        rangeContainer.classList.add('hidden');
+      } else {
+        singleContainer.classList.add('hidden');
+        rangeContainer.classList.remove('hidden');
+      }
+      
+      updatePriceSummary();
+      checkAvailability();
+    });
+  });
 }
 
 /**
@@ -271,6 +326,7 @@ function renderContents() {
 function initDatePickers() {
   const startDate = document.getElementById('start-date');
   const endDate = document.getElementById('end-date');
+  const eventDate = document.getElementById('event-date');
   
   if (!startDate || !endDate) return;
 
@@ -281,6 +337,7 @@ function initDatePickers() {
   
   startDate.min = minDate;
   endDate.min = minDate;
+  if (eventDate) eventDate.min = minDate;
 
   // Set default dates (next weekend)
   const nextFriday = getNextFriday();
@@ -290,7 +347,32 @@ function initDatePickers() {
   startDate.value = nextFriday.toISOString().split('T')[0];
   endDate.value = nextSunday.toISOString().split('T')[0];
 
-  // Event listeners
+  // Single Date Logic
+  if (eventDate) {
+    eventDate.addEventListener('change', () => {
+      const dateVal = eventDate.value;
+      if (!dateVal) return;
+
+      const date = new Date(dateVal);
+      
+      // Start = date - 1 day
+      const start = new Date(date);
+      start.setDate(date.getDate() - 1);
+      
+      // End = date + 1 day
+      const end = new Date(date);
+      end.setDate(date.getDate() + 1);
+      
+      startDate.value = start.toISOString().split('T')[0];
+      endDate.value = end.toISOString().split('T')[0];
+      
+      updateRentalDaysHint();
+      updatePriceSummary();
+      checkAvailability();
+    });
+  }
+
+  // Event listeners for range inputs
   startDate.addEventListener('change', () => {
     // Ensure end date is after start date
     if (endDate.value < startDate.value) {
@@ -312,6 +394,10 @@ function initDatePickers() {
 
   updateRentalDaysHint();
 }
+
+/**
+ * Get next Friday date
+ */
 
 /**
  * Get next Friday date
@@ -437,13 +523,13 @@ function updatePriceSummary() {
     }
   });
 
-  // Deposit (simplified - would come from backend in real implementation)
-  const depositPercentage = 0.3; // 30%
+  // Damage Compensation (NOT paid upfront - only shown for reference)
+  const compensationPercentage = 0.3; // 30%
   const subtotal = basePrice + extraDaysPrice + addonsPrice;
-  const deposit = Math.round(subtotal * depositPercentage * 100) / 100;
+  const compensation = Math.round(subtotal * compensationPercentage * 100) / 100;
 
-  // Total
-  const total = subtotal + deposit;
+  // Total (compensation is NOT included as it's not paid upfront)
+  const total = subtotal;
 
   // Update UI
   document.getElementById('summary-persons').textContent = persons;
@@ -466,7 +552,7 @@ function updatePriceSummary() {
     addonsRow.style.display = 'none';
   }
 
-  document.getElementById('summary-deposit').textContent = formatPrice(deposit);
+  document.getElementById('summary-deposit').textContent = formatPrice(compensation);
   document.getElementById('summary-total').textContent = formatPrice(total);
 }
 
