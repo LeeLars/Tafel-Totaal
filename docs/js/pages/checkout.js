@@ -325,6 +325,13 @@ function updateTotals() {
     deliveryCost = checkoutData.deliveryCost || 0;
   }
 
+  console.log('updateTotals called:', {
+    deliveryMethod,
+    deliveryCostFromData: checkoutData.deliveryCost,
+    finalDeliveryCost: deliveryCost,
+    subtotal
+  });
+
   // Damage Compensation (NOT paid upfront - only shown for reference)
   const compensation = Math.round(subtotal * 0.3 * 100) / 100;
 
@@ -606,7 +613,14 @@ async function checkDeliveryZone() {
     const destName = geocodeData[0].display_name.split(',')[0];
     
     // Calculate route using OSRM (free, no API key)
+    // OSRM expects coordinates as lon,lat (not lat,lon)
     const routeUrl = `https://router.project-osrm.org/route/v1/driving/${ORIGIN_COORDS[1]},${ORIGIN_COORDS[0]};${destCoords[1]},${destCoords[0]}?overview=full&geometries=geojson`;
+    
+    console.log('Route calculation:', {
+      origin: `${ORIGIN_COORDS[1]},${ORIGIN_COORDS[0]}`,
+      destination: `${destCoords[1]},${destCoords[0]}`,
+      url: routeUrl
+    });
     const routeResponse = await fetch(routeUrl);
     const routeData = await routeResponse.json();
     
@@ -673,6 +687,14 @@ async function checkDeliveryZone() {
     checkoutData.deliveryDistance = distanceKm;
     checkoutData.deliveryDuration = durationMin;
     checkoutData.deliveryLocation = city || destName;
+    
+    console.log('Delivery cost calculated:', {
+      distance: distanceKm,
+      cost: deliveryCost,
+      location: city || destName
+    });
+    
+    // Force update of totals
     updateTotals();
     
   } catch (error) {
@@ -752,6 +774,14 @@ async function initializeMap(routeCoordinates, destCoords, destName) {
   const mapEl = document.getElementById('delivery-map');
   if (!mapEl) return;
   
+  console.log('Initializing map with:', {
+    origin: ORIGIN_COORDS,
+    destination: destCoords,
+    routePoints: routeCoordinates.length,
+    firstPoint: routeCoordinates[0],
+    lastPoint: routeCoordinates[routeCoordinates.length - 1]
+  });
+  
   // Initialize map if not exists
   if (!deliveryMap) {
     deliveryMap = L.map('delivery-map', {
@@ -786,15 +816,15 @@ async function initializeMap(routeCoordinates, destCoords, destName) {
     opacity: 0.8
   }).addTo(routeLayer);
   
-  // Origin marker (Tafel Totaal)
+  // Origin marker (Tafel Totaal - Parkstraat 44, Beernem)
   const originIcon = L.divIcon({
     className: 'custom-marker origin-marker',
     html: `<div style="background: #903D3E; color: white; padding: 6px 10px; border-radius: 0; font-size: 12px; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-      Tafel Totaal
+      Parkstraat 44, Beernem
     </div>`,
-    iconSize: [120, 30],
-    iconAnchor: [60, 30]
+    iconSize: [160, 30],
+    iconAnchor: [80, 30]
   });
   L.marker(ORIGIN_COORDS, { icon: originIcon }).addTo(routeLayer);
   
