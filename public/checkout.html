@@ -149,11 +149,21 @@
                     <input type="radio" name="delivery_method" value="DELIVERY" id="delivery-radio">
                     <div class="delivery-option__content">
                       <div class="delivery-option__header">
-                        <span class="delivery-option__title">Bezorgen</span>
+                        <span class="delivery-option__title">Bezorgen + Ophalen</span>
                         <span class="delivery-option__price" id="delivery-price">Berekend op adres</span>
                       </div>
-                      <p class="delivery-option__desc">Wij bezorgen tot 2 dagen voor je event en halen op binnen 48u na afloop.</p>
-                      <p class="delivery-option__min" id="delivery-min-notice" style="font-size: 12px; color: var(--color-primary); margin-top: 4px; font-weight: 500;">Min. €150 • GRATIS binnen 15km • Daarbuiten €0,50/km</p>
+                      <p class="delivery-option__desc">Wij <strong>bezorgen</strong> tot 2 dagen voor je event én <strong>halen weer op</strong> binnen 48u na afloop.</p>
+                      <div style="display: flex; gap: var(--space-sm); margin-top: 8px; flex-wrap: wrap;">
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: var(--color-concrete); padding: 4px 8px; border: 1px solid var(--border-color);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                          Levering
+                        </span>
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: var(--color-concrete); padding: 4px 8px; border: 1px solid var(--border-color);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                          Ophaling inbegrepen
+                        </span>
+                      </div>
+                      <p class="delivery-option__min" id="delivery-min-notice" style="font-size: 12px; color: var(--color-primary); margin-top: 8px; font-weight: 500;">Min. €150 • GRATIS binnen 15km • Daarbuiten €0,50/km (heen+terug)</p>
                       <p class="delivery-option__disabled-notice hidden" id="delivery-disabled-notice" style="font-size: 12px; color: var(--color-error); margin-top: 4px; font-weight: 600;">Je bestelling is onder €150 - bezorgen niet beschikbaar</p>
                     </div>
                   </label>
@@ -161,11 +171,14 @@
                     <input type="radio" name="delivery_method" value="PICKUP" id="pickup-radio" checked>
                     <div class="delivery-option__content">
                       <div class="delivery-option__header">
-                        <span class="delivery-option__title">Afhalen in Beernem</span>
+                        <span class="delivery-option__title">Zelf afhalen + Terugbrengen</span>
                         <span class="delivery-option__price">Gratis</span>
                       </div>
-                      <p class="delivery-option__desc">Ophalen tot 2 dagen vooraf. Terugbrengen binnen 48u na evenement (borstelschoon).</p>
-                      <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">Parkstraat 44, 8730 Beernem • Altijd mogelijk</p>
+                      <p class="delivery-option__desc">Je haalt zelf op tot 2 dagen vooraf en brengt terug binnen 48u na evenement (borstelschoon).</p>
+                      <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        Parkstraat 44, 8730 Beernem
+                      </p>
                     </div>
                   </label>
                 </div>

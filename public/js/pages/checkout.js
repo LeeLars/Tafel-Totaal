@@ -21,8 +21,8 @@ const PRICE_PER_KM = 0.50;
 const FREE_DELIVERY_RADIUS_KM = 15;
 const ORIGIN_ADDRESS = 'Parkstraat 44, 8730 Beernem, Belgium';
 
-// Origin coordinates (Parkstraat 44, Beernem)
-const ORIGIN_COORDS = [51.1367, 3.3389]; // [lat, lng]
+// Origin coordinates (Parkstraat 44, 8730 Beernem - exact location)
+const ORIGIN_COORDS = [51.1372195, 3.3281456]; // [lat, lng] - precise geocoded coordinates
 
 // OpenRouteService API key (free tier - 2000 requests/day)
 const ORS_API_KEY = '5b3ce3597851110001cf6248a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6'; // Public demo key
@@ -311,17 +311,18 @@ function renderSummary() {
  */
 function updateTotals() {
   const cart = checkoutData.items;
-  const deliveryMethod = document.querySelector('input[name="delivery_method"]:checked')?.value || 'DELIVERY';
+  const deliveryMethod = document.querySelector('input[name="delivery_method"]:checked')?.value || 'PICKUP';
   
   let subtotal = 0;
   cart.forEach(item => {
     subtotal += item.line_total || (item.unit_price * item.quantity);
   });
 
-  // Delivery cost (simplified - would come from API based on postal code)
+  // Use calculated delivery cost from route calculation, or 0 for pickup
   let deliveryCost = 0;
   if (deliveryMethod === 'DELIVERY') {
-    deliveryCost = 25; // Default, would be calculated based on zone
+    // Use the calculated delivery cost from checkDeliveryZone, default to 0 if not yet calculated
+    deliveryCost = checkoutData.deliveryCost || 0;
   }
 
   // Damage Compensation (NOT paid upfront - only shown for reference)
@@ -331,13 +332,25 @@ function updateTotals() {
   const total = subtotal + deliveryCost;
 
   document.getElementById('checkout-subtotal').textContent = formatPrice(subtotal);
-  document.getElementById('checkout-delivery').textContent = deliveryMethod === 'PICKUP' ? 'Gratis' : formatPrice(deliveryCost);
+  
+  // Show delivery cost or appropriate message
+  const deliveryEl = document.getElementById('checkout-delivery');
+  if (deliveryMethod === 'PICKUP') {
+    deliveryEl.textContent = 'Gratis (afhalen)';
+    deliveryEl.style.color = '';
+  } else if (deliveryCost === 0) {
+    deliveryEl.textContent = 'GRATIS';
+    deliveryEl.style.color = 'var(--color-success)';
+  } else {
+    deliveryEl.textContent = formatPrice(deliveryCost);
+    deliveryEl.style.color = '';
+  }
+  
   document.getElementById('checkout-deposit').textContent = formatPrice(compensation);
   document.getElementById('checkout-total').textContent = formatPrice(total);
 
-  // Store for order placement
+  // Store for order placement (don't overwrite deliveryCost if already set by route calculation)
   checkoutData.subtotal = subtotal;
-  checkoutData.deliveryCost = deliveryCost;
   checkoutData.damageCompensation = compensation;
   checkoutData.total = total;
 }
