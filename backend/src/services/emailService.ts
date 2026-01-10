@@ -391,7 +391,7 @@ export const EmailService = {
             <p><strong>Retourdatum:</strong> ${this.formatDate(order.rental_end_date)}</p>
             
             <p>Zorg ervoor dat alle items klaarstaan voor ophaling. Je hoeft niets af te wassen!</p>
-            <p>Na controle van het materiaal wordt je borg teruggestort.</p>
+            <p>Na controle van het materiaal ontvang je bericht. Alleen bij schade wordt een vergoeding in rekening gebracht.</p>
           </div>
           <div class="footer">
             <p>Tafel Totaal - Van bord tot glas, zonder afwas!</p>
