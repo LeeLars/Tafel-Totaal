@@ -635,20 +635,21 @@ async function checkDeliveryZone() {
     const routeCoordinates = route.geometry.coordinates.map(c => [c[1], c[0]]); // Swap to [lat, lng]
     
     // Calculate delivery cost
+    // FREE if ≤15km, FULL distance cost if >15km (not just excess)
     let deliveryCost = 0;
     let deliveryMessage = '';
     
     if (distanceKm <= FREE_DELIVERY_RADIUS_KM) {
       deliveryCost = 0;
-      deliveryMessage = `✓ GRATIS levering naar ${city || destName} (${distanceKm}km)`;
+      deliveryMessage = `✓ GRATIS levering naar ${city || destName} (${distanceKm}km - binnen gratis zone)`;
       
       if (deliveryPriceEl) {
         deliveryPriceEl.textContent = 'GRATIS';
         deliveryPriceEl.style.color = 'var(--color-success)';
       }
     } else {
-      const chargeableKm = distanceKm - FREE_DELIVERY_RADIUS_KM;
-      deliveryCost = Math.round(chargeableKm * PRICE_PER_KM * 2 * 100) / 100;
+      // Pay for FULL distance (round trip), not just the excess over 15km
+      deliveryCost = Math.round(distanceKm * PRICE_PER_KM * 2 * 100) / 100;
       deliveryCost = Math.max(deliveryCost, 5);
       
       deliveryMessage = `✓ Bezorging naar ${city || destName} (${distanceKm}km) - ${formatPrice(deliveryCost)}`;
@@ -669,7 +670,7 @@ async function checkDeliveryZone() {
       breakdown.style.display = 'block';
       breakdown.style.marginTop = '4px';
       breakdown.style.opacity = '0.8';
-      breakdown.textContent = `Berekening: (${distanceKm}km - ${FREE_DELIVERY_RADIUS_KM}km gratis) × €0,50 × 2 (heen+terug)`;
+      breakdown.textContent = `Berekening: ${distanceKm}km × €0,50 × 2 (heen+terug) = ${formatPrice(deliveryCost)}`;
       textEl.appendChild(breakdown);
     }
     
@@ -741,14 +742,14 @@ async function fallbackToPostalCodeDistance(postalCode, zoneInfo, deliveryPriceE
   
   if (distance <= FREE_DELIVERY_RADIUS_KM) {
     deliveryCost = 0;
-    deliveryMessage = `✓ GRATIS levering naar ${location.name} (~${distance}km)`;
+    deliveryMessage = `✓ GRATIS levering naar ${location.name} (~${distance}km - binnen gratis zone)`;
     if (deliveryPriceEl) {
       deliveryPriceEl.textContent = 'GRATIS';
       deliveryPriceEl.style.color = 'var(--color-success)';
     }
   } else {
-    const chargeableKm = distance - FREE_DELIVERY_RADIUS_KM;
-    deliveryCost = Math.round(chargeableKm * PRICE_PER_KM * 2 * 100) / 100;
+    // Pay for FULL distance (round trip), not just the excess over 15km
+    deliveryCost = Math.round(distance * PRICE_PER_KM * 2 * 100) / 100;
     deliveryCost = Math.max(deliveryCost, 5);
     deliveryMessage = `✓ Bezorging naar ${location.name} (~${distance}km) - ${formatPrice(deliveryCost)} (geschat)`;
     if (deliveryPriceEl) {
