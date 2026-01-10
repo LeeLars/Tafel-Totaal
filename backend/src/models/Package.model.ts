@@ -145,7 +145,7 @@ export const PackageModel = {
     forfait_days?: number;
     min_persons?: number;
     max_persons?: number;
-    deposit_percentage?: number;
+    damage_compensation_percentage?: number;
     images?: string[];
     is_featured?: boolean;
     is_active?: boolean;
@@ -155,7 +155,7 @@ export const PackageModel = {
       `INSERT INTO packages (
         name, slug, description, short_description, service_level, pricing_type,
         base_price, price_per_extra_day, forfait_days, min_persons, max_persons,
-        deposit_percentage, images, is_featured, is_active, sort_order
+        damage_compensation_percentage, images, is_featured, is_active, sort_order
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
       RETURNING *`,
       [
@@ -170,7 +170,7 @@ export const PackageModel = {
         data.forfait_days || 3,
         data.min_persons || 1,
         data.max_persons || 100,
-        data.deposit_percentage || 20,
+        data.damage_compensation_percentage || 20,
         JSON.stringify(data.images || []),
         data.is_featured || false,
         data.is_active !== false,
@@ -194,7 +194,7 @@ export const PackageModel = {
     forfait_days: number;
     min_persons: number;
     max_persons: number;
-    deposit_percentage: number;
+    damage_compensation_percentage: number;
     images: string[];
     is_featured: boolean;
     is_active: boolean;

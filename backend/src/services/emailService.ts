@@ -151,33 +151,32 @@ export const EmailService = {
   },
 
   /**
-   * Send deposit refund confirmation
+   * Send damage compensation invoice (only if damage occurred)
    */
-  async sendDepositRefundConfirmation(
+  async sendDamageCompensationInvoice(
     order: Order,
     customer: Customer,
-    refundAmount: number,
-    damageCost: number = 0
+    damageCost: number
   ): Promise<EmailResult> {
     if (!isEmailEnabled()) {
-      console.log('📧 Email disabled - skipping deposit refund confirmation');
+      console.log('📧 Email disabled - skipping damage compensation invoice');
       return { success: true, messageId: 'email-disabled' };
     }
     try {
       const { data, error } = await resend!.emails.send({
         from: env.EMAIL_FROM,
         to: customer.email,
-        subject: `Borg terugbetaling - ${order.order_number}`,
-        html: this.generateDepositRefundHtml(order, customer, refundAmount, damageCost)
+        subject: `Schadevergoeding factuur - ${order.order_number}`,
+        html: this.generateDamageCompensationHtml(order, customer, damageCost)
       });
 
       if (error) {
-        return { success: false, error: error.message };
+        throw error;
       }
 
       return { success: true, messageId: data?.id };
     } catch (error) {
-      console.error('Failed to send deposit refund confirmation:', error);
+      console.error('Failed to send damage compensation invoice:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Email sending failed'
@@ -258,7 +257,7 @@ export const EmailService = {
               <hr>
               <p><strong>Subtotaal:</strong> ${PricingService.formatPrice(order.subtotal)}</p>
               <p><strong>Bezorgkosten:</strong> ${PricingService.formatPrice(order.delivery_fee)}</p>
-              <p><strong>Borg:</strong> ${PricingService.formatPrice(order.deposit_total)}</p>
+              <p><strong>Schadevergoeding (referentie):</strong> ${PricingService.formatPrice(order.damage_compensation_total)}</p>
               <p class="total">Totaal: ${PricingService.formatPrice(order.total)}</p>
             </div>
             
@@ -403,10 +402,9 @@ export const EmailService = {
     `;
   },
 
-  generateDepositRefundHtml(
+  generateDamageCompensationHtml(
     order: Order,
     customer: Customer,
-    refundAmount: number,
     damageCost: number
   ): string {
     return `
@@ -427,20 +425,20 @@ export const EmailService = {
         <div class="container">
           <div class="header">
             <h1>Tafel Totaal</h1>
-            <p>Borg terugbetaling</p>
+            <p>Schadevergoeding Factuur</p>
           </div>
           <div class="content">
             <p>Beste ${customer.first_name},</p>
             
-            <p>Bedankt voor het huren bij Tafel Totaal! Het materiaal is in goede staat retour ontvangen.</p>
+            <p>Bedankt voor het huren bij Tafel Totaal!</p>
             
             <div class="refund">
-              <p><strong>Borg:</strong> ${PricingService.formatPrice(order.deposit_total)}</p>
-              ${damageCost > 0 ? `<p><strong>Schadekosten:</strong> -${PricingService.formatPrice(damageCost)}</p>` : ''}
-              <p><strong>Terugbetaling:</strong> ${PricingService.formatPrice(refundAmount)}</p>
+              <p>Helaas hebben we schade geconstateerd aan het geretourneerde materiaal voor bestelling <strong>${order.order_number}</strong>.</p>
+              <p><strong>Schadekosten:</strong> ${PricingService.formatPrice(damageCost)}</p>
+              <p>Deze kosten worden gefactureerd conform onze schadevergoedingsregeling.</p>
             </div>
             
-            <p>Het bedrag wordt binnen 5-7 werkdagen teruggestort op je rekening.</p>
+            <p>Het bedrag wordt binnen 5-7 werkdagen gefactureerd.</p>
             
             <p>We hopen je snel weer te mogen verwelkomen!</p>
           </div>

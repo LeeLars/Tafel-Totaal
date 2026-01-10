@@ -31,7 +31,7 @@ INSERT INTO subcategories (category_id, name, slug, sort_order) VALUES
 ((SELECT id FROM categories WHERE slug = 'glazen'), 'Champagneglazen', 'champagneglazen', 3);
 
 -- Products - Standaard
-INSERT INTO products (sku, name, slug, description, category_id, subcategory_id, service_level, price_per_day, deposit_per_item, stock_total, stock_buffer, images) VALUES
+INSERT INTO products (sku, name, slug, description, category_id, subcategory_id, service_level, price_per_day, damage_compensation_per_item, stock_total, stock_buffer, images) VALUES
 ('BD-STD-001', 'Dinerbord Wit', 'dinerbord-wit', 'Klassiek wit dinerbord, 27cm diameter', 
   (SELECT id FROM categories WHERE slug = 'borden'),
   (SELECT id FROM subcategories WHERE slug = 'dinerborden'),
@@ -78,7 +78,7 @@ INSERT INTO products (sku, name, slug, description, category_id, subcategory_id,
   'STANDAARD', 0.25, 2.50, 500, 25, '["https://res.cloudinary.com/tafeltotaal/products/waterglas.jpg"]');
 
 -- Products - Luxe
-INSERT INTO products (sku, name, slug, description, category_id, subcategory_id, service_level, price_per_day, deposit_per_item, stock_total, stock_buffer, images) VALUES
+INSERT INTO products (sku, name, slug, description, category_id, subcategory_id, service_level, price_per_day, damage_compensation_per_item, stock_total, stock_buffer, images) VALUES
 ('BD-LUX-001', 'Dinerbord Design Goud', 'dinerbord-design-goud', 'Premium dinerbord met gouden rand, 27cm diameter',
   (SELECT id FROM categories WHERE slug = 'borden'),
   (SELECT id FROM subcategories WHERE slug = 'dinerborden'),
@@ -105,7 +105,7 @@ INSERT INTO products (sku, name, slug, description, category_id, subcategory_id,
   'LUXE', 0.60, 6.00, 250, 15, '["https://res.cloudinary.com/tafeltotaal/products/champagneflute-kristal.jpg"]');
 
 -- Packages
-INSERT INTO packages (name, slug, description, short_description, service_level, pricing_type, base_price, price_per_extra_day, forfait_days, min_persons, max_persons, deposit_percentage, is_featured, sort_order, images) VALUES
+INSERT INTO packages (name, slug, description, short_description, service_level, pricing_type, base_price, price_per_extra_day, forfait_days, min_persons, max_persons, damage_compensation_percentage, is_featured, sort_order, images) VALUES
 ('Diner Basis', 'diner-basis', 
   'Het perfecte startpakket voor een stijlvol diner. Bevat alles wat je nodig hebt voor een hoofdgerecht: dinerborden, bestek en wijnglazen.',
   'Alles voor een stijlvol hoofdgerecht',
@@ -170,10 +170,10 @@ INSERT INTO cities (name, slug, province, delivery_fee, postal_codes) VALUES
 ('Aalst', 'aalst', 'Oost-Vlaanderen', 25, '["9300", "9310", "9320"]'),
 ('Sint-Niklaas', 'sint-niklaas', 'Oost-Vlaanderen', 25, '["9100", "9110", "9120"]');
 
--- Deposit Rules
-INSERT INTO deposit_rules (name, description, min_order_value, max_order_value, deposit_type, deposit_value, max_deposit, priority) VALUES
-('Standaard Borg', 'Standaard borgpercentage voor alle bestellingen', 0, 500, 'percentage', 20, 100, 1),
-('Grote Bestelling', 'Verlaagd borgpercentage voor grote bestellingen', 500, NULL, 'percentage', 15, 200, 2);
+-- Damage Compensation Rules
+INSERT INTO damage_compensation_rules (name, description, min_order_value, max_order_value, compensation_type, compensation_value, max_compensation, priority) VALUES
+('Standaard Schadevergoeding', 'Standaard schadevergoeding percentage voor alle bestellingen', 0, 500, 'percentage', 20, 100, 1),
+('Grote Bestelling', 'Verlaagd schadevergoeding percentage voor grote bestellingen', 500, NULL, 'percentage', 15, 200, 2);
 
 -- Test Customer (password: Test1234!)
 INSERT INTO customers (email, password_hash, first_name, last_name, phone, company_name) VALUES

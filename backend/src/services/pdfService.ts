@@ -313,8 +313,8 @@ export const PDFService = {
 
         yPosition += 20;
         doc
-          .text('Waarborg:', totalsX, yPosition)
-          .text(this.formatCurrency(Number(order.deposit_total)), totalX, yPosition);
+          .text('Schadevergoeding:', totalsX, yPosition)
+          .text(this.formatCurrency(Number(order.damage_compensation_total)), totalX, yPosition);
 
         yPosition += 25;
         doc.moveTo(totalsX, yPosition - 5).lineTo(550, yPosition - 5).stroke();
@@ -350,7 +350,7 @@ export const PDFService = {
             .fontSize(8)
             .font('Helvetica')
             .text(
-              'Algemene voorwaarden van toepassing. Waarborg wordt terugbetaald na controle van het materiaal.',
+              'Algemene voorwaarden van toepassing. Schadevergoeding wordt alleen in rekening gebracht bij daadwerkelijke schade.',
               50,
               750,
               { align: 'center', width: 500 }

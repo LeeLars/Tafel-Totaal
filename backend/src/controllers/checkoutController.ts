@@ -133,7 +133,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       customer_id: customerId,
       subtotal: breakdown.subtotal,
       delivery_fee: breakdown.deliveryFee,
-      deposit_total: breakdown.depositTotal,
+      damage_compensation_total: breakdown.damageCompensationTotal,
       total: breakdown.total,
       delivery_method: deliveryMethod,
       delivery_address_id: deliveryAddressId,
@@ -150,7 +150,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
         quantity: item.quantity,
         persons: item.persons,
         unit_price: item.unitPrice,
-        deposit_amount: item.depositAmount,
+        damage_compensation_amount: item.damageCompensationAmount,
         line_total: item.lineTotal
       });
     }
@@ -164,7 +164,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
         ...order,
         subtotal: Number((order as any).subtotal),
         delivery_fee: Number((order as any).delivery_fee),
-        deposit_total: Number((order as any).deposit_total),
+        damage_compensation_total: Number((order as any).damage_compensation_total),
         total: Number((order as any).total)
       },
       description: `Tafel Totaal - ${order.order_number}`,

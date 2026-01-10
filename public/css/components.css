@@ -451,8 +451,147 @@ select.form-input {
 }
 
 /* ============================================
-   MODAL
+   ARCHITECTURAL CARD (Package/Product)
    ============================================ */
+
+.package-card {
+  background-color: var(--color-white);
+  /* Borders on right and bottom to create grid */
+  border-right: var(--border-width) solid var(--border-color);
+  border-bottom: var(--border-width) solid var(--border-color);
+  border-top: none;
+  border-left: none;
+  border-radius: 0; /* Strict */
+  overflow: hidden;
+  transition: z-index 0s, transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.package-card:hover {
+  z-index: 10; /* Bring to front */
+  transform: scale(1.02);
+  box-shadow: var(--shadow-xl);
+  border-color: transparent; /* Hide borders to avoid glitch during scale */
+}
+
+.package-card__image {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.package-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out-quart);
+}
+
+.package-card:hover .package-card__image img {
+  transform: scale(1.1);
+}
+
+.package-card__badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  padding: var(--space-xs) var(--space-md);
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+.package-card__content {
+  padding: var(--space-lg);
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  flex: 1;
+}
+
+.package-card__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  margin: 0;
+  color: var(--color-black);
+  line-height: var(--line-height-tight);
+}
+
+.package-card__description {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray);
+  margin-bottom: var(--space-md);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.package-card__meta {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: auto;
+  padding-bottom: var(--space-md);
+  font-size: var(--font-size-xs);
+  color: var(--color-gray);
+  font-weight: 500;
+}
+
+.package-card__meta span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.package-card__meta svg {
+  width: 16px;
+  height: 16px;
+}
+
+.package-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-light-gray);
+}
+
+.package-card__price {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  color: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.package-card__price span {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-gray);
+  margin-top: 4px;
+}
+
+.package-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
 
 .modal-backdrop {
   position: fixed;

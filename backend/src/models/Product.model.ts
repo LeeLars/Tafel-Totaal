@@ -141,7 +141,7 @@ export const ProductModel = {
     subcategory_id?: string;
     service_level?: ServiceLevel;
     price_per_day: number;
-    deposit_per_item?: number;
+    damage_compensation_per_item?: number;
     stock_total: number;
     stock_buffer?: number;
     turnaround_days?: number;
@@ -151,7 +151,7 @@ export const ProductModel = {
     const result = await queryOne<Product>(
       `INSERT INTO products (
         sku, name, slug, description, category_id, subcategory_id, 
-        service_level, price_per_day, deposit_per_item, stock_total, 
+        service_level, price_per_day, damage_compensation_per_item, stock_total, 
         stock_buffer, turnaround_days, images, is_active
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
       RETURNING *`,
@@ -164,7 +164,7 @@ export const ProductModel = {
         data.subcategory_id || null,
         data.service_level || 'STANDAARD',
         data.price_per_day,
-        data.deposit_per_item || 0,
+        data.damage_compensation_per_item || 0,
         data.stock_total,
         data.stock_buffer || 5,
         data.turnaround_days || 1,
@@ -185,7 +185,7 @@ export const ProductModel = {
     subcategory_id: string;
     service_level: ServiceLevel;
     price_per_day: number;
-    deposit_per_item: number;
+    damage_compensation_per_item: number;
     stock_total: number;
     stock_buffer: number;
     turnaround_days: number;

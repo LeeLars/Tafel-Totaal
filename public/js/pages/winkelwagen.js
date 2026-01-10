@@ -169,22 +169,24 @@ function getItemImageUrl(item) {
  */
 function updateSummary(cart) {
   let subtotal = 0;
-  let deposit = 0;
+  let compensation = 0;
 
   cart.forEach(item => {
     subtotal += item.line_total || (item.unit_price * item.quantity);
-    deposit += item.deposit || 0;
+    compensation += item.damage_compensation || 0;
   });
 
-  // Estimate deposit if not provided (30% of subtotal)
-  if (deposit === 0) {
-    deposit = Math.round(subtotal * 0.3 * 100) / 100;
+  // Estimate compensation if not provided (30% of subtotal)
+  // NOTE: This is NOT paid upfront, only shown for reference
+  if (compensation === 0) {
+    compensation = Math.round(subtotal * 0.3 * 100) / 100;
   }
 
-  const total = subtotal + deposit;
+  // Total does NOT include compensation as it's not paid upfront
+  const total = subtotal;
 
   document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
-  document.getElementById('summary-deposit').textContent = formatPrice(deposit);
+  document.getElementById('summary-deposit').textContent = formatPrice(compensation);
   document.getElementById('summary-total').textContent = formatPrice(total);
 }
 

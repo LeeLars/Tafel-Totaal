@@ -11,7 +11,7 @@ interface CSVRow {
   subcategory?: string;
   service_level?: string;
   price_per_day: string;
-  deposit_per_item?: string;
+  damage_compensation_per_item?: string;
   stock_total: string;
   stock_buffer?: string;
   turnaround_days?: string;
@@ -122,7 +122,7 @@ export async function parseProductsCSV(req: Request, res: Response): Promise<voi
         subcategory_id: subcategoryId,
         service_level: (row.service_level?.toUpperCase() === 'LUXE' ? 'LUXE' : 'STANDAARD') as 'STANDAARD' | 'LUXE',
         price_per_day: parseFloat(row.price_per_day),
-        deposit_per_item: row.deposit_per_item ? parseFloat(row.deposit_per_item) : 0,
+        damage_compensation_per_item: row.damage_compensation_per_item ? parseFloat(row.damage_compensation_per_item) : 0,
         stock_total: parseInt(row.stock_total),
         stock_buffer: row.stock_buffer ? parseInt(row.stock_buffer) : 5,
         turnaround_days: row.turnaround_days ? parseInt(row.turnaround_days) : 1,
@@ -288,7 +288,7 @@ export async function exportProductsCSV(req: Request, res: Response): Promise<vo
     // CSV header
     const headers = [
       'sku', 'name', 'description', 'category', 'subcategory', 'service_level',
-      'price_per_day', 'deposit_per_item', 'stock_total', 'stock_buffer', 'turnaround_days',
+      'price_per_day', 'damage_compensation_per_item', 'stock_total', 'stock_buffer', 'turnaround_days',
       'length_cm', 'width_cm', 'height_cm', 'weight_kg', 'color', 'material',
       'units_per_pack', 'pack_type', 'supplier', 'supplier_sku', 'notes', 'is_active'
     ];
@@ -302,7 +302,7 @@ export async function exportProductsCSV(req: Request, res: Response): Promise<vo
       p.subcategory_name || '',
       p.service_level,
       p.price_per_day,
-      p.deposit_per_item,
+      p.damage_compensation_per_item,
       p.stock_total,
       p.stock_buffer,
       p.turnaround_days,

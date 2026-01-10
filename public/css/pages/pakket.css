@@ -295,6 +295,38 @@
   -moz-appearance: textfield;
 }
 
+/* Quantity Presets */
+.quantity-presets {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.preset-btn {
+  flex: 1;
+  padding: 6px 12px;
+  font-size: var(--font-size-xs);
+  font-family: var(--font-mono);
+  background-color: var(--color-off-white);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.preset-btn:hover:not(:disabled) {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.preset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--color-concrete);
+  color: var(--color-gray);
+  text-decoration: line-through;
+}
+
 /* Date Selection */
 .package-detail__dates {
   display: grid;
@@ -437,6 +469,67 @@
   font-weight: 600;
   color: var(--color-black);
   margin-bottom: var(--space-sm);
+}
+
+/* ============================================
+   EVENT TYPE SELECTOR
+   ============================================ */
+
+.event-type-toggle {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.type-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  border: 1px solid var(--border-color);
+  background-color: var(--color-white);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-align: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.type-btn:hover {
+  background-color: var(--color-off-white);
+  border-color: var(--color-black);
+}
+
+.type-btn.active {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-color: var(--color-black);
+}
+
+.type-btn__sub {
+  font-size: 0.7rem;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.configurator__single-date .form-group {
+  margin-bottom: 0;
+}
+
+.date-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray);
+  margin-top: var(--space-xs);
+  font-style: italic;
+}
+
+/* Quote Button visibility */
+.btn.hidden {
+  display: none !important;
 }
 
 .configurator__dates {

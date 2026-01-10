@@ -105,20 +105,21 @@ function updateTotals() {
     deliveryCost = 25; // Default, would be calculated based on zone
   }
 
-  // Deposit (30% of subtotal)
-  const deposit = Math.round(subtotal * 0.3 * 100) / 100;
+  // Damage Compensation (NOT paid upfront - only shown for reference)
+  const compensation = Math.round(subtotal * 0.3 * 100) / 100;
 
-  const total = subtotal + deliveryCost + deposit;
+  // Total does NOT include compensation as it's not paid upfront
+  const total = subtotal + deliveryCost;
 
   document.getElementById('checkout-subtotal').textContent = formatPrice(subtotal);
   document.getElementById('checkout-delivery').textContent = deliveryMethod === 'PICKUP' ? 'Gratis' : formatPrice(deliveryCost);
-  document.getElementById('checkout-deposit').textContent = formatPrice(deposit);
+  document.getElementById('checkout-deposit').textContent = formatPrice(compensation);
   document.getElementById('checkout-total').textContent = formatPrice(total);
 
   // Store for order placement
   checkoutData.subtotal = subtotal;
   checkoutData.deliveryCost = deliveryCost;
-  checkoutData.deposit = deposit;
+  checkoutData.damageCompensation = compensation;
   checkoutData.total = total;
 }
 

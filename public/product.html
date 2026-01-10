@@ -88,6 +88,21 @@
               <div class="configurator">
                 <h2 class="configurator__title">Product huren</h2>
 
+                <!-- Event Type Selector -->
+                <div class="configurator__section">
+                  <label class="configurator__label">Type evenement</label>
+                  <div class="event-type-toggle">
+                    <button type="button" class="type-btn active" data-type="single">
+                      Eendaags
+                      <span class="type-btn__sub">Gebuik: 1 dag</span>
+                    </button>
+                    <button type="button" class="type-btn" data-type="multi">
+                      Meerdaags
+                      <span class="type-btn__sub">Gebruik: > 1 dag</span>
+                    </button>
+                  </div>
+                </div>
+
                 <!-- Specifications -->
                 <div class="configurator__section">
                   <label class="configurator__label">Specificaties</label>
@@ -104,14 +119,25 @@
                 <!-- Date Selection -->
                 <div class="configurator__section">
                   <label class="configurator__label">Verhuurperiode</label>
-                  <div class="configurator__dates">
+                  
+                  <!-- Single Date Picker -->
+                  <div class="configurator__single-date" id="single-date-container">
+                    <div class="form-group">
+                      <label for="event-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Datum evenement</label>
+                      <input type="date" id="event-date" class="form-input">
+                      <p class="date-hint">Wij rekenen 1 dag voor en na voor ophalen/bezorgen (totaal 3 dagen huur)</p>
+                    </div>
+                  </div>
+
+                  <!-- Range Date Picker -->
+                  <div class="configurator__dates hidden" id="range-date-container">
                     <div class="form-group">
                       <label for="start-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Startdatum</label>
-                      <input type="date" id="start-date" class="form-input" required>
+                      <input type="date" id="start-date" class="form-input">
                     </div>
                     <div class="form-group">
                       <label for="end-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Einddatum</label>
-                      <input type="date" id="end-date" class="form-input" required>
+                      <input type="date" id="end-date" class="form-input">
                     </div>
                   </div>
                   <div class="package-detail__days hidden" id="days-display" style="margin-top: 8px; font-size: 0.9rem; color: var(--color-primary); font-weight: 500;">
@@ -127,6 +153,13 @@
                     <input type="number" id="quantity" value="1" min="1" max="100" style="flex: 1;">
                     <button type="button" class="quantity-btn" id="qty-plus" style="flex: 1;">+</button>
                   </div>
+                  
+                  <!-- Quantity Presets -->
+                  <div class="quantity-presets">
+                    <button type="button" class="preset-btn" data-value="25">25 stuks</button>
+                    <button type="button" class="preset-btn" data-value="75">75 stuks</button>
+                    <button type="button" class="preset-btn" data-value="125">125 stuks</button>
+                  </div>
                 </div>
 
                 <!-- Price Summary -->
@@ -136,7 +169,7 @@
                     <span id="product-price">€0,00</span>
                   </div>
                   <div class="price-summary__row price-summary__row--deposit">
-                    <span>Borg per stuk (terugbetaalbaar)</span>
+                    <span>Schadevergoeding per stuk</span>
                     <span id="product-deposit">€0,00</span>
                   </div>
                   <div class="price-summary__total">
@@ -154,6 +187,11 @@
                   </svg>
                   Toevoegen aan winkelwagen
                 </button>
+                
+                <!-- Quote Button (Hidden by default) -->
+                <a href="/Tafel-Totaal/contact.html?subject=Offerte%20aanvraag" class="btn btn--dark btn--lg btn--full hidden" id="quote-btn">
+                  Offerte aanvragen
+                </a>
               </div>
             </div>
           </div>

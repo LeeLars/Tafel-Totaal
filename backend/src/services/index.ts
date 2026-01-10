@@ -1,6 +1,6 @@
 export { AvailabilityService } from './availabilityService';
 export { PricingService } from './pricingService';
-export { DepositService } from './depositService';
+export { DamageCompensationService } from './damageCompensationService';
 export { MollieService } from './mollieService';
 export { EmailService } from './emailService';
 export { CloudinaryService } from './cloudinaryService';

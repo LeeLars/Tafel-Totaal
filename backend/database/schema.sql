@@ -90,7 +90,7 @@ CREATE TABLE products (
   subcategory_id UUID REFERENCES subcategories(id),
   service_level service_level NOT NULL DEFAULT 'STANDAARD',
   price_per_day DECIMAL(10,2) NOT NULL DEFAULT 0,
-  deposit_per_item DECIMAL(10,2) NOT NULL DEFAULT 0,
+  damage_compensation_per_item DECIMAL(10,2) NOT NULL DEFAULT 0,
   stock_total INTEGER NOT NULL DEFAULT 0,
   stock_buffer INTEGER NOT NULL DEFAULT 5,
   turnaround_days INTEGER NOT NULL DEFAULT 1,
@@ -123,7 +123,7 @@ CREATE TABLE packages (
   forfait_days INTEGER DEFAULT 3,
   min_persons INTEGER NOT NULL DEFAULT 1,
   max_persons INTEGER NOT NULL DEFAULT 100,
-  deposit_percentage DECIMAL(5,2) DEFAULT 20,
+  damage_compensation_percentage DECIMAL(5,2) DEFAULT 20,
   images JSONB DEFAULT '[]'::jsonb,
   is_featured BOOLEAN DEFAULT false,
   is_active BOOLEAN DEFAULT true,
@@ -220,7 +220,7 @@ CREATE TABLE orders (
   status order_status NOT NULL DEFAULT 'pending_payment',
   subtotal DECIMAL(10,2) NOT NULL DEFAULT 0,
   delivery_fee DECIMAL(10,2) NOT NULL DEFAULT 0,
-  deposit_total DECIMAL(10,2) NOT NULL DEFAULT 0,
+  damage_compensation_total DECIMAL(10,2) NOT NULL DEFAULT 0,
   total DECIMAL(10,2) NOT NULL DEFAULT 0,
   delivery_method delivery_method NOT NULL DEFAULT 'DELIVERY',
   delivery_address_id UUID REFERENCES customer_addresses(id),
@@ -255,7 +255,7 @@ CREATE TABLE order_items (
   quantity INTEGER NOT NULL DEFAULT 1,
   persons INTEGER,
   unit_price DECIMAL(10,2) NOT NULL,
-  deposit_amount DECIMAL(10,2) NOT NULL DEFAULT 0,
+  damage_compensation_amount DECIMAL(10,2) NOT NULL DEFAULT 0,
   line_total DECIMAL(10,2) NOT NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
@@ -306,18 +306,18 @@ CREATE INDEX idx_sessions_customer ON sessions(customer_id);
 CREATE INDEX idx_sessions_expires ON sessions(expires_at);
 
 -- ============================================
--- DEPOSIT RULES
+-- DAMAGE COMPENSATION RULES
 -- ============================================
 
-CREATE TABLE deposit_rules (
+CREATE TABLE damage_compensation_rules (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(100) NOT NULL,
   description TEXT,
   min_order_value DECIMAL(10,2) DEFAULT 0,
   max_order_value DECIMAL(10,2),
-  deposit_type VARCHAR(20) NOT NULL CHECK (deposit_type IN ('percentage', 'fixed')),
-  deposit_value DECIMAL(10,2) NOT NULL,
-  max_deposit DECIMAL(10,2),
+  compensation_type VARCHAR(20) NOT NULL CHECK (compensation_type IN ('percentage', 'fixed')),
+  compensation_value DECIMAL(10,2) NOT NULL,
+  max_compensation DECIMAL(10,2),
   is_active BOOLEAN DEFAULT true,
   priority INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT NOW()
@@ -352,7 +352,7 @@ CREATE TABLE damage_reports (
   photos JSONB DEFAULT '[]'::jsonb,
   cost_per_item DECIMAL(10,2) NOT NULL,
   total_cost DECIMAL(10,2) NOT NULL,
-  deducted_from_deposit BOOLEAN DEFAULT true,
+  deducted_from_compensation BOOLEAN DEFAULT true,
   reported_by UUID REFERENCES users(id),
   created_at TIMESTAMP DEFAULT NOW()
 );

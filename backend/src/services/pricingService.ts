@@ -6,7 +6,7 @@ import { CartItem } from '../types';
 export interface PriceBreakdown {
   subtotal: number;
   deliveryFee: number;
-  depositTotal: number;
+  damageCompensationTotal: number;
   total: number;
   items: PriceBreakdownItem[];
 }
@@ -20,7 +20,7 @@ export interface PriceBreakdownItem {
   days: number;
   unitPrice: number;
   lineTotal: number;
-  depositAmount: number;
+  damageCompensationAmount: number;
 }
 
 // Delivery fee configuration
@@ -51,13 +51,13 @@ export const PricingService = {
     startDate: Date,
     endDate: Date,
     selectedAddons: string[] = []
-  ): Promise<{ unitPrice: number; lineTotal: number; depositAmount: number } | null> {
+  ): Promise<{ unitPrice: number; lineTotal: number; damageCompensationAmount: number } | null> {
     const pkg = await PackageModel.findById(packageId, true);
     if (!pkg) return null;
 
     const days = this.calculateDays(startDate, endDate);
     let unitPrice = 0;
-    let depositAmount = 0;
+    let damageCompensationAmount = 0;
 
     if (pkg.pricing_type === 'FORFAIT') {
       // Forfait pricing: base price for forfait_days, then extra per day
@@ -87,13 +87,13 @@ export const PricingService = {
       }
     }
 
-    // Calculate deposit (after addons)
-    depositAmount = (lineTotal * pkg.deposit_percentage) / 100;
+    // Calculate damage compensation (after addons)
+    damageCompensationAmount = (lineTotal * pkg.damage_compensation_percentage) / 100;
 
     return {
       unitPrice,
       lineTotal,
-      depositAmount
+      damageCompensationAmount
     };
   },
 
@@ -105,7 +105,7 @@ export const PricingService = {
     quantity: number,
     startDate: Date,
     endDate: Date
-  ): Promise<{ unitPrice: number; lineTotal: number; depositAmount: number } | null> {
+  ): Promise<{ unitPrice: number; lineTotal: number; damageCompensationAmount: number } | null> {
     const product = await ProductModel.findById(productId);
     if (!product) return null;
 
@@ -113,12 +113,12 @@ export const PricingService = {
     
     const unitPrice = product.price_per_day * days;
     const lineTotal = unitPrice * quantity;
-    const depositAmount = product.deposit_per_item * quantity;
+    const damageCompensationAmount = product.damage_compensation_per_item * quantity;
 
     return {
       unitPrice,
       lineTotal,
-      depositAmount
+      damageCompensationAmount
     };
   },
 
@@ -132,7 +132,7 @@ export const PricingService = {
   ): Promise<PriceBreakdown> {
     const items: PriceBreakdownItem[] = [];
     let subtotal = 0;
-    let depositTotal = 0;
+    let damageCompensationTotal = 0;
 
     for (const cartItem of cartItems) {
       const startDate = new Date(cartItem.startDate);
@@ -160,11 +160,11 @@ export const PricingService = {
             days,
             unitPrice: pricing.unitPrice,
             lineTotal: pricing.lineTotal * cartItem.quantity,
-            depositAmount: pricing.depositAmount * cartItem.quantity
+            damageCompensationAmount: pricing.damageCompensationAmount * cartItem.quantity
           });
 
           subtotal += pricing.lineTotal * cartItem.quantity;
-          depositTotal += pricing.depositAmount * cartItem.quantity;
+          damageCompensationTotal += pricing.damageCompensationAmount * cartItem.quantity;
         }
       } else {
         const pricing = await this.calculateProductPrice(
@@ -185,11 +185,11 @@ export const PricingService = {
             days,
             unitPrice: pricing.unitPrice,
             lineTotal: pricing.lineTotal,
-            depositAmount: pricing.depositAmount
+            damageCompensationAmount: pricing.damageCompensationAmount
           });
 
           subtotal += pricing.lineTotal;
-          depositTotal += pricing.depositAmount;
+          damageCompensationTotal += pricing.damageCompensationAmount;
         }
       }
     }
@@ -204,12 +204,13 @@ export const PricingService = {
       }
     }
 
-    const total = subtotal + deliveryFee + depositTotal;
+    // NOTE: Damage compensation is NOT included in total as it's not paid upfront
+    const total = subtotal + deliveryFee;
 
     return {
       subtotal,
       deliveryFee,
-      depositTotal,
+      damageCompensationTotal,
       total,
       items
     };
@@ -246,12 +247,11 @@ export const PricingService = {
   },
 
   /**
-   * Calculate refund amount for deposit return
+   * Calculate damage compensation charge (only if damage occurred)
    */
-  calculateDepositRefund(
-    depositTotal: number,
-    damageCost: number = 0
+  calculateDamageCharge(
+    damageCost: number
   ): number {
-    return Math.max(0, depositTotal - damageCost);
+    return damageCost;
   }
 };

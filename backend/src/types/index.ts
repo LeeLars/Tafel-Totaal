@@ -53,7 +53,7 @@ export interface Product {
   subcategory_id: string | null;
   service_level: ServiceLevel;
   price_per_day: number;
-  deposit_per_item: number;
+  damage_compensation_per_item: number;
   stock_total: number;
   stock_buffer: number;
   turnaround_days: number;
@@ -88,7 +88,7 @@ export interface Package {
   forfait_days: number;
   min_persons: number;
   max_persons: number;
-  deposit_percentage: number;
+  damage_compensation_percentage: number;
   images: string[];
   is_featured: boolean;
   is_active: boolean;
@@ -113,7 +113,7 @@ export interface Order {
   status: OrderStatus;
   subtotal: number;
   delivery_fee: number;
-  deposit_total: number;
+  damage_compensation_total: number;
   total: number;
   delivery_method: DeliveryMethod;
   delivery_address_id: string | null;
@@ -138,7 +138,7 @@ export interface OrderItem {
   quantity: number;
   persons: number | null;
   unit_price: number;
-  deposit_amount: number;
+  damage_compensation_amount: number;
   line_total: number;
 }
 

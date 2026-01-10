@@ -155,7 +155,7 @@ export const OrderModel = {
     customer_id: string;
     subtotal: number;
     delivery_fee: number;
-    deposit_total: number;
+    damage_compensation_total: number;
     total: number;
     delivery_method: DeliveryMethod;
     delivery_address_id?: string;
@@ -165,7 +165,7 @@ export const OrderModel = {
   }): Promise<Order> {
     const result = await queryOne<Order>(
       `INSERT INTO orders (
-        customer_id, subtotal, delivery_fee, deposit_total, total,
+        customer_id, subtotal, delivery_fee, damage_compensation_total, total,
         delivery_method, delivery_address_id, rental_start_date, rental_end_date, notes
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *`,
@@ -173,7 +173,7 @@ export const OrderModel = {
         data.customer_id,
         data.subtotal,
         data.delivery_fee,
-        data.deposit_total,
+        data.damage_compensation_total,
         data.total,
         data.delivery_method,
         data.delivery_address_id || null,
@@ -194,13 +194,13 @@ export const OrderModel = {
     quantity: number;
     persons?: number;
     unit_price: number;
-    deposit_amount: number;
+    damage_compensation_amount: number;
     line_total: number;
   }): Promise<OrderItem> {
     const result = await queryOne<OrderItem>(
       `INSERT INTO order_items (
         order_id, item_type, package_id, product_id, quantity, persons,
-        unit_price, deposit_amount, line_total
+        unit_price, damage_compensation_amount, line_total
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *`,
       [
@@ -211,7 +211,7 @@ export const OrderModel = {
         data.quantity,
         data.persons || null,
         data.unit_price,
-        data.deposit_amount,
+        data.damage_compensation_amount,
         data.line_total
       ]
     );
