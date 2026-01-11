@@ -294,11 +294,6 @@ function renderSummary() {
             ${item.persons ? `${item.persons} pers.` : `${item.quantity}x`}
           </div>
         </div>
-        <div class="delivery-option__header">
-          <span class="delivery-option__title">Afhalen</span>
-          <span class="delivery-option__price">Gratis</span>
-        </div>
-        <p class="delivery-option__desc">Haal je bestelling op in Beernem (Parkstraat 44).</p>
         <div class="checkout-summary__item-price">${formatPrice(item.line_total || item.unit_price * item.quantity)}</div>
       </div>
     `).join('');
@@ -529,10 +524,18 @@ function populateEventDates() {
   
   // Find the first item with a start_date
   const itemWithDate = cart.find(item => item.start_date);
-  if (!itemWithDate || !itemWithDate.start_date) return;
   
-  const eventDate = new Date(itemWithDate.start_date);
+  if (!itemWithDate || !itemWithDate.start_date) {
+    console.log('No event date found in cart items');
+    return;
+  }
+  
+  // Format date: "dd-mm-yyyy"
+  const dateObj = new Date(itemWithDate.start_date);
+  if (isNaN(dateObj.getTime())) return;
+  
   const formattedDate = formatDateShort(itemWithDate.start_date);
+  console.log('Populating event date:', formattedDate);
   
   // Populate both delivery and pickup event date fields
   const deliveryEventDateField = document.getElementById('delivery-event-date');

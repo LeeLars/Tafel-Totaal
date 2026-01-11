@@ -153,18 +153,18 @@
                         <span class="delivery-option__price" id="delivery-price">Berekend op adres</span>
                       </div>
                       <p class="delivery-option__desc">Wij <strong>bezorgen</strong> tot 2 dagen voor je event én <strong>halen weer op</strong> binnen 48u na afloop.</p>
-                      <div style="display: flex; gap: var(--space-sm); margin-top: 8px; flex-wrap: wrap;">
-                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: var(--color-concrete); padding: 4px 8px; border: 1px solid var(--border-color);">
+                      <div class="delivery-option__tags">
+                        <span class="badge badge--neutral">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
                           Levering
                         </span>
-                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: var(--color-concrete); padding: 4px 8px; border: 1px solid var(--border-color);">
+                        <span class="badge badge--neutral">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
                           Ophaling inbegrepen
                         </span>
                       </div>
-                      <p class="delivery-option__min" id="delivery-min-notice" style="font-size: 12px; color: var(--color-primary); margin-top: 8px; font-weight: 500;">Min. €150 • GRATIS binnen 15km • Buiten 15km: €0,50/km × afstand × 2 (heen+terug)</p>
-                      <p class="delivery-option__disabled-notice hidden" id="delivery-disabled-notice" style="font-size: 12px; color: var(--color-error); margin-top: 4px; font-weight: 600;">Je bestelling is onder €150 - bezorgen niet beschikbaar</p>
+                      <p class="delivery-option__min" id="delivery-min-notice">Min. €150 • GRATIS binnen 15km • Buiten 15km: €0,50/km × afstand × 2 (heen+terug)</p>
+                      <p class="delivery-option__disabled-notice hidden" id="delivery-disabled-notice">Je bestelling is onder €150 - bezorgen niet beschikbaar</p>
                     </div>
                   </label>
                   <label class="delivery-option" id="delivery-option-pickup">
@@ -175,8 +175,8 @@
                         <span class="delivery-option__price">Gratis</span>
                       </div>
                       <p class="delivery-option__desc">Je haalt zelf op tot 2 dagen vooraf en brengt terug binnen 48u na evenement (borstelschoon).</p>
-                      <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                      <p class="delivery-option__location">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                         Parkstraat 44, 8730 Beernem
                       </p>
                     </div>
@@ -184,13 +184,13 @@
                 </div>
 
                 <!-- Delivery Scheduling (shown when DELIVERY selected) -->
-                <div class="delivery-scheduling hidden" id="delivery-scheduling">
-                  <h3 style="margin-top: var(--space-lg); margin-bottom: var(--space-md);">Planning voor bezorging & ophaling</h3>
+                <div class="scheduling-section hidden" id="delivery-scheduling">
+                  <h3 class="scheduling-title">Planning voor bezorging & ophaling</h3>
                   
                   <div class="form-group">
                     <label class="form-label">Evenement datum</label>
-                    <input type="text" id="delivery-event-date" class="form-input" readonly style="background: var(--color-concrete); cursor: not-allowed;">
-                    <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">Dit is de datum die je eerder hebt gekozen bij het toevoegen van items aan je winkelwagen.</p>
+                    <input type="text" id="delivery-event-date" class="form-input form-input--readonly" readonly>
+                    <p class="form-hint">Dit is de datum die je eerder hebt gekozen bij het toevoegen van items aan je winkelwagen.</p>
                   </div>
 
                   <div class="form-group">
@@ -203,7 +203,7 @@
                       <option value="14:00-16:00">14:00 - 16:00</option>
                       <option value="16:00-18:00">16:00 - 18:00</option>
                     </select>
-                    <p style="font-size: 12px; color: var(--color-primary); margin-top: 4px; font-weight: 500;">
+                    <p class="form-hint text-primary">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
                       Let op: Het levermoment kan wijzigen afhankelijk van onze chauffeurs en drukte. We nemen contact op bij wijzigingen.
                     </p>
@@ -219,18 +219,18 @@
                       <option value="14:00-16:00">14:00 - 16:00</option>
                       <option value="16:00-18:00">16:00 - 18:00</option>
                     </select>
-                    <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">Ophaling vindt plaats binnen 48u na je evenement (borstelschoon terugbrengen).</p>
+                    <p class="form-hint">Ophaling vindt plaats binnen 48u na je evenement (borstelschoon terugbrengen).</p>
                   </div>
                 </div>
 
                 <!-- Pickup Scheduling (shown when PICKUP selected) -->
-                <div class="pickup-scheduling hidden" id="pickup-scheduling">
-                  <h3 style="margin-top: var(--space-lg); margin-bottom: var(--space-md);">Planning voor afhalen & terugbrengen</h3>
+                <div class="scheduling-section hidden" id="pickup-scheduling">
+                  <h3 class="scheduling-title">Planning voor afhalen & terugbrengen</h3>
                   
                   <div class="form-group">
                     <label class="form-label">Evenement datum</label>
-                    <input type="text" id="pickup-event-date" class="form-input" readonly style="background: var(--color-concrete); cursor: not-allowed;">
-                    <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">Dit is de datum die je eerder hebt gekozen bij het toevoegen van items aan je winkelwagen.</p>
+                    <input type="text" id="pickup-event-date" class="form-input form-input--readonly" readonly>
+                    <p class="form-hint">Dit is de datum die je eerder hebt gekozen bij het toevoegen van items aan je winkelwagen.</p>
                   </div>
 
                   <div class="form-group">
@@ -243,7 +243,7 @@
                       <option value="14:00-16:00">14:00 - 16:00</option>
                       <option value="16:00-18:00">16:00 - 18:00</option>
                     </select>
-                    <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">Je kunt ophalen tot 2 dagen voor je evenement in Beernem (Parkstraat 44).</p>
+                    <p class="form-hint">Je kunt ophalen tot 2 dagen voor je evenement in Beernem (Parkstraat 44).</p>
                   </div>
 
                   <div class="form-group">
@@ -256,7 +256,7 @@
                       <option value="14:00-16:00">14:00 - 16:00</option>
                       <option value="16:00-18:00">16:00 - 18:00</option>
                     </select>
-                    <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">Terugbrengen binnen 48u na je evenement (borstelschoon).</p>
+                    <p class="form-hint">Terugbrengen binnen 48u na je evenement (borstelschoon).</p>
                   </div>
                 </div>
 
@@ -286,49 +286,49 @@
                     </div>
                   </div>
 
-                  <div class="delivery-zone-info" id="delivery-zone-info" style="display: none;">
+                  <div class="delivery-zone-info" id="delivery-zone-info">
                     <div class="delivery-zone-info__icon"></div>
                     <span class="delivery-zone-info__text"></span>
                   </div>
 
                   <!-- Route Map (always visible) -->
-                  <div class="route-map-container" id="route-map-container" style="margin-top: var(--space-md);">
-                    <div class="route-map-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
-                      <h4 style="margin: 0; font-size: 0.9rem;">Route vanaf Beernem</h4>
-                      <span class="route-distance" id="route-distance" style="font-size: 0.85rem; color: var(--color-primary); font-weight: 600;"></span>
+                  <div class="route-map-container" id="route-map-container">
+                    <div class="route-map-header">
+                      <h4 class="route-map-title">Route vanaf Beernem</h4>
+                      <span class="route-distance" id="route-distance"></span>
                     </div>
-                    <div id="delivery-map" style="height: 280px; border: 1px solid var(--border-color); background: var(--color-concrete); display: flex; align-items: center; justify-content: center;">
-                      <div id="map-placeholder" style="text-align: center; color: var(--color-gray);">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.5; margin-bottom: 8px;">
+                    <div id="delivery-map" class="delivery-map-wrapper">
+                      <div id="map-placeholder" class="map-placeholder">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                           <circle cx="12" cy="10" r="3"></circle>
                         </svg>
-                        <p style="margin: 0; font-size: 14px;">Vul je adres in om de route te berekenen</p>
+                        <p>Vul je adres in om de route te berekenen</p>
                       </div>
                     </div>
-                    <div class="route-info" style="display: flex; gap: var(--space-md); margin-top: var(--space-sm); font-size: 0.8rem; color: var(--color-gray);">
-                      <span id="route-duration"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>-- min</span>
-                      <span id="route-km"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>-- km</span>
+                    <div class="route-info">
+                      <span id="route-duration"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>-- min</span>
+                      <span id="route-km"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>-- km</span>
                     </div>
                     
                     <!-- Price Breakdown -->
-                    <div class="delivery-price-breakdown" id="delivery-price-breakdown" style="margin-top: var(--space-md); padding: var(--space-md); background: var(--color-concrete); border: 1px solid var(--border-color);">
-                      <h5 style="margin: 0 0 var(--space-sm); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Kostenberekening</h5>
-                      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem;">
-                        <div style="display: flex; justify-content: space-between;">
+                    <div class="delivery-price-breakdown" id="delivery-price-breakdown">
+                      <h5 class="price-breakdown-title">Kostenberekening</h5>
+                      <div class="price-breakdown-rows">
+                        <div class="price-breakdown-row">
                           <span>🚚 Levering (heen)</span>
                           <span id="delivery-cost-one-way">€--,--</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between;">
+                        <div class="price-breakdown-row">
                           <span>🔄 Ophaling (terug)</span>
                           <span id="pickup-cost-one-way">€--,--</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 4px; font-weight: 700; color: var(--color-primary);">
+                        <div class="price-breakdown-row price-breakdown-total">
                           <span>Totaal bezorgkosten</span>
                           <span id="delivery-cost-total">€--,--</span>
                         </div>
                       </div>
-                      <p style="margin: var(--space-sm) 0 0; font-size: 11px; color: var(--color-gray);">Berekening: afstand × €0,50 per km × 2 (heen + terug)</p>
+                      <p class="price-breakdown-note">Berekening: afstand × €0,50 per km × 2 (heen + terug)</p>
                     </div>
                   </div>
                 </div>
