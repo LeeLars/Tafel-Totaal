@@ -427,6 +427,16 @@ function initDatePickers() {
   if (endDateInput) endDateInput.min = today;
   if (eventDateInput) eventDateInput.min = today;
 
+  // Auto-populate from saved event date if exists
+  const savedEventDate = getSavedEventDate();
+  if (savedEventDate && savedEventDate >= today) {
+    if (eventDateInput) {
+      eventDateInput.value = savedEventDate;
+      // Trigger the change event to calculate rental period
+      eventDateInput.dispatchEvent(new Event('change'));
+    }
+  }
+
   // Single Date Picker Logic - for single day events, calculate rental period automatically
   if (eventDateInput) {
     eventDateInput.addEventListener('change', () => {
@@ -445,6 +455,9 @@ function initDatePickers() {
       
       startDate = start.toISOString().split('T')[0];
       endDate = end.toISOString().split('T')[0];
+      
+      // Save event date for other products
+      saveEventDate(dateVal);
       
       updateTotalPrice();
     });
@@ -609,4 +622,27 @@ function initAddToCart() {
 function showError() {
   document.getElementById('product-loading').classList.add('hidden');
   document.getElementById('product-error').classList.remove('hidden');
+}
+
+/**
+ * Save event date to localStorage for auto-population on other product pages
+ */
+function saveEventDate(dateStr) {
+  try {
+    localStorage.setItem('tafel_totaal_event_date', dateStr);
+  } catch (e) {
+    console.warn('Could not save event date to localStorage:', e);
+  }
+}
+
+/**
+ * Get saved event date from localStorage
+ */
+function getSavedEventDate() {
+  try {
+    return localStorage.getItem('tafel_totaal_event_date');
+  } catch (e) {
+    console.warn('Could not read event date from localStorage:', e);
+    return null;
+  }
 }
