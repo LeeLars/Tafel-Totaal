@@ -151,7 +151,7 @@ function renderOrder(order) {
   const subtotal = order.subtotal || items.reduce((sum, item) => sum + (item.line_total || 0), 0);
   document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
   document.getElementById('summary-delivery').textContent = formatPrice(order.delivery_cost || 0);
-  document.getElementById('summary-deposit').textContent = formatPrice(order.deposit_total || 0);
+  document.getElementById('summary-deposit').textContent = formatPrice(order.damage_compensation_total || 0);
   document.getElementById('summary-total').textContent = formatPrice(order.total);
 
   // Delivery info

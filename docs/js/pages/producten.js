@@ -229,24 +229,22 @@ function createProductCard(product) {
   const imageUrl = product.image_url || product.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg';
   
   return `
-    <article class="product-card">
-      <a href="/Tafel-Totaal/product.html?id=${product.id}" class="product-card__link">
-        <div class="product-card__image">
+    <article class="package-card">
+      <a href="/Tafel-Totaal/product.html?id=${product.id}" class="package-card__link">
+        <div class="package-card__image">
           <img src="${imageUrl}" 
                alt="${product.name}" 
                loading="lazy">
-          <div class="product-card__badge">${categoryName}</div>
+          <span class="package-card__badge">${categoryName}</span>
         </div>
-        <div class="product-card__content">
-          <div class="product-card__header">
-            <span class="product-card__category">${categoryName}</span>
-            <h3 class="product-card__title">${product.name}</h3>
-          </div>
+        <div class="package-card__content">
+          <h3 class="package-card__title">${product.name}</h3>
+          <p class="package-card__description">${product.description || ''}</p>
           
-          <div class="product-card__footer">
-            <div class="product-card__price-wrapper">
-              <span class="product-card__price-label">Prijs per dag</span>
-              <span class="product-card__price">${formatPrice(product.price_per_day || product.price)}</span>
+          <div class="package-card__footer">
+            <div class="package-card__price">
+              ${formatPrice(product.price_per_day || product.price)}
+              <span>/ dag</span>
             </div>
             <span class="btn btn--primary btn--sm">Bekijk</span>
           </div>

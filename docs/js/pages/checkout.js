@@ -247,6 +247,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   prefillUserData();
   renderSummary();
+  populateEventDates();
   initForms();
   initDeliveryToggle();
   initStepNavigation();
@@ -366,6 +367,33 @@ function updateTotals() {
  * Initialize form submissions
  */
 function initForms() {
+  // Prevent Enter key from submitting forms - move to next field instead
+  document.querySelectorAll('.checkout-form input:not([type="checkbox"]):not([type="radio"]), .checkout-form select').forEach(input => {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        
+        // Get all focusable form elements
+        const form = input.closest('form');
+        if (!form) return;
+        
+        const focusableElements = Array.from(form.querySelectorAll(
+          'input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([disabled]):not([readonly]), select:not([disabled]), textarea:not([disabled]), button[type="submit"]'
+        ));
+        
+        const currentIndex = focusableElements.indexOf(input);
+        
+        if (currentIndex > -1 && currentIndex < focusableElements.length - 1) {
+          // Move to next field
+          focusableElements[currentIndex + 1].focus();
+        } else if (currentIndex === focusableElements.length - 1) {
+          // Last field - submit the form
+          form.requestSubmit();
+        }
+      }
+    });
+  });
+
   // Step 1: Customer form
   document.getElementById('customer-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -412,6 +440,12 @@ function initForms() {
     const form = e.target;
     const deliveryMethod = document.querySelector('input[name="delivery_method"]:checked')?.value;
 
+    // Validate delivery method selection
+    if (!deliveryMethod) {
+      showToast('Selecteer een leveringsmethode (Bezorgen of Afhalen)', 'error');
+      return;
+    }
+
     checkoutData.delivery = {
       method: deliveryMethod,
       notes: form.notes.value.trim()
@@ -422,9 +456,21 @@ function initForms() {
       const houseNumber = form.house_number.value.trim();
       const postalCode = form.postal_code.value.trim();
       const city = form.city.value.trim();
+      const deliveryTime = form.delivery_time?.value;
+      const pickupTime = form.pickup_time?.value;
 
       if (!street || !houseNumber || !postalCode || !city) {
         showToast('Vul alle adresgegevens in', 'error');
+        return;
+      }
+
+      if (!deliveryTime) {
+        showToast('Selecteer een gewenst levermoment', 'error');
+        return;
+      }
+
+      if (!pickupTime) {
+        showToast('Selecteer een gewenst ophaalmoment', 'error');
         return;
       }
 
@@ -435,6 +481,25 @@ function initForms() {
         city,
         country: 'België'
       };
+      
+      checkoutData.delivery.deliveryTime = deliveryTime;
+      checkoutData.delivery.pickupTime = pickupTime;
+    } else if (deliveryMethod === 'PICKUP') {
+      const selfPickupTime = form.self_pickup_time?.value;
+      const returnTime = form.return_time?.value;
+
+      if (!selfPickupTime) {
+        showToast('Selecteer een gewenst afhaalmoment', 'error');
+        return;
+      }
+
+      if (!returnTime) {
+        showToast('Selecteer een gewenst terugbrengmoment', 'error');
+        return;
+      }
+
+      checkoutData.delivery.selfPickupTime = selfPickupTime;
+      checkoutData.delivery.returnTime = returnTime;
     }
 
     renderOrderReview();
@@ -456,12 +521,43 @@ function initForms() {
 }
 
 /**
+ * Populate event dates from cart items
+ */
+function populateEventDates() {
+  const cart = checkoutData.items;
+  if (!cart || cart.length === 0) return;
+  
+  // Find the first item with a start_date
+  const itemWithDate = cart.find(item => item.start_date);
+  if (!itemWithDate || !itemWithDate.start_date) return;
+  
+  const eventDate = new Date(itemWithDate.start_date);
+  const formattedDate = formatDateShort(itemWithDate.start_date);
+  
+  // Populate both delivery and pickup event date fields
+  const deliveryEventDateField = document.getElementById('delivery-event-date');
+  const pickupEventDateField = document.getElementById('pickup-event-date');
+  
+  if (deliveryEventDateField) {
+    deliveryEventDateField.value = formattedDate;
+  }
+  if (pickupEventDateField) {
+    pickupEventDateField.value = formattedDate;
+  }
+  
+  // Store event date in checkout data
+  checkoutData.eventDate = itemWithDate.start_date;
+}
+
+/**
  * Initialize delivery method toggle
  */
 function initDeliveryToggle() {
   const deliveryRadio = document.getElementById('delivery-radio');
   const pickupRadio = document.getElementById('pickup-radio');
   const addressSection = document.getElementById('delivery-address');
+  const deliveryScheduling = document.getElementById('delivery-scheduling');
+  const pickupScheduling = document.getElementById('pickup-scheduling');
   const deliveryOption = document.getElementById('delivery-option-delivery');
   const deliveryMinNotice = document.getElementById('delivery-min-notice');
   const deliveryDisabledNotice = document.getElementById('delivery-disabled-notice');
@@ -482,6 +578,11 @@ function initDeliveryToggle() {
     // Force pickup selection
     pickupRadio.checked = true;
     addressSection.style.display = 'none';
+    deliveryScheduling?.classList.add('hidden');
+    pickupScheduling?.classList.remove('hidden');
+    
+    // Set required fields for pickup
+    setSchedulingRequiredFields('PICKUP');
   } else {
     deliveryRadio.disabled = false;
     deliveryOption.classList.remove('disabled');
@@ -489,6 +590,11 @@ function initDeliveryToggle() {
     deliveryOption.style.cursor = 'pointer';
     deliveryMinNotice?.classList.remove('hidden');
     deliveryDisabledNotice?.classList.add('hidden');
+    
+    // No default selection - user must choose
+    addressSection.style.display = 'none';
+    deliveryScheduling?.classList.add('hidden');
+    pickupScheduling?.classList.add('hidden');
   }
 
   // Handle delivery method change
@@ -496,19 +602,22 @@ function initDeliveryToggle() {
     option.addEventListener('change', () => {
       if (option.value === 'DELIVERY' && canDeliver) {
         addressSection.style.display = '';
-        addressSection.querySelectorAll('input').forEach(input => input.required = true);
-      } else {
+        deliveryScheduling?.classList.remove('hidden');
+        pickupScheduling?.classList.add('hidden');
+        setSchedulingRequiredFields('DELIVERY');
+        
+        // Initialize map placeholder and check if address already filled
+        initializeMapPlaceholder();
+        checkDeliveryZone();
+      } else if (option.value === 'PICKUP') {
         addressSection.style.display = 'none';
-        addressSection.querySelectorAll('input').forEach(input => input.required = false);
+        deliveryScheduling?.classList.add('hidden');
+        pickupScheduling?.classList.remove('hidden');
+        setSchedulingRequiredFields('PICKUP');
       }
       updateTotals();
     });
   });
-
-  // Initial state - hide address if pickup selected
-  if (pickupRadio.checked) {
-    addressSection.style.display = 'none';
-  }
 
   // Address field changes - trigger route calculation
   const addressFields = ['street', 'house_number', 'postal_code', 'city'];
@@ -519,6 +628,123 @@ function initDeliveryToggle() {
       field.addEventListener('input', debounce(checkDeliveryZone, 800));
     }
   });
+}
+
+/**
+ * Set required fields based on delivery method
+ */
+function setSchedulingRequiredFields(method) {
+  // Delivery scheduling fields
+  const deliveryTimeField = document.getElementById('delivery-time');
+  const pickupTimeField = document.getElementById('pickup-time');
+  
+  // Pickup scheduling fields
+  const selfPickupTimeField = document.getElementById('self-pickup-time');
+  const returnTimeField = document.getElementById('return-time');
+  
+  // Address fields
+  const addressSection = document.getElementById('delivery-address');
+  const addressInputs = addressSection?.querySelectorAll('input[required]') || [];
+  
+  if (method === 'DELIVERY') {
+    // Delivery: require delivery-time, pickup-time, and address fields
+    if (deliveryTimeField) deliveryTimeField.required = true;
+    if (pickupTimeField) pickupTimeField.required = true;
+    if (selfPickupTimeField) selfPickupTimeField.required = false;
+    if (returnTimeField) returnTimeField.required = false;
+    addressInputs.forEach(input => input.required = true);
+  } else if (method === 'PICKUP') {
+    // Pickup: require self-pickup-time and return-time
+    if (deliveryTimeField) deliveryTimeField.required = false;
+    if (pickupTimeField) pickupTimeField.required = false;
+    if (selfPickupTimeField) selfPickupTimeField.required = true;
+    if (returnTimeField) returnTimeField.required = true;
+    addressInputs.forEach(input => input.required = false);
+  }
+}
+
+/**
+ * Initialize map with placeholder view (centered on Beernem)
+ */
+function initializeMapPlaceholder() {
+  const mapEl = document.getElementById('delivery-map');
+  const mapPlaceholder = document.getElementById('map-placeholder');
+  
+  if (!mapEl) return;
+  
+  // Show placeholder, hide any existing map content
+  if (mapPlaceholder) {
+    mapPlaceholder.style.display = 'block';
+  }
+  
+  // Reset price breakdown to placeholder state
+  const deliveryCostEl = document.getElementById('delivery-cost-one-way');
+  const pickupCostEl = document.getElementById('pickup-cost-one-way');
+  const totalCostEl = document.getElementById('delivery-cost-total');
+  
+  if (deliveryCostEl) deliveryCostEl.textContent = '€--,--';
+  if (pickupCostEl) pickupCostEl.textContent = '€--,--';
+  if (totalCostEl) totalCostEl.textContent = '€--,--';
+  
+  // Reset route info
+  document.getElementById('route-duration').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>-- min`;
+  document.getElementById('route-km').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>-- km`;
+  document.getElementById('route-distance').textContent = '';
+  
+  // Clear any existing map
+  if (deliveryMap) {
+    if (routeLayer) {
+      deliveryMap.removeLayer(routeLayer);
+      routeLayer = null;
+    }
+    if (carMarker) {
+      deliveryMap.removeLayer(carMarker);
+      carMarker = null;
+    }
+    if (animationFrame) {
+      cancelAnimationFrame(animationFrame);
+      animationFrame = null;
+    }
+  }
+}
+
+/**
+ * Update the price breakdown display with separate delivery and pickup costs
+ */
+function updatePriceBreakdown(deliveryCost, pickupCost, totalCost) {
+  const deliveryCostEl = document.getElementById('delivery-cost-one-way');
+  const pickupCostEl = document.getElementById('pickup-cost-one-way');
+  const totalCostEl = document.getElementById('delivery-cost-total');
+  
+  if (deliveryCostEl) {
+    if (deliveryCost === 0 && totalCost === 0) {
+      deliveryCostEl.textContent = 'GRATIS';
+      deliveryCostEl.style.color = 'var(--color-success)';
+    } else {
+      deliveryCostEl.textContent = formatPrice(deliveryCost);
+      deliveryCostEl.style.color = '';
+    }
+  }
+  
+  if (pickupCostEl) {
+    if (pickupCost === 0 && totalCost === 0) {
+      pickupCostEl.textContent = 'GRATIS';
+      pickupCostEl.style.color = 'var(--color-success)';
+    } else {
+      pickupCostEl.textContent = formatPrice(pickupCost);
+      pickupCostEl.style.color = '';
+    }
+  }
+  
+  if (totalCostEl) {
+    if (totalCost === 0) {
+      totalCostEl.textContent = 'GRATIS';
+      totalCostEl.style.color = 'var(--color-success)';
+    } else {
+      totalCostEl.textContent = formatPrice(totalCost);
+      totalCostEl.style.color = '';
+    }
+  }
 }
 
 /**
@@ -573,12 +799,12 @@ async function checkDeliveryZone() {
     zoneInfo.className = 'delivery-zone-info delivery-zone-info--unavailable';
     zoneInfo.querySelector('.delivery-zone-info__text').textContent = 
       '✗ Bezorging enkel mogelijk in West- en Oost-Vlaanderen. Kies voor afhalen of neem contact op.';
-    mapContainer.style.display = 'none';
     checkoutData.deliveryCost = 0;
     if (deliveryPriceEl) {
       deliveryPriceEl.textContent = 'Niet beschikbaar';
       deliveryPriceEl.style.color = '';
     }
+    updatePriceBreakdown(0, 0, 0);
     return;
   }
   
@@ -639,6 +865,9 @@ async function checkDeliveryZone() {
     let deliveryCost = 0;
     let deliveryMessage = '';
     
+    // Calculate one-way cost
+    const oneWayCost = Math.round(distanceKm * PRICE_PER_KM * 100) / 100;
+    
     if (distanceKm <= FREE_DELIVERY_RADIUS_KM) {
       deliveryCost = 0;
       deliveryMessage = `✓ GRATIS levering naar ${city || destName} (${distanceKm}km - binnen gratis zone)`;
@@ -647,10 +876,17 @@ async function checkDeliveryZone() {
         deliveryPriceEl.textContent = 'GRATIS';
         deliveryPriceEl.style.color = 'var(--color-success)';
       }
+      
+      // Update price breakdown (both free)
+      updatePriceBreakdown(0, 0, 0);
     } else {
       // Pay for FULL distance (round trip), not just the excess over 15km
       deliveryCost = Math.round(distanceKm * PRICE_PER_KM * 2 * 100) / 100;
       deliveryCost = Math.max(deliveryCost, 5);
+      
+      // Calculate individual leg costs
+      const deliveryLegCost = Math.round(oneWayCost * 100) / 100;
+      const pickupLegCost = Math.round(oneWayCost * 100) / 100;
       
       deliveryMessage = `✓ Bezorging naar ${city || destName} (${distanceKm}km) - ${formatPrice(deliveryCost)}`;
       
@@ -658,6 +894,9 @@ async function checkDeliveryZone() {
         deliveryPriceEl.textContent = formatPrice(deliveryCost);
         deliveryPriceEl.style.color = '';
       }
+      
+      // Update price breakdown with separate costs
+      updatePriceBreakdown(deliveryLegCost, pickupLegCost, deliveryCost);
     }
     
     // Update zone info
@@ -665,22 +904,16 @@ async function checkDeliveryZone() {
     const textEl = zoneInfo.querySelector('.delivery-zone-info__text');
     textEl.innerHTML = deliveryMessage;
     
-    if (distanceKm > FREE_DELIVERY_RADIUS_KM) {
-      const breakdown = document.createElement('small');
-      breakdown.style.display = 'block';
-      breakdown.style.marginTop = '4px';
-      breakdown.style.opacity = '0.8';
-      breakdown.textContent = `Berekening: ${distanceKm}km × €0,50 × 2 (heen+terug) = ${formatPrice(deliveryCost)}`;
-      textEl.appendChild(breakdown);
-    }
-    
     // Update route info
     document.getElementById('route-distance').textContent = formatPrice(deliveryCost);
     document.getElementById('route-duration').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>${durationMin} min`;
     document.getElementById('route-km').innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>${distanceKm} km`;
     
-    // Show map and draw route
-    mapContainer.style.display = 'block';
+    // Hide placeholder and show map
+    const mapPlaceholder = document.getElementById('map-placeholder');
+    if (mapPlaceholder) mapPlaceholder.style.display = 'none';
+    
+    // Initialize map with route
     await initializeMap(routeCoordinates, destCoords, city || destName);
     
     // Store data
@@ -740,6 +973,9 @@ async function fallbackToPostalCodeDistance(postalCode, zoneInfo, deliveryPriceE
   let deliveryCost = 0;
   let deliveryMessage = '';
   
+  // Calculate one-way cost
+  const oneWayCost = Math.round(distance * PRICE_PER_KM * 100) / 100;
+  
   if (distance <= FREE_DELIVERY_RADIUS_KM) {
     deliveryCost = 0;
     deliveryMessage = `✓ GRATIS levering naar ${location.name} (~${distance}km - binnen gratis zone)`;
@@ -747,6 +983,7 @@ async function fallbackToPostalCodeDistance(postalCode, zoneInfo, deliveryPriceE
       deliveryPriceEl.textContent = 'GRATIS';
       deliveryPriceEl.style.color = 'var(--color-success)';
     }
+    updatePriceBreakdown(0, 0, 0);
   } else {
     // Pay for FULL distance (round trip), not just the excess over 15km
     deliveryCost = Math.round(distance * PRICE_PER_KM * 2 * 100) / 100;
@@ -756,11 +993,11 @@ async function fallbackToPostalCodeDistance(postalCode, zoneInfo, deliveryPriceE
       deliveryPriceEl.textContent = formatPrice(deliveryCost);
       deliveryPriceEl.style.color = '';
     }
+    updatePriceBreakdown(oneWayCost, oneWayCost, deliveryCost);
   }
   
   zoneInfo.className = 'delivery-zone-info delivery-zone-info--available';
   zoneInfo.querySelector('.delivery-zone-info__text').textContent = deliveryMessage;
-  mapContainer.style.display = 'none';
   
   checkoutData.deliveryCost = deliveryCost;
   checkoutData.deliveryDistance = distance;
@@ -983,6 +1220,7 @@ async function placeOrder() {
       delivery_method: checkoutData.delivery.method,
       delivery_address: checkoutData.delivery.address || null,
       notes: checkoutData.delivery.notes,
+      event_date: checkoutData.eventDate,
       items: checkoutData.items.map(item => ({
         type: item.type,
         id: item.package_id || item.product_id,
@@ -993,6 +1231,15 @@ async function placeOrder() {
         addons: item.addons || []
       }))
     };
+    
+    // Add scheduling information based on delivery method
+    if (checkoutData.delivery.method === 'DELIVERY') {
+      orderData.delivery_time = checkoutData.delivery.deliveryTime;
+      orderData.pickup_time = checkoutData.delivery.pickupTime;
+    } else if (checkoutData.delivery.method === 'PICKUP') {
+      orderData.self_pickup_time = checkoutData.delivery.selfPickupTime;
+      orderData.return_time = checkoutData.delivery.returnTime;
+    }
 
     // Create order via API
     const response = await checkoutAPI.createOrder(orderData);

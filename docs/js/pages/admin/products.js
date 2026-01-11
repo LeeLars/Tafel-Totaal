@@ -304,7 +304,7 @@ function openEditModal(product) {
   document.getElementById('edit-sku').value = product.sku || '';
   document.getElementById('edit-description').value = product.description || '';
   document.getElementById('edit-price').value = product.price_per_day || 0;
-  document.getElementById('edit-deposit').value = product.deposit_per_item || 0;
+  document.getElementById('edit-deposit').value = product.damage_compensation_per_item || 0;
   document.getElementById('edit-stock').value = product.stock_total || 0;
   document.getElementById('edit-buffer').value = product.stock_buffer || 0;
   document.getElementById('edit-turnaround').value = product.turnaround_days || 1;
@@ -339,7 +339,7 @@ async function saveProduct() {
     sku: document.getElementById('edit-sku').value.trim() || undefined,
     description: document.getElementById('edit-description').value.trim() || undefined,
     price_per_day: parseFloat(document.getElementById('edit-price').value) || 0,
-    deposit_per_item: parseFloat(document.getElementById('edit-deposit').value) || 0,
+    damage_compensation_per_item: parseFloat(document.getElementById('edit-deposit').value) || 0,
     stock_total: parseInt(document.getElementById('edit-stock').value) || 0,
     stock_buffer: parseInt(document.getElementById('edit-buffer').value) || 0,
     turnaround_days: parseInt(document.getElementById('edit-turnaround').value) || 1,
