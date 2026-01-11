@@ -312,194 +312,6 @@
 }
 
 /* ============================================
-   DELIVERY TAGS & BADGES
-   ============================================ */
-
-.delivery-option__tags {
-  display: flex;
-  gap: var(--space-sm);
-  margin-top: var(--space-sm);
-  flex-wrap: wrap;
-}
-
-.badge--neutral {
-  background-color: var(--color-concrete);
-  color: var(--color-dark-gray);
-  border: 1px solid var(--color-light-gray);
-  font-family: var(--font-body);
-  font-size: 11px;
-  text-transform: none;
-  border-radius: 0;
-}
-
-.badge--neutral svg {
-  margin-right: 4px;
-}
-
-/* ============================================
-   SCHEDULING SECTION
-   ============================================ */
-
-.scheduling-section {
-  margin-bottom: var(--space-xl);
-  padding: var(--space-lg);
-  background-color: var(--color-white);
-  border: 1px solid var(--color-light-gray);
-  border-radius: var(--border-radius-md);
-  animation: fadeIn 0.3s ease-out;
-}
-
-.scheduling-title {
-  font-family: var(--font-body);
-  font-size: var(--font-size-md);
-  font-weight: 600;
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-sm);
-  border-bottom: 1px solid var(--color-light-gray);
-}
-
-.form-input--readonly {
-  background-color: var(--color-off-white);
-  cursor: not-allowed;
-  color: var(--color-gray);
-}
-
-.form-hint {
-  font-size: var(--font-size-sm);
-  color: var(--color-gray);
-  margin-top: 4px;
-  margin-bottom: 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-}
-
-.form-hint svg {
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-/* ============================================
-   ROUTE MAP & PRICE BREAKDOWN
-   ============================================ */
-
-.route-map-container {
-  margin-top: var(--space-md);
-  border: 1px solid var(--color-light-gray);
-  background-color: var(--color-white);
-}
-
-.route-map-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-md);
-  background-color: var(--color-off-white);
-  border-bottom: 1px solid var(--color-light-gray);
-}
-
-.route-map-title {
-  margin: 0;
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.route-distance {
-  font-size: var(--font-size-sm);
-  color: var(--color-primary);
-  font-weight: 700;
-}
-
-.delivery-map-wrapper {
-  height: 280px;
-  background-color: var(--color-concrete);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.map-placeholder {
-  text-align: center;
-  color: var(--color-gray);
-  padding: var(--space-md);
-}
-
-.map-placeholder svg {
-  opacity: 0.5;
-  margin-bottom: var(--space-sm);
-}
-
-.map-placeholder p {
-  margin: 0;
-  font-size: var(--font-size-sm);
-}
-
-.route-info {
-  display: flex;
-  gap: var(--space-lg);
-  padding: var(--space-sm) var(--space-md);
-  background-color: var(--color-white);
-  border-bottom: 1px solid var(--color-light-gray);
-  font-size: var(--font-size-sm);
-  color: var(--color-dark-gray);
-}
-
-.route-info span {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Price Breakdown */
-.delivery-price-breakdown {
-  padding: var(--space-md);
-  background-color: var(--color-off-white);
-}
-
-.price-breakdown-title {
-  margin: 0 0 var(--space-sm);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--color-gray);
-  font-weight: 600;
-}
-
-.price-breakdown-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.price-breakdown-row {
-  display: flex;
-  justify-content: space-between;
-  font-size: var(--font-size-sm);
-}
-
-.price-breakdown-total {
-  border-top: 1px solid var(--color-light-gray);
-  padding-top: 8px;
-  margin-top: 4px;
-  font-weight: 700;
-  color: var(--color-primary);
-}
-
-.price-breakdown-note {
-  margin: var(--space-sm) 0 0;
-  font-size: 11px;
-  color: var(--color-gray);
-  font-style: italic;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ============================================
    ORDER REVIEW
    ============================================ */
 
@@ -548,41 +360,64 @@
 
 .checkout-summary {
   background-color: var(--color-white);
-  border: 1px solid var(--color-light-gray);
-  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-black);
+  border-radius: 0;
   padding: var(--space-lg);
   height: fit-content;
   position: sticky;
   top: 20px;
+  box-shadow: 4px 4px 0 var(--color-black);
 }
 
 .checkout-summary__title {
-  font-family: var(--font-body);
-  font-size: var(--font-size-md);
-  font-weight: 600;
+  font-family: 'Righteous', cursive;
+  font-size: var(--font-size-lg);
+  font-weight: 400;
+  text-transform: uppercase;
   margin-bottom: var(--space-lg);
   padding-bottom: var(--space-md);
-  border-bottom: 1px solid var(--color-light-gray);
+  border-bottom: 2px solid var(--color-black);
+  color: var(--color-black);
+  letter-spacing: 0.05em;
 }
 
 .checkout-summary__items {
   margin-bottom: var(--space-lg);
-  max-height: 200px;
+  max-height: 300px;
   overflow-y: auto;
+  padding-right: var(--space-xs); /* Avoid scrollbar covering content */
+}
+
+/* Custom scrollbar for brutalist feel */
+.checkout-summary__items::-webkit-scrollbar {
+  width: 6px;
+}
+.checkout-summary__items::-webkit-scrollbar-track {
+  background: var(--color-off-white);
+}
+.checkout-summary__items::-webkit-scrollbar-thumb {
+  background: var(--color-black);
 }
 
 .checkout-summary__item {
   display: flex;
   gap: var(--space-md);
-  padding: var(--space-sm) 0;
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+.checkout-summary__item:last-child {
+  border-bottom: none;
 }
 
 .checkout-summary__item-image {
   width: 60px;
   height: 60px;
-  border-radius: var(--border-radius-md);
+  border-radius: 0;
+  border: 1px solid var(--color-black);
   overflow: hidden;
   flex-shrink: 0;
+  position: relative;
 }
 
 .checkout-summary__item-image img {
@@ -594,43 +429,51 @@
 .checkout-summary__item-info {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .checkout-summary__item-name {
   font-size: var(--font-size-sm);
-  font-weight: 500;
-  margin-bottom: 2px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  color: var(--color-black);
 }
 
 .checkout-summary__item-meta {
-  font-size: var(--font-size-sm);
-  color: var(--color-gray);
+  font-size: var(--font-size-xs);
+  color: var(--color-dark-gray);
+  font-family: var(--font-mono); /* Technical look */
 }
 
 .checkout-summary__item-price {
   font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-primary);
 }
 
 .checkout-summary__rows {
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background-color: var(--color-off-white);
+  border: 1px solid var(--color-light-gray);
 }
 
 .checkout-summary__row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-sm) 0;
+  padding: var(--space-xs) 0;
   font-size: var(--font-size-sm);
-  color: var(--color-dark-gray);
+  color: var(--color-black);
 }
 
 .checkout-summary__row--deposit {
-  border-top: 1px dashed var(--color-light-gray);
+  border-top: 1px dashed var(--color-gray);
   margin-top: var(--space-sm);
-  padding-top: var(--space-md);
-  font-style: italic;
+  padding-top: var(--space-sm);
 }
 
 .checkout-summary__total {
@@ -638,10 +481,13 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--space-md) 0;
-  border-top: 2px solid var(--color-light-gray);
+  border-top: 2px solid var(--color-black);
+  margin-top: var(--space-md);
   font-size: var(--font-size-lg);
   font-weight: 700;
   color: var(--color-black);
+  font-family: 'Righteous', cursive;
+  text-transform: uppercase;
 }
 
 .checkout-summary__total span:last-child {
@@ -651,14 +497,16 @@
 .checkout-summary__secure {
   display: flex;
   gap: var(--space-md);
-  padding: var(--space-lg);
-  background-color: var(--color-off-white);
-  border-radius: var(--border-radius-md);
+  padding: var(--space-md);
+  background-color: var(--color-concrete);
+  border: 1px solid var(--color-light-gray);
+  border-radius: 0;
   margin-top: var(--space-lg);
+  align-items: center;
 }
 
 .checkout-summary__secure svg {
-  color: var(--color-success);
+  color: var(--color-black);
   flex-shrink: 0;
 }
 
@@ -666,11 +514,13 @@
   display: block;
   font-size: var(--font-size-sm);
   margin-bottom: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .checkout-summary__secure p {
-  font-size: var(--font-size-sm);
-  color: var(--color-gray);
+  font-size: var(--font-size-xs);
+  color: var(--color-dark-gray);
   margin: 0;
 }
 

@@ -291,7 +291,7 @@ function renderSummary() {
         <div class="checkout-summary__item-info">
           <div class="checkout-summary__item-name">${item.name}</div>
           <div class="checkout-summary__item-meta">
-            ${item.persons ? `${item.persons} pers.` : `${item.quantity}x`}
+            ${item.persons ? `${item.persons} pers.` : `${item.quantity}x`} | ${formatDateShort(item.start_date)} - ${formatDateShort(item.end_date)}
           </div>
         </div>
         <div class="checkout-summary__item-price">${formatPrice(item.line_total || item.unit_price * item.quantity)}</div>
@@ -524,18 +524,15 @@ function populateEventDates() {
   
   // Find the first item with a start_date
   const itemWithDate = cart.find(item => item.start_date);
+  if (!itemWithDate || !itemWithDate.start_date) return;
   
-  if (!itemWithDate || !itemWithDate.start_date) {
-    console.log('No event date found in cart items');
-    return;
-  }
-  
-  // Format date: "dd-mm-yyyy"
-  const dateObj = new Date(itemWithDate.start_date);
-  if (isNaN(dateObj.getTime())) return;
-  
+  const eventDate = new Date(itemWithDate.start_date);
   const formattedDate = formatDateShort(itemWithDate.start_date);
-  console.log('Populating event date:', formattedDate);
+  
+  console.log('Populating event dates with:', { 
+    raw: itemWithDate.start_date, 
+    formatted: formattedDate 
+  });
   
   // Populate both delivery and pickup event date fields
   const deliveryEventDateField = document.getElementById('delivery-event-date');
@@ -581,8 +578,16 @@ function initDeliveryToggle() {
     // Force pickup selection
     pickupRadio.checked = true;
     addressSection.style.display = 'none';
-    deliveryScheduling?.classList.add('hidden');
-    pickupScheduling?.classList.remove('hidden');
+    
+    if (deliveryScheduling) {
+      deliveryScheduling.style.display = 'none';
+      deliveryScheduling.classList.add('hidden');
+    }
+    
+    if (pickupScheduling) {
+      pickupScheduling.style.display = 'block';
+      pickupScheduling.classList.remove('hidden');
+    }
     
     // Set required fields for pickup
     setSchedulingRequiredFields('PICKUP');
@@ -595,18 +600,57 @@ function initDeliveryToggle() {
     deliveryDisabledNotice?.classList.add('hidden');
     
     // No default selection - user must choose
-    addressSection.style.display = 'none';
-    deliveryScheduling?.classList.add('hidden');
-    pickupScheduling?.classList.add('hidden');
+    // But check if one is already checked
+    const selectedMethod = document.querySelector('input[name="delivery_method"]:checked')?.value;
+    
+    if (selectedMethod === 'DELIVERY') {
+      addressSection.style.display = 'block';
+      if (deliveryScheduling) {
+        deliveryScheduling.style.display = 'block';
+        deliveryScheduling.classList.remove('hidden');
+      }
+      if (pickupScheduling) {
+        pickupScheduling.style.display = 'none';
+        pickupScheduling.classList.add('hidden');
+      }
+      setSchedulingRequiredFields('DELIVERY');
+    } else if (selectedMethod === 'PICKUP') {
+      addressSection.style.display = 'none';
+      if (deliveryScheduling) {
+        deliveryScheduling.style.display = 'none';
+        deliveryScheduling.classList.add('hidden');
+      }
+      if (pickupScheduling) {
+        pickupScheduling.style.display = 'block';
+        pickupScheduling.classList.remove('hidden');
+      }
+      setSchedulingRequiredFields('PICKUP');
+    } else {
+      // Nothing selected yet
+      addressSection.style.display = 'none';
+      if (deliveryScheduling) deliveryScheduling.style.display = 'none';
+      if (pickupScheduling) pickupScheduling.style.display = 'none';
+    }
   }
 
   // Handle delivery method change
   document.querySelectorAll('input[name="delivery_method"]').forEach(option => {
     option.addEventListener('change', () => {
+      console.log('Delivery method changed to:', option.value);
+      
       if (option.value === 'DELIVERY' && canDeliver) {
-        addressSection.style.display = '';
-        deliveryScheduling?.classList.remove('hidden');
-        pickupScheduling?.classList.add('hidden');
+        addressSection.style.display = 'block';
+        
+        if (deliveryScheduling) {
+          deliveryScheduling.style.display = 'block';
+          deliveryScheduling.classList.remove('hidden');
+        }
+        
+        if (pickupScheduling) {
+          pickupScheduling.style.display = 'none';
+          pickupScheduling.classList.add('hidden');
+        }
+        
         setSchedulingRequiredFields('DELIVERY');
         
         // Initialize map placeholder and check if address already filled
@@ -614,8 +658,17 @@ function initDeliveryToggle() {
         checkDeliveryZone();
       } else if (option.value === 'PICKUP') {
         addressSection.style.display = 'none';
-        deliveryScheduling?.classList.add('hidden');
-        pickupScheduling?.classList.remove('hidden');
+        
+        if (deliveryScheduling) {
+          deliveryScheduling.style.display = 'none';
+          deliveryScheduling.classList.add('hidden');
+        }
+        
+        if (pickupScheduling) {
+          pickupScheduling.style.display = 'block';
+          pickupScheduling.classList.remove('hidden');
+        }
+        
         setSchedulingRequiredFields('PICKUP');
       }
       updateTotals();
