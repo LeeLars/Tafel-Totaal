@@ -547,6 +547,125 @@ function populateEventDates() {
   
   // Store event date in checkout data
   checkoutData.eventDate = itemWithDate.start_date;
+  
+  // Generate date preset buttons
+  generateDatePresets(eventDate);
+}
+
+/**
+ * Generate date preset buttons for delivery/pickup scheduling
+ */
+function generateDatePresets(eventDate) {
+  // Delivery date options (up to 2 days before event)
+  const deliveryDateContainer = document.getElementById('delivery-date-options');
+  const pickupDateContainer = document.getElementById('pickup-date-options');
+  
+  // Self-pickup date options (up to 2 days before event)
+  const selfPickupDateContainer = document.getElementById('self-pickup-date-options');
+  const returnDateContainer = document.getElementById('return-date-options');
+  
+  if (deliveryDateContainer) {
+    const deliveryOptions = generateDateOptions(eventDate, -2, 0); // 2 days before to event day
+    deliveryDateContainer.innerHTML = deliveryOptions.map(opt => 
+      `<button type="button" class="date-preset-btn" data-date="${opt.value}">${opt.label}</button>`
+    ).join('');
+    
+    // Add click handlers
+    deliveryDateContainer.querySelectorAll('.date-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => selectDatePreset(btn, 'delivery-date-selected'));
+    });
+  }
+  
+  if (pickupDateContainer) {
+    const pickupOptions = generateDateOptions(eventDate, 1, 2); // 1-2 days after event
+    pickupDateContainer.innerHTML = pickupOptions.map(opt => 
+      `<button type="button" class="date-preset-btn" data-date="${opt.value}">${opt.label}</button>`
+    ).join('');
+    
+    // Add click handlers
+    pickupDateContainer.querySelectorAll('.date-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => selectDatePreset(btn, 'pickup-date-selected'));
+    });
+  }
+  
+  if (selfPickupDateContainer) {
+    const selfPickupOptions = generateDateOptions(eventDate, -2, 0); // 2 days before to event day
+    selfPickupDateContainer.innerHTML = selfPickupOptions.map(opt => 
+      `<button type="button" class="date-preset-btn" data-date="${opt.value}">${opt.label}</button>`
+    ).join('');
+    
+    // Add click handlers
+    selfPickupDateContainer.querySelectorAll('.date-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => selectDatePreset(btn, 'self-pickup-date-selected'));
+    });
+  }
+  
+  if (returnDateContainer) {
+    const returnOptions = generateDateOptions(eventDate, 1, 2); // 1-2 days after event
+    returnDateContainer.innerHTML = returnOptions.map(opt => 
+      `<button type="button" class="date-preset-btn" data-date="${opt.value}">${opt.label}</button>`
+    ).join('');
+    
+    // Add click handlers
+    returnDateContainer.querySelectorAll('.date-preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => selectDatePreset(btn, 'return-date-selected'));
+    });
+  }
+}
+
+/**
+ * Generate date options relative to event date
+ */
+function generateDateOptions(eventDate, startOffset, endOffset) {
+  const options = [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  for (let i = startOffset; i <= endOffset; i++) {
+    const date = new Date(eventDate);
+    date.setDate(date.getDate() + i);
+    
+    // Skip dates in the past
+    if (date < today) continue;
+    
+    const dayNames = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za'];
+    const dayName = dayNames[date.getDay()];
+    const dateStr = formatDateShort(date.toISOString());
+    
+    let label = `${dayName} ${dateStr}`;
+    if (i === 0) label += ' (Evenement)';
+    else if (i === -2) label = `2 dagen voor`;
+    else if (i === -1) label = `1 dag voor`;
+    else if (i === 1) label = `1 dag na`;
+    else if (i === 2) label = `2 dagen na`;
+    
+    options.push({
+      value: date.toISOString().split('T')[0],
+      label: label
+    });
+  }
+  
+  return options;
+}
+
+/**
+ * Select a date preset button
+ */
+function selectDatePreset(button, hiddenFieldId) {
+  // Remove active class from siblings
+  const container = button.parentElement;
+  container.querySelectorAll('.date-preset-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Add active class to selected button
+  button.classList.add('active');
+  
+  // Set hidden field value
+  const hiddenField = document.getElementById(hiddenFieldId);
+  if (hiddenField) {
+    hiddenField.value = button.dataset.date;
+  }
 }
 
 /**
