@@ -5,7 +5,7 @@
 import { productsAPI } from '../lib/api.js';
 import { formatPrice, calculateDays, getQueryParam, showToast, formatDateShort } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
-import { addToCart } from '../services/cart.js';
+import { addToCart, getLockedEventDate, isDateLocked } from '../services/cart.js';
 
 let currentProduct = null;
 let selectedQuantity = 1;
@@ -491,14 +491,57 @@ function initDatePickers() {
     });
   }
 
-  // Auto-populate from saved event date if exists
-  // This MUST be after event listeners are set up so the change event works
-  const savedEventDate = getSavedEventDate();
-  if (savedEventDate && savedEventDate >= today) {
-    if (eventDateInput && eventType === 'single') {
-      eventDateInput.value = savedEventDate;
-      // Trigger the change event to calculate rental period and price
+  // Check if date should be locked (cart has items)
+  const dateLocked = isDateLocked();
+  const lockedDate = getLockedEventDate();
+  
+  if (dateLocked && lockedDate) {
+    // Lock the date - disable inputs and set to locked date
+    if (eventDateInput) {
+      eventDateInput.value = lockedDate;
+      eventDateInput.disabled = true;
+      eventDateInput.style.cursor = 'not-allowed';
+      eventDateInput.title = 'Datum is vergrendeld. Leeg eerst je winkelwagen om de datum te wijzigen.';
+      // Trigger change to calculate prices
       eventDateInput.dispatchEvent(new Event('change'));
+    }
+    if (startDateInput) {
+      startDateInput.disabled = true;
+      startDateInput.style.cursor = 'not-allowed';
+      startDateInput.title = 'Datum is vergrendeld. Leeg eerst je winkelwagen om de datum te wijzigen.';
+    }
+    if (endDateInput) {
+      endDateInput.disabled = true;
+      endDateInput.style.cursor = 'not-allowed';
+      endDateInput.title = 'Datum is vergrendeld. Leeg eerst je winkelwagen om de datum te wijzigen.';
+    }
+    
+    // Disable event type toggle
+    document.querySelectorAll('.type-btn').forEach(btn => {
+      btn.disabled = true;
+      btn.style.cursor = 'not-allowed';
+      btn.style.opacity = '0.5';
+    });
+    
+    // Show info message
+    const dateContainer = eventDateInput?.closest('.form-group') || startDateInput?.closest('.form-group');
+    if (dateContainer && !dateContainer.querySelector('.date-locked-info')) {
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'date-locked-info';
+      infoDiv.style.cssText = 'margin-top: 8px; padding: 8px 12px; background: #fff3cd; border: 1px solid #ffc107; font-size: 14px; color: #856404;';
+      infoDiv.innerHTML = '🔒 Datum vergrendeld. Alle producten moeten dezelfde verhuurperiode hebben.';
+      dateContainer.appendChild(infoDiv);
+    }
+  } else {
+    // Auto-populate from saved event date if exists
+    // This MUST be after event listeners are set up so the change event works
+    const savedEventDate = getSavedEventDate();
+    if (savedEventDate && savedEventDate >= today) {
+      if (eventDateInput && eventType === 'single') {
+        eventDateInput.value = savedEventDate;
+        // Trigger the change event to calculate rental period and price
+        eventDateInput.dispatchEvent(new Event('change'));
+      }
     }
   }
 }

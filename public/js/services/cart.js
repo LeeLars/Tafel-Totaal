@@ -47,10 +47,14 @@ export async function initCart() {
  * Add item to cart
  */
 export async function addToCart(item) {
+  console.log('🛒 Adding item to cart:', item);
+  
   // Generate a unique ID for the item if not present
   if (!item.id) {
     item.id = generateItemId(item);
   }
+  
+  console.log('🛒 Item ID:', item.id);
   
   // Check if item already exists (same product/package and dates)
   const existingIndex = cartData.findIndex(i => 
@@ -60,11 +64,17 @@ export async function addToCart(item) {
     i.end_date === item.end_date
   );
   
+  console.log('🛒 Existing item index:', existingIndex);
+  
   if (existingIndex >= 0) {
     cartData[existingIndex].quantity += item.quantity;
+    console.log('🛒 Updated existing item quantity:', cartData[existingIndex].quantity);
   } else {
     cartData.push(item);
+    console.log('🛒 Added new item to cart');
   }
+  
+  console.log('🛒 Cart now has', cartData.length, 'items:', cartData);
   
   saveToStorage(cartData);
   notifyListeners();
@@ -181,6 +191,25 @@ export function getCart() {
  */
 export function getCartCount() {
   return cartData.reduce((sum, item) => sum + (item.quantity || 1), 0);
+}
+
+/**
+ * Get the locked event date from cart (if any items exist)
+ * Returns the event date from the first item, or null if cart is empty
+ */
+export function getLockedEventDate() {
+  if (cartData.length === 0) return null;
+  
+  const firstItem = cartData[0];
+  // Return the event_date if it exists, otherwise derive from start_date
+  return firstItem.event_date || firstItem.start_date;
+}
+
+/**
+ * Check if cart has items (date should be locked)
+ */
+export function isDateLocked() {
+  return cartData.length > 0;
 }
 
 /**
