@@ -271,6 +271,8 @@ function prefillUserData() {
   document.getElementById('first_name').value = user.first_name || '';
   document.getElementById('last_name').value = user.last_name || '';
   document.getElementById('email').value = user.email || '';
+  const vatField = document.getElementById('vat_number');
+  if (vatField) vatField.value = user.vat_number || '';
   document.getElementById('phone').value = user.phone || '';
   document.getElementById('company_name').value = user.company_name || '';
 }
@@ -397,6 +399,7 @@ function initForms() {
     const firstName = form.first_name.value.trim();
     const lastName = form.last_name.value.trim();
     const email = form.email.value.trim();
+    const vatNumber = form.vat_number?.value?.trim?.() || '';
     const phone = form.phone.value.trim();
 
     // Validation
@@ -420,6 +423,7 @@ function initForms() {
       first_name: firstName,
       last_name: lastName,
       email: email,
+      vat_number: vatNumber,
       phone: phone,
       company_name: form.company_name.value.trim(),
       create_account: form.create_account.checked
