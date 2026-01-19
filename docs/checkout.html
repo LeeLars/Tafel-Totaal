@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="Rond je bestelling af en betaal veilig via Mollie.">
+  <meta name="description" content="Rond je reservering af. Betaling volgt via factuur na inleveren.">
   
-  <title>Checkout | Tafel Totaal</title>
+  <title>Reservering Afronden | Tafel Totaal</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
@@ -41,7 +41,7 @@
           <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
           <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
         </svg>
-        Beveiligde checkout
+        Beveiligde reservering
       </div>
     </div>
   </header>
@@ -61,7 +61,7 @@
           </li>
           <li class="progress-step" data-step="3">
             <span class="progress-step__number">3</span>
-            <span class="progress-step__label">Betaling</span>
+            <span class="progress-step__label">Bevestiging</span>
           </li>
         </ol>
       </div>
@@ -375,7 +375,7 @@
                 <div class="checkout-step__actions">
                   <button type="button" class="btn btn--ghost" id="back-to-step-1">← Terug</button>
                   <button type="submit" class="btn btn--primary">
-                    Verder naar betaling
+                    Verder naar bevestiging
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                       <polyline points="12 5 19 12 12 19"></polyline>
@@ -385,9 +385,9 @@
               </form>
             </div>
 
-            <!-- Step 3: Payment -->
+            <!-- Step 3: Confirmation -->
             <div class="checkout-step" id="step-3">
-              <h2>Betaling</h2>
+              <h2>Bevestiging</h2>
 
               <form id="payment-form">
                 <!-- Order Review -->
@@ -409,14 +409,32 @@
                   </label>
                 </div>
 
+                <!-- Invoice Payment Notice -->
+                <div class="invoice-notice" style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border: 1px solid #2196F3; padding: var(--space-lg); margin: var(--space-lg) 0;">
+                  <div style="display: flex; gap: var(--space-md); align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1976D2" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <div>
+                      <h3 style="margin: 0 0 var(--space-xs); color: #1565C0; font-size: 1.1rem;">Betaling via factuur</h3>
+                      <p style="margin: 0; color: #1976D2; line-height: 1.6;">
+                        Je hoeft nu <strong>niet te betalen</strong>. Na inlevering van het materiaal controleren wij de staat en factureren we het correcte bedrag inclusief eventuele schadevergoeding. Dit zorgt voor een eerlijke en transparante afrekening.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="checkout-step__actions">
                   <button type="button" class="btn btn--ghost" id="back-to-step-2">← Terug</button>
                   <button type="submit" class="btn btn--primary btn--lg" id="place-order-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                      <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    Bestelling plaatsen & betalen
+                    Reservering Bevestigen
                   </button>
                 </div>
               </form>
@@ -459,6 +477,7 @@
               <span id="checkout-total">€0,00</span>
             </div>
 
+            <!--! PAYMENT INTEGRATION DISABLED - Invoice-based payment after return
             <div class="checkout-summary__secure">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -467,6 +486,20 @@
               <div>
                 <strong>Veilig betalen</strong>
                 <p>Via Mollie met Bancontact, iDEAL, creditcard en meer.</p>
+              </div>
+            </div>
+            !-->
+            
+            <div class="checkout-summary__secure">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <div>
+                <strong>Betaling via factuur</strong>
+                <p>Betaling volgt na inleveren. Correcte afrekening inclusief eventuele schade.</p>
               </div>
             </div>
           </aside>
