@@ -10,7 +10,7 @@ import { LoyaltyModel } from '../models/Loyalty.model';
  * Get all loyalty tiers
  * GET /api/loyalty/tiers
  */
-export async function getTiers(req: Request, res: Response): Promise<void> {
+export async function getTiers(_req: Request, res: Response): Promise<void> {
   try {
     const tiers = await LoyaltyService.getAllTiers();
     
