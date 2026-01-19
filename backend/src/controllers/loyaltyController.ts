@@ -40,6 +40,11 @@ export async function getCustomerLoyalty(req: Request, res: Response): Promise<v
 
     const loyaltyInfo = await LoyaltyService.getCustomerLoyaltyInfo(customerId);
     
+    if (!loyaltyInfo) {
+      res.status(500).json({ success: false, error: 'Loyalty system not initialized. Please run database migrations.' });
+      return;
+    }
+    
     res.json({
       success: true,
       data: {

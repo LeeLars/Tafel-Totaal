@@ -489,17 +489,22 @@
 
     async function loadLoyaltyData() {
       try {
+        console.log('Loading loyalty data...');
         const response = await loyaltyAPI.getCustomerLoyalty();
+        console.log('Loyalty API response:', response);
         
-        if (response.success) {
+        if (response && response.success) {
           loyaltyData = response.data;
+          console.log('Loyalty data loaded:', loyaltyData);
           renderLoyaltyDashboard();
         } else {
-          showError('Kon loyalty gegevens niet laden');
+          console.error('Loyalty API error:', response);
+          showError('Kon loyalty gegevens niet laden: ' + (response?.error || 'Onbekende fout'));
         }
       } catch (error) {
         console.error('Loyalty load error:', error);
-        showError('Er ging iets mis bij het laden van je loyalty gegevens');
+        console.error('Error details:', error.message, error.stack);
+        showError('Er ging iets mis bij het laden van je loyalty gegevens. Check de console voor details.');
       }
     }
 
