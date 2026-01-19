@@ -3,7 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { env, isDevelopment } from './config/env';
-import { testConnection } from './config/database';
+import { testConnection, runLoyaltyMigration } from './config/database';
 
 import authRoutes from './routes/auth.routes';
 import packagesRoutes from './routes/packages.routes';
@@ -107,6 +107,9 @@ async function startServer(): Promise<void> {
     console.error('❌ Could not connect to database. Exiting...');
     process.exit(1);
   }
+  
+  // Run loyalty migration on startup
+  await runLoyaltyMigration();
   
   app.listen(env.PORT, () => {
     console.log(`
