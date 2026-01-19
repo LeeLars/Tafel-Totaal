@@ -13,6 +13,7 @@ let selectedAddons = [];
 let startDate = null;
 let endDate = null;
 let eventType = 'single'; // 'single' or 'multi'
+let billingDays = 1; // Actual usage days for pricing (1 for single-day events)
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
@@ -370,6 +371,9 @@ function initDatePickers() {
       startDate = start.toISOString().split('T')[0];
       endDate = end.toISOString().split('T')[0];
       
+      // For single-day events, billing is for 1 day only
+      billingDays = 1;
+      
       // Save event date for other products
       saveEventDate(dateVal);
       
@@ -399,6 +403,11 @@ function initDatePickers() {
   if (endDateInput) {
     endDateInput.addEventListener('change', () => {
       endDate = endDateInput.value;
+      
+      // For multi-day events, billing days = actual rental days
+      if (startDate && endDate) {
+        billingDays = calculateDays(startDate, endDate);
+      }
       
       updateRentalDaysHint();
       updatePriceSummary();
@@ -470,19 +479,19 @@ function getNextFriday() {
  */
 function updateRentalDaysHint() {
   const hint = document.getElementById('rental-days-hint');
-  const startDate = document.getElementById('start-date')?.value;
-  const endDate = document.getElementById('end-date')?.value;
   
   if (!hint || !startDate || !endDate) return;
 
-  const days = calculateDays(startDate, endDate);
   const forfaitDays = currentPackage?.forfait_days || 3;
   
-  if (days <= forfaitDays) {
-    hint.textContent = `${days} ${days === 1 ? 'dag' : 'dagen'} (binnen forfait van ${forfaitDays} dagen)`;
+  // Use billingDays for display (1 for single-day events)
+  if (eventType === 'single') {
+    hint.textContent = '1 dag huur (eendaags evenement, binnen forfait)';
+  } else if (billingDays <= forfaitDays) {
+    hint.textContent = `${billingDays} ${billingDays === 1 ? 'dag' : 'dagen'} (binnen forfait van ${forfaitDays} dagen)`;
   } else {
-    const extraDays = days - forfaitDays;
-    hint.textContent = `${days} dagen (${extraDays} extra ${extraDays === 1 ? 'dag' : 'dagen'} boven forfait)`;
+    const extraDays = billingDays - forfaitDays;
+    hint.textContent = `${billingDays} dagen (${extraDays} extra ${extraDays === 1 ? 'dag' : 'dagen'} boven forfait)`;
   }
 }
 
@@ -557,9 +566,9 @@ function updatePriceSummary() {
   const startDate = document.getElementById('start-date')?.value;
   const endDate = document.getElementById('end-date')?.value;
   
-  const days = startDate && endDate ? calculateDays(startDate, endDate) : 0;
+  // Use billingDays for pricing (1 for single-day events, actual days for multi-day)
   const forfaitDays = currentPackage.forfait_days || 3;
-  const extraDays = Math.max(0, days - forfaitDays);
+  const extraDays = Math.max(0, billingDays - forfaitDays);
 
   // Base price (per person)
   const basePrice = currentPackage.base_price * persons;

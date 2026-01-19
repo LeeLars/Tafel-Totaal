@@ -12,6 +12,7 @@ let selectedQuantity = 1;
 let startDate = null;
 let endDate = null;
 let eventType = 'single'; // 'single' or 'multi'
+let billingDays = 1; // Actual usage days for pricing (1 for single-day events)
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
@@ -456,6 +457,9 @@ function initDatePickers() {
       startDate = start.toISOString().split('T')[0];
       endDate = end.toISOString().split('T')[0];
       
+      // For single-day events, billing is for 1 day only
+      billingDays = 1;
+      
       // Save event date for other products
       saveEventDate(dateVal);
       
@@ -474,6 +478,11 @@ function initDatePickers() {
         if (endDateInput) endDateInput.value = '';
       }
       
+      // For multi-day events, billing days = actual rental days
+      if (startDate && endDate) {
+        billingDays = calculateDays(startDate, endDate);
+      }
+      
       updateTotalPrice();
     });
   }
@@ -481,6 +490,12 @@ function initDatePickers() {
   if (endDateInput) {
     endDateInput.addEventListener('change', () => {
       endDate = endDateInput.value;
+      
+      // For multi-day events, billing days = actual rental days
+      if (startDate && endDate) {
+        billingDays = calculateDays(startDate, endDate);
+      }
+      
       updateTotalPrice();
     });
   }
@@ -501,20 +516,24 @@ function updateTotalPrice() {
     return;
   }
 
-  const days = calculateDays(startDate, endDate);
+  // Use billingDays for pricing (1 for single-day events, actual days for multi-day)
   const pricePerDay = currentProduct.price_per_day || 0;
-  const total = days * pricePerDay * selectedQuantity;
+  const total = billingDays * pricePerDay * selectedQuantity;
 
-  // Update rental hint with days info
+  // Update rental hint with billing days info
   if (rentalHint) {
-    rentalHint.textContent = `${days} ${days === 1 ? 'dag' : 'dagen'} huur`;
+    if (eventType === 'single') {
+      rentalHint.textContent = '1 dag huur (eendaags evenement)';
+    } else {
+      rentalHint.textContent = `${billingDays} ${billingDays === 1 ? 'dag' : 'dagen'} huur`;
+    }
     rentalHint.style.color = 'var(--color-primary)';
     rentalHint.style.fontWeight = '600';
   }
   if (totalPriceEl) totalPriceEl.textContent = formatPrice(total);
 
   // Quote Logic: > 7 days
-  if (days > 7) {
+  if (billingDays > 7) {
     if (addToCartBtn) {
       addToCartBtn.classList.add('hidden');
       addToCartBtn.disabled = true;
@@ -523,7 +542,7 @@ function updateTotalPrice() {
       quoteBtn.classList.remove('hidden');
       // Update quote link with details
       const subject = `Offerte aanvraag: ${currentProduct.name}`;
-      const body = `Ik wil graag een offerte voor:\nProduct: ${currentProduct.name}\nAantal: ${selectedQuantity}\nPeriode: ${formatDateShort(startDate)} tot ${formatDateShort(endDate)} (${days} dagen)`;
+      const body = `Ik wil graag een offerte voor:\nProduct: ${currentProduct.name}\nAantal: ${selectedQuantity}\nPeriode: ${formatDateShort(startDate)} tot ${formatDateShort(endDate)} (${billingDays} dagen)`;
       quoteBtn.href = `/Tafel-Totaal/contact.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
   } else {
@@ -569,7 +588,7 @@ function initAddToCart() {
       btn.textContent = 'Toevoegen...';
 
       const pricePerDay = currentProduct.price_per_day || 0;
-      const unitPrice = pricePerDay * days;
+      const unitPrice = pricePerDay * billingDays;
       const lineTotal = unitPrice * selectedQuantity;
       const damageCompensation = (currentProduct.damage_compensation_per_item || 0) * selectedQuantity;
 

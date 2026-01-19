@@ -1423,6 +1423,9 @@ async function placeOrder() {
       orderData.return_time = checkoutData.delivery.returnTime;
     }
 
+    // Debug: Log the order data being sent
+    console.log('Sending order data:', JSON.stringify(orderData, null, 2));
+
     // Create order via API
     const response = await checkoutAPI.createOrder(orderData);
 

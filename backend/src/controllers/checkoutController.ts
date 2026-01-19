@@ -162,6 +162,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     // Attach reservations to order (keep session_id for later conversion)
     await ReservationModel.assignOrderToSessionReservations(session.id, order.id);
 
+    /*! PAYMENT INTEGRATION DISABLED - Invoice-based payment after return
     // Create Mollie payment
     const paymentResult = await MollieService.createPayment({
       order: {
@@ -181,6 +182,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     }
 
     await OrderModel.setMolliePaymentId(order.id, paymentResult.paymentId);
+    !*/
 
     // Send initial emails (order received)
     const customerRecord = await CustomerModel.findById(customerId);
@@ -208,9 +210,8 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     res.status(201).json({
       success: true,
       data: {
-        orderId: order.id,
-        orderNumber: order.order_number,
-        paymentUrl: paymentResult.checkoutUrl
+        order_id: order.id,
+        order_number: order.order_number
       }
     });
   } catch (error) {
