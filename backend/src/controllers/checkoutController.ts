@@ -181,7 +181,17 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     // Send initial emails (order received)
     const customerRecord = await CustomerModel.findById(customerId);
     if (customerRecord) {
-      await EmailService.sendOrderConfirmation({ ...order, items: breakdown.items as any[] }, customerRecord);
+      let deliveryAddr;
+      if (order.delivery_method === 'DELIVERY' && order.delivery_address_id) {
+        const addresses = await CustomerModel.getAddresses(order.customer_id);
+        deliveryAddr = addresses.find((a) => a.id === order.delivery_address_id);
+      }
+
+      await EmailService.sendOrderConfirmation(
+        { ...order, items: breakdown.items as any[] },
+        customerRecord,
+        deliveryAddr
+      );
       await EmailService.sendAdminNewOrderNotification(order);
     }
 

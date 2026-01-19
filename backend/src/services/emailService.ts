@@ -23,7 +23,14 @@ export const EmailService = {
    */
   async sendOrderConfirmation(
     order: Order & { items?: any[] },
-    customer: Customer
+    customer: Customer,
+    deliveryAddress?: {
+      street: string;
+      house_number: string;
+      postal_code: string;
+      city: string;
+      country?: string;
+    }
   ): Promise<EmailResult> {
     if (!isEmailEnabled()) {
       console.log('📧 Email disabled - skipping order confirmation');
@@ -33,8 +40,8 @@ export const EmailService = {
       const { data, error } = await resend!.emails.send({
         from: env.EMAIL_FROM,
         to: customer.email,
-        subject: `Bevestiging bestelling ${order.order_number} - Tafel Totaal`,
-        html: this.generateOrderConfirmationHtml(order, customer)
+        subject: `Bevestiging reservering ${order.order_number} - Tafel Totaal`,
+        html: this.generateOrderConfirmationHtml(order, customer, deliveryAddress)
       });
 
       if (error) {
@@ -223,53 +230,222 @@ export const EmailService = {
   },
 
   // HTML Template generators
-  generateOrderConfirmationHtml(order: Order & { items?: any[] }, customer: Customer): string {
+  generateOrderConfirmationHtml(
+    order: Order & { items?: any[] },
+    customer: Customer,
+    deliveryAddress?: {
+      street: string;
+      house_number: string;
+      postal_code: string;
+      city: string;
+      country?: string;
+    }
+  ): string {
+    const items = Array.isArray(order.items) ? order.items : [];
+    const formatDeliveryMethod = order.delivery_method === 'DELIVERY' ? 'Bezorgen + Ophalen' : 'Afhalen + Terugbrengen';
+    const orderCreated = this.formatDate(order.created_at);
+    const rentalPeriod = `${this.formatDate(order.rental_start_date)} - ${this.formatDate(order.rental_end_date)}`;
+
+    const addressHtml =
+      order.delivery_method === 'DELIVERY' && deliveryAddress
+        ? `
+            <tr>
+              <td style="padding:0 0 6px 0; font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#4A4A4A; text-transform:uppercase; letter-spacing:0.6px; font-weight:700;">BEZORGADRES</td>
+            </tr>
+            <tr>
+              <td style="padding:0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.6;">
+                ${deliveryAddress.street} ${deliveryAddress.house_number}<br>
+                ${deliveryAddress.postal_code} ${deliveryAddress.city}<br>
+                ${deliveryAddress.country || 'België'}
+              </td>
+            </tr>
+          `
+        : '';
+
+    const itemsHtml =
+      items.length > 0
+        ? items
+            .map((item) => {
+              const qty = Number(item.quantity || 0);
+              const persons = item.persons ? ` • ${item.persons} pers.` : '';
+              const lineTotal = item.lineTotal ?? item.line_total ?? 0;
+              const comp = item.damageCompensationAmount ?? item.damage_compensation_amount ?? 0;
+              return `
+                <tr>
+                  <td style="padding:12px 0; border-top:1px solid #E5E5E5; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A;">
+                    <div style="font-weight:700; text-transform:uppercase; letter-spacing:0.3px;">${item.name || 'Item'}</div>
+                    <div style="margin-top:4px; font-size:12px; color:#4A4A4A;">${qty}x${persons}</div>
+                    <div style="margin-top:4px; font-size:12px; color:#4A4A4A;">Schadevergoeding (referentie): ${PricingService.formatPrice(comp)}</div>
+                  </td>
+                  <td align="right" style="padding:12px 0; border-top:1px solid #E5E5E5; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; font-weight:700; white-space:nowrap;">
+                    ${PricingService.formatPrice(lineTotal)}
+                  </td>
+                </tr>
+              `;
+            })
+            .join('')
+        : `
+            <tr>
+              <td style="padding:12px 0; border-top:1px solid #E5E5E5; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#4A4A4A;">Je items zijn succesvol geregistreerd. Je ontvangt verdere details per e-mail.</td>
+            </tr>
+          `;
+
     return `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #2D5A27; color: white; padding: 20px; text-align: center; }
-          .content { padding: 20px; background: #f9f9f9; }
-          .order-details { background: white; padding: 15px; margin: 15px 0; border-radius: 5px; }
-          .total { font-size: 18px; font-weight: bold; color: #2D5A27; }
-          .footer { text-align: center; padding: 20px; font-size: 12px; color: #666; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h1>Tafel Totaal</h1>
-            <p>Bedankt voor je bestelling!</p>
-          </div>
-          <div class="content">
-            <p>Beste ${customer.first_name},</p>
-            <p>We hebben je bestelling ontvangen en deze wordt verwerkt zodra de betaling is voltooid.</p>
-            
-            <div class="order-details">
-              <h3>Bestelgegevens</h3>
-              <p><strong>Bestelnummer:</strong> ${order.order_number}</p>
-              <p><strong>Verhuurperiode:</strong> ${this.formatDate(order.rental_start_date)} - ${this.formatDate(order.rental_end_date)}</p>
-              <p><strong>Levering:</strong> ${order.delivery_method === 'DELIVERY' ? 'Bezorging' : 'Afhalen'}</p>
-              <hr>
-              <p><strong>Subtotaal:</strong> ${PricingService.formatPrice(order.subtotal)}</p>
-              <p><strong>Bezorgkosten:</strong> ${PricingService.formatPrice(order.delivery_fee)}</p>
-              <p><strong>Schadevergoeding (referentie):</strong> ${PricingService.formatPrice(order.damage_compensation_total)}</p>
-              <p class="total">Totaal: ${PricingService.formatPrice(order.total)}</p>
-            </div>
-            
-            <p>Je ontvangt een bevestiging zodra je betaling is verwerkt.</p>
-            <p>Heb je vragen? Neem gerust contact met ons op.</p>
-          </div>
-          <div class="footer">
-            <p>Tafel Totaal - Van bord tot glas, zonder afwas!</p>
-            <p>info@tafeltotaal.be | +32 xxx xx xx xx</p>
-          </div>
-        </div>
-      </body>
+      <!doctype html>
+      <html lang="nl">
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Reserveringsbevestiging</title>
+        </head>
+        <body style="margin:0; padding:0; background:#FAFAFA;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FAFAFA;">
+            <tr>
+              <td align="center" style="padding:24px 12px;">
+                <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; border:1px solid #E5E5E5; background:#FFFFFF;">
+                  <tr>
+                    <td style="padding:0;">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1A1A1A;">
+                        <tr>
+                          <td style="padding:20px; border-bottom:1px solid #333333;">
+                            <div style="font-family: Arial, Helvetica, sans-serif; font-size:22px; letter-spacing:1px; font-weight:800; color:#FFFFFF; text-transform:uppercase;">TAFEL TOTAAL</div>
+                            <div style="margin-top:6px; font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#E5E5E5; letter-spacing:0.6px; text-transform:uppercase;">Reserveringsbevestiging</div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 20px 20px 20px;">
+                            <div style="font-family: Arial, Helvetica, sans-serif; font-size:34px; line-height:1.1; font-weight:900; color:#FFFFFF; text-transform:uppercase; letter-spacing:0.5px;">
+                              Reservering bevestigd
+                            </div>
+                            <div style="margin-top:10px; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#FAFAFA; line-height:1.6;">
+                              Bestelnummer: <span style="color:#B56B6C; font-weight:800;">${order.order_number}</span>
+                            </div>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding:20px;">
+                      <div style="font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.7;">
+                        Beste <strong>${customer.first_name}</strong>,<br>
+                        We hebben je reservering goed ontvangen.
+                      </div>
+
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px; border:1px solid #E5E5E5;">
+                        <tr>
+                          <td style="padding:14px; background:#F4F4F4; border-bottom:1px solid #E5E5E5; font-family: Arial, Helvetica, sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.6px; font-weight:800; color:#1A1A1A;">
+                            Betaling via factuur na inleveren
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:14px; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.7;">
+                            Je hoeft nu <strong>niet vooraf te betalen</strong>. Na inlevering controleren wij het materiaal en sturen we een factuur voor de huurprijs. Alleen bij schade of ontbrekende items wordt een vergoeding toegevoegd.
+                          </td>
+                        </tr>
+                      </table>
+
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
+                        <tr>
+                          <td style="padding:0;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E5E5;">
+                              <tr>
+                                <td style="padding:14px; background:#FFFFFF;">
+                                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                                    <tr>
+                                      <td style="padding:0 0 6px 0; font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#4A4A4A; text-transform:uppercase; letter-spacing:0.6px; font-weight:700;">OVERZICHT</td>
+                                    </tr>
+                                    <tr>
+                                      <td style="padding:0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.6;">
+                                        <strong>Datum reservering:</strong> ${orderCreated}<br>
+                                        <strong>Verhuurperiode:</strong> ${rentalPeriod}<br>
+                                        <strong>Levering:</strong> ${formatDeliveryMethod}
+                                      </td>
+                                    </tr>
+                                    ${addressHtml}
+                                  </table>
+                                </td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px; border:1px solid #E5E5E5;">
+                        <tr>
+                          <td style="padding:14px; background:#1A1A1A; font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#FFFFFF; text-transform:uppercase; letter-spacing:0.6px; font-weight:800;">
+                            Items
+                          </td>
+                        </tr>
+                        <tr>
+                          <td style="padding:0 14px;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              ${itemsHtml}
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px; border:1px solid #E5E5E5;">
+                        <tr>
+                          <td style="padding:14px; background:#FFFFFF;">
+                            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                              <tr>
+                                <td style="padding:6px 0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A;">Subtotaal</td>
+                                <td align="right" style="padding:6px 0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; white-space:nowrap; font-weight:700;">${PricingService.formatPrice(order.subtotal)}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding:6px 0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A;">Bezorgkosten</td>
+                                <td align="right" style="padding:6px 0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; white-space:nowrap; font-weight:700;">${PricingService.formatPrice(order.delivery_fee)}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding:6px 0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A;">Schadevergoeding (referentie)</td>
+                                <td align="right" style="padding:6px 0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; white-space:nowrap; font-weight:700;">${PricingService.formatPrice(order.damage_compensation_total)}</td>
+                              </tr>
+                              <tr>
+                                <td style="padding:10px 0 0 0; border-top:1px solid #E5E5E5; font-family: Arial, Helvetica, sans-serif; font-size:16px; color:#903D3E; font-weight:900; text-transform:uppercase; letter-spacing:0.4px;">Totaal (huur)</td>
+                                <td align="right" style="padding:10px 0 0 0; border-top:1px solid #E5E5E5; font-family: Arial, Helvetica, sans-serif; font-size:16px; color:#903D3E; font-weight:900; white-space:nowrap;">${PricingService.formatPrice(order.total)}</td>
+                              </tr>
+                            </table>
+                          </td>
+                        </tr>
+                      </table>
+
+                      ${order.notes ? `
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px; border:1px solid #E5E5E5;">
+                        <tr>
+                          <td style="padding:14px; background:#F4F4F4; border-bottom:1px solid #E5E5E5; font-family: Arial, Helvetica, sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:0.6px; font-weight:800; color:#1A1A1A;">Opmerkingen</td>
+                        </tr>
+                        <tr>
+                          <td style="padding:14px; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.7;">${String(order.notes)}</td>
+                        </tr>
+                      </table>
+                      ` : ''}
+
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
+                        <tr>
+                          <td style="padding:0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.7;">
+                            Vragen? Antwoord op deze mail of contacteer ons via <strong>info@tafeltotaal.be</strong>.
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td style="padding:18px 20px; background:#FAFAFA; border-top:1px solid #E5E5E5;">
+                      <div style="font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#666666; line-height:1.6;">
+                        <strong style="color:#1A1A1A;">Tafel Totaal</strong> — Van bord tot glas, zonder afwas!<br>
+                        Parkstraat 44, 8730 Beernem • info@tafeltotaal.be
+                      </div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
       </html>
     `;
   },

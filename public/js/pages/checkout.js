@@ -1274,47 +1274,50 @@ async function initializeMap(routeCoordinates, destCoords, destName) {
 }
 
 /**
- * Animate car marker along the route
+ * Animate car marker along the route with smooth interpolation
  */
 function animateCarAlongRoute(routeCoordinates) {
   if (!carMarker || routeCoordinates.length < 2) return;
   
   const totalPoints = routeCoordinates.length;
-  const animationDuration = 5000; // 5 seconds for full route
+  const animationDuration = 8000; // 8 seconds for full route (slower, smoother)
   let startTime = null;
-  let currentIndex = 0;
   
   function animate(timestamp) {
     if (!startTime) startTime = timestamp;
     const elapsed = timestamp - startTime;
     const progress = Math.min(elapsed / animationDuration, 1);
     
-    // Calculate current position along route
-    const targetIndex = Math.floor(progress * (totalPoints - 1));
+    // Calculate exact position along route with smooth interpolation
+    const exactIndex = progress * (totalPoints - 1);
+    const currentIndex = Math.floor(exactIndex);
+    const nextIndex = Math.min(currentIndex + 1, totalPoints - 1);
+    const segmentProgress = exactIndex - currentIndex;
     
-    if (targetIndex !== currentIndex && targetIndex < totalPoints) {
-      currentIndex = targetIndex;
-      const currentPos = routeCoordinates[currentIndex];
-      carMarker.setLatLng(currentPos);
-      
-      // Calculate rotation based on direction
-      if (currentIndex < totalPoints - 1) {
-        const nextPos = routeCoordinates[currentIndex + 1];
-        const angle = Math.atan2(nextPos[1] - currentPos[1], nextPos[0] - currentPos[0]) * 180 / Math.PI;
-        const carEl = carMarker.getElement();
-        if (carEl) {
-          carEl.style.transform = `rotate(${angle - 90}deg)`;
-        }
+    // Interpolate between current and next point for smooth movement
+    const currentPoint = routeCoordinates[currentIndex];
+    const nextPoint = routeCoordinates[nextIndex];
+    
+    const lat = currentPoint[0] + (nextPoint[0] - currentPoint[0]) * segmentProgress;
+    const lng = currentPoint[1] + (nextPoint[1] - currentPoint[1]) * segmentProgress;
+    
+    carMarker.setLatLng([lat, lng]);
+    
+    // Calculate rotation based on direction to next point
+    if (currentIndex < totalPoints - 1) {
+      const angle = Math.atan2(nextPoint[1] - currentPoint[1], nextPoint[0] - currentPoint[0]) * 180 / Math.PI;
+      const carEl = carMarker.getElement();
+      if (carEl) {
+        carEl.style.transform = `rotate(${angle + 90}deg)`;
       }
     }
     
     if (progress < 1) {
       animationFrame = requestAnimationFrame(animate);
     } else {
-      // Reset and loop animation
+      // Reset and loop animation after pause
       setTimeout(() => {
         startTime = null;
-        currentIndex = 0;
         carMarker.setLatLng(ORIGIN_COORDS);
         animationFrame = requestAnimationFrame(animate);
       }, 2000);
