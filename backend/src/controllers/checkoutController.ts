@@ -17,7 +17,7 @@ const SESSION_DURATION_DAYS = 30;
 
 export async function createOrder(req: Request, res: Response): Promise<void> {
   try {
-    const { deliveryMethod, customer, deliveryAddress, notes, delivery_time, pickup_time, self_pickup_time, return_time } = req.body as {
+    const { deliveryMethod, customer, deliveryAddress, notes, delivery_time, pickup_time, self_pickup_time, return_time, items } = req.body as {
       deliveryMethod: DeliveryMethod;
       customer: {
         email: string;
@@ -39,6 +39,15 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       pickup_time?: string;
       self_pickup_time?: string;
       return_time?: string;
+      items?: Array<{
+        type: 'product' | 'package';
+        id: string;
+        quantity?: number;
+        persons?: number;
+        start_date: string;
+        end_date: string;
+        addons?: string[];
+      }>;
     };
     
     // TODO: Implement full checkout logic
@@ -53,21 +62,32 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     // 9. Return payment URL
 
     const session = await getOrCreateSession(req, res);
-    const cartItems = Array.isArray(session.cart_data) ? session.cart_data : [];
+    
+    // Use items from request body (preferred) or fall back to session cart
+    const sessionCartItems = Array.isArray(session.cart_data) ? session.cart_data : [];
+    const requestItems = Array.isArray(items) ? items : [];
+    
+    // Convert request items to cart item format
+    const cartItems: CartItem[] = requestItems.length > 0 
+      ? requestItems.map(item => ({
+          type: item.type,
+          id: item.id,
+          quantity: item.quantity || 1,
+          persons: item.persons,
+          startDate: item.start_date,
+          endDate: item.end_date,
+          addons: item.addons || []
+        }))
+      : sessionCartItems;
 
     if (cartItems.length === 0) {
       res.status(400).json({ success: false, error: 'Cart is empty' });
       return;
     }
 
-    // Ensure single rental period for now
+    // Use the first item's dates as the rental period
     const rentalStart = cartItems[0].startDate;
     const rentalEnd = cartItems[0].endDate;
-    const hasMixedDates = cartItems.some((i) => i.startDate !== rentalStart || i.endDate !== rentalEnd);
-    if (hasMixedDates) {
-      res.status(400).json({ success: false, error: 'All cart items must have the same rental period' });
-      return;
-    }
 
     // Validate delivery address requirements
     const postalCode = deliveryAddress?.postal_code;
