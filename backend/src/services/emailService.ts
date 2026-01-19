@@ -30,6 +30,12 @@ export const EmailService = {
       postal_code: string;
       city: string;
       country?: string;
+    },
+    timeSlots?: {
+      deliveryTime?: string;
+      pickupTime?: string;
+      selfPickupTime?: string;
+      returnTime?: string;
     }
   ): Promise<EmailResult> {
     if (!isEmailEnabled()) {
@@ -41,7 +47,7 @@ export const EmailService = {
         from: env.EMAIL_FROM,
         to: customer.email,
         subject: `Bevestiging reservering ${order.order_number} - Tafel Totaal`,
-        html: this.generateOrderConfirmationHtml(order, customer, deliveryAddress)
+        html: this.generateOrderConfirmationHtml(order, customer, deliveryAddress, timeSlots)
       });
 
       if (error) {
@@ -239,12 +245,34 @@ export const EmailService = {
       postal_code: string;
       city: string;
       country?: string;
+    },
+    timeSlots?: {
+      deliveryTime?: string;
+      pickupTime?: string;
+      selfPickupTime?: string;
+      returnTime?: string;
     }
   ): string {
     const items = Array.isArray(order.items) ? order.items : [];
     const formatDeliveryMethod = order.delivery_method === 'DELIVERY' ? 'Bezorgen + Ophalen' : 'Afhalen + Terugbrengen';
     const orderCreated = this.formatDate(order.created_at);
     const rentalPeriod = `${this.formatDate(order.rental_start_date)} - ${this.formatDate(order.rental_end_date)}`;
+
+    // Customer details section
+    const customerDetailsHtml = `
+      <tr>
+        <td style="padding:0 0 6px 0; font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#4A4A4A; text-transform:uppercase; letter-spacing:0.6px; font-weight:700;">KLANTGEGEVENS</td>
+      </tr>
+      <tr>
+        <td style="padding:0 0 12px 0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.6;">
+          <strong>${customer.first_name} ${customer.last_name}</strong><br>
+          ${customer.company_name ? `${customer.company_name}<br>` : ''}
+          ${customer.email}<br>
+          ${customer.phone || ''}
+          ${customer.vat_number ? `<br>BTW: ${customer.vat_number}` : ''}
+        </td>
+      </tr>
+    `;
 
     const addressHtml =
       order.delivery_method === 'DELIVERY' && deliveryAddress
@@ -261,6 +289,23 @@ export const EmailService = {
             </tr>
           `
         : '';
+
+    // Time slots section
+    const timeSlotsHtml = timeSlots && (timeSlots.deliveryTime || timeSlots.selfPickupTime)
+      ? `
+          <tr>
+            <td style="padding:12px 0 0 0; font-family: Arial, Helvetica, sans-serif; font-size:12px; color:#4A4A4A; text-transform:uppercase; letter-spacing:0.6px; font-weight:700;">TIJDSLOTS</td>
+          </tr>
+          <tr>
+            <td style="padding:0; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.6;">
+              ${timeSlots.deliveryTime ? `<strong>Levering:</strong> ${timeSlots.deliveryTime}<br>` : ''}
+              ${timeSlots.pickupTime ? `<strong>Ophalen:</strong> ${timeSlots.pickupTime}<br>` : ''}
+              ${timeSlots.selfPickupTime ? `<strong>Afhalen:</strong> ${timeSlots.selfPickupTime}<br>` : ''}
+              ${timeSlots.returnTime ? `<strong>Terugbrengen:</strong> ${timeSlots.returnTime}` : ''}
+            </td>
+          </tr>
+        `
+      : '';
 
     const itemsHtml =
       items.length > 0
@@ -363,7 +408,9 @@ export const EmailService = {
                                         <strong>Levering:</strong> ${formatDeliveryMethod}
                                       </td>
                                     </tr>
+                                    ${customerDetailsHtml}
                                     ${addressHtml}
+                                    ${timeSlotsHtml}
                                   </table>
                                 </td>
                               </tr>
@@ -422,6 +469,16 @@ export const EmailService = {
                         </tr>
                       </table>
                       ` : ''}
+
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px; border:1px solid #E5E5E5;">
+                        <tr>
+                          <td style="padding:14px; background:#F4F4F4; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#1A1A1A; line-height:1.7; text-align:center;">
+                            <a href="${env.FRONTEND_URL}/account/bestellingen" style="display:inline-block; background:#903D3E; color:#FFFFFF; padding:12px 24px; text-decoration:none; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">
+                              Bekijk Mijn Bestellingen
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
 
                       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:18px;">
                         <tr>

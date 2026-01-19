@@ -17,7 +17,7 @@ const SESSION_DURATION_DAYS = 30;
 
 export async function createOrder(req: Request, res: Response): Promise<void> {
   try {
-    const { deliveryMethod, customer, deliveryAddress, notes } = req.body as {
+    const { deliveryMethod, customer, deliveryAddress, notes, delivery_time, pickup_time, self_pickup_time, return_time } = req.body as {
       deliveryMethod: DeliveryMethod;
       customer: {
         email: string;
@@ -35,6 +35,10 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
         country?: string;
       };
       notes?: string;
+      delivery_time?: string;
+      pickup_time?: string;
+      self_pickup_time?: string;
+      return_time?: string;
     };
     
     // TODO: Implement full checkout logic
@@ -190,7 +194,13 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       await EmailService.sendOrderConfirmation(
         { ...order, items: breakdown.items as any[] },
         customerRecord,
-        deliveryAddr
+        deliveryAddr,
+        {
+          deliveryTime: delivery_time,
+          pickupTime: pickup_time,
+          selfPickupTime: self_pickup_time,
+          returnTime: return_time
+        }
       );
       await EmailService.sendAdminNewOrderNotification(order);
     }
