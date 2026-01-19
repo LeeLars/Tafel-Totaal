@@ -1399,8 +1399,8 @@ async function placeOrder() {
     // Prepare order data
     const orderData = {
       customer: checkoutData.customer,
-      delivery_method: checkoutData.delivery.method,
-      delivery_address: checkoutData.delivery.address || null,
+      deliveryMethod: checkoutData.delivery.method,
+      deliveryAddress: checkoutData.delivery.address || null,
       notes: checkoutData.delivery.notes,
       event_date: checkoutData.eventDate,
       items: checkoutData.items.map(item => ({
