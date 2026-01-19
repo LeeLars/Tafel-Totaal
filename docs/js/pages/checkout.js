@@ -526,15 +526,21 @@ function populateEventDates() {
   const cart = checkoutData.items;
   if (!cart || cart.length === 0) return;
   
-  // Find the first item with a start_date
-  const itemWithDate = cart.find(item => item.start_date);
-  if (!itemWithDate || !itemWithDate.start_date) return;
+  // Find the first item with an event_date (preferred) or start_date (fallback)
+  const itemWithDate = cart.find(item => item.event_date || item.start_date);
+  if (!itemWithDate) return;
   
-  const eventDate = new Date(itemWithDate.start_date);
-  const formattedDate = formatDateShort(itemWithDate.start_date);
+  // Use event_date if available (actual event date), otherwise fall back to start_date
+  const actualEventDate = itemWithDate.event_date || itemWithDate.start_date;
+  if (!actualEventDate) return;
+  
+  const eventDate = new Date(actualEventDate);
+  const formattedDate = formatDateShort(actualEventDate);
   
   console.log('Populating event dates with:', { 
-    raw: itemWithDate.start_date, 
+    event_date: itemWithDate.event_date,
+    start_date: itemWithDate.start_date,
+    using: actualEventDate,
     formatted: formattedDate 
   });
   
@@ -549,8 +555,8 @@ function populateEventDates() {
     pickupEventDateField.value = formattedDate;
   }
   
-  // Store event date in checkout data
-  checkoutData.eventDate = itemWithDate.start_date;
+  // Store event date in checkout data (use actual event_date, not logistical start_date)
+  checkoutData.eventDate = actualEventDate;
   
   // Generate date preset buttons
   generateDatePresets(eventDate);

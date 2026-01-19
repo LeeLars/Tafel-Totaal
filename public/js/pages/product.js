@@ -637,6 +637,10 @@ function initAddToCart() {
       const lineTotal = unitPrice * selectedQuantity;
       const damageCompensation = (currentProduct.damage_compensation_per_item || 0) * selectedQuantity;
 
+      // Get the actual event date (for single-day events, this is the date user selected)
+      const eventDateInput = document.getElementById('event-date');
+      const actualEventDate = eventType === 'single' && eventDateInput ? eventDateInput.value : startDate;
+      
       await addToCart({
         type: 'product',
         product_id: currentProduct.id,
@@ -646,8 +650,12 @@ function initAddToCart() {
         unit_price: unitPrice,
         line_total: lineTotal,
         damage_compensation: damageCompensation,
+        damage_compensation_per_item: currentProduct.damage_compensation_per_item || 0,
         start_date: startDate,
         end_date: endDate,
+        event_date: actualEventDate,  // The actual event date (not logistical)
+        event_type: eventType,        // 'single' or 'multi'
+        billing_days: billingDays,    // Actual days charged (1 for single-day)
         days: days,
         image: currentProduct.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg'
       });

@@ -697,14 +697,25 @@ document.getElementById('add-to-cart-btn')?.addEventListener('click', async () =
   btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Toevoegen...';
 
   try {
+    // Get the actual event date (for single-day events, this is the date user selected)
+    const eventDateInput = document.getElementById('event-date');
+    const actualEventDate = eventType === 'single' && eventDateInput ? eventDateInput.value : startDate;
+    
     const result = await addToCart({
       type: 'package',
-      id: currentPackage.id,
+      package_id: currentPackage.id,
+      name: currentPackage.name,
       quantity: 1,
       persons: persons,
-      startDate: startDate,
-      endDate: endDate,
-      addons: selectedAddons
+      start_date: startDate,
+      end_date: endDate,
+      event_date: actualEventDate,  // The actual event date (not logistical)
+      event_type: eventType,        // 'single' or 'multi'
+      billing_days: billingDays,    // Actual days charged
+      addons: selectedAddons,
+      unit_price: calculatePackagePrice(),
+      line_total: calculatePackagePrice(),
+      image: currentPackage.images?.[0] || '/Tafel-Totaal/images/packages/placeholder.jpg'
     });
 
     if (result.success) {

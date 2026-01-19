@@ -195,14 +195,30 @@ export function getCartCount() {
 
 /**
  * Get the locked event date from cart (if any items exist)
- * Returns the event date from the first item, or null if cart is empty
+ * Returns the actual event date from the first item, or null if cart is empty
  */
 export function getLockedEventDate() {
   if (cartData.length === 0) return null;
   
   const firstItem = cartData[0];
-  // Return the event_date if it exists, otherwise derive from start_date
+  // Return the event_date if it exists (actual event date), otherwise fall back to start_date
+  // For single-day events, event_date is the actual event, start_date is logistical (2 days before)
   return firstItem.event_date || firstItem.start_date;
+}
+
+/**
+ * Get the locked start/end dates from cart (logistical dates)
+ */
+export function getLockedDates() {
+  if (cartData.length === 0) return null;
+  
+  const firstItem = cartData[0];
+  return {
+    start_date: firstItem.start_date,
+    end_date: firstItem.end_date,
+    event_date: firstItem.event_date,
+    event_type: firstItem.event_type || 'single'
+  };
 }
 
 /**
