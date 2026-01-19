@@ -1380,13 +1380,13 @@ function renderOrderReview() {
 }
 
 /**
- * Place order and redirect to payment
+ * Place order and confirm reservation (no payment required)
  */
 async function placeOrder() {
   const btn = document.getElementById('place-order-btn');
   
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Bestelling verwerken...';
+  btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Reservering verwerken...';
 
   try {
     // Prepare order data
@@ -1419,6 +1419,7 @@ async function placeOrder() {
     // Create order via API
     const response = await checkoutAPI.createOrder(orderData);
 
+    /*! PAYMENT INTEGRATION DISABLED - Invoice-based payment after return
     if (response.data?.payment_url) {
       // Clear cart before redirect
       await clearCart();
@@ -1428,17 +1429,27 @@ async function placeOrder() {
     } else {
       throw new Error('Geen betaallink ontvangen');
     }
+    !*/
+    
+    // Clear cart and redirect to confirmation page
+    if (response.data?.order_id) {
+      await clearCart();
+      
+      // Redirect to order confirmation page
+      window.location.href = `/Tafel-Totaal/bestelling-bevestigd.html?order=${response.data.order_id}`;
+    } else {
+      throw new Error('Reservering kon niet worden aangemaakt');
+    }
   } catch (error) {
     console.error('Order placement error:', error);
-    showToast(error.message || 'Er ging iets mis bij het plaatsen van je bestelling', 'error');
+    showToast(error.message || 'Er ging iets mis bij het plaatsen van je reservering', 'error');
     
     btn.disabled = false;
     btn.innerHTML = `
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
-      Bestelling plaatsen & betalen
+      Reservering Bevestigen
     `;
   }
 }

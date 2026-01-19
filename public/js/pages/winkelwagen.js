@@ -184,6 +184,7 @@ function getItemImageUrl(item) {
 function updateSummary(cart) {
   let subtotal = 0;
   let compensation = 0;
+  const compensationItems = [];
 
   cart.forEach(item => {
     // Calculate line total from available data
@@ -197,7 +198,16 @@ function updateSummary(cart) {
     }
     
     subtotal += itemTotal;
-    compensation += item.damage_compensation || 0;
+    
+    const itemCompensation = item.damage_compensation || 0;
+    if (itemCompensation > 0) {
+      compensationItems.push({
+        name: item.name,
+        amount: itemCompensation,
+        quantity: item.quantity || 1
+      });
+      compensation += itemCompensation;
+    }
   });
 
   // Estimate compensation if not provided (30% of subtotal)
@@ -210,7 +220,19 @@ function updateSummary(cart) {
   const total = subtotal;
 
   document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
-  document.getElementById('summary-deposit').textContent = formatPrice(compensation);
+  
+  // Build compensation breakdown text
+  const depositEl = document.getElementById('summary-deposit');
+  if (compensationItems.length > 0) {
+    const breakdown = compensationItems
+      .map(item => `${item.name} (${formatPrice(item.amount)})`)
+      .join(' + ');
+    depositEl.innerHTML = `€&nbsp;${compensation.toFixed(2).replace('.', ',')}`;
+    depositEl.title = breakdown;
+  } else {
+    depositEl.textContent = formatPrice(compensation);
+  }
+  
   document.getElementById('summary-total').textContent = formatPrice(total);
 }
 
