@@ -248,6 +248,13 @@ export const OrderModel = {
     );
   },
 
+  async updateLoyaltyPoints(id: string, pointsEarned: number, pointsRedeemed: number): Promise<Order | null> {
+    return queryOne<Order>(
+      'UPDATE orders SET loyalty_points_earned = $1, loyalty_points_redeemed = $2 WHERE id = $3 RETURNING *',
+      [pointsEarned, pointsRedeemed, id]
+    );
+  },
+
   async getByCustomer(customerId: string, limit = 20): Promise<OrderWithItems[]> {
     return query<OrderWithItems>(
       `SELECT * FROM orders WHERE customer_id = $1 ORDER BY created_at DESC LIMIT $2`,

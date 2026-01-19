@@ -175,12 +175,22 @@ function initLogout() {
   if (!logoutBtn) return;
 
   logoutBtn.addEventListener('click', async () => {
+    logoutBtn.disabled = true;
+    logoutBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div> Uitloggen...';
+    
     try {
       await authAPI.logout();
-      showToast('Je bent uitgelogd', 'success');
-      window.location.href = '/Tafel-Totaal/';
     } catch (error) {
-      showToast('Uitloggen mislukt', 'error');
+      console.error('Logout API error:', error);
+      // Continue with local logout even if API fails
     }
+    
+    // Always clear local storage and redirect
+    localStorage.removeItem('user');
+    localStorage.removeItem('auth_token');
+    sessionStorage.clear();
+    
+    showToast('Je bent uitgelogd', 'success');
+    window.location.href = '/Tafel-Totaal/';
   });
 }

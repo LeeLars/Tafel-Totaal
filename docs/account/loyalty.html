@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Bekijk je loyalty punten en voordelen bij Tafel Totaal.">
+  
+  <title>Loyalty Programma | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/account.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main class="account-page">
+    <div class="container">
+      <div class="account-layout">
+        <!-- Sidebar -->
+        <aside class="account-sidebar">
+          <div class="account-sidebar__header">
+            <div class="account-sidebar__avatar" id="user-avatar">-</div>
+            <div class="account-sidebar__info">
+              <div class="account-sidebar__name" id="user-name">Laden...</div>
+              <div class="account-sidebar__email" id="user-email">-</div>
+            </div>
+          </div>
+          <nav class="account-nav">
+            <a href="/Tafel-Totaal/account/overzicht.html" class="account-nav__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+              Overzicht
+            </a>
+            <a href="/Tafel-Totaal/account/bestellingen.html" class="account-nav__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+              Bestellingen
+            </a>
+            <a href="/Tafel-Totaal/account/loyalty.html" class="account-nav__link active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              Loyalty Programma
+            </a>
+            <a href="/Tafel-Totaal/account/gegevens.html" class="account-nav__link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              Mijn Gegevens
+            </a>
+            <div class="account-nav__divider"></div>
+            <button class="account-nav__link account-nav__link--danger" id="logout-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+              Uitloggen
+            </button>
+          </nav>
+        </aside>
+
+        <!-- Content -->
+        <div class="account-content">
+          <div class="account-content__header">
+            <h1>Loyalty Programma</h1>
+            <p>Spaar punten en ontvang exclusieve kortingen op je bestellingen.</p>
+          </div>
+
+          <!-- Loading State -->
+          <div id="loyalty-loading" class="account-card">
+            <div style="text-align: center; padding: var(--space-xl);">
+              <div class="spinner" style="margin: 0 auto;"></div>
+              <p style="margin-top: var(--space-md); color: var(--color-gray);">Loyalty gegevens laden...</p>
+            </div>
+          </div>
+
+          <!-- Loyalty Dashboard (hidden until loaded) -->
+          <div id="loyalty-dashboard" style="display: none;">
+            
+            <!-- Current Tier Card -->
+            <div class="account-card loyalty-tier-card" id="tier-card">
+              <div class="loyalty-tier-header">
+                <div class="loyalty-tier-badge" id="tier-badge">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="tier-icon">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                  <span id="tier-name">Brons</span>
+                </div>
+                <div class="loyalty-points">
+                  <span class="loyalty-points__value" id="available-points">0</span>
+                  <span class="loyalty-points__label">beschikbare punten</span>
+                </div>
+              </div>
+              
+              <!-- Progress to Next Tier -->
+              <div class="loyalty-progress" id="tier-progress">
+                <div class="loyalty-progress__header">
+                  <span>Voortgang naar <strong id="next-tier-name">Zilver</strong></span>
+                  <span id="points-to-next">500 punten nodig</span>
+                </div>
+                <div class="loyalty-progress__bar">
+                  <div class="loyalty-progress__fill" id="progress-fill" style="width: 0%;"></div>
+                </div>
+              </div>
+              
+              <!-- Current Benefits -->
+              <div class="loyalty-benefits">
+                <h3>Jouw voordelen</h3>
+                <ul class="loyalty-benefits__list" id="benefits-list">
+                  <li>Punten sparen bij elke bestelling</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Redemption Card -->
+            <div class="account-card">
+              <div class="account-card__header">
+                <h2 class="account-card__title">Punten Inwisselen</h2>
+              </div>
+              <div class="loyalty-redemption">
+                <div class="loyalty-redemption__info">
+                  <div class="loyalty-redemption__value">
+                    <span id="redemption-value">€0,00</span>
+                    <span class="loyalty-redemption__label">beschikbaar als korting</span>
+                  </div>
+                  <p class="loyalty-redemption__hint">100 punten = €10 korting (max 40% van je bestelling)</p>
+                </div>
+                <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary">
+                  Bestelling Plaatsen
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- All Tiers Overview -->
+            <div class="account-card">
+              <div class="account-card__header">
+                <h2 class="account-card__title">Alle Niveaus</h2>
+              </div>
+              <div class="loyalty-tiers-grid" id="tiers-grid">
+                <!-- Tiers will be rendered here -->
+              </div>
+            </div>
+
+            <!-- Transaction History -->
+            <div class="account-card">
+              <div class="account-card__header">
+                <h2 class="account-card__title">Puntengeschiedenis</h2>
+              </div>
+              <div class="loyalty-history" id="history-container">
+                <p class="loyalty-history__empty">Nog geen transacties.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <style>
+    /* Loyalty Specific Styles */
+    .loyalty-tier-card {
+      background: linear-gradient(135deg, var(--color-black) 0%, #2a2a2a 100%);
+      color: var(--color-white);
+    }
+
+    .loyalty-tier-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .loyalty-tier-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-sm) var(--space-md);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .loyalty-tier-badge svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .loyalty-tier-badge span {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      text-transform: uppercase;
+    }
+
+    .loyalty-tier-badge.bronze { color: #CD7F32; }
+    .loyalty-tier-badge.silver { color: #C0C0C0; }
+    .loyalty-tier-badge.gold { color: #FFD700; }
+    .loyalty-tier-badge.platinum { color: #E5E4E2; }
+
+    .loyalty-points {
+      text-align: right;
+    }
+
+    .loyalty-points__value {
+      display: block;
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1;
+    }
+
+    .loyalty-points__label {
+      font-size: var(--font-size-sm);
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .loyalty-progress {
+      margin-bottom: var(--space-xl);
+    }
+
+    .loyalty-progress__header {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--font-size-sm);
+      margin-bottom: var(--space-sm);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .loyalty-progress__bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      overflow: hidden;
+    }
+
+    .loyalty-progress__fill {
+      height: 100%;
+      background: var(--color-primary);
+      transition: width 0.5s ease;
+    }
+
+    .loyalty-benefits h3 {
+      font-size: var(--font-size-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: var(--space-sm);
+    }
+
+    .loyalty-benefits__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .loyalty-benefits__list li {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      padding: var(--space-xs) 0;
+      font-size: var(--font-size-sm);
+    }
+
+    .loyalty-benefits__list li::before {
+      content: '✓';
+      color: var(--color-success);
+      font-weight: bold;
+    }
+
+    .loyalty-redemption {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-lg);
+      flex-wrap: wrap;
+    }
+
+    .loyalty-redemption__value span:first-child {
+      display: block;
+      font-family: var(--font-display);
+      font-size: var(--font-size-2xl);
+      color: var(--color-primary);
+    }
+
+    .loyalty-redemption__label {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray);
+    }
+
+    .loyalty-redemption__hint {
+      font-size: var(--font-size-xs);
+      color: var(--color-gray);
+      margin-top: var(--space-xs);
+    }
+
+    .loyalty-tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+    }
+
+    .loyalty-tier-item {
+      padding: var(--space-lg);
+      border: 1px solid var(--color-light-gray);
+      text-align: center;
+      position: relative;
+    }
+
+    .loyalty-tier-item.current {
+      border-color: var(--color-primary);
+      background: rgba(144, 61, 62, 0.05);
+    }
+
+    .loyalty-tier-item.current::after {
+      content: 'HUIDIG';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: var(--color-white);
+      font-size: 10px;
+      font-weight: bold;
+      padding: 2px 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .loyalty-tier-item__icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto var(--space-sm);
+    }
+
+    .loyalty-tier-item__name {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-xs);
+    }
+
+    .loyalty-tier-item__points {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray);
+      margin-bottom: var(--space-sm);
+    }
+
+    .loyalty-tier-item__discount {
+      font-size: var(--font-size-xl);
+      font-weight: bold;
+      color: var(--color-primary);
+    }
+
+    .loyalty-tier-item__boost {
+      font-size: var(--font-size-xs);
+      color: var(--color-success);
+      margin-top: var(--space-xs);
+    }
+
+    .loyalty-history__empty {
+      text-align: center;
+      color: var(--color-gray);
+      padding: var(--space-xl);
+    }
+
+    .loyalty-history__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .loyalty-history__item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--color-light-gray);
+    }
+
+    .loyalty-history__item:last-child {
+      border-bottom: none;
+    }
+
+    .loyalty-history__info {
+      flex: 1;
+    }
+
+    .loyalty-history__description {
+      font-weight: 500;
+    }
+
+    .loyalty-history__date {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray);
+    }
+
+    .loyalty-history__points {
+      font-weight: bold;
+      font-size: var(--font-size-lg);
+    }
+
+    .loyalty-history__points.positive {
+      color: var(--color-success);
+    }
+
+    .loyalty-history__points.positive::before {
+      content: '+';
+    }
+
+    .loyalty-history__points.negative {
+      color: var(--color-error);
+    }
+
+    @media (max-width: 640px) {
+      .loyalty-tier-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .loyalty-points {
+        text-align: center;
+      }
+
+      .loyalty-redemption {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+
+  <script type="module">
+    import { loadHeader } from '/Tafel-Totaal/js/components/header.js';
+    import { loadFooter } from '/Tafel-Totaal/js/components/footer.js';
+    import { initAuth, getCurrentUser, logout } from '/Tafel-Totaal/js/services/auth.js';
+    import { loyaltyAPI } from '/Tafel-Totaal/js/lib/api.js';
+    import { formatPrice, formatDate } from '/Tafel-Totaal/js/lib/utils.js';
+
+    let loyaltyData = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadHeader();
+      await loadFooter();
+      await initAuth();
+      
+      const user = getCurrentUser();
+      if (!user) {
+        window.location.href = '/Tafel-Totaal/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+        return;
+      }
+
+      // Update sidebar
+      document.getElementById('user-name').textContent = `${user.first_name} ${user.last_name}`;
+      document.getElementById('user-email').textContent = user.email;
+      document.getElementById('user-avatar').textContent = user.first_name.charAt(0).toUpperCase();
+
+      // Logout handler
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        await logout();
+        window.location.href = '/Tafel-Totaal/';
+      });
+
+      // Load loyalty data
+      await loadLoyaltyData();
+    });
+
+    async function loadLoyaltyData() {
+      try {
+        const response = await loyaltyAPI.getCustomerLoyalty();
+        
+        if (response.success) {
+          loyaltyData = response.data;
+          renderLoyaltyDashboard();
+        } else {
+          showError('Kon loyalty gegevens niet laden');
+        }
+      } catch (error) {
+        console.error('Loyalty load error:', error);
+        showError('Er ging iets mis bij het laden van je loyalty gegevens');
+      }
+    }
+
+    function renderLoyaltyDashboard() {
+      document.getElementById('loyalty-loading').style.display = 'none';
+      document.getElementById('loyalty-dashboard').style.display = 'block';
+
+      const { loyalty, tier, progress, redemption, tiers } = loyaltyData;
+
+      // Update tier badge
+      const tierBadge = document.getElementById('tier-badge');
+      tierBadge.className = `loyalty-tier-badge ${tier?.slug || 'bronze'}`;
+      document.getElementById('tier-name').textContent = tier?.name || 'Brons';
+
+      // Update points
+      document.getElementById('available-points').textContent = loyalty.available_points.toLocaleString('nl-NL');
+
+      // Update progress
+      if (progress.nextTier) {
+        document.getElementById('next-tier-name').textContent = progress.nextTier.name;
+        document.getElementById('points-to-next').textContent = `${progress.pointsToNextTier.toLocaleString('nl-NL')} punten nodig`;
+        document.getElementById('progress-fill').style.width = `${progress.progressPercentage}%`;
+        document.getElementById('tier-progress').style.display = 'block';
+      } else {
+        document.getElementById('tier-progress').style.display = 'none';
+      }
+
+      // Update benefits
+      const benefitsList = document.getElementById('benefits-list');
+      if (tier?.benefits && tier.benefits.length > 0) {
+        benefitsList.innerHTML = tier.benefits.map(b => `<li>${b}</li>`).join('');
+      }
+
+      // Update redemption value
+      document.getElementById('redemption-value').textContent = formatPrice(redemption.availableValue);
+
+      // Render all tiers
+      renderTiersGrid(tiers, tier?.id);
+
+      // Load transaction history
+      loadTransactionHistory();
+    }
+
+    function renderTiersGrid(tiers, currentTierId) {
+      const grid = document.getElementById('tiers-grid');
+      
+      grid.innerHTML = tiers.map(t => `
+        <div class="loyalty-tier-item ${t.id === currentTierId ? 'current' : ''}">
+          <svg class="loyalty-tier-item__icon" viewBox="0 0 24 24" fill="none" stroke="${t.color}" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <div class="loyalty-tier-item__name" style="color: ${t.color}">${t.name}</div>
+          <div class="loyalty-tier-item__points">${t.min_points.toLocaleString('nl-NL')}${t.max_points ? ` - ${t.max_points.toLocaleString('nl-NL')}` : '+'} punten</div>
+          <div class="loyalty-tier-item__discount">${t.discount_percentage}% korting</div>
+          ${t.points_boost_percentage > 0 ? `<div class="loyalty-tier-item__boost">+${t.points_boost_percentage}% puntenboost</div>` : ''}
+        </div>
+      `).join('');
+    }
+
+    async function loadTransactionHistory() {
+      try {
+        const response = await loyaltyAPI.getHistory(20);
+        
+        if (response.success && response.data.length > 0) {
+          renderTransactionHistory(response.data);
+        }
+      } catch (error) {
+        console.error('History load error:', error);
+      }
+    }
+
+    function renderTransactionHistory(transactions) {
+      const container = document.getElementById('history-container');
+      
+      container.innerHTML = `
+        <ul class="loyalty-history__list">
+          ${transactions.map(t => `
+            <li class="loyalty-history__item">
+              <div class="loyalty-history__info">
+                <div class="loyalty-history__description">${t.description || getTransactionTypeLabel(t.transaction_type)}</div>
+                <div class="loyalty-history__date">${formatDate(t.created_at)}</div>
+              </div>
+              <div class="loyalty-history__points ${t.points >= 0 ? 'positive' : 'negative'}">
+                ${t.points.toLocaleString('nl-NL')}
+              </div>
+            </li>
+          `).join('')}
+        </ul>
+      `;
+    }
+
+    function getTransactionTypeLabel(type) {
+      const labels = {
+        'earned': 'Punten verdiend',
+        'redeemed': 'Punten ingewisseld',
+        'bonus': 'Bonus punten',
+        'expired': 'Punten verlopen',
+        'adjustment': 'Aanpassing'
+      };
+      return labels[type] || type;
+    }
+
+    function showError(message) {
+      document.getElementById('loyalty-loading').innerHTML = `
+        <div style="text-align: center; padding: var(--space-xl); color: var(--color-error);">
+          <p>${message}</p>
+          <button class="btn btn--secondary" onclick="location.reload()">Opnieuw proberen</button>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

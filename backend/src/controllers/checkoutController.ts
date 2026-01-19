@@ -9,6 +9,7 @@ import { AvailabilityService } from '../services/availabilityService';
 import { PricingService } from '../services/pricingService';
 // import { MollieService } from '../services/mollieService'; // Disabled for invoice-based payment
 import { EmailService } from '../services/emailService';
+import { LoyaltyService } from '../services/loyaltyService';
 import crypto from 'crypto';
 // import { env } from '../config/env'; // Not needed for invoice-based flow
 
@@ -227,16 +228,46 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       await EmailService.sendAdminNewOrderNotification(order);
     }
 
+    // Award loyalty points for the order
+    let loyaltyResult = null;
+    try {
+      loyaltyResult = await LoyaltyService.awardPointsForOrder(
+        customerId,
+        order.id,
+        breakdown.subtotal
+      );
+      
+      // Update order with loyalty points earned
+      if (loyaltyResult.pointsEarned > 0) {
+        await OrderModel.updateLoyaltyPoints(order.id, loyaltyResult.pointsEarned + loyaltyResult.bonusPoints, 0);
+      }
+    } catch (loyaltyError) {
+      console.error('Loyalty points error (non-fatal):', loyaltyError);
+      // Don't fail the order if loyalty fails
+    }
+
     res.status(201).json({
       success: true,
       data: {
         order_id: order.id,
-        order_number: order.order_number
+        order_number: order.order_number,
+        loyalty: loyaltyResult ? {
+          points_earned: loyaltyResult.pointsEarned + loyaltyResult.bonusPoints,
+          milestones: loyaltyResult.milestones,
+          tier_upgrade: loyaltyResult.tierUpgrade,
+          new_tier: loyaltyResult.newTier?.name || null
+        } : null
       }
     });
   } catch (error) {
     console.error('Create order error:', error);
-    res.status(500).json({ success: false, error: 'Failed to create order' });
+    console.error('Error stack:', (error as Error).stack);
+    console.error('Request body:', JSON.stringify(req.body, null, 2));
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to create order',
+      details: process.env.NODE_ENV === 'development' ? (error as Error).message : undefined
+    });
   }
 }
 

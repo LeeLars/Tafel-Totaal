@@ -307,7 +307,7 @@ function initClearCartButton() {
     }
 
     clearBtn.disabled = true;
-    clearBtn.textContent = 'Bezig...';
+    clearBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div>';
 
     const result = await clearCart();
 

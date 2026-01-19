@@ -39,6 +39,8 @@ export interface Customer {
   phone: string | null;
   company_name: string | null;
   vat_number: string | null;
+  date_of_birth: Date | null;
+  birthday_points_claimed_year: number | null;
   created_at: Date;
   updated_at: Date;
 }

@@ -141,6 +141,32 @@ export const ordersAPI = {
     apiCall(`/api/orders/${id}`)
 };
 
+export const loyaltyAPI = {
+  getTiers: () => 
+    apiCall('/api/loyalty/tiers'),
+  
+  getCustomerLoyalty: () => 
+    apiCall('/api/loyalty/customer'),
+  
+  getHistory: (limit = 50, offset = 0) => 
+    apiCall(`/api/loyalty/history?limit=${limit}&offset=${offset}`),
+  
+  getMilestones: () => 
+    apiCall('/api/loyalty/milestones'),
+  
+  calculateDiscount: (subtotal, pointsToRedeem = 0) => 
+    apiCall('/api/loyalty/calculate-discount', {
+      method: 'POST',
+      body: JSON.stringify({ subtotal, points_to_redeem: pointsToRedeem })
+    }),
+  
+  redeemPoints: (orderId, points) => 
+    apiCall('/api/loyalty/redeem', {
+      method: 'POST',
+      body: JSON.stringify({ order_id: orderId, points })
+    })
+};
+
 export const availabilityAPI = {
   check: (type, id, quantity, startDate, endDate, persons) => 
     apiCall('/api/availability/check', {
