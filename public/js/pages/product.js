@@ -428,17 +428,8 @@ function initDatePickers() {
   if (endDateInput) endDateInput.min = today;
   if (eventDateInput) eventDateInput.min = today;
 
-  // Auto-populate from saved event date if exists
-  const savedEventDate = getSavedEventDate();
-  if (savedEventDate && savedEventDate >= today) {
-    if (eventDateInput) {
-      eventDateInput.value = savedEventDate;
-      // Trigger the change event to calculate rental period
-      eventDateInput.dispatchEvent(new Event('change'));
-    }
-  }
-
   // Single Date Picker Logic - for single day events, calculate rental period automatically
+  // NOTE: Event listener must be added BEFORE we dispatch the change event for saved dates
   if (eventDateInput) {
     eventDateInput.addEventListener('change', () => {
       const dateVal = eventDateInput.value;
@@ -498,6 +489,17 @@ function initDatePickers() {
       
       updateTotalPrice();
     });
+  }
+
+  // Auto-populate from saved event date if exists
+  // This MUST be after event listeners are set up so the change event works
+  const savedEventDate = getSavedEventDate();
+  if (savedEventDate && savedEventDate >= today) {
+    if (eventDateInput && eventType === 'single') {
+      eventDateInput.value = savedEventDate;
+      // Trigger the change event to calculate rental period and price
+      eventDateInput.dispatchEvent(new Event('change'));
+    }
   }
 }
 
