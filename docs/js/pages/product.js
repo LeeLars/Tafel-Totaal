@@ -523,14 +523,20 @@ function initDatePickers() {
       btn.style.opacity = '0.5';
     });
     
-    // Show info message
+    // Show info message with unlock link
     const dateContainer = eventDateInput?.closest('.form-group') || startDateInput?.closest('.form-group');
     if (dateContainer && !dateContainer.querySelector('.date-locked-info')) {
       const infoDiv = document.createElement('div');
       infoDiv.className = 'date-locked-info';
       infoDiv.style.cssText = 'margin-top: 8px; padding: 8px 12px; background: #fff3cd; border: 1px solid #ffc107; font-size: 14px; color: #856404;';
-      infoDiv.innerHTML = '🔒 Datum vergrendeld. Alle producten moeten dezelfde verhuurperiode hebben.';
+      infoDiv.innerHTML = 'Alle producten moeten dezelfde verhuurperiode hebben. <a href="#" class="unlock-date-link" style="color: #856404; font-weight: 600; text-decoration: underline;">Hier</a> kan je de datum aanpassen.';
       dateContainer.appendChild(infoDiv);
+      
+      // Add click handler for unlock link
+      infoDiv.querySelector('.unlock-date-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        unlockDateSelection();
+      });
     }
   } else {
     // Auto-populate from saved event date if exists
@@ -694,6 +700,53 @@ function initAddToCart() {
 function showError() {
   document.getElementById('product-loading').classList.add('hidden');
   document.getElementById('product-error').classList.remove('hidden');
+}
+
+/**
+ * Unlock date selection - clears cart and enables date inputs
+ */
+function unlockDateSelection() {
+  // Import clearCart dynamically to avoid circular dependency
+  import('../services/cart.js').then(({ clearCart }) => {
+    // Confirm with user
+    if (confirm('Let op: als je de datum aanpast wordt je winkelwagen geleegd. Wil je doorgaan?')) {
+      clearCart().then(() => {
+        // Re-enable date inputs
+        const eventDateInput = document.getElementById('event-date');
+        const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+        
+        if (eventDateInput) {
+          eventDateInput.disabled = false;
+          eventDateInput.style.cursor = '';
+          eventDateInput.title = '';
+        }
+        if (startDateInput) {
+          startDateInput.disabled = false;
+          startDateInput.style.cursor = '';
+          startDateInput.title = '';
+        }
+        if (endDateInput) {
+          endDateInput.disabled = false;
+          endDateInput.style.cursor = '';
+          endDateInput.title = '';
+        }
+        
+        // Re-enable event type toggle
+        document.querySelectorAll('.type-btn').forEach(btn => {
+          btn.disabled = false;
+          btn.style.cursor = '';
+          btn.style.opacity = '';
+        });
+        
+        // Remove the info message
+        const infoDiv = document.querySelector('.date-locked-info');
+        if (infoDiv) infoDiv.remove();
+        
+        showToast('Winkelwagen geleegd. Je kan nu een nieuwe datum kiezen.', 'success');
+      });
+    }
+  });
 }
 
 /**
