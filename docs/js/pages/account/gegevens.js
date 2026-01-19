@@ -176,13 +176,15 @@ function initLogout() {
   const logoutBtn = document.getElementById('logout-btn');
   if (!logoutBtn) return;
 
-  logoutBtn.addEventListener('click', async () => {
-    try {
-      await authAPI.logout();
-      showToast('Je bent uitgelogd', 'success');
-      window.location.href = '/Tafel-Totaal/';
-    } catch (error) {
-      showToast('Uitloggen mislukt', 'error');
-    }
+  logoutBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    localStorage.clear();
+    sessionStorage.clear();
+    document.cookie.split(";").forEach(c => {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+    authAPI.logout().catch(() => {});
+    window.location.replace('/Tafel-Totaal/');
   });
 }

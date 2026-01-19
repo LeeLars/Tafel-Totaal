@@ -478,9 +478,15 @@
       document.getElementById('user-avatar').textContent = user.first_name.charAt(0).toUpperCase();
 
       // Logout handler
-      document.getElementById('logout-btn').addEventListener('click', async () => {
-        await logout();
-        window.location.href = '/Tafel-Totaal/';
+      document.getElementById('logout-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        localStorage.clear();
+        sessionStorage.clear();
+        document.cookie.split(";").forEach(c => {
+          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        window.location.replace('/Tafel-Totaal/');
       });
 
       // Load loyalty data

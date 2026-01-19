@@ -172,25 +172,40 @@ function getStatusInfo(status) {
  */
 function initLogout() {
   const logoutBtn = document.getElementById('logout-btn');
-  if (!logoutBtn) return;
+  if (!logoutBtn) {
+    console.error('Logout button not found');
+    return;
+  }
 
-  logoutBtn.addEventListener('click', async () => {
+  logoutBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('Logout clicked');
+    
+    // Disable button and show loading
     logoutBtn.disabled = true;
-    logoutBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div> Uitloggen...';
+    const originalHTML = logoutBtn.innerHTML;
+    logoutBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;display:inline-block;"></div> Uitloggen...';
     
-    try {
-      await authAPI.logout();
-    } catch (error) {
-      console.error('Logout API error:', error);
-      // Continue with local logout even if API fails
-    }
-    
-    // Always clear local storage and redirect
-    localStorage.removeItem('user');
-    localStorage.removeItem('auth_token');
+    // Clear all local data first
+    localStorage.clear();
     sessionStorage.clear();
     
-    showToast('Je bent uitgelogd', 'success');
-    window.location.href = '/Tafel-Totaal/';
+    // Try API logout (but don't wait for it)
+    try {
+      authAPI.logout().catch(err => console.log('API logout error (ignored):', err));
+    } catch (error) {
+      console.log('Logout API call failed (ignored):', error);
+    }
+    
+    // Clear cookies by setting them to expire
+    document.cookie.split(";").forEach(c => {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+    
+    // Redirect immediately
+    console.log('Redirecting to home...');
+    window.location.replace('/Tafel-Totaal/');
   });
 }
