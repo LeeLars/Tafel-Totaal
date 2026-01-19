@@ -62,8 +62,7 @@ CREATE TABLE IF NOT EXISTS loyalty_milestones (
   milestone_type VARCHAR(50) NOT NULL CHECK (milestone_type IN ('first_order', 'orders_5', 'orders_10', 'orders_25', 'orders_50', 'birthday', 'review')),
   points_awarded INT NOT NULL,
   order_id UUID REFERENCES orders(id) ON DELETE SET NULL,
-  achieved_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(customer_id, milestone_type, achieved_at)
+  achieved_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- ============================================
