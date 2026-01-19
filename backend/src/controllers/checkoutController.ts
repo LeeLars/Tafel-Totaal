@@ -7,10 +7,10 @@ import { OrderModel } from '../models/Order.model';
 import { ReservationModel } from '../models/Reservation.model';
 import { AvailabilityService } from '../services/availabilityService';
 import { PricingService } from '../services/pricingService';
-import { MollieService } from '../services/mollieService';
+// import { MollieService } from '../services/mollieService'; // Disabled for invoice-based payment
 import { EmailService } from '../services/emailService';
 import crypto from 'crypto';
-import { env } from '../config/env';
+// import { env } from '../config/env'; // Not needed for invoice-based flow
 
 const SESSION_COOKIE_NAME = 'session_id';
 const SESSION_DURATION_DAYS = 30;
