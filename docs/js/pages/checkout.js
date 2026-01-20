@@ -335,7 +335,32 @@ function updateTotals() {
   });
 
   // Damage Compensation (NOT paid upfront - only shown for reference)
-  const compensation = Math.round(subtotal * 0.3 * 100) / 100;
+  // Calculate based on per-item damage compensation, and group by amount
+  const compensationGroups = new Map();
+  let compensation = 0;
+  cart.forEach(item => {
+    const qty = item.quantity || 1;
+
+    const perItem =
+      (typeof item.damage_compensation_per_item === 'number' && !isNaN(item.damage_compensation_per_item))
+        ? item.damage_compensation_per_item
+        : null;
+
+    const totalForItem =
+      (typeof item.damage_compensation === 'number' && !isNaN(item.damage_compensation))
+        ? item.damage_compensation
+        : (perItem != null ? perItem * qty : 0);
+
+    compensation += totalForItem;
+
+    if (perItem != null && perItem > 0) {
+      const key = perItem.toFixed(2);
+      const entry = compensationGroups.get(key) || { perItem, names: [] };
+      entry.names.push(qty > 1 ? `${item.name} (${qty}x)` : item.name);
+      compensationGroups.set(key, entry);
+    }
+  });
+  compensation = Math.round(compensation * 100) / 100;
 
   // Total does NOT include compensation as it's not paid upfront
   const total = subtotal + deliveryCost;
@@ -355,7 +380,25 @@ function updateTotals() {
     deliveryEl.style.color = '';
   }
   
-  document.getElementById('checkout-deposit').textContent = formatPrice(compensation);
+  const depositEl = document.getElementById('checkout-deposit');
+  if (depositEl) {
+    depositEl.textContent = formatPrice(compensation);
+
+    const breakdownLines = Array.from(compensationGroups.values())
+      .sort((a, b) => a.perItem - b.perItem)
+      .map(group => `${group.names.join(' + ')}: ${formatPrice(group.perItem)}`);
+
+    if (breakdownLines.length > 0) {
+      depositEl.title = breakdownLines.join(' | ');
+
+      const tooltipTextEl = document.querySelector('.checkout-summary__row--deposit .info-tooltip__text');
+      if (tooltipTextEl) {
+        tooltipTextEl.innerHTML = breakdownLines.join('<br>');
+      }
+    } else {
+      depositEl.title = '';
+    }
+  }
   document.getElementById('checkout-total').textContent = formatPrice(total);
 
   // Store for order placement (don't overwrite deliveryCost if already set by route calculation)

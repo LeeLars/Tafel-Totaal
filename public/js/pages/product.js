@@ -98,6 +98,9 @@ async function loadProduct() {
       
       document.getElementById('product-loading').classList.add('hidden');
       document.getElementById('product-content').classList.remove('hidden');
+
+      // Try to load related products as well (may still work if list endpoint is reachable)
+      loadRelatedProducts(currentProduct);
       return;
     }
 
@@ -119,6 +122,9 @@ async function loadProduct() {
     
     document.getElementById('product-loading').classList.add('hidden');
     document.getElementById('product-content').classList.remove('hidden');
+
+    // Try to load related products as well
+    loadRelatedProducts(currentProduct);
   }
 }
 
@@ -144,28 +150,116 @@ function createMockProduct(productId) {
   };
 }
 
+ function normalizeText(text) {
+   return String(text || '')
+     .toLowerCase()
+     .normalize('NFD')
+     .replace(/[\u0300-\u036f]/g, '');
+ }
+
+ function getFinishTags(product) {
+   const text = `${product.name || ''} ${product.description || ''} ${product.category_name || ''} ${product.category || ''}`;
+   const t = normalizeText(text);
+
+   const tags = new Set();
+   if (t.includes('goud') || t.includes('gold') || t.includes('gouden')) tags.add('gold');
+   if (t.includes('zilver') || t.includes('silver')) tags.add('silver');
+   if (t.includes('zwart') || t.includes('black') || t.includes('mat zwart')) tags.add('black');
+   if (t.includes('wit') || t.includes('white')) tags.add('white');
+   if (t.includes('koper') || t.includes('copper')) tags.add('copper');
+   if (t.includes('rosegoud') || t.includes('rose gold') || t.includes('rosé')) tags.add('rose');
+   if (t.includes('hout') || t.includes('wood')) tags.add('wood');
+
+   return tags;
+ }
+
+ function getUtensilType(product) {
+   const t = normalizeText(product.name);
+   if (t.includes('mes')) return 'knife';
+   if (t.includes('vork')) return 'fork';
+   if (t.includes('lepel')) return 'spoon';
+   if (t.includes('bord')) return 'plate';
+   if (t.includes('glas') || t.includes('flute') || t.includes('beker')) return 'glass';
+   return null;
+ }
+
+ function getBrandKey(product) {
+   const sku = normalizeText(product.sku);
+   if (sku && sku.includes('-')) {
+     return sku.split('-')[0];
+   }
+   const name = normalizeText(product.name);
+   const firstWord = name.split(/\s+/).find(Boolean);
+   return firstWord || '';
+ }
+
+ function scoreRelatedProduct(current, candidate) {
+   if (!candidate || candidate.id === current.id) return -Infinity;
+
+   let score = 0;
+
+   // Prefer same brand/line
+   const brandA = getBrandKey(current);
+   const brandB = getBrandKey(candidate);
+   if (brandA && brandB && brandA === brandB) score += 6;
+
+   // Prefer same finish/tone
+   const finishA = getFinishTags(current);
+   const finishB = getFinishTags(candidate);
+   let sharedFinish = 0;
+   finishA.forEach(tag => {
+     if (finishB.has(tag)) sharedFinish++;
+   });
+   score += sharedFinish * 4;
+
+   // Prefer same category as a baseline
+   if (current.category && candidate.category && current.category === candidate.category) score += 2;
+   if (current.category_name && candidate.category_name && current.category_name === candidate.category_name) score += 2;
+
+   // Complementary pairing rules: knife -> fork/spoon/plate, fork -> knife/spoon/plate, spoon -> knife/fork/plate
+   const typeA = getUtensilType(current);
+   const typeB = getUtensilType(candidate);
+   if (typeA && typeB) {
+     const pairBoost = {
+       knife: new Set(['fork', 'spoon', 'plate']),
+       fork: new Set(['knife', 'spoon', 'plate']),
+       spoon: new Set(['knife', 'fork', 'plate']),
+       plate: new Set(['knife', 'fork', 'spoon']),
+       glass: new Set(['glass'])
+     };
+     if (pairBoost[typeA]?.has(typeB)) score += 3;
+   }
+
+   // Keyword overlap (lightweight)
+   const tokensA = new Set(normalizeText(`${current.name} ${current.description}`).split(/[^a-z0-9]+/).filter(w => w.length >= 4));
+   const tokensB = new Set(normalizeText(`${candidate.name} ${candidate.description}`).split(/[^a-z0-9]+/).filter(w => w.length >= 4));
+   let overlap = 0;
+   tokensA.forEach(w => {
+     if (tokensB.has(w)) overlap++;
+   });
+   score += Math.min(overlap, 6);
+
+   return score;
+ }
+
 /**
  * Load related products
  */
 async function loadRelatedProducts(product) {
-  if (!product.category) return;
-
   try {
-    const response = await productsAPI.getAll({ 
-      category: product.category, 
-      limit: 5 // Fetch 5 to ensure we have 4 after filtering out current
-    });
-    
-    if (!response.success || !response.data) return;
+    // Try to fetch a broader set so we can match across related categories (e.g. mes -> vork/bord)
+    const response = await productsAPI.getAll({ limit: 60 });
+    if (!response.success || !Array.isArray(response.data)) return;
 
-    // Filter out current product and limit to 4
-    const related = response.data
-      .filter(p => p.id !== product.id)
-      .slice(0, 4);
+    const candidates = response.data.filter(p => p && p.id !== product.id);
+    const ranked = candidates
+      .map(p => ({ product: p, score: scoreRelatedProduct(product, p) }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4)
+      .map(x => x.product);
 
-    if (related.length > 0) {
-      renderRelatedProducts(related);
-    }
+    if (ranked.length > 0) renderRelatedProducts(ranked);
   } catch (error) {
     console.error('Error loading related products:', error);
   }
