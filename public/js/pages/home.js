@@ -186,7 +186,7 @@ function renderLocations(cities) {
       <h3 class="location-card__name">${city.name}</h3>
       <p class="location-card__province">${city.province}</p>
       <div class="location-card__info">
-        <span>Gratis binnen ${city.free_delivery_radius_km || 15}km</span>
+        <span>Bekijk meer</span>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="5" y1="12" x2="19" y2="12"></line>
           <polyline points="12 5 19 12 12 19"></polyline>
