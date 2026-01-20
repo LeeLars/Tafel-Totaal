@@ -15,6 +15,7 @@ export function initHeader() {
   initLogoutButtons();
   setActiveNavLink();
   initDirectionAwareHover();
+  initCartPreview();
 }
 
 /**
@@ -310,6 +311,122 @@ export async function loadHeader(containerId = 'header-container') {
   } catch (error) {
     console.error('Error loading header:', error);
   }
+}
+
+/**
+ * Initialize cart preview hover functionality
+ */
+function initCartPreview() {
+  const cartWrapper = document.querySelector('.header__cart-wrapper');
+  if (!cartWrapper) return;
+
+  // Update cart preview on hover
+  cartWrapper.addEventListener('mouseenter', updateCartPreview);
+}
+
+/**
+ * Update cart preview with current cart items
+ */
+async function updateCartPreview() {
+  try {
+    // Get cart data from sessionStorage
+    const cartData = sessionStorage.getItem('cart');
+    if (!cartData) {
+      renderEmptyCart();
+      return;
+    }
+
+    const cart = JSON.parse(cartData);
+    if (!cart || cart.length === 0) {
+      renderEmptyCart();
+      return;
+    }
+
+    renderCartItems(cart);
+  } catch (error) {
+    console.error('Error updating cart preview:', error);
+    renderEmptyCart();
+  }
+}
+
+/**
+ * Render empty cart state
+ */
+function renderEmptyCart() {
+  const itemsContainer = document.getElementById('cart-preview-items');
+  const countEl = document.querySelector('.cart-preview__count');
+  const totalEl = document.getElementById('cart-preview-total');
+
+  if (itemsContainer) {
+    itemsContainer.innerHTML = '<p style="text-align: center; color: var(--color-gray); padding: var(--space-lg);">Je winkelwagen is leeg</p>';
+  }
+  if (countEl) countEl.textContent = '0 items';
+  if (totalEl) totalEl.textContent = '€0,00';
+}
+
+/**
+ * Render cart items in preview
+ */
+function renderCartItems(cart) {
+  const itemsContainer = document.getElementById('cart-preview-items');
+  const countEl = document.querySelector('.cart-preview__count');
+  const totalEl = document.getElementById('cart-preview-total');
+
+  if (!itemsContainer) return;
+
+  // Calculate total
+  let total = 0;
+  let itemCount = 0;
+
+  const itemsHtml = cart.map(item => {
+    const price = parseFloat(item.price || 0);
+    const quantity = parseInt(item.quantity || 1);
+    const lineTotal = price * quantity;
+    total += lineTotal;
+    itemCount += quantity;
+
+    const imageUrl = item.image || '/Tafel-Totaal/images/placeholder.jpg';
+    const itemName = item.name || 'Product';
+    const details = [];
+    if (item.persons) details.push(`${item.persons} pers.`);
+    if (item.startDate && item.endDate) {
+      details.push(`${formatDateShort(item.startDate)} - ${formatDateShort(item.endDate)}`);
+    }
+
+    return `
+      <div class="cart-preview__item">
+        <img src="${imageUrl}" alt="${itemName}" class="cart-preview__item-image" onerror="this.src='/Tafel-Totaal/images/placeholder.jpg'">
+        <div class="cart-preview__item-info">
+          <div class="cart-preview__item-name">${itemName}</div>
+          ${details.length > 0 ? `<div class="cart-preview__item-details">${details.join(' • ')}</div>` : ''}
+          <div class="cart-preview__item-price">${quantity}x ${formatPrice(price)} = ${formatPrice(lineTotal)}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  itemsContainer.innerHTML = itemsHtml;
+  if (countEl) countEl.textContent = `${itemCount} item${itemCount !== 1 ? 's' : ''}`;
+  if (totalEl) totalEl.textContent = formatPrice(total);
+}
+
+/**
+ * Format price helper
+ */
+function formatPrice(amount) {
+  return new Intl.NumberFormat('nl-BE', {
+    style: 'currency',
+    currency: 'EUR'
+  }).format(amount);
+}
+
+/**
+ * Format date helper
+ */
+function formatDateShort(dateString) {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('nl-BE', { day: '2-digit', month: '2-digit' });
 }
 
 // Auto-init if header already in DOM
