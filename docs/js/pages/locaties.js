@@ -11,33 +11,50 @@ const API_BASE_URL = window.location.hostname.includes('github.io')
 
 let allCities = [];
 let filteredCities = [];
+let currentProvince = '';
+let currentSort = 'name_asc';
+let currentQuery = '';
+
+const CACHE_KEY = 'tafel_totaal_cities_cache_v1';
+const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   await loadHeader();
   await loadFooter();
-  await loadCities();
   initFilters();
+  // Instant render from cache, then revalidate
+  loadCities({ preferCache: true });
+  loadCities({ preferCache: false });
 });
 
 /**
  * Load all cities from API
  */
-async function loadCities() {
+async function loadCities({ preferCache } = { preferCache: true }) {
+  const cached = getCachedCities();
+  if (preferCache && cached) {
+    allCities = cached;
+    applyFiltersAndRender();
+    return;
+  }
+
   try {
-    const response = await fetch(`${API_BASE_URL}/api/bezorgzones/cities`);
+    const response = await fetch(`${API_BASE_URL}/api/bezorgzones/cities`, {
+      headers: { 'Accept': 'application/json' }
+    });
     const data = await response.json();
 
-    if (data.success && data.data) {
+    if (data.success && Array.isArray(data.data)) {
       allCities = data.data;
-      filteredCities = [...allCities];
-      renderCities();
+      setCachedCities(allCities);
+      applyFiltersAndRender();
     } else {
-      showEmpty();
+      if (!cached) showEmpty();
     }
   } catch (error) {
     console.error('Error loading cities:', error);
-    showEmpty();
+    if (!cached) showEmpty();
   }
 }
 
@@ -46,17 +63,64 @@ async function loadCities() {
  */
 function initFilters() {
   const provinceFilter = document.getElementById('province-filter');
+  const sortFilter = document.getElementById('sort-filter');
+  const searchInput = document.getElementById('location-search');
+
   if (provinceFilter) {
     provinceFilter.addEventListener('change', () => {
-      const province = provinceFilter.value;
-      if (province) {
-        filteredCities = allCities.filter(city => city.province === province);
-      } else {
-        filteredCities = [...allCities];
-      }
-      renderCities();
+      currentProvince = provinceFilter.value;
+      applyFiltersAndRender();
     });
   }
+
+  if (sortFilter) {
+    sortFilter.addEventListener('change', () => {
+      currentSort = sortFilter.value;
+      applyFiltersAndRender();
+    });
+  }
+
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      currentQuery = (searchInput.value || '').trim();
+      applyFiltersAndRender();
+    });
+  }
+}
+
+function applyFiltersAndRender() {
+  filteredCities = [...allCities];
+
+  if (currentProvince) {
+    filteredCities = filteredCities.filter(city => city.province === currentProvince);
+  }
+
+  if (currentQuery) {
+    const q = currentQuery.toLowerCase();
+    filteredCities = filteredCities.filter(city => {
+      const name = (city.name || '').toLowerCase();
+      const province = (city.province || '').toLowerCase();
+      const slug = (city.slug || '').toLowerCase();
+      return name.includes(q) || province.includes(q) || slug.includes(q);
+    });
+  }
+
+  filteredCities.sort((a, b) => {
+    const aName = (a.name || '').toLowerCase();
+    const bName = (b.name || '').toLowerCase();
+    const aProv = (a.province || '').toLowerCase();
+    const bProv = (b.province || '').toLowerCase();
+
+    if (currentSort === 'name_desc') return bName.localeCompare(aName);
+    if (currentSort === 'province_asc') {
+      const byProv = aProv.localeCompare(bProv);
+      if (byProv !== 0) return byProv;
+      return aName.localeCompare(bName);
+    }
+    return aName.localeCompare(bName);
+  });
+
+  renderCities();
 }
 
 /**
@@ -67,7 +131,7 @@ function renderCities() {
   const loading = document.getElementById('loading-state');
   const empty = document.getElementById('empty-state');
 
-  loading.style.display = 'none';
+  if (loading) loading.style.display = 'none';
 
   if (filteredCities.length === 0) {
     grid.style.display = 'none';
@@ -79,6 +143,27 @@ function renderCities() {
   grid.style.display = 'grid';
 
   grid.innerHTML = filteredCities.map(city => createCityCard(city)).join('');
+}
+
+function getCachedCities() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.data) || !parsed.ts) return null;
+    if (Date.now() - parsed.ts > CACHE_TTL_MS) return null;
+    return parsed.data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedCities(cities) {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: cities }));
+  } catch {
+    // ignore
+  }
 }
 
 /**

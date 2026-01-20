@@ -7,6 +7,7 @@
   <title>Bezorglocaties | Tafel Totaal</title>
   <meta name="description" content="Bekijk alle locaties waar Tafel Totaal tafelverhuur levert. Gratis levering binnen 15km in West- en Oost-Vlaanderen.">
   <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://leelars.github.io/Tafel-Totaal/locaties.html">
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
@@ -45,13 +46,27 @@
     <!-- Filter Section -->
     <section class="filter-section" style="padding: var(--space-xl) 0; background: var(--color-white); border-bottom: 1px solid var(--color-light-gray);">
       <div class="container">
-        <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap;">
-          <label style="font-weight: 600; text-transform: uppercase; font-size: var(--font-size-sm);">Filter op provincie:</label>
-          <select id="province-filter" class="form-input" style="max-width: 300px;">
-            <option value="">Alle provincies</option>
-            <option value="West-Vlaanderen">West-Vlaanderen</option>
-            <option value="Oost-Vlaanderen">Oost-Vlaanderen</option>
-          </select>
+        <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-md);">
+          <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap;">
+            <label style="font-weight: 600; text-transform: uppercase; font-size: var(--font-size-sm);">Zoek locatie:</label>
+            <input id="location-search" class="form-input" type="search" placeholder="Zoek op stad of gemeente (bv. Knokke-Heist)" style="max-width: 420px; flex: 1;">
+          </div>
+
+          <div style="display: flex; gap: var(--space-md); align-items: center; flex-wrap: wrap;">
+            <label style="font-weight: 600; text-transform: uppercase; font-size: var(--font-size-sm);">Provincie:</label>
+            <select id="province-filter" class="form-input" style="max-width: 300px;">
+              <option value="">Alle provincies</option>
+              <option value="West-Vlaanderen">West-Vlaanderen</option>
+              <option value="Oost-Vlaanderen">Oost-Vlaanderen</option>
+            </select>
+
+            <label style="font-weight: 600; text-transform: uppercase; font-size: var(--font-size-sm);">Sorteer:</label>
+            <select id="sort-filter" class="form-input" style="max-width: 260px;">
+              <option value="name_asc">Naam (A-Z)</option>
+              <option value="name_desc">Naam (Z-A)</option>
+              <option value="province_asc">Provincie</option>
+            </select>
+          </div>
         </div>
       </div>
     </section>
@@ -59,6 +74,21 @@
     <!-- Cities Grid -->
     <section class="cities-section" style="padding: var(--space-3xl) 0;">
       <div class="container">
+        <noscript>
+          <div style="padding: var(--space-xl); border: 1px solid var(--color-black); background: var(--color-off-white); margin-bottom: var(--space-xl);">
+            <h2 style="font-family: var(--font-display); text-transform: uppercase; margin: 0 0 var(--space-sm);">Populaire locaties</h2>
+            <p style="margin: 0 0 var(--space-md); color: var(--color-gray);">Schakel JavaScript in voor het volledige overzicht. Deze links helpen ook voor vindbaarheid.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm);">
+              <a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locatie.html?slug=knokke-heist">Tafelverhuur Knokke-Heist</a>
+              <a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locatie.html?slug=brugge">Tafelverhuur Brugge</a>
+              <a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locatie.html?slug=gent">Tafelverhuur Gent</a>
+              <a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locatie.html?slug=oostende">Tafelverhuur Oostende</a>
+              <a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locatie.html?slug=kortrijk">Tafelverhuur Kortrijk</a>
+              <a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locatie.html?slug=aalst">Tafelverhuur Aalst</a>
+            </div>
+          </div>
+        </noscript>
+
         <!-- Loading State -->
         <div id="loading-state" style="text-align: center; padding: 60px 0;">
           <div class="spinner" style="margin: 0 auto 20px;"></div>

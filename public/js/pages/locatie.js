@@ -11,6 +11,10 @@ const API_BASE_URL = window.location.hostname.includes('github.io')
   : 'http://localhost:3000';
 
 let currentCity = null;
+let currentSlug = null;
+
+const CITY_CACHE_PREFIX = 'tafel_totaal_city_cache_v1:';
+const CITY_CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
@@ -25,10 +29,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadLocationData() {
   const urlParams = new URLSearchParams(window.location.search);
   const slug = urlParams.get('slug');
+  currentSlug = slug;
 
   if (!slug) {
     showError('Geen locatie opgegeven');
     return;
+  }
+
+  const cached = getCachedCity(slug);
+  if (cached) {
+    currentCity = cached;
+    renderLocationPage();
   }
 
   try {
@@ -36,16 +47,148 @@ async function loadLocationData() {
     const data = await response.json();
 
     if (!data.success || !data.data) {
-      showError('Locatie niet gevonden');
+      if (!cached) showError('Locatie niet gevonden');
       return;
     }
 
     currentCity = data.data;
+    setCachedCity(slug, currentCity);
     renderLocationPage();
   } catch (error) {
     console.error('Error loading location:', error);
-    showError('Kon locatie niet laden');
+    if (!cached) showError('Kon locatie niet laden');
   }
+}
+
+function setupLazyMap() {
+  const mapSection = document.getElementById('map-section');
+  if (!mapSection) return;
+
+  const run = async () => {
+    await ensureLeafletLoaded();
+    await initializeMap();
+  };
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some(e => e.isIntersecting)) {
+        io.disconnect();
+        run();
+      }
+    }, { rootMargin: '200px' });
+    io.observe(mapSection);
+  } else {
+    run();
+  }
+}
+
+let leafletPromise = null;
+function ensureLeafletLoaded() {
+  if (window.L) return Promise.resolve();
+  if (leafletPromise) return leafletPromise;
+
+  leafletPromise = new Promise((resolve, reject) => {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(css);
+
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load Leaflet'));
+    document.head.appendChild(script);
+  });
+
+  return leafletPromise;
+}
+
+async function loadRelatedLocations() {
+  const container = document.getElementById('related-locations-links');
+  if (!container) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/bezorgzones/cities`);
+    const data = await response.json();
+    const cities = (data && data.success && Array.isArray(data.data)) ? data.data : [];
+    const related = cities
+      .filter(c => c && c.slug && c.slug !== currentSlug)
+      .slice(0, 10);
+
+    container.innerHTML = related.map(c => {
+      return `<a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locatie.html?slug=${encodeURIComponent(c.slug)}">Tafelverhuur ${escapeHtml(c.name)}</a>`;
+    }).join('');
+  } catch {
+    // ignore
+  }
+}
+
+function injectJsonLd() {
+  try {
+    const existing = document.getElementById('city-jsonld');
+    if (existing) existing.remove();
+
+    const title = currentCity.meta_title || `Tafelverhuur ${currentCity.name} | Tafel Totaal`;
+    const description = currentCity.meta_description || `Professionele tafelverhuur in ${currentCity.name}.`;
+    const url = currentSlug ? `https://leelars.github.io/Tafel-Totaal/locatie.html?slug=${encodeURIComponent(currentSlug)}` : 'https://leelars.github.io/Tafel-Totaal/locatie.html';
+
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: title,
+      description,
+      areaServed: {
+        '@type': 'City',
+        name: currentCity.name,
+        addressRegion: currentCity.province,
+        addressCountry: 'BE'
+      },
+      provider: {
+        '@type': 'Organization',
+        name: 'Tafel Totaal',
+        url: 'https://leelars.github.io/Tafel-Totaal/'
+      },
+      url
+    };
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'city-jsonld';
+    script.textContent = JSON.stringify(ld);
+    document.head.appendChild(script);
+  } catch {
+    // ignore
+  }
+}
+
+function getCachedCity(slug) {
+  try {
+    const raw = localStorage.getItem(`${CITY_CACHE_PREFIX}${slug}`);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.ts || !parsed.data) return null;
+    if (Date.now() - parsed.ts > CITY_CACHE_TTL_MS) return null;
+    return parsed.data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedCity(slug, data) {
+  try {
+    localStorage.setItem(`${CITY_CACHE_PREFIX}${slug}`, JSON.stringify({ ts: Date.now(), data }));
+  } catch {
+    // ignore
+  }
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 /**
@@ -79,7 +222,7 @@ function renderLocationPage() {
 
   // Show map if coordinates available
   if (currentCity.latitude && currentCity.longitude) {
-    initializeMap();
+    setupLazyMap();
     document.getElementById('map-section').style.display = 'block';
   }
 
@@ -87,6 +230,16 @@ function renderLocationPage() {
   if (currentCity.postal_codes && currentCity.postal_codes.length > 0) {
     renderPostalCodes();
   }
+
+  // Breadcrumb
+  const bc = document.getElementById('breadcrumb-current');
+  if (bc) bc.textContent = currentCity.name;
+
+  // Related locations
+  loadRelatedLocations();
+
+  // Structured data
+  injectJsonLd();
 
   // Show content, hide loading
   document.getElementById('loading-state').style.display = 'none';
@@ -102,6 +255,12 @@ function updateMetaTags() {
     `Professionele tafelverhuur in ${currentCity.name}. Gratis levering binnen ${currentCity.free_delivery_radius_km || 15}km. Bestel online!`;
 
   document.title = title;
+
+  // Canonical
+  const canonical = document.getElementById('canonical-link');
+  if (canonical && currentSlug) {
+    canonical.setAttribute('href', `https://leelars.github.io/Tafel-Totaal/locatie.html?slug=${encodeURIComponent(currentSlug)}`);
+  }
   
   // Update meta description
   let metaDesc = document.querySelector('meta[name="description"]');
@@ -124,7 +283,7 @@ function updateMetaTags() {
 /**
  * Initialize map with city location
  */
-function initializeMap() {
+async function initializeMap() {
   const mapEl = document.getElementById('location-map');
   if (!mapEl || !window.L) return;
 
