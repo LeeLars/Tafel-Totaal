@@ -4,6 +4,155 @@
    ============================================ */
 
 /* ============================================
+   LOCATIONS SECTION
+   ============================================ */
+
+.locations-section {
+  padding: var(--space-5xl) 0;
+  background: linear-gradient(135deg, var(--color-concrete) 0%, var(--color-off-white) 100%);
+  border-top: 1px solid var(--color-black);
+}
+
+.locations-section .section-header {
+  text-align: center;
+  margin-bottom: var(--space-4xl);
+}
+
+.locations-section .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-md);
+  line-height: 1.1;
+}
+
+.locations-section .section-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-gray);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.locations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-xl);
+  margin-bottom: var(--space-3xl);
+}
+
+.location-card {
+  display: block;
+  padding: var(--space-xl);
+  background: var(--color-white);
+  border: 1px solid var(--color-black);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+
+.location-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out-expo);
+  z-index: 0;
+}
+
+.location-card:hover::before {
+  transform: scaleX(1);
+}
+
+.location-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+  color: var(--color-white);
+}
+
+.location-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.location-card__icon {
+  width: 48px;
+  height: 48px;
+  background: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-md);
+  transition: background-color 0.3s ease;
+}
+
+.location-card:hover .location-card__icon {
+  background: var(--color-white);
+}
+
+.location-card:hover .location-card__icon svg {
+  stroke: var(--color-primary);
+}
+
+.location-card__name {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  text-transform: uppercase;
+  margin-bottom: var(--space-xs);
+  line-height: 1.2;
+}
+
+.location-card__province {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray);
+  margin-bottom: var(--space-md);
+  transition: color 0.3s ease;
+}
+
+.location-card:hover .location-card__province {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.location-card__info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.location-skeleton {
+  height: 200px;
+  background: linear-gradient(90deg, var(--color-off-white) 25%, var(--color-light-gray) 50%, var(--color-off-white) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border: 1px solid var(--color-light-gray);
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.locations-cta {
+  text-align: center;
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-black);
+}
+
+@media (max-width: 768px) {
+  .locations-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
    HERO SECTION v2 - Architectural Brutalism
    ============================================ */
 

@@ -7,11 +7,16 @@ import { packagesAPI } from '../lib/api.js';
 import { formatPrice } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
 
+const API_BASE_URL = window.location.hostname.includes('github.io')
+  ? 'https://tafel-totaal-production.up.railway.app'
+  : 'http://localhost:3000';
+
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   await loadHeader();
   await loadFooter();
   await loadFeaturedPackages();
+  await loadFeaturedLocations();
   // Animation library is loaded via script tag in index.html and auto-initializes
 });
 
@@ -139,3 +144,70 @@ function getServiceLevelBadge(serviceLevel) {
   return badges[serviceLevel?.toLowerCase()] || null;
 }
 
+/**
+ * Load featured locations for home page
+ */
+async function loadFeaturedLocations() {
+  const grid = document.getElementById('locations-grid');
+  if (!grid) return;
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/bezorgzones/cities`);
+    const data = await response.json();
+
+    if (data.success && data.data && data.data.length > 0) {
+      // Show first 6 cities
+      const featuredCities = data.data.slice(0, 6);
+      renderLocations(featuredCities);
+    } else {
+      renderFallbackLocations();
+    }
+  } catch (error) {
+    console.error('Error loading locations:', error);
+    renderFallbackLocations();
+  }
+}
+
+/**
+ * Render location cards
+ */
+function renderLocations(cities) {
+  const grid = document.getElementById('locations-grid');
+  if (!grid) return;
+
+  grid.innerHTML = cities.map(city => `
+    <a href="/Tafel-Totaal/locatie.html?slug=${city.slug}" class="location-card">
+      <div class="location-card__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+      </div>
+      <h3 class="location-card__name">${city.name}</h3>
+      <p class="location-card__province">${city.province}</p>
+      <div class="location-card__info">
+        <span>Gratis binnen ${city.free_delivery_radius_km || 15}km</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </div>
+    </a>
+  `).join('');
+}
+
+/**
+ * Fallback locations if API fails
+ */
+function renderFallbackLocations() {
+  const fallbackCities = [
+    { name: 'Brugge', slug: 'brugge', province: 'West-Vlaanderen', free_delivery_radius_km: 15 },
+    { name: 'Gent', slug: 'gent', province: 'Oost-Vlaanderen', free_delivery_radius_km: 15 },
+    { name: 'Kortrijk', slug: 'kortrijk', province: 'West-Vlaanderen', free_delivery_radius_km: 15 },
+    { name: 'Oostende', slug: 'oostende', province: 'West-Vlaanderen', free_delivery_radius_km: 15 },
+    { name: 'Aalst', slug: 'aalst', province: 'Oost-Vlaanderen', free_delivery_radius_km: 15 },
+    { name: 'Roeselare', slug: 'roeselare', province: 'West-Vlaanderen', free_delivery_radius_km: 15 }
+  ];
+  
+  renderLocations(fallbackCities);
+}
