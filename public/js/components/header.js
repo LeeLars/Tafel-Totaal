@@ -116,10 +116,28 @@ function initLogoutButtons() {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    const result = await logout();
-    if (result.success) {
-      window.location.href = '/Tafel-Totaal/';
+    e.stopPropagation();
+    
+    // Clear all local data first (before API call)
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Clear all cookies (including auth_token)
+    document.cookie.split(';').forEach(c => {
+      const name = c.split('=')[0].trim();
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/Tafel-Totaal`;
+    });
+    
+    // Try API logout (but don't wait for success)
+    try {
+      await logout();
+    } catch (error) {
+      console.log('API logout failed (ignored):', error);
     }
+    
+    // Always redirect to homepage
+    window.location.replace('/Tafel-Totaal/');
   };
 
   if (logoutBtn) {
