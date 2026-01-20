@@ -57,12 +57,21 @@ export async function addToCart(item) {
   console.log('🛒 Item ID:', item.id);
   
   // Check if item already exists (same product/package and dates)
-  const existingIndex = cartData.findIndex(i => 
-    i.type === item.type && 
-    (i.product_id === item.product_id || i.package_id === item.package_id) &&
-    i.start_date === item.start_date && 
-    i.end_date === item.end_date
-  );
+  const existingIndex = cartData.findIndex(i => {
+    // Must match type
+    if (i.type !== item.type) return false;
+    
+    // Must match dates
+    if (i.start_date !== item.start_date || i.end_date !== item.end_date) return false;
+    
+    // For products: must match product_id
+    if (item.type === 'product' && i.product_id === item.product_id) return true;
+    
+    // For packages: must match package_id
+    if (item.type === 'package' && i.package_id === item.package_id) return true;
+    
+    return false;
+  });
   
   console.log('🛒 Existing item index:', existingIndex);
   

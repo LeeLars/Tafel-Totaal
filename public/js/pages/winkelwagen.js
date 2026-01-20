@@ -301,22 +301,95 @@ function initClearCartButton() {
   const clearBtn = document.getElementById('clear-cart-btn');
   if (!clearBtn) return;
 
-  clearBtn.addEventListener('click', async () => {
-    if (!confirm('Weet je zeker dat je de hele winkelwagen wilt legen?')) {
-      return;
+  clearBtn.addEventListener('click', () => {
+    showClearCartModal();
+  });
+}
+
+/**
+ * Show custom modal for clear cart confirmation
+ */
+function showClearCartModal() {
+  // Create modal if it doesn't exist
+  if (!document.getElementById('clear-cart-modal')) {
+    const modalHtml = `
+      <div id="clear-cart-modal-backdrop" class="modal-backdrop"></div>
+      <div id="clear-cart-modal" class="modal">
+        <div class="modal__header">
+          <h3 class="modal__title" style="font-family: var(--font-display); text-transform: uppercase;">Winkelwagen Legen?</h3>
+          <button class="modal__close" onclick="closeClearCartModal()">&times;</button>
+        </div>
+        <div class="modal__body">
+          <p>Weet je zeker dat je de hele winkelwagen wilt legen?</p>
+        </div>
+        <div class="modal__footer">
+          <button class="btn btn--secondary" onclick="closeClearCartModal()">Annuleren</button>
+          <button class="btn btn--primary" id="confirm-clear-cart-btn">
+            Winkelwagen Legen
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+  }
+
+  // Show modal
+  const backdrop = document.getElementById('clear-cart-modal-backdrop');
+  const modal = document.getElementById('clear-cart-modal');
+  const confirmBtn = document.getElementById('confirm-clear-cart-btn');
+
+  // Force reflow for animation
+  modal.offsetHeight;
+
+  backdrop.classList.add('active');
+  modal.classList.add('active');
+
+  // Handle confirm action
+  confirmBtn.onclick = async () => {
+    const clearBtn = document.getElementById('clear-cart-btn');
+    
+    if (clearBtn) {
+      clearBtn.disabled = true;
+      clearBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div>';
     }
 
-    clearBtn.disabled = true;
-    clearBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div>';
+    confirmBtn.disabled = true;
+    confirmBtn.innerHTML = '<div class="spinner" style="width:16px;height:16px;"></div> Legen...';
 
     const result = await clearCart();
 
     if (result.success) {
       showToast('Winkelwagen geleegd', 'success');
+      closeClearCartModal();
     } else {
       showToast(result.error || 'Kon winkelwagen niet legen', 'error');
-      clearBtn.disabled = false;
-      clearBtn.textContent = 'Winkelwagen legen';
+      if (clearBtn) {
+        clearBtn.disabled = false;
+        clearBtn.textContent = 'Winkelwagen legen';
+      }
+      confirmBtn.disabled = false;
+      confirmBtn.innerHTML = `
+        Winkelwagen Legen
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 6h18"></path>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+      `;
     }
-  });
+  };
 }
+
+// Global function to close modal (needed for inline onclick attributes)
+window.closeClearCartModal = function() {
+  const backdrop = document.getElementById('clear-cart-modal-backdrop');
+  const modal = document.getElementById('clear-cart-modal');
+  
+  if (backdrop) backdrop.classList.remove('active');
+  if (modal) modal.classList.remove('active');
+};

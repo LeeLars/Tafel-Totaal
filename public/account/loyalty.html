@@ -499,22 +499,37 @@
         const response = await loyaltyAPI.getCustomerLoyalty();
         console.log('Loyalty API response:', response);
         
-        if (response && response.success) {
+        if (response && response.success && response.data) {
           loyaltyData = response.data;
           console.log('Loyalty data loaded:', loyaltyData);
           renderLoyaltyDashboard();
         } else {
           console.error('Loyalty API error:', response);
-          showError('Kon loyalty gegevens niet laden: ' + (response?.error || 'Onbekende fout'));
+          const errorMsg = response?.error || 'Onbekende fout';
+          showError('Kon loyalty gegevens niet laden: ' + errorMsg);
         }
       } catch (error) {
         console.error('Loyalty load error:', error);
         console.error('Error details:', error.message, error.stack);
-        showError('Er ging iets mis bij het laden van je loyalty gegevens. Check de console voor details.');
+        
+        // Show more specific error message
+        let errorMsg = 'Er ging iets mis bij het laden van je loyalty gegevens.';
+        if (error.message) {
+          errorMsg += ' ' + error.message;
+        }
+        if (error.status === 401) {
+          errorMsg = 'Je bent niet ingelogd. Redirect naar login...';
+          setTimeout(() => {
+            window.location.href = '/Tafel-Totaal/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+          }, 1500);
+        }
+        showError(errorMsg);
       }
     }
 
     function renderLoyaltyDashboard() {
+      console.log('Rendering loyalty dashboard with data:', loyaltyData);
+      
       document.getElementById('loyalty-loading').style.display = 'none';
       document.getElementById('loyalty-dashboard').style.display = 'block';
 
@@ -525,11 +540,12 @@
       tierBadge.className = `loyalty-tier-badge ${tier?.slug || 'bronze'}`;
       document.getElementById('tier-name').textContent = tier?.name || 'Brons';
 
-      // Update points
-      document.getElementById('available-points').textContent = loyalty.available_points.toLocaleString('nl-NL');
+      // Update points (handle 0 points correctly)
+      const availablePoints = loyalty?.available_points ?? 0;
+      document.getElementById('available-points').textContent = availablePoints.toLocaleString('nl-NL');
 
       // Update progress
-      if (progress.nextTier) {
+      if (progress && progress.nextTier) {
         document.getElementById('next-tier-name').textContent = progress.nextTier.name;
         document.getElementById('points-to-next').textContent = `${progress.pointsToNextTier.toLocaleString('nl-NL')} punten nodig`;
         document.getElementById('progress-fill').style.width = `${progress.progressPercentage}%`;
@@ -542,13 +558,18 @@
       const benefitsList = document.getElementById('benefits-list');
       if (tier?.benefits && tier.benefits.length > 0) {
         benefitsList.innerHTML = tier.benefits.map(b => `<li>${b}</li>`).join('');
+      } else {
+        benefitsList.innerHTML = '<li>Punten sparen bij elke bestelling</li>';
       }
 
-      // Update redemption value
-      document.getElementById('redemption-value').textContent = formatPrice(redemption.availableValue);
+      // Update redemption value (handle 0 correctly)
+      const redemptionValue = redemption?.availableValue ?? 0;
+      document.getElementById('redemption-value').textContent = formatPrice(redemptionValue);
 
       // Render all tiers
-      renderTiersGrid(tiers, tier?.id);
+      if (tiers && tiers.length > 0) {
+        renderTiersGrid(tiers, tier?.id);
+      }
 
       // Load transaction history
       loadTransactionHistory();

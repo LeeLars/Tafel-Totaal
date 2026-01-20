@@ -31,20 +31,28 @@ export const LoyaltyService = {
       loyalty = await LoyaltyModel.getCustomerLoyalty(customerId);
     }
 
+    if (!loyalty) {
+      throw new Error('Failed to initialize customer loyalty');
+    }
+
     // Get all tiers
     const tiers = await LoyaltyModel.getAllTiers();
+    
+    if (!tiers || tiers.length === 0) {
+      throw new Error('No loyalty tiers found. Please run database migrations.');
+    }
 
     // Calculate progress
-    const progress = LoyaltyModel.calculateTierProgress(loyalty!, tiers);
+    const progress = LoyaltyModel.calculateTierProgress(loyalty, tiers);
 
     // Calculate redemption value
     const redemption = {
-      availablePoints: loyalty!.available_points,
-      availableValue: LoyaltyModel.calculateRedemptionValue(loyalty!.available_points)
+      availablePoints: loyalty.available_points || 0,
+      availableValue: LoyaltyModel.calculateRedemptionValue(loyalty.available_points || 0)
     };
 
     return {
-      loyalty: loyalty!,
+      loyalty,
       tiers,
       progress,
       redemption

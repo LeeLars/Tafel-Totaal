@@ -704,12 +704,57 @@ function showError() {
 
 /**
  * Unlock date selection - clears cart and enables date inputs
+ * Uses a custom modal instead of browser confirm
  */
 function unlockDateSelection() {
-  // Import clearCart dynamically to avoid circular dependency
-  import('../services/cart.js').then(({ clearCart }) => {
-    // Confirm with user
-    if (confirm('Let op: als je de datum aanpast wordt je winkelwagen geleegd. Wil je doorgaan?')) {
+  // Create modal if it doesn't exist
+  if (!document.getElementById('unlock-modal')) {
+    const modalHtml = `
+      <div id="unlock-modal-backdrop" class="modal-backdrop"></div>
+      <div id="unlock-modal" class="modal">
+        <div class="modal__header">
+          <h3 class="modal__title" style="font-family: var(--font-display); text-transform: uppercase;">Datum Wijzigen?</h3>
+          <button class="modal__close" onclick="closeUnlockModal()">&times;</button>
+        </div>
+        <div class="modal__body">
+          <p style="margin-bottom: var(--space-md);">Let op: als je de datum nu aanpast, wordt je winkelwagen geleegd omdat de beschikbaarheid per datum verschilt.</p>
+          <div style="background-color: var(--color-concrete); padding: var(--space-md); border-left: 2px solid var(--color-primary);">
+            <p style="font-weight: 500; margin-bottom: var(--space-xs);">Goed om te weten:</p>
+            <p style="font-size: var(--font-size-sm); color: var(--color-dark-gray);">Je kunt de datum ook later in de <strong>checkout</strong> aanpassen. In dat geval wordt je winkelwagen <u>niet</u> geleegd.</p>
+          </div>
+          <p style="margin-top: var(--space-md);">Wil je toch doorgaan en je winkelwagen legen?</p>
+        </div>
+        <div class="modal__footer">
+          <button class="btn btn--secondary" onclick="closeUnlockModal()">Annuleren</button>
+          <button class="btn btn--primary" id="confirm-unlock-btn">
+            Winkelwagen Legen
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
+              <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+  }
+
+  // Show modal
+  const backdrop = document.getElementById('unlock-modal-backdrop');
+  const modal = document.getElementById('unlock-modal');
+  const confirmBtn = document.getElementById('confirm-unlock-btn');
+
+  // Force reflow for animation
+  modal.offsetHeight;
+
+  backdrop.classList.add('active');
+  modal.classList.add('active');
+
+  // Handle confirm action
+  const handleConfirm = () => {
+    // Import clearCart dynamically
+    import('../services/cart.js').then(({ clearCart }) => {
       clearCart().then(() => {
         // Re-enable date inputs
         const eventDateInput = document.getElementById('event-date');
@@ -744,10 +789,26 @@ function unlockDateSelection() {
         if (infoDiv) infoDiv.remove();
         
         showToast('Winkelwagen geleegd. Je kan nu een nieuwe datum kiezen.', 'success');
+        closeUnlockModal();
       });
-    }
-  });
+    });
+  };
+
+  // Attach one-time event listener
+  confirmBtn.onclick = handleConfirm;
 }
+
+// Global function to close modal (needed for inline onclick attributes)
+window.closeUnlockModal = function() {
+  const backdrop = document.getElementById('unlock-modal-backdrop');
+  const modal = document.getElementById('unlock-modal');
+  
+  if (backdrop) backdrop.classList.remove('active');
+  if (modal) modal.classList.remove('active');
+  
+  // Optional: remove from DOM after animation
+  // setTimeout(() => modal.remove(), 300);
+};
 
 /**
  * Save event date to localStorage for auto-population on other product pages
