@@ -198,6 +198,9 @@ export const adminAPI = {
       method: 'PATCH',
       body: JSON.stringify({ status })
     }),
+
+  deleteOrder: (id) =>
+    apiCall(`/api/admin/orders/${id}`, { method: 'DELETE' }),
   
   getPickingListUrl: (id) => 
     `${API_BASE_URL}/api/admin/orders/${id}/picking-list`,

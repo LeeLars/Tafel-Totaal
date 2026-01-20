@@ -27,6 +27,10 @@ const updateOrderStatusValidation = [
   ]).withMessage('Invalid status'),
 ];
 
+const deleteOrderValidation = [
+  param('id').isUUID().withMessage('Valid order ID is required'),
+];
+
 const getProductsValidation = [
   query('search').optional().isString(),
   query('category_id').optional().isUUID(),
@@ -56,6 +60,7 @@ const getCustomersValidation = [
 router.get('/orders', validate(getOrdersValidation), adminController.getAllOrders);
 router.get('/orders/:id', adminController.getOrderDetail);
 router.patch('/orders/:id/status', validate(updateOrderStatusValidation), adminController.updateOrderStatus);
+router.delete('/orders/:id', validate(deleteOrderValidation), adminController.deleteOrder);
 router.get('/orders/:id/picking-list', adminController.generatePickingList);
 router.get('/orders/:id/invoice', adminController.generateInvoice);
 

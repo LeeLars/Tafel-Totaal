@@ -15,8 +15,124 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!user) return;
 
   initFilters();
+  initTableInteractions();
   await loadOrders();
 });
+
+function initTableInteractions() {
+  const tbody = document.getElementById('orders-table');
+  if (!tbody) return;
+
+  tbody.addEventListener('click', async (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+
+    if (target.closest('a, button, input, select, textarea')) return;
+
+    const row = target.closest('tr');
+    if (!row) return;
+
+    const id = row.getAttribute('data-order-id');
+    if (!id) return;
+
+    window.location.href = `/Tafel-Totaal/admin/order.html?id=${id}`;
+  });
+
+  tbody.addEventListener('click', async (e) => {
+    const target = e.target;
+    if (!(target instanceof Element)) return;
+
+    const cancelBtn = target.closest('[data-action="cancel-order"]');
+    const deleteBtn = target.closest('[data-action="delete-order"]');
+    if (!cancelBtn && !deleteBtn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const id = (cancelBtn || deleteBtn)?.getAttribute('data-order-id');
+    if (!id) return;
+
+    if (cancelBtn) {
+      const ok = await showConfirmModal('Bestelling annuleren?', 'Wil je deze bestelling annuleren?');
+      if (!ok) return;
+      try {
+        await adminAPI.updateOrderStatus(id, 'cancelled');
+        showToast('Bestelling geannuleerd', 'success');
+        await loadOrders();
+      } catch (err) {
+        console.error(err);
+        showToast(err.message || 'Kon bestelling niet annuleren', 'error');
+      }
+      return;
+    }
+
+    if (deleteBtn) {
+      const ok = await showConfirmModal('Bestelling verwijderen?', 'Deze actie kan niet ongedaan worden gemaakt. Wil je doorgaan?');
+      if (!ok) return;
+      try {
+        await adminAPI.deleteOrder(id);
+        showToast('Bestelling verwijderd', 'success');
+        await loadOrders();
+      } catch (err) {
+        console.error(err);
+        showToast(err.message || 'Kon bestelling niet verwijderen', 'error');
+      }
+    }
+  });
+}
+
+function showConfirmModal(title, message) {
+  return new Promise((resolve) => {
+    if (!document.getElementById('admin-confirm-modal')) {
+      const modalHtml = `
+        <div id="admin-confirm-modal-backdrop" class="modal-backdrop"></div>
+        <div id="admin-confirm-modal" class="modal">
+          <div class="modal__header">
+            <h3 class="modal__title" style="font-family: var(--font-display); text-transform: uppercase;">${title}</h3>
+            <button class="modal__close" type="button" id="admin-confirm-close">&times;</button>
+          </div>
+          <div class="modal__body">
+            <p id="admin-confirm-message">${message}</p>
+          </div>
+          <div class="modal__footer">
+            <button class="btn btn--secondary" type="button" id="admin-confirm-cancel">Annuleren</button>
+            <button class="btn btn--primary" type="button" id="admin-confirm-ok">Bevestigen</button>
+          </div>
+        </div>
+      `;
+      document.body.insertAdjacentHTML('beforeend', modalHtml);
+    }
+
+    const backdrop = document.getElementById('admin-confirm-modal-backdrop');
+    const modal = document.getElementById('admin-confirm-modal');
+    const msg = document.getElementById('admin-confirm-message');
+    const closeBtn = document.getElementById('admin-confirm-close');
+    const cancelBtn = document.getElementById('admin-confirm-cancel');
+    const okBtn = document.getElementById('admin-confirm-ok');
+    const titleEl = modal?.querySelector('.modal__title');
+
+    if (msg) msg.textContent = message;
+    if (titleEl) titleEl.textContent = title;
+
+    const cleanup = (value) => {
+      backdrop?.classList.remove('active');
+      modal?.classList.remove('active');
+      closeBtn.onclick = null;
+      cancelBtn.onclick = null;
+      okBtn.onclick = null;
+      resolve(value);
+    };
+
+    closeBtn.onclick = () => cleanup(false);
+    cancelBtn.onclick = () => cleanup(false);
+    okBtn.onclick = () => cleanup(true);
+    backdrop.onclick = () => cleanup(false);
+
+    modal?.offsetHeight;
+    backdrop?.classList.add('active');
+    modal?.classList.add('active');
+  });
+}
 
 /**
  * Initialize filters
@@ -95,9 +211,12 @@ function createOrderRow(order) {
   const rentalPeriod = order.rental_start_date && order.rental_end_date
     ? `${formatDateShort(order.rental_start_date)} - ${formatDateShort(order.rental_end_date)}`
     : '-';
+
+  const canCancel = order.status !== 'cancelled' && order.status !== 'completed';
+  const canDelete = order.status === 'cancelled';
   
   return `
-    <tr>
+    <tr data-order-id="${order.id}" style="cursor: pointer;">
       <td>
         <strong>${order.order_number}</strong>
         <br><small style="color: var(--color-gray);">${formatDateShort(order.created_at)}</small>
@@ -119,6 +238,8 @@ function createOrderRow(order) {
       <td>
         <div class="admin-table__actions">
           <a href="/Tafel-Totaal/admin/order.html?id=${order.id}" class="btn btn--ghost btn--sm">Details</a>
+          ${canCancel ? `<button type="button" class="btn btn--secondary btn--sm" data-action="cancel-order" data-order-id="${order.id}">Annuleren</button>` : ''}
+          ${canDelete ? `<button type="button" class="btn btn--primary btn--sm" data-action="delete-order" data-order-id="${order.id}">Verwijderen</button>` : ''}
         </div>
       </td>
     </tr>

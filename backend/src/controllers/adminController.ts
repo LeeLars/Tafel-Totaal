@@ -55,6 +55,37 @@ export async function getAllOrders(req: Request, res: Response): Promise<void> {
   }
 }
 
+export async function deleteOrder(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+
+    const existing = await queryOne<{ id: string; status: string }>(
+      'SELECT id, status FROM orders WHERE id = $1',
+      [id]
+    );
+
+    if (!existing) {
+      res.status(404).json({ success: false, error: 'Order not found' });
+      return;
+    }
+
+    const result = await query(
+      'DELETE FROM orders WHERE id = $1 RETURNING id',
+      [id]
+    );
+
+    if (result.length === 0) {
+      res.status(404).json({ success: false, error: 'Order not found' });
+      return;
+    }
+
+    res.json({ success: true, data: { id } });
+  } catch (error) {
+    console.error('Delete order error:', error);
+    res.status(500).json({ success: false, error: 'Failed to delete order' });
+  }
+}
+
 export async function getOrderDetail(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
