@@ -1453,7 +1453,6 @@ async function placeOrder() {
     const orderData = {
       customer: checkoutData.customer,
       deliveryMethod: checkoutData.delivery.method,
-      deliveryAddress: checkoutData.delivery.address || null,
       notes: checkoutData.delivery.notes,
       event_date: checkoutData.eventDate,
       items: checkoutData.items.map(item => ({
@@ -1466,6 +1465,11 @@ async function placeOrder() {
         addons: item.addons || []
       }))
     };
+
+    // Only include deliveryAddress when it's actually provided (null would fail backend validation)
+    if (checkoutData.delivery.method === 'DELIVERY' && checkoutData.delivery.address) {
+      orderData.deliveryAddress = checkoutData.delivery.address;
+    }
     
     // Add scheduling information based on delivery method
     if (checkoutData.delivery.method === 'DELIVERY') {

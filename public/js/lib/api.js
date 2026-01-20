@@ -25,7 +25,15 @@ async function apiCall(endpoint, options = {}) {
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      const error = new Error(errorData.error || `HTTP ${response.status}`);
+      let message = errorData.error || `HTTP ${response.status}`;
+      // If backend provides validation details, surface the first one in the message
+      if (Array.isArray(errorData.details) && errorData.details.length > 0) {
+        const first = errorData.details[0];
+        if (first?.field && first?.message) {
+          message = `${message}: ${first.field} - ${first.message}`;
+        }
+      }
+      const error = new Error(message);
       error.status = response.status;
       error.data = errorData;
       throw error;
