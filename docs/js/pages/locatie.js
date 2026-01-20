@@ -43,7 +43,7 @@ async function loadLocationData() {
   currentSlug = slug;
 
   if (!slug) {
-    showError('Geen locatie opgegeven');
+    console.warn('Geen locatie slug gevonden');
     return;
   }
 
@@ -58,7 +58,7 @@ async function loadLocationData() {
     const data = await response.json();
 
     if (!data.success || !data.data) {
-      if (!cached) showError('Locatie niet gevonden');
+      if (!cached) console.warn('Locatie niet gevonden in API, tonen van statische content');
       return;
     }
 
@@ -67,7 +67,7 @@ async function loadLocationData() {
     renderLocationPage();
   } catch (error) {
     console.error('Error loading location:', error);
-    if (!cached) showError('Kon locatie niet laden');
+    // Do not hide content on error, just log it. Static content is already visible.
   }
 }
 

@@ -27,11 +27,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadLocations() {
   const loadingEl = document.getElementById('sitemap-locations-loading');
-  const errorEl = document.getElementById('sitemap-locations-error');
-  const fallbackEl = document.getElementById('sitemap-locations-fallback');
   const grid = document.getElementById('sitemap-locations');
 
-  if (!loadingEl || !errorEl || !fallbackEl || !grid) return;
+  if (!loadingEl || !grid) return;
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/bezorgzones/cities`);
@@ -44,26 +42,26 @@ async function loadLocations() {
       .filter(c => c && c.slug && c.name)
       .sort((a, b) => String(a.name).localeCompare(String(b.name), 'nl', { sensitivity: 'base' }));
 
-    grid.style.display = 'grid';
+    // Replace content with dynamic list
     grid.innerHTML = sorted.map(c => {
       const url = `/Tafel-Totaal/locaties/${encodeURIComponent(c.slug)}.html`;
       return `
-        <a href="${url}" class="btn btn--secondary btn--sm" style="justify-content: space-between;">
-          Tafelverhuur ${escapeHtml(c.name)}
-          <span aria-hidden="true">→</span>
-        </a>
+        <li>
+          <a href="${url}" class="sitemap-link">
+            ${escapeHtml(c.name)}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </li>
       `;
     }).join('');
 
     loadingEl.style.display = 'none';
+    grid.style.display = 'grid';
   } catch (e) {
+    // On error, just hide loading and show the static fallback list
+    console.warn('Could not load dynamic locations, showing fallback.', e);
     loadingEl.style.display = 'none';
-    errorEl.style.display = 'block';
-
-    fallbackEl.innerHTML = FALLBACK_CITIES.map(c => {
-      const url = `/Tafel-Totaal/locaties/${encodeURIComponent(c.slug)}.html`;
-      return `<a href="${url}" class="btn btn--secondary btn--sm">Tafelverhuur ${escapeHtml(c.name)}</a>`;
-    }).join('');
+    grid.style.display = 'grid';
   }
 }
 
