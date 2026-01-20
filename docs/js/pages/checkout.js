@@ -7,6 +7,7 @@ import { checkoutAPI } from '../lib/api.js';
 import { formatPrice, formatDateShort, showToast, isValidEmail, isValidPhone } from '../lib/utils.js';
 import { getCart, clearCart } from '../services/cart.js';
 import { getCurrentUser } from '../services/auth.js';
+import { loadHeader } from '../components/header.js';
 
 let currentStep = 1;
 let checkoutData = {
@@ -236,6 +237,9 @@ const POSTAL_CODE_DISTANCES = {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
+  // Load header first
+  await loadHeader();
+  
   const cart = getCart();
   
   if (!cart || cart.length === 0) {

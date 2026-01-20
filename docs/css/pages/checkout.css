@@ -476,6 +476,7 @@
   border-top: 1px dashed var(--color-gray);
   margin-top: var(--space-sm);
   padding-top: var(--space-sm);
+  gap: 14px;
 }
 
 .checkout-summary__total {
