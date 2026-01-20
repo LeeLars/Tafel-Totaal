@@ -428,6 +428,7 @@ function initQuantitySelector() {
 
 /**
  * Initialize quantity presets (25, 75, 125 buttons)
+ * Clicking multiple times adds to current quantity (additive/cumulative)
  */
 function initQuantityPresets() {
   const qtyInput = document.getElementById('quantity');
@@ -439,19 +440,23 @@ function initQuantityPresets() {
     btn.addEventListener('click', () => {
       if (btn.disabled) return;
       
-      const value = parseInt(btn.dataset.value);
+      const presetValue = parseInt(btn.dataset.value);
+      const currentValue = parseInt(qtyInput.value) || 1;
+      const newValue = currentValue + presetValue;
       const max = parseInt(qtyInput.max) || 9999;
       
-      if (value <= max) {
-        qtyInput.value = value;
-        selectedQuantity = value;
+      if (newValue <= max) {
+        qtyInput.value = newValue;
+        selectedQuantity = newValue;
         updateTotalPrice();
         
-        // Visual feedback
-        buttons.forEach(b => b.classList.remove('active'));
+        // Visual feedback - flash the button
         btn.classList.add('active');
+        setTimeout(() => btn.classList.remove('active'), 200);
+        
+        showToast(`+${presetValue} stuks toegevoegd (totaal: ${newValue})`, 'success');
       } else {
-        showToast(`Slechts ${max} stuks beschikbaar`, 'warning');
+        showToast(`Maximaal ${max} stuks beschikbaar`, 'warning');
       }
     });
   });

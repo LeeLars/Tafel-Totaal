@@ -448,6 +448,7 @@ function initForms() {
     const email = form.email.value.trim();
     const vatNumber = form.vat_number?.value?.trim?.() || '';
     const phone = form.phone.value.trim();
+    const companyName = form.company_name.value.trim();
 
     // Validation
     if (!firstName || !lastName) {
@@ -465,6 +466,17 @@ function initForms() {
       return;
     }
 
+    // Conditional validation: if one of company_name or vat_number is filled, both are required
+    if (companyName && !vatNumber) {
+      showToast('BTW-nummer is verplicht wanneer bedrijfsnaam is ingevuld', 'error');
+      return;
+    }
+    
+    if (vatNumber && !companyName) {
+      showToast('Bedrijfsnaam is verplicht wanneer BTW-nummer is ingevuld', 'error');
+      return;
+    }
+
     // Store data
     checkoutData.customer = {
       first_name: firstName,
@@ -472,7 +484,7 @@ function initForms() {
       email: email,
       vat_number: vatNumber,
       phone: phone,
-      company_name: form.company_name.value.trim(),
+      company_name: companyName,
       create_account: form.create_account.checked
     };
 

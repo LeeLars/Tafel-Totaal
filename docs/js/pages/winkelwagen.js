@@ -75,6 +75,11 @@ function renderCart() {
     itemsList.querySelectorAll('.quantity-control__btn').forEach(btn => {
       btn.addEventListener('click', handleQuantityChange);
     });
+    
+    itemsList.querySelectorAll('.quantity-control__value').forEach(input => {
+      input.addEventListener('change', handleManualQuantityChange);
+      input.addEventListener('blur', handleManualQuantityChange);
+    });
   }
 
   // Update summary
@@ -120,7 +125,7 @@ function createCartItemHTML(item) {
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </button>
-            <input type="text" class="quantity-control__value" value="${item.quantity}" readonly>
+            <input type="number" class="quantity-control__value" value="${item.quantity}" min="1" data-item-id="${item.id}">
             <button class="quantity-control__btn" data-action="increase" data-item-id="${item.id}">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -237,7 +242,7 @@ function updateSummary(cart) {
 }
 
 /**
- * Handle quantity change
+ * Handle quantity change from buttons
  */
 async function handleQuantityChange(e) {
   const btn = e.currentTarget;
@@ -264,6 +269,34 @@ async function handleQuantityChange(e) {
     if (!result.success) {
       showToast(result.error || 'Kon hoeveelheid niet aanpassen', 'error');
     }
+  }
+}
+
+/**
+ * Handle manual quantity input change
+ */
+async function handleManualQuantityChange(e) {
+  const input = e.currentTarget;
+  const itemId = input.dataset.itemId;
+  const newQuantity = parseInt(input.value, 10);
+  
+  if (isNaN(newQuantity) || newQuantity < 1) {
+    input.value = 1;
+    return;
+  }
+  
+  const cart = getCart();
+  const item = cart.find(i => i.id === itemId);
+  
+  if (!item || newQuantity === item.quantity) return;
+  
+  input.disabled = true;
+  const result = await updateCartItem(itemId, newQuantity);
+  input.disabled = false;
+  
+  if (!result.success) {
+    showToast(result.error || 'Kon hoeveelheid niet aanpassen', 'error');
+    input.value = item.quantity;
   }
 }
 
