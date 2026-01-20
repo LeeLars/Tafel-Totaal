@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { query, queryOne } from '../config/database';
 import { Session, CartItem } from '../types';
+import { CustomerModel } from '../models/Customer.model';
 
 const SESSION_COOKIE_NAME = 'session_id';
 const SESSION_DURATION_DAYS = 30;
@@ -14,6 +15,20 @@ export async function getCart(req: Request, res: Response): Promise<void> {
     console.error('Get cart error:', error);
     res.status(500).json({ success: false, error: 'Failed to get cart' });
   }
+}
+
+async function resolveAuthenticatedCustomerId(req: Request): Promise<string | null> {
+  if (!req.user) return null;
+
+  // Some environments store a non-customer id in JWT (e.g. a separate users table).
+  // Sessions.customer_id has an FK to customers(id), so we must only use a valid customers.id.
+  const byId = req.user.userId ? await CustomerModel.findById(req.user.userId) : null;
+  if (byId?.id) return byId.id;
+
+  const byEmail = req.user.email ? await CustomerModel.findByEmail(req.user.email) : null;
+  if (byEmail?.id) return byEmail.id;
+
+  return null;
 }
 
 export async function addItem(req: Request, res: Response): Promise<void> {
@@ -93,7 +108,7 @@ export async function clearCart(req: Request, res: Response): Promise<void> {
 
 async function getOrCreateSession(req: Request, res: Response): Promise<Session> {
   const sessionToken = req.cookies?.[SESSION_COOKIE_NAME];
-  const customerId = req.user?.userId || null;
+  const customerId = await resolveAuthenticatedCustomerId(req);
 
   if (sessionToken) {
     const session = await queryOne<Session>(

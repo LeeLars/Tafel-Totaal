@@ -16,6 +16,19 @@ import crypto from 'crypto';
 const SESSION_COOKIE_NAME = 'session_id';
 const SESSION_DURATION_DAYS = 30;
 
+async function resolveAuthenticatedCustomerId(req: Request): Promise<string | null> {
+  if (!req.user) return null;
+
+  // Sessions.customer_id has an FK to customers(id). JWT userId may not be a customers.id.
+  const byId = req.user.userId ? await CustomerModel.findById(req.user.userId) : null;
+  if (byId?.id) return byId.id;
+
+  const byEmail = req.user.email ? await CustomerModel.findByEmail(req.user.email) : null;
+  if (byEmail?.id) return byEmail.id;
+
+  return null;
+}
+
 export async function createOrder(req: Request, res: Response): Promise<void> {
   try {
     const { deliveryMethod, customer, deliveryAddress, notes, delivery_time, pickup_time, self_pickup_time, return_time, items } = req.body as {
@@ -301,7 +314,7 @@ export async function calculatePrice(req: Request, res: Response): Promise<void>
 
 async function getOrCreateSession(req: Request, res: Response) {
   const sessionToken = req.cookies?.[SESSION_COOKIE_NAME] as string | undefined;
-  const customerId = req.user?.userId;
+  const customerId = (await resolveAuthenticatedCustomerId(req)) || undefined;
 
   if (sessionToken) {
     const existing = await SessionModel.findByToken(sessionToken);
@@ -337,8 +350,26 @@ async function resolveCustomerId(
     vat_number?: string;
   }
 ): Promise<string> {
-  if (req.user?.userId) {
-    return req.user.userId;
+  // If authenticated, try to map to a real customers.id
+  const authCustomerId = await resolveAuthenticatedCustomerId(req);
+  if (authCustomerId) return authCustomerId;
+
+  // If authenticated but we couldn't resolve a customer record, try to create one from the provided payload
+  if (req.user?.email) {
+    const existingByEmail = await CustomerModel.findByEmail(req.user.email);
+    if (existingByEmail) return existingByEmail.id;
+
+    const randomPassword = crypto.randomBytes(24).toString('hex');
+    const createdFromAuth = await CustomerModel.create({
+      email: req.user.email,
+      password: randomPassword,
+      first_name: customer.first_name,
+      last_name: customer.last_name,
+      phone: customer.phone,
+      company_name: customer.company_name,
+      vat_number: customer.vat_number
+    });
+    return createdFromAuth.id;
   }
 
   const existing = await CustomerModel.findByEmail(customer.email);
