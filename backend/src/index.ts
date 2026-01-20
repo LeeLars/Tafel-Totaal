@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import { env, isDevelopment } from './config/env';
 import { testConnection, runLoyaltyMigration } from './config/database';
+import { runMigrations } from './config/migrations';
 
 import authRoutes from './routes/auth.routes';
 import packagesRoutes from './routes/packages.routes';
@@ -108,7 +109,8 @@ async function startServer(): Promise<void> {
     process.exit(1);
   }
   
-  // Run loyalty migration on startup
+  // Run database migrations on startup
+  await runMigrations();
   await runLoyaltyMigration();
   
   app.listen(env.PORT, () => {
