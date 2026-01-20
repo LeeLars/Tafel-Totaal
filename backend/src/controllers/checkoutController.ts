@@ -266,7 +266,8 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     res.status(500).json({ 
       success: false, 
       error: 'Failed to create order',
-      details: process.env.NODE_ENV === 'development' ? (error as Error).message : undefined
+      message: (error as Error).message,
+      details: process.env.NODE_ENV === 'development' ? (error as Error).stack : undefined
     });
   }
 }

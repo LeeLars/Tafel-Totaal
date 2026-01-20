@@ -1516,7 +1516,14 @@ async function placeOrder() {
     }
   } catch (error) {
     console.error('Order placement error:', error);
-    showToast(error.message || 'Er ging iets mis bij het plaatsen van je reservering', 'error');
+    
+    // Try to extract more detailed error info from API response
+    let errorMsg = error.message || 'Er ging iets mis bij het plaatsen van je reservering';
+    if (error.data?.message) {
+      errorMsg += ': ' + error.data.message;
+    }
+    
+    showToast(errorMsg, 'error');
     
     btn.disabled = false;
     btn.innerHTML = `
