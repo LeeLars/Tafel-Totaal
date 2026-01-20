@@ -129,15 +129,15 @@
 
 .location-skeleton {
   height: 200px;
-  background: linear-gradient(90deg, var(--color-off-white) 25%, var(--color-light-gray) 50%, var(--color-off-white) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-loading 1.5s infinite;
+  background: var(--color-off-white);
   border: 1px solid var(--color-light-gray);
+  animation: skeleton-pulse 1.5s infinite ease-in-out;
 }
 
-@keyframes skeleton-loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+@keyframes skeleton-pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
 }
 
 .locations-cta {
