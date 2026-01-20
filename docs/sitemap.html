@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sitemap | Tafel Totaal</title>
+  <meta name="description" content="Overzicht van alle pagina’s op Tafel Totaal.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://leelars.github.io/Tafel-Totaal/sitemap.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Sitemap | Tafel Totaal">
+  <meta property="og:description" content="Overzicht van alle pagina’s op Tafel Totaal.">
+  <meta property="og:image" content="/Tafel-Totaal/images/site/Logo-T-T-Zwart-transparant.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/content.css">
+</head>
+<body>
+  <div id="header-container"></div>
+
+  <main>
+    <section style="padding: var(--space-4xl) 0; background: var(--color-concrete); border-bottom: 1px solid var(--color-black);">
+      <div class="container">
+        <h1 style="font-family: var(--font-display); text-transform: uppercase; margin: 0 0 var(--space-md);">Sitemap</h1>
+        <p style="margin: 0; color: var(--color-gray); max-width: 70ch;">Hier vind je een overzicht van alle pagina’s. De locaties worden automatisch bijgewerkt op basis van onze actieve bezorgzones.</p>
+      </div>
+    </section>
+
+    <section style="padding: var(--space-3xl) 0;">
+      <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-xl);">
+          <div style="border: 1px solid var(--color-black); background: var(--color-white); padding: var(--space-xl);">
+            <h2 style="font-family: var(--font-display); text-transform: uppercase; margin: 0 0 var(--space-md);">Belangrijk</h2>
+            <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-sm);">
+              <li><a href="/Tafel-Totaal/" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Home</a></li>
+              <li><a href="/Tafel-Totaal/pakketten.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Pakketten</a></li>
+              <li><a href="/Tafel-Totaal/producten.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Losse producten</a></li>
+              <li><a href="/Tafel-Totaal/locaties.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Alle locaties</a></li>
+              <li><a href="/Tafel-Totaal/contact.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Contact</a></li>
+            </ul>
+          </div>
+
+          <div style="border: 1px solid var(--color-black); background: var(--color-white); padding: var(--space-xl);">
+            <h2 style="font-family: var(--font-display); text-transform: uppercase; margin: 0 0 var(--space-md);">Info</h2>
+            <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-sm);">
+              <li><a href="/Tafel-Totaal/hoe-werkt-het.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Hoe werkt het?</a></li>
+              <li><a href="/Tafel-Totaal/faq.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Veelgestelde vragen</a></li>
+              <li><a href="/Tafel-Totaal/over-ons.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Over ons</a></li>
+              <li><a href="/Tafel-Totaal/levering-retour.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Levering & retour</a></li>
+              <li><a href="/Tafel-Totaal/borg-schade.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Schadevergoeding</a></li>
+            </ul>
+          </div>
+
+          <div style="border: 1px solid var(--color-black); background: var(--color-white); padding: var(--space-xl); grid-column: 1 / -1;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-lg); flex-wrap: wrap; margin-bottom: var(--space-md);">
+              <div>
+                <h2 style="font-family: var(--font-display); text-transform: uppercase; margin: 0 0 var(--space-xs);">Locaties</h2>
+                <p style="margin: 0; color: var(--color-gray);">Deze lijst wordt automatisch opgebouwd op basis van actieve bezorgzones.</p>
+              </div>
+              <a href="/Tafel-Totaal/locaties.html" class="btn btn--primary btn--sm">Bekijk overzicht</a>
+            </div>
+
+            <div id="sitemap-locations-loading" style="padding: var(--space-lg); border: 1px solid var(--color-light-gray); background: var(--color-off-white);">
+              <div class="spinner" style="margin: 0 auto 12px;"></div>
+              <p style="margin: 0; text-align: center;">Locaties laden...</p>
+            </div>
+
+            <div id="sitemap-locations-error" style="display: none; padding: var(--space-lg); border: 1px solid var(--color-black); background: var(--color-concrete);">
+              <p style="margin: 0;">Kon locaties niet laden. Bekijk intussen:</p>
+              <div style="display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md);" id="sitemap-locations-fallback"></div>
+            </div>
+
+            <div id="sitemap-locations" style="display: none; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-sm);"></div>
+          </div>
+
+          <div style="border: 1px solid var(--color-black); background: var(--color-white); padding: var(--space-xl);">
+            <h2 style="font-family: var(--font-display); text-transform: uppercase; margin: 0 0 var(--space-md);">Juridisch</h2>
+            <ul style="list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-sm);">
+              <li><a href="/Tafel-Totaal/algemene-voorwaarden.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Algemene voorwaarden</a></li>
+              <li><a href="/Tafel-Totaal/privacy.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Privacybeleid</a></li>
+              <li><a href="/Tafel-Totaal/cookies.html" class="btn btn--secondary btn--sm" style="width: 100%; justify-content: space-between;">Cookiebeleid</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footer-container"></div>
+
+  <script type="module" src="/Tafel-Totaal/js/pages/sitemap.js"></script>
+</body>
+</html>
