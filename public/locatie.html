@@ -198,7 +198,15 @@
   <!-- Footer -->
   <div id="footer-container"></div>
 
-  <!-- Scripts -->
+  <!-- Redirect to new URL structure -->
+  <script>
+    // Redirect old ?slug=xxx URLs to new /locaties/xxx.html format
+    const urlParams = new URLSearchParams(window.location.search);
+    const slug = urlParams.get('slug');
+    if (slug) {
+      window.location.replace('/Tafel-Totaal/locaties/' + encodeURIComponent(slug) + '.html');
+    }
+  </script>
   <script type="module" src="/Tafel-Totaal/js/pages/locatie.js"></script>
 </body>
 </html>

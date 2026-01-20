@@ -174,7 +174,7 @@ function createCityCard(city) {
   const freeRadius = city.free_delivery_radius_km || 15;
 
   return `
-    <a href="/Tafel-Totaal/locatie.html?slug=${city.slug}" class="city-card" style="
+    <a href="/Tafel-Totaal/locaties/${city.slug}.html" class="city-card" style="
       display: block;
       padding: var(--space-xl);
       background: var(--color-white);

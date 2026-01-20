@@ -24,11 +24,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
- * Load location data from URL parameter
+ * Load location data from URL path
+ * Supports both /locaties/brugge.html and ?slug=brugge formats
  */
 async function loadLocationData() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const slug = urlParams.get('slug');
+  // Extract slug from URL path: /Tafel-Totaal/locaties/brugge.html -> brugge
+  let slug = null;
+  const path = window.location.pathname;
+  const match = path.match(/\/locaties\/([^\/]+)\.html$/);
+  if (match) {
+    slug = match[1];
+  } else {
+    // Fallback to query param for backwards compatibility
+    const urlParams = new URLSearchParams(window.location.search);
+    slug = urlParams.get('slug');
+  }
+  
   currentSlug = slug;
 
   if (!slug) {
@@ -116,7 +127,7 @@ async function loadRelatedLocations() {
       .slice(0, 10);
 
     container.innerHTML = related.map(c => {
-      return `<a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locatie.html?slug=${encodeURIComponent(c.slug)}">Tafelverhuur ${escapeHtml(c.name)}</a>`;
+      return `<a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locaties/${encodeURIComponent(c.slug)}.html">Tafelverhuur ${escapeHtml(c.name)}</a>`;
     }).join('');
   } catch {
     // ignore
@@ -130,7 +141,7 @@ function injectJsonLd() {
 
     const title = currentCity.meta_title || `Tafelverhuur ${currentCity.name} | Tafel Totaal`;
     const description = currentCity.meta_description || `Professionele tafelverhuur in ${currentCity.name}.`;
-    const url = currentSlug ? `https://leelars.github.io/Tafel-Totaal/locatie.html?slug=${encodeURIComponent(currentSlug)}` : 'https://leelars.github.io/Tafel-Totaal/locatie.html';
+    const url = currentSlug ? `https://leelars.github.io/Tafel-Totaal/locaties/${encodeURIComponent(currentSlug)}.html` : 'https://leelars.github.io/Tafel-Totaal/locaties.html';
 
     const ld = {
       '@context': 'https://schema.org',
@@ -259,7 +270,7 @@ function updateMetaTags() {
   // Canonical
   const canonical = document.getElementById('canonical-link');
   if (canonical && currentSlug) {
-    canonical.setAttribute('href', `https://leelars.github.io/Tafel-Totaal/locatie.html?slug=${encodeURIComponent(currentSlug)}`);
+    canonical.setAttribute('href', `https://leelars.github.io/Tafel-Totaal/locaties/${encodeURIComponent(currentSlug)}.html`);
   }
   
   // Update meta description
