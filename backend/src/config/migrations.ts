@@ -64,6 +64,19 @@ const requiredColumns: ColumnMigration[] = [
   
   // products table - warehouse location
   { table: 'products', column: 'warehouse_location', definition: "VARCHAR(100)" },
+  
+  // cities table - SEO and location fields
+  { table: 'cities', column: 'meta_title', definition: "VARCHAR(200)" },
+  { table: 'cities', column: 'meta_description', definition: "TEXT" },
+  { table: 'cities', column: 'hero_title', definition: "VARCHAR(200)" },
+  { table: 'cities', column: 'hero_subtitle', definition: "TEXT" },
+  { table: 'cities', column: 'description', definition: "TEXT" },
+  { table: 'cities', column: 'latitude', definition: "DECIMAL(10, 7)" },
+  { table: 'cities', column: 'longitude', definition: "DECIMAL(10, 7)" },
+  { table: 'cities', column: 'free_delivery_radius_km', definition: "INTEGER DEFAULT 15" },
+  { table: 'cities', column: 'total_orders', definition: "INTEGER DEFAULT 0" },
+  { table: 'cities', column: 'avg_rating', definition: "DECIMAL(3,2) DEFAULT 5.0" },
+  { table: 'cities', column: 'updated_at', definition: "TIMESTAMP DEFAULT NOW()" },
 ];
 
 async function columnExists(table: string, column: string): Promise<boolean> {

@@ -36,3 +36,36 @@ export async function getDeliveryZone(req: Request, res: Response): Promise<void
     res.status(500).json({ success: false, error: 'Failed to get delivery zone' });
   }
 }
+
+export async function getCityBySlug(req: Request, res: Response): Promise<void> {
+  try {
+    const { slug } = req.params;
+
+    const city = await CityModel.findBySlug(slug);
+
+    if (!city) {
+      res.status(404).json({ success: false, error: 'City not found' });
+      return;
+    }
+
+    res.json({ success: true, data: city });
+  } catch (error) {
+    console.error('Get city by slug error:', error);
+    res.status(500).json({ success: false, error: 'Failed to get city' });
+  }
+}
+
+export async function getAllCities(req: Request, res: Response): Promise<void> {
+  try {
+    const { province } = req.query;
+
+    const cities = province 
+      ? await CityModel.listByProvince(province as string)
+      : await CityModel.listActive();
+
+    res.json({ success: true, data: cities });
+  } catch (error) {
+    console.error('Get all cities error:', error);
+    res.status(500).json({ success: false, error: 'Failed to get cities' });
+  }
+}

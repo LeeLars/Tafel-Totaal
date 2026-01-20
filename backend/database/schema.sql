@@ -371,7 +371,25 @@ CREATE TABLE cities (
   postal_codes JSONB DEFAULT '[]'::jsonb,
   delivery_fee DECIMAL(10,2) DEFAULT 25,
   is_active BOOLEAN DEFAULT true,
-  created_at TIMESTAMP DEFAULT NOW()
+  
+  -- SEO & Content
+  meta_title VARCHAR(200),
+  meta_description TEXT,
+  hero_title VARCHAR(200),
+  hero_subtitle TEXT,
+  description TEXT,
+  
+  -- Location data
+  latitude DECIMAL(10, 7),
+  longitude DECIMAL(10, 7),
+  free_delivery_radius_km INTEGER DEFAULT 15,
+  
+  -- Stats (for dynamic content)
+  total_orders INTEGER DEFAULT 0,
+  avg_rating DECIMAL(3,2) DEFAULT 5.0,
+  
+  created_at TIMESTAMP DEFAULT NOW(),
+  updated_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_cities_slug ON cities(slug);
