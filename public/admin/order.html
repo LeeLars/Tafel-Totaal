@@ -209,6 +209,54 @@
             </div>
           </div>
 
+          <!-- Digital Order Picking -->
+          <div class="admin-card" style="margin-bottom: var(--space-xl);" id="picking-section">
+            <div class="admin-card__header">
+              <h2 class="admin-card__title">📦 Order Picking</h2>
+              <div class="picking-status-badge" id="picking-status-badge">
+                <span class="status-badge status-badge--pending">
+                  <span class="status-badge__dot"></span>
+                  <span id="picking-status-text">Niet gestart</span>
+                </span>
+              </div>
+            </div>
+            <div class="admin-card__body">
+              <!-- Picking Info Grid -->
+              <div class="picking-info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-xl);">
+                <div class="picking-info-item">
+                  <label style="font-size: var(--font-size-sm); color: var(--color-gray); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--space-xs);">Klaar voor</label>
+                  <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                    <input type="datetime-local" id="preparation-deadline" class="form-input" style="flex: 1;">
+                    <button type="button" id="save-deadline-btn" class="btn btn--secondary btn--sm">Opslaan</button>
+                  </div>
+                </div>
+                <div class="picking-info-item">
+                  <label style="font-size: var(--font-size-sm); color: var(--color-gray); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--space-xs);">Klaarzetten op</label>
+                  <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                    <input type="text" id="preparation-location" class="form-input" placeholder="Bijv. Zone A, Rek 3" style="flex: 1;">
+                    <button type="button" id="save-location-btn" class="btn btn--secondary btn--sm">Opslaan</button>
+                  </div>
+                </div>
+                <div class="picking-info-item">
+                  <label style="font-size: var(--font-size-sm); color: var(--color-gray); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--space-xs);">Picking Status</label>
+                  <select id="picking-status-select" class="form-input">
+                    <option value="not_started">Niet gestart</option>
+                    <option value="in_progress">Bezig</option>
+                    <option value="completed">Klaar</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Picking Checklist -->
+              <div class="picking-checklist">
+                <h3 style="font-family: var(--font-display); font-size: var(--font-size-lg); text-transform: uppercase; margin-bottom: var(--space-md); border-bottom: 1px solid var(--border-color); padding-bottom: var(--space-sm);">Picking Checklist</h3>
+                <div id="picking-items" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                  <!-- Items will be loaded here -->
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Order Items -->
           <div class="admin-card" style="margin-bottom: var(--space-xl);">
             <div class="admin-card__header">

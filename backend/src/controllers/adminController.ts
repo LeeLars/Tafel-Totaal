@@ -147,6 +147,120 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
   }
 }
 
+export async function updatePickingStatus(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const { picking_status, preparation_deadline, preparation_location } = req.body;
+
+    const updates: string[] = [];
+    const values: unknown[] = [];
+    let paramIndex = 1;
+
+    if (picking_status) {
+      updates.push(`picking_status = $${paramIndex++}`);
+      values.push(picking_status);
+    }
+    if (preparation_deadline !== undefined) {
+      updates.push(`preparation_deadline = $${paramIndex++}`);
+      values.push(preparation_deadline);
+    }
+    if (preparation_location !== undefined) {
+      updates.push(`preparation_location = $${paramIndex++}`);
+      values.push(preparation_location);
+    }
+
+    if (updates.length === 0) {
+      res.status(400).json({ success: false, error: 'No fields to update' });
+      return;
+    }
+
+    updates.push(`updated_at = NOW()`);
+    values.push(id);
+
+    const result = await query(
+      `UPDATE orders SET ${updates.join(', ')} WHERE id = $${paramIndex} RETURNING *`,
+      values
+    );
+
+    if (result.length === 0) {
+      res.status(404).json({ success: false, error: 'Order not found' });
+      return;
+    }
+
+    res.json({ success: true, data: result[0] });
+  } catch (error) {
+    console.error('Update picking status error:', error);
+    res.status(500).json({ success: false, error: 'Failed to update picking status' });
+  }
+}
+
+export async function updateItemPicked(req: Request, res: Response): Promise<void> {
+  try {
+    const { id, itemId } = req.params;
+    const { picked } = req.body;
+    const userId = (req as any).user?.userId;
+
+    const updates = picked
+      ? `picked = true, picked_at = NOW(), picked_by = $1`
+      : `picked = false, picked_at = NULL, picked_by = NULL`;
+
+    const result = await query(
+      `UPDATE order_items SET ${updates} WHERE id = $${picked ? 2 : 1} AND order_id = $${picked ? 3 : 2} RETURNING *`,
+      picked ? [userId, itemId, id] : [itemId, id]
+    );
+
+    if (result.length === 0) {
+      res.status(404).json({ success: false, error: 'Order item not found' });
+      return;
+    }
+
+    res.json({ success: true, data: result[0] });
+  } catch (error) {
+    console.error('Update item picked error:', error);
+    res.status(500).json({ success: false, error: 'Failed to update item picked status' });
+  }
+}
+
+export async function getPickingDetails(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+
+    const order = await queryOne(
+      `SELECT o.*,
+              json_agg(
+                json_build_object(
+                  'id', oi.id,
+                  'item_type', oi.item_type,
+                  'product_id', oi.product_id,
+                  'package_id', oi.package_id,
+                  'quantity', oi.quantity,
+                  'picked', COALESCE(oi.picked, false),
+                  'picked_at', oi.picked_at,
+                  'product_name', p.name,
+                  'product_sku', p.sku,
+                  'warehouse_location', p.warehouse_location
+                )
+              ) as items
+       FROM orders o
+       LEFT JOIN order_items oi ON o.id = oi.order_id
+       LEFT JOIN products p ON oi.product_id = p.id
+       WHERE o.id = $1
+       GROUP BY o.id`,
+      [id]
+    );
+
+    if (!order) {
+      res.status(404).json({ success: false, error: 'Order not found' });
+      return;
+    }
+
+    res.json({ success: true, data: order });
+  } catch (error) {
+    console.error('Get picking details error:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch picking details' });
+  }
+}
+
 export async function generatePickingList(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;

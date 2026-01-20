@@ -202,6 +202,22 @@ export const adminAPI = {
   deleteOrder: (id) =>
     apiCall(`/api/admin/orders/${id}`, { method: 'DELETE' }),
   
+  // Picking
+  getPickingDetails: (id) =>
+    apiCall(`/api/admin/orders/${id}/picking`),
+  
+  updatePickingStatus: (id, data) =>
+    apiCall(`/api/admin/orders/${id}/picking`, {
+      method: 'PATCH',
+      body: JSON.stringify(data)
+    }),
+  
+  updateItemPicked: (orderId, itemId, picked) =>
+    apiCall(`/api/admin/orders/${orderId}/items/${itemId}/pick`, {
+      method: 'PATCH',
+      body: JSON.stringify({ picked })
+    }),
+  
   getPickingListUrl: (id) => 
     `${API_BASE_URL}/api/admin/orders/${id}/picking-list`,
   

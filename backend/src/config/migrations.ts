@@ -26,6 +26,9 @@ const requiredColumns: ColumnMigration[] = [
   { table: 'orders', column: 'admin_notes', definition: "TEXT" },
   { table: 'orders', column: 'mollie_payment_id', definition: "VARCHAR(100)" },
   { table: 'orders', column: 'paid_at', definition: "TIMESTAMP" },
+  { table: 'orders', column: 'picking_status', definition: "VARCHAR(20) DEFAULT 'not_started'" },
+  { table: 'orders', column: 'preparation_deadline', definition: "TIMESTAMP" },
+  { table: 'orders', column: 'preparation_location', definition: "VARCHAR(255)" },
   
   // order_items table
   { table: 'order_items', column: 'order_id', definition: "UUID NOT NULL" },
@@ -37,6 +40,9 @@ const requiredColumns: ColumnMigration[] = [
   { table: 'order_items', column: 'unit_price', definition: "DECIMAL(10,2) NOT NULL DEFAULT 0" },
   { table: 'order_items', column: 'damage_compensation_amount', definition: "DECIMAL(10,2) NOT NULL DEFAULT 0" },
   { table: 'order_items', column: 'line_total', definition: "DECIMAL(10,2) NOT NULL DEFAULT 0" },
+  { table: 'order_items', column: 'picked', definition: "BOOLEAN DEFAULT false" },
+  { table: 'order_items', column: 'picked_at', definition: "TIMESTAMP" },
+  { table: 'order_items', column: 'picked_by', definition: "UUID" },
   
   // sessions table
   { table: 'sessions', column: 'session_token', definition: "VARCHAR(255) NOT NULL" },
@@ -55,6 +61,9 @@ const requiredColumns: ColumnMigration[] = [
   { table: 'inventory_reservations', column: 'status', definition: "VARCHAR(20) NOT NULL DEFAULT 'PENDING'" },
   { table: 'inventory_reservations', column: 'expires_at', definition: "TIMESTAMP" },
   { table: 'inventory_reservations', column: 'released_at', definition: "TIMESTAMP" },
+  
+  // products table - warehouse location
+  { table: 'products', column: 'warehouse_location', definition: "VARCHAR(100)" },
 ];
 
 async function columnExists(table: string, column: string): Promise<boolean> {

@@ -64,6 +64,11 @@ router.delete('/orders/:id', validate(deleteOrderValidation), adminController.de
 router.get('/orders/:id/picking-list', adminController.generatePickingList);
 router.get('/orders/:id/invoice', adminController.generateInvoice);
 
+// Order Picking
+router.get('/orders/:id/picking', adminController.getPickingDetails);
+router.patch('/orders/:id/picking', adminController.updatePickingStatus);
+router.patch('/orders/:id/items/:itemId/pick', adminController.updateItemPicked);
+
 // Products
 router.get('/products', validate(getProductsValidation), adminController.getAllProducts);
 router.get('/products/:id', adminController.getProductById);
