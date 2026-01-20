@@ -208,32 +208,46 @@ function renderPickingSection() {
     pickingStatusSelect.value = pickingStatus;
   }
 
-  // Update status badge
+  // Update status badge with colors
   const statusInfo = getPickingStatusInfo(pickingStatus);
   const statusBadge = document.getElementById('picking-status-badge');
   if (statusBadge) {
     statusBadge.innerHTML = `
-      <span class="status-badge status-badge--${statusInfo.class}">
+      <span class="status-badge status-badge--${statusInfo.class}" style="background-color: ${statusInfo.bgColor}; color: ${statusInfo.color}; border-color: ${statusInfo.color};">
         <span class="status-badge__dot"></span>
         <span>${statusInfo.label}</span>
       </span>
     `;
   }
 
-  // Set deadline
-  if (pickingData.preparation_deadline) {
-    const deadline = new Date(pickingData.preparation_deadline);
-    const deadlineInput = document.getElementById('preparation-deadline');
-    if (deadlineInput) {
+  // Set deadline - auto-populate if not set
+  const deadlineInput = document.getElementById('preparation-deadline');
+  if (deadlineInput) {
+    if (pickingData.preparation_deadline) {
+      const deadline = new Date(pickingData.preparation_deadline);
       deadlineInput.value = deadline.toISOString().slice(0, 16);
+    } else if (pickingData.rental_start_date) {
+      // Auto-fill: 1 day before rental start date at 14:00
+      const rentalStart = new Date(pickingData.rental_start_date);
+      rentalStart.setDate(rentalStart.getDate() - 1);
+      rentalStart.setHours(14, 0, 0, 0);
+      deadlineInput.value = rentalStart.toISOString().slice(0, 16);
+      deadlineInput.style.borderColor = '#F59E0B';
+      deadlineInput.style.background = 'rgba(245, 158, 11, 0.05)';
     }
   }
 
-  // Set location
-  if (pickingData.preparation_location) {
-    const locationInput = document.getElementById('preparation-location');
-    if (locationInput) {
+  // Set location - auto-populate based on delivery method
+  const locationInput = document.getElementById('preparation-location');
+  if (locationInput) {
+    if (pickingData.preparation_location) {
       locationInput.value = pickingData.preparation_location;
+    } else if (pickingData.delivery_method === 'PICKUP') {
+      locationInput.placeholder = 'Bijv. Afhaalzone A';
+      locationInput.style.borderColor = '#3B82F6';
+    } else {
+      locationInput.placeholder = 'Bijv. Leveringszone B';
+      locationInput.style.borderColor = '#8B5CF6';
     }
   }
 
@@ -384,30 +398,85 @@ function initPickingControls() {
 }
 
 /**
- * Get picking status display info
+ * Get picking status display info with colors
  */
 function getPickingStatusInfo(status) {
   const statusMap = {
-    'not_started': { label: 'Niet gestart', class: 'pending' },
-    'in_progress': { label: 'Bezig', class: 'preparing' },
-    'completed': { label: 'Klaar', class: 'confirmed' }
+    'not_started': { 
+      label: 'Niet gestart', 
+      class: 'pending',
+      color: '#DC2626',
+      bgColor: 'rgba(220, 38, 38, 0.1)'
+    },
+    'in_progress': { 
+      label: 'Bezig', 
+      class: 'preparing',
+      color: '#F59E0B',
+      bgColor: 'rgba(245, 158, 11, 0.1)'
+    },
+    'completed': { 
+      label: 'Klaar', 
+      class: 'confirmed',
+      color: '#16A34A',
+      bgColor: 'rgba(22, 163, 74, 0.1)'
+    }
   };
-  return statusMap[status] || { label: status, class: 'pending' };
+  return statusMap[status] || statusMap['not_started'];
 }
 
 /**
- * Get status display info
+ * Get status display info with colors
  */
 function getStatusInfo(status) {
   const statusMap = {
-    'pending_payment': { label: 'Wacht op betaling', class: 'pending' },
-    'confirmed': { label: 'Bevestigd', class: 'confirmed' },
-    'preparing': { label: 'In voorbereiding', class: 'preparing' },
-    'ready_for_delivery': { label: 'Klaar voor levering', class: 'confirmed' },
-    'delivered': { label: 'Geleverd', class: 'delivered' },
-    'returned': { label: 'Retour ontvangen', class: 'confirmed' },
-    'completed': { label: 'Afgerond', class: 'completed' },
-    'cancelled': { label: 'Geannuleerd', class: 'cancelled' }
+    'pending_payment': { 
+      label: 'Wacht op betaling', 
+      class: 'pending',
+      color: '#F59E0B',
+      bgColor: 'rgba(245, 158, 11, 0.1)'
+    },
+    'confirmed': { 
+      label: 'Bevestigd', 
+      class: 'confirmed',
+      color: '#16A34A',
+      bgColor: 'rgba(22, 163, 74, 0.1)'
+    },
+    'preparing': { 
+      label: 'In voorbereiding', 
+      class: 'preparing',
+      color: '#3B82F6',
+      bgColor: 'rgba(59, 130, 246, 0.1)'
+    },
+    'ready_for_delivery': { 
+      label: 'Klaar voor levering', 
+      class: 'confirmed',
+      color: '#8B5CF6',
+      bgColor: 'rgba(139, 92, 246, 0.1)'
+    },
+    'delivered': { 
+      label: 'Geleverd', 
+      class: 'delivered',
+      color: '#903D3E',
+      bgColor: 'rgba(144, 61, 62, 0.1)'
+    },
+    'returned': { 
+      label: 'Retour ontvangen', 
+      class: 'confirmed',
+      color: '#06B6D4',
+      bgColor: 'rgba(6, 182, 212, 0.1)'
+    },
+    'completed': { 
+      label: 'Afgerond', 
+      class: 'completed',
+      color: '#059669',
+      bgColor: 'rgba(5, 150, 105, 0.15)'
+    },
+    'cancelled': { 
+      label: 'Geannuleerd', 
+      class: 'cancelled',
+      color: '#DC2626',
+      bgColor: 'rgba(220, 38, 38, 0.1)'
+    }
   };
-  return statusMap[status] || { label: status, class: 'pending' };
+  return statusMap[status] || statusMap['pending_payment'];
 }

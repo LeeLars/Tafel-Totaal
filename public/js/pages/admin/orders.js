@@ -229,7 +229,7 @@ function createOrderRow(order) {
       </td>
       <td>${rentalPeriod}</td>
       <td>
-        <span class="status-badge status-badge--${statusInfo.class}">
+        <span class="status-badge status-badge--${statusInfo.class}" style="background-color: ${statusInfo.bgColor}; color: ${statusInfo.color}; border-color: ${statusInfo.color};">
           <span class="status-badge__dot"></span>
           ${statusInfo.label}
         </span>
@@ -304,18 +304,58 @@ function renderPagination(pagination) {
 }
 
 /**
- * Get status display info
+ * Get status display info with colors
  */
 function getStatusInfo(status) {
   const statusMap = {
-    'pending_payment': { label: 'Wacht op betaling', class: 'pending' },
-    'confirmed': { label: 'Bevestigd', class: 'confirmed' },
-    'preparing': { label: 'In voorbereiding', class: 'preparing' },
-    'ready_for_delivery': { label: 'Klaar voor levering', class: 'confirmed' },
-    'delivered': { label: 'Geleverd', class: 'delivered' },
-    'returned': { label: 'Retour ontvangen', class: 'confirmed' },
-    'completed': { label: 'Afgerond', class: 'completed' },
-    'cancelled': { label: 'Geannuleerd', class: 'cancelled' }
+    'pending_payment': { 
+      label: 'Wacht op betaling', 
+      class: 'pending',
+      color: '#F59E0B',
+      bgColor: 'rgba(245, 158, 11, 0.1)'
+    },
+    'confirmed': { 
+      label: 'Bevestigd', 
+      class: 'confirmed',
+      color: '#16A34A',
+      bgColor: 'rgba(22, 163, 74, 0.1)'
+    },
+    'preparing': { 
+      label: 'In voorbereiding', 
+      class: 'preparing',
+      color: '#3B82F6',
+      bgColor: 'rgba(59, 130, 246, 0.1)'
+    },
+    'ready_for_delivery': { 
+      label: 'Klaar voor levering', 
+      class: 'confirmed',
+      color: '#8B5CF6',
+      bgColor: 'rgba(139, 92, 246, 0.1)'
+    },
+    'delivered': { 
+      label: 'Geleverd', 
+      class: 'delivered',
+      color: '#903D3E',
+      bgColor: 'rgba(144, 61, 62, 0.1)'
+    },
+    'returned': { 
+      label: 'Retour ontvangen', 
+      class: 'confirmed',
+      color: '#06B6D4',
+      bgColor: 'rgba(6, 182, 212, 0.1)'
+    },
+    'completed': { 
+      label: 'Afgerond', 
+      class: 'completed',
+      color: '#059669',
+      bgColor: 'rgba(5, 150, 105, 0.15)'
+    },
+    'cancelled': { 
+      label: 'Geannuleerd', 
+      class: 'cancelled',
+      color: '#DC2626',
+      bgColor: 'rgba(220, 38, 38, 0.1)'
+    }
   };
-  return statusMap[status] || { label: status, class: 'pending' };
+  return statusMap[status] || statusMap['pending_payment'];
 }
