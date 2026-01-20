@@ -41,11 +41,26 @@ async function checkAlreadyLoggedIn() {
     const response = await authAPI.me();
     if (response.success && response.data) {
       // Already logged in, redirect
-      const returnUrl = getQueryParam('returnUrl') || './account/overzicht.html';
+      const returnUrl = getQueryParam('returnUrl') || '/Tafel-Totaal/account/overzicht.html';
       window.location.href = returnUrl;
+      return;
     }
   } catch (error) {
-    // Not logged in, stay on page
+    // API failed, check localStorage fallback
+  }
+  
+  // Fallback: check localStorage
+  const storedUser = localStorage.getItem('user');
+  if (storedUser && localStorage.getItem('isLoggedIn') === 'true') {
+    try {
+      const user = JSON.parse(storedUser);
+      if (user) {
+        const returnUrl = getQueryParam('returnUrl') || '/Tafel-Totaal/account/overzicht.html';
+        window.location.href = returnUrl;
+      }
+    } catch (e) {
+      // Invalid stored data, stay on page
+    }
   }
 }
 
@@ -99,6 +114,12 @@ function initLoginForm() {
       const response = await authAPI.login(email, password);
 
       if (response.success) {
+        // Store user data in localStorage as fallback for cross-origin cookie issues
+        if (response.data) {
+          localStorage.setItem('user', JSON.stringify(response.data));
+          localStorage.setItem('isLoggedIn', 'true');
+        }
+        
         showToast('Succesvol ingelogd!', 'success');
         
         // Redirect based on role

@@ -1,6 +1,6 @@
 /**
  * Tafel Totaal - Auth Service
- * Authenticatie via JWT in httpOnly cookies
+ * Authenticatie via JWT in httpOnly cookies + localStorage fallback
  */
 
 import { authAPI } from '../lib/api.js';
@@ -10,11 +10,29 @@ let authListeners = [];
 
 export async function initAuth() {
   try {
+    // First try API (cookie-based auth)
     const response = await authAPI.me();
     currentUser = response.data;
+    // Sync to localStorage
+    if (currentUser) {
+      localStorage.setItem('user', JSON.stringify(currentUser));
+      localStorage.setItem('isLoggedIn', 'true');
+    }
     notifyListeners();
     updateAuthUI();
   } catch (error) {
+    // Fallback to localStorage if API fails (cross-origin cookie issue)
+    const storedUser = localStorage.getItem('user');
+    if (storedUser && localStorage.getItem('isLoggedIn') === 'true') {
+      try {
+        currentUser = JSON.parse(storedUser);
+        notifyListeners();
+        updateAuthUI();
+        return;
+      } catch (e) {
+        // Invalid stored data
+      }
+    }
     currentUser = null;
     updateAuthUI();
   }
@@ -24,6 +42,11 @@ export async function login(email, password) {
   try {
     const response = await authAPI.login(email, password);
     currentUser = response.data;
+    // Store in localStorage as fallback
+    if (currentUser) {
+      localStorage.setItem('user', JSON.stringify(currentUser));
+      localStorage.setItem('isLoggedIn', 'true');
+    }
     notifyListeners();
     updateAuthUI();
     return { success: true, user: currentUser };
@@ -36,6 +59,11 @@ export async function register(userData) {
   try {
     const response = await authAPI.register(userData);
     currentUser = response.data;
+    // Store in localStorage as fallback
+    if (currentUser) {
+      localStorage.setItem('user', JSON.stringify(currentUser));
+      localStorage.setItem('isLoggedIn', 'true');
+    }
     notifyListeners();
     updateAuthUI();
     return { success: true, user: currentUser };
@@ -47,13 +75,18 @@ export async function register(userData) {
 export async function logout() {
   try {
     await authAPI.logout();
-    currentUser = null;
-    notifyListeners();
-    updateAuthUI();
-    return { success: true };
   } catch (error) {
-    return { success: false, error: error.message };
+    // Ignore API errors - we'll clear local state anyway
+    console.log('API logout failed (ignored):', error);
   }
+  
+  // Always clear local state
+  currentUser = null;
+  localStorage.removeItem('user');
+  localStorage.removeItem('isLoggedIn');
+  notifyListeners();
+  updateAuthUI();
+  return { success: true };
 }
 
 export function getCurrentUser() {
