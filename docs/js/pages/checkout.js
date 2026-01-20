@@ -1480,6 +1480,13 @@ async function placeOrder() {
       orderData.return_time = checkoutData.delivery.returnTime;
     }
 
+    // Defensive cleanup: remove null/undefined values that would fail backend validation
+    Object.keys(orderData).forEach(key => {
+      if (orderData[key] === null || orderData[key] === undefined) {
+        delete orderData[key];
+      }
+    });
+
     // Debug: Log the order data being sent
     console.log('Sending order data:', JSON.stringify(orderData, null, 2));
 
