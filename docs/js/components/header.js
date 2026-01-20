@@ -329,20 +329,27 @@ function initCartPreview() {
  */
 async function updateCartPreview() {
   try {
-    // Get cart data from sessionStorage
-    const cartData = sessionStorage.getItem('cart');
-    if (!cartData) {
-      renderEmptyCart();
-      return;
+    // Primary source: cart service uses localStorage
+    const cartData = localStorage.getItem('tafel_totaal_cart');
+    if (cartData) {
+      const cart = JSON.parse(cartData);
+      if (Array.isArray(cart) && cart.length > 0) {
+        renderCartItems(cart);
+        return;
+      }
     }
 
-    const cart = JSON.parse(cartData);
-    if (!cart || cart.length === 0) {
-      renderEmptyCart();
-      return;
+    // Fallback: legacy sessionStorage key
+    const legacy = sessionStorage.getItem('cart');
+    if (legacy) {
+      const cart = JSON.parse(legacy);
+      if (Array.isArray(cart) && cart.length > 0) {
+        renderCartItems(cart);
+        return;
+      }
     }
 
-    renderCartItems(cart);
+    renderEmptyCart();
   } catch (error) {
     console.error('Error updating cart preview:', error);
     renderEmptyCart();
@@ -379,18 +386,21 @@ function renderCartItems(cart) {
   let itemCount = 0;
 
   const itemsHtml = cart.map(item => {
-    const price = parseFloat(item.price || 0);
-    const quantity = parseInt(item.quantity || 1);
-    const lineTotal = price * quantity;
-    total += lineTotal;
+    const quantity = parseInt(item.quantity || 1, 10);
+
+    const unitPrice = parseFloat(item.unit_price ?? item.price_per_day ?? item.price ?? 0) || 0;
+
+    const computedLineTotal = (parseFloat(item.line_total) || 0) || (unitPrice * quantity);
+    total += computedLineTotal;
     itemCount += quantity;
 
     const imageUrl = item.image || '/Tafel-Totaal/images/placeholder.jpg';
-    const itemName = item.name || 'Product';
+    const itemName = item.name || (item.type === 'package' ? 'Pakket' : 'Product');
     const details = [];
+    if (item.type) details.push(item.type === 'package' ? 'Pakket' : 'Product');
     if (item.persons) details.push(`${item.persons} pers.`);
-    if (item.startDate && item.endDate) {
-      details.push(`${formatDateShort(item.startDate)} - ${formatDateShort(item.endDate)}`);
+    if (item.start_date && item.end_date) {
+      details.push(`${formatDateShort(item.start_date)} - ${formatDateShort(item.end_date)}`);
     }
 
     return `
@@ -399,7 +409,7 @@ function renderCartItems(cart) {
         <div class="cart-preview__item-info">
           <div class="cart-preview__item-name">${itemName}</div>
           ${details.length > 0 ? `<div class="cart-preview__item-details">${details.join(' • ')}</div>` : ''}
-          <div class="cart-preview__item-price">${quantity}x ${formatPrice(price)} = ${formatPrice(lineTotal)}</div>
+          <div class="cart-preview__item-price">${quantity}x ${formatPrice(unitPrice)} = ${formatPrice(computedLineTotal)}</div>
         </div>
       </div>
     `;
