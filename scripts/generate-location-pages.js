@@ -1,19 +1,142 @@
-<!DOCTYPE html>
+/**
+ * Generate all location pages for West and Oost-Vlaanderen
+ * Each page has unique content, animations, and product showcase
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const cities = {
+  'west-vlaanderen': [
+    { name: 'Brugge', slug: 'brugge', postal: '8000', province: 'West-Vlaanderen' },
+    { name: 'Kortrijk', slug: 'kortrijk', postal: '8500', province: 'West-Vlaanderen' },
+    { name: 'Oostende', slug: 'oostende', postal: '8400', province: 'West-Vlaanderen' },
+    { name: 'Roeselare', slug: 'roeselare', postal: '8800', province: 'West-Vlaanderen' },
+    { name: 'Waregem', slug: 'waregem', postal: '8790', province: 'West-Vlaanderen' },
+    { name: 'Ieper', slug: 'ieper', postal: '8900', province: 'West-Vlaanderen' },
+    { name: 'Menen', slug: 'menen', postal: '8930', province: 'West-Vlaanderen' },
+    { name: 'Torhout', slug: 'torhout', postal: '8820', province: 'West-Vlaanderen' },
+    { name: 'Izegem', slug: 'izegem', postal: '8870', province: 'West-Vlaanderen' },
+    { name: 'Tielt', slug: 'tielt', postal: '8700', province: 'West-Vlaanderen' },
+    { name: 'Knokke-Heist', slug: 'knokke-heist', postal: '8300', province: 'West-Vlaanderen' },
+    { name: 'Blankenberge', slug: 'blankenberge', postal: '8370', province: 'West-Vlaanderen' },
+    { name: 'Harelbeke', slug: 'harelbeke', postal: '8530', province: 'West-Vlaanderen' },
+    { name: 'Wevelgem', slug: 'wevelgem', postal: '8560', province: 'West-Vlaanderen' },
+    { name: 'Kuurne', slug: 'kuurne', postal: '8520', province: 'West-Vlaanderen' },
+    { name: 'Deerlijk', slug: 'deerlijk', postal: '8540', province: 'West-Vlaanderen' },
+    { name: 'Zwevegem', slug: 'zwevegem', postal: '8550', province: 'West-Vlaanderen' },
+    { name: 'Poperinge', slug: 'poperinge', postal: '8970', province: 'West-Vlaanderen' },
+    { name: 'Diksmuide', slug: 'diksmuide', postal: '8600', province: 'West-Vlaanderen' },
+    { name: 'Oostkamp', slug: 'oostkamp', postal: '8020', province: 'West-Vlaanderen' },
+    { name: 'Zedelgem', slug: 'zedelgem', postal: '8210', province: 'West-Vlaanderen' },
+    { name: 'Lichtervelde', slug: 'lichtervelde', postal: '8810', province: 'West-Vlaanderen' },
+    { name: 'Wervik', slug: 'wervik', postal: '8940', province: 'West-Vlaanderen' },
+    { name: 'Wingene', slug: 'wingene', postal: '8750', province: 'West-Vlaanderen' },
+    { name: 'Gistel', slug: 'gistel', postal: '8470', province: 'West-Vlaanderen' },
+    { name: 'Moorslede', slug: 'moorslede', postal: '8890', province: 'West-Vlaanderen' },
+    { name: 'Staden', slug: 'staden', postal: '8840', province: 'West-Vlaanderen' },
+    { name: 'Kortemark', slug: 'kortemark', postal: '8610', province: 'West-Vlaanderen' },
+    { name: 'Ardooie', slug: 'ardooie', postal: '8850', province: 'West-Vlaanderen' },
+    { name: 'Anzegem', slug: 'anzegem', postal: '8570', province: 'West-Vlaanderen' }
+  ],
+  'oost-vlaanderen': [
+    { name: 'Gent', slug: 'gent', postal: '9000', province: 'Oost-Vlaanderen' },
+    { name: 'Aalst', slug: 'aalst', postal: '9300', province: 'Oost-Vlaanderen' },
+    { name: 'Sint-Niklaas', slug: 'sint-niklaas', postal: '9100', province: 'Oost-Vlaanderen' },
+    { name: 'Dendermonde', slug: 'dendermonde', postal: '9200', province: 'Oost-Vlaanderen' },
+    { name: 'Lokeren', slug: 'lokeren', postal: '9160', province: 'Oost-Vlaanderen' },
+    { name: 'Oudenaarde', slug: 'oudenaarde', postal: '9700', province: 'Oost-Vlaanderen' },
+    { name: 'Ninove', slug: 'ninove', postal: '9400', province: 'Oost-Vlaanderen' },
+    { name: 'Zottegem', slug: 'zottegem', postal: '9620', province: 'Oost-Vlaanderen' },
+    { name: 'Geraardsbergen', slug: 'geraardsbergen', postal: '9500', province: 'Oost-Vlaanderen' },
+    { name: 'Eeklo', slug: 'eeklo', postal: '9900', province: 'Oost-Vlaanderen' },
+    { name: 'Deinze', slug: 'deinze', postal: '9800', province: 'Oost-Vlaanderen' },
+    { name: 'Ronse', slug: 'ronse', postal: '9600', province: 'Oost-Vlaanderen' },
+    { name: 'Wetteren', slug: 'wetteren', postal: '9230', province: 'Oost-Vlaanderen' },
+    { name: 'Lebbeke', slug: 'lebbeke', postal: '9280', province: 'Oost-Vlaanderen' },
+    { name: 'Merelbeke', slug: 'merelbeke', postal: '9820', province: 'Oost-Vlaanderen' },
+    { name: 'Beveren', slug: 'beveren', postal: '9120', province: 'Oost-Vlaanderen' },
+    { name: 'Lede', slug: 'lede', postal: '9340', province: 'Oost-Vlaanderen' },
+    { name: 'Erpe-Mere', slug: 'erpe-mere', postal: '9420', province: 'Oost-Vlaanderen' },
+    { name: 'Waasmunster', slug: 'waasmunster', postal: '9250', province: 'Oost-Vlaanderen' },
+    { name: 'Temse', slug: 'temse', postal: '9140', province: 'Oost-Vlaanderen' },
+    { name: 'Lochristi', slug: 'lochristi', postal: '9080', province: 'Oost-Vlaanderen' },
+    { name: 'Evergem', slug: 'evergem', postal: '9940', province: 'Oost-Vlaanderen' },
+    { name: 'Zelzate', slug: 'zelzate', postal: '9060', province: 'Oost-Vlaanderen' },
+    { name: 'Destelbergen', slug: 'destelbergen', postal: '9070', province: 'Oost-Vlaanderen' },
+    { name: 'Nazareth', slug: 'nazareth', postal: '9810', province: 'Oost-Vlaanderen' },
+    { name: 'Maldegem', slug: 'maldegem', postal: '9990', province: 'Oost-Vlaanderen' },
+    { name: 'Hamme', slug: 'hamme', postal: '9220', province: 'Oost-Vlaanderen' },
+    { name: 'Assenede', slug: 'assenede', postal: '9960', province: 'Oost-Vlaanderen' },
+    { name: 'Kaprijke', slug: 'kaprijke', postal: '9970', province: 'Oost-Vlaanderen' },
+    { name: 'Sint-Lievens-Houtem', slug: 'sint-lievens-houtem', postal: '9520', province: 'Oost-Vlaanderen' }
+  ]
+};
+
+// Unique descriptions for each city type
+const cityDescriptions = {
+  large: [
+    'Een bruisende stad met een rijk cultureel erfgoed en moderne evenementlocaties.',
+    'De perfecte combinatie van historische charme en eigentijdse faciliteiten voor uw feest.',
+    'Een levendige stad waar traditie en innovatie samenkomen voor onvergetelijke evenementen.'
+  ],
+  medium: [
+    'Een gezellige stad met prachtige locaties voor uw bijzondere momenten.',
+    'De ideale setting voor intieme feesten en grootse celebraties.',
+    'Een charmante stad met uitstekende mogelijkheden voor uw evenement.'
+  ],
+  small: [
+    'Een pittoresk stadje met een warme, gastvrije sfeer voor uw feest.',
+    'De perfecte locatie voor authentieke en persoonlijke evenementen.',
+    'Een verborgen parel met unieke locaties voor uw viering.'
+  ]
+};
+
+const eventTypes = [
+  'bruiloften', 'communiefeesten', 'bedrijfsevents', 'verjaardagsfeesten', 
+  'jubilea', 'babyborrels', 'tuinfeesten', 'familiebijeenkomsten'
+];
+
+function getCitySize(name) {
+  const largeCities = ['Gent', 'Brugge', 'Aalst', 'Kortrijk', 'Oostende', 'Sint-Niklaas', 'Roeselare'];
+  const mediumCities = ['Dendermonde', 'Lokeren', 'Oudenaarde', 'Ninove', 'Waregem', 'Ieper', 'Menen', 'Torhout'];
+  
+  if (largeCities.includes(name)) return 'large';
+  if (mediumCities.includes(name)) return 'medium';
+  return 'small';
+}
+
+function getRandomDescription(size) {
+  const descriptions = cityDescriptions[size];
+  return descriptions[Math.floor(Math.random() * descriptions.length)];
+}
+
+function getRandomEvents() {
+  const shuffled = [...eventTypes].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, 4);
+}
+
+function generateLocationPage(city) {
+  const size = getCitySize(city.name);
+  const description = getRandomDescription(size);
+  const events = getRandomEvents();
+  
+  return `<!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!-- SEO Meta Tags -->
-  <title>Servies & Tafelverhuur Aalst | Tafel Totaal</title>
-  <meta name="description" content="Professionele servies- en tafelverhuur in Aalst. Een bruisende stad met een rijk cultureel erfgoed en moderne evenementlocaties. Levering mogelijk in heel Aalst en omgeving!">
+  <title>Servies & Tafelverhuur ${city.name} | Tafel Totaal</title>
+  <meta name="description" content="Professionele servies- en tafelverhuur in ${city.name}. ${description} Levering mogelijk in heel ${city.name} en omgeving!">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://leelars.github.io/Tafel-Totaal/locaties/aalst.html" id="canonical-link">
+  <link rel="canonical" href="https://leelars.github.io/Tafel-Totaal/locaties/${city.slug}.html" id="canonical-link">
   
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Servies & Tafelverhuur Aalst | Tafel Totaal">
-  <meta property="og:description" content="Professionele servies- en tafelverhuur in Aalst. Levering mogelijk!">
+  <meta property="og:title" content="Servies & Tafelverhuur ${city.name} | Tafel Totaal">
+  <meta property="og:description" content="Professionele servies- en tafelverhuur in ${city.name}. Levering mogelijk!">
   <meta property="og:image" content="/Tafel-Totaal/images/site/Logo-T-T-Zwart-transparant.png">
   
   <!-- Favicon -->
@@ -134,7 +257,7 @@
           <span style="opacity: 0.6; margin: 0 var(--space-xs);">/</span>
           <a href="/Tafel-Totaal/locaties.html" style="color: inherit; text-decoration: none;">Locaties</a>
           <span style="opacity: 0.6; margin: 0 var(--space-xs);">/</span>
-          <span style="color: var(--color-black);">Aalst</span>
+          <span style="color: var(--color-black);">${city.name}</span>
         </nav>
       </div>
     </section>
@@ -145,10 +268,10 @@
         <div style="max-width: 900px; margin: 0 auto; text-align: center;">
           <h1 data-animate="fade-up" style="font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 5rem); text-transform: uppercase; margin-bottom: var(--space-lg); line-height: 1.1;">
             Servies & Tafelverhuur<br>
-            <span style="color: var(--color-primary);">Aalst</span>
+            <span style="color: var(--color-primary);">${city.name}</span>
           </h1>
           <p data-animate="fade-up" class="delay-1" style="font-size: var(--font-size-xl); color: var(--color-dark-gray); margin-bottom: var(--space-2xl); line-height: 1.6;">
-            Een bruisende stad met een rijk cultureel erfgoed en moderne evenementlocaties.
+            ${description}
           </p>
           <div data-animate="fade-up" class="delay-2" style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
             <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary btn--xl">Bekijk Pakketten</a>
@@ -173,7 +296,7 @@
               </svg>
             </div>
             <h3 style="font-family: var(--font-display); text-transform: uppercase; margin-bottom: var(--space-sm); font-size: var(--font-size-lg);">Levering Mogelijk</h3>
-            <p style="color: var(--color-gray); font-size: var(--font-size-sm);">In heel Aalst en omgeving</p>
+            <p style="color: var(--color-gray); font-size: var(--font-size-sm);">In heel ${city.name} en omgeving</p>
           </div>
           
           <div data-animate="scale" class="delay-2" style="text-align: center; padding: var(--space-xl); border: 1px solid var(--color-light-gray); background: var(--color-off-white);">
@@ -216,7 +339,7 @@
       <div class="container">
         <div style="text-align: center; margin-bottom: var(--space-3xl);">
           <h2 data-animate="fade-up" style="font-family: var(--font-display); text-transform: uppercase; font-size: clamp(2rem, 4vw, 3rem); margin-bottom: var(--space-md);">
-            Perfect voor uw evenement in Aalst
+            Perfect voor uw evenement in ${city.name}
           </h2>
           <p data-animate="fade-up" class="delay-1" style="font-size: var(--font-size-lg); color: var(--color-gray); max-width: 700px; margin: 0 auto;">
             Wij leveren professioneel serviesgoed voor alle soorten evenementen
@@ -224,35 +347,14 @@
         </div>
         
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-lg);">
-          
-          <div data-animate="fade-up" class="delay-1" style="padding: var(--space-xl); background: var(--color-white); border: 1px solid var(--color-black); text-align: center;">
+          ${events.map((event, i) => `
+          <div data-animate="fade-up" class="delay-${i + 1}" style="padding: var(--space-xl); background: var(--color-white); border: 1px solid var(--color-black); text-align: center;">
             <h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">
-              Familiebijeenkomsten
+              ${event.charAt(0).toUpperCase() + event.slice(1)}
             </h3>
             <p style="color: var(--color-gray); font-size: var(--font-size-sm);">Professionele verhuur</p>
           </div>
-          
-          <div data-animate="fade-up" class="delay-2" style="padding: var(--space-xl); background: var(--color-white); border: 1px solid var(--color-black); text-align: center;">
-            <h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">
-              Verjaardagsfeesten
-            </h3>
-            <p style="color: var(--color-gray); font-size: var(--font-size-sm);">Professionele verhuur</p>
-          </div>
-          
-          <div data-animate="fade-up" class="delay-3" style="padding: var(--space-xl); background: var(--color-white); border: 1px solid var(--color-black); text-align: center;">
-            <h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">
-              Bedrijfsevents
-            </h3>
-            <p style="color: var(--color-gray); font-size: var(--font-size-sm);">Professionele verhuur</p>
-          </div>
-          
-          <div data-animate="fade-up" class="delay-4" style="padding: var(--space-xl); background: var(--color-white); border: 1px solid var(--color-black); text-align: center;">
-            <h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">
-              Jubilea
-            </h3>
-            <p style="color: var(--color-gray); font-size: var(--font-size-sm);">Professionele verhuur</p>
-          </div>
-          
+          `).join('')}
         </div>
       </div>
     </section>
@@ -286,7 +388,7 @@
           Klaar om te bestellen?
         </h2>
         <p data-animate="fade-up" class="delay-1" style="font-size: var(--font-size-xl); margin-bottom: var(--space-2xl); max-width: 700px; margin-left: auto; margin-right: auto; opacity: 0.9;">
-          Reserveer vandaag nog uw serviesgoed voor uw evenement in Aalst
+          Reserveer vandaag nog uw serviesgoed voor uw evenement in ${city.name}
         </p>
         <div data-animate="fade-up" class="delay-2" style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
           <a href="/Tafel-Totaal/pakketten.html" class="btn btn--white btn--xl">Bekijk Pakketten</a>
@@ -319,7 +421,7 @@
           ? 'https://tafel-totaal-production.up.railway.app'
           : 'http://localhost:3000';
         
-        const response = await fetch(`${API_BASE}/api/products?limit=6`);
+        const response = await fetch(\`\${API_BASE}/api/products?limit=6\`);
         const data = await response.json();
         
         if (data.success && data.data) {
@@ -334,29 +436,29 @@
       const grid = document.getElementById('products-grid');
       if (!grid || !products.length) return;
       
-      grid.innerHTML = products.map((product, i) => `
-        <article class="product-card" data-animate="scale" style="animation-delay: ${i * 0.1}s; border: 1px solid var(--color-light-gray); overflow: hidden; background: var(--color-white);">
-          <a href="/Tafel-Totaal/product.html?id=${product.id}" style="text-decoration: none; color: inherit;">
+      grid.innerHTML = products.map((product, i) => \`
+        <article class="product-card" data-animate="scale" style="animation-delay: \${i * 0.1}s; border: 1px solid var(--color-light-gray); overflow: hidden; background: var(--color-white);">
+          <a href="/Tafel-Totaal/product.html?id=\${product.id}" style="text-decoration: none; color: inherit;">
             <div style="aspect-ratio: 1; overflow: hidden; background: var(--color-concrete);">
-              <img src="${product.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg'}" 
-                   alt="${product.name}" 
+              <img src="\${product.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg'}" 
+                   alt="\${product.name}" 
                    style="width: 100%; height: 100%; object-fit: cover;"
                    loading="lazy">
             </div>
             <div style="padding: var(--space-lg);">
               <div style="font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-primary); margin-bottom: var(--space-xs);">
-                ${product.category_name || 'Product'}
+                \${product.category_name || 'Product'}
               </div>
               <h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">
-                ${product.name}
+                \${product.name}
               </h3>
               <p style="font-size: var(--font-size-xl); font-weight: bold; color: var(--color-primary);">
-                €${product.price_per_day?.toFixed(2) || '0.00'} /dag
+                €\${product.price_per_day?.toFixed(2) || '0.00'} /dag
               </p>
             </div>
           </a>
         </article>
-      `).join('');
+      \`).join('');
     }
     
     // Initialize
@@ -377,4 +479,40 @@
     });
   </script>
 </body>
-</html>
+</html>`;
+}
+
+// Generate all pages
+function generateAllPages() {
+  const outputDir = path.join(__dirname, '..', 'public', 'locaties');
+  
+  // Ensure directory exists
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+  
+  let count = 0;
+  
+  // Generate West-Vlaanderen pages
+  cities['west-vlaanderen'].forEach(city => {
+    const html = generateLocationPage(city);
+    const filePath = path.join(outputDir, `${city.slug}.html`);
+    fs.writeFileSync(filePath, html, 'utf8');
+    count++;
+    console.log(`✅ Generated: ${city.slug}.html`);
+  });
+  
+  // Generate Oost-Vlaanderen pages
+  cities['oost-vlaanderen'].forEach(city => {
+    const html = generateLocationPage(city);
+    const filePath = path.join(outputDir, `${city.slug}.html`);
+    fs.writeFileSync(filePath, html, 'utf8');
+    count++;
+    console.log(`✅ Generated: ${city.slug}.html`);
+  });
+  
+  console.log(`\n🎉 Successfully generated ${count} location pages!`);
+}
+
+// Run the generator
+generateAllPages();
