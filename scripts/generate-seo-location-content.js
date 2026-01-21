@@ -203,139 +203,291 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.`
   };
 }
 
-// Generate content sections HTML
-function generateContentHTML(city) {
+// Generate full HTML page
+function generateFullPageHTML(city) {
   const content = generateCityContent(city);
   
-  return `
-    <!-- Location Detail Page CSS -->
-    <link rel="stylesheet" href="/Tafel-Totaal/css/pages/location-detail.css">
+  return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- SEO Meta Tags -->
+  <title>Servies & Tafelverhuur ${city.name} | Tafel Totaal</title>
+  <meta name="description" content="Professionele servies- en tafelverhuur in ${city.name}. ${content.intro.substring(0, 150)}...">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://leelars.github.io/Tafel-Totaal/locaties/${city.slug}.html">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Servies & Tafelverhuur ${city.name} | Tafel Totaal">
+  <meta property="og:description" content="Professionele servies- en tafelverhuur in ${city.name}. Levering mogelijk!">
+  <meta property="og:image" content="/Tafel-Totaal/images/site/Logo-T-T-Zwart-transparant.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/location-detail.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
 
-    <!-- Hero Section (Brutalist) -->
-    <header class="location-hero">
-      <div class="container">
-        <div class="location-hero__content">
-          <nav class="breadcrumbs" aria-label="Breadcrumb" style="background: transparent; border: none; padding: 0; margin-bottom: var(--space-xl);">
-            <a href="/Tafel-Totaal/">Home</a>
-            <span style="margin: 0 var(--space-xs);">/</span>
-            <a href="/Tafel-Totaal/locaties.html">Locaties</a>
-            <span style="margin: 0 var(--space-xs);">/</span>
-            <span>${city.name}</span>
-          </nav>
-          
-          <h1 class="location-hero__title" data-animate="fade-up">
-            Servies Verhuur<br>
-            <span style="color: var(--color-primary);">${city.name}</span>
-          </h1>
-          
-          <p class="location-hero__subtitle" data-animate="fade-up" class="delay-1">
-            ${content.intro}
-          </p>
-          
-          <div data-animate="fade-up" class="delay-2" style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
-            <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary btn--lg">Bekijk Pakketten</a>
-            <a href="/Tafel-Totaal/producten.html" class="btn btn--white btn--lg">Losse Producten</a>
-          </div>
+  <main>
+    <!-- Marquee Section -->
+    <div class="marquee-section">
+      <div class="marquee-track">
+        <div class="marquee-content">
+          <span>LEVERING IN ${city.name.toUpperCase()}</span> <span class="separator">•</span>
+          <span>GEEN AFWAS</span> <span class="separator">•</span>
+          <span>SERVIES & MEUBILAIR</span> <span class="separator">•</span>
+          <span>VOOR ELK EVENT</span> <span class="separator">•</span>
+          <span>LEVERING IN ${city.name.toUpperCase()}</span> <span class="separator">•</span>
+          <span>GEEN AFWAS</span> <span class="separator">•</span>
+          <span>SERVIES & MEUBILAIR</span> <span class="separator">•</span>
+          <span>VOOR ELK EVENT</span> <span class="separator">•</span>
         </div>
-      </div>
-      
-      <!-- Decorative Grid Lines -->
-      <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--color-black);"></div>
-      <div style="position: absolute; top: 0; right: 10%; width: 1px; height: 100%; background: var(--color-black); opacity: 0.1;"></div>
-    </header>
-
-    <!-- USPs (Bento Grid) -->
-    <section class="content-section" style="background-color: var(--color-white);">
-      <div class="container">
-        <div class="bento-grid">
-          <div class="bento-item bento-item--medium" data-animate="scale" class="delay-1">
-            <div class="feature-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                <circle cx="12" cy="10" r="3"></circle>
-              </svg>
-            </div>
-            <h3 class="section-title" style="font-size: var(--font-size-xl); margin-bottom: var(--space-sm);">Lokale Service</h3>
-            <p style="color: var(--color-dark-gray);">Levering in heel ${city.name} en omgeving. Wij kennen de regio en leveren stipt op tijd.</p>
-          </div>
-          
-          <div class="bento-item bento-item--medium" data-animate="scale" class="delay-2">
-            <div class="feature-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-              </svg>
-            </div>
-            <h3 class="section-title" style="font-size: var(--font-size-xl); margin-bottom: var(--space-sm);">Wij Doen de Afwas</h3>
-            <p style="color: var(--color-dark-gray);">Geen zorgen na het feest. U levert het servies vuil in, wij zorgen voor de professionele reiniging.</p>
-          </div>
-
-          <div class="bento-item bento-item--small" data-animate="scale" class="delay-3">
-            <h3 class="section-title" style="font-size: var(--font-size-lg);">Groot Assortiment</h3>
-            <ul style="list-style: none; padding: 0; margin: 0; color: var(--color-dark-gray);">
-              <li style="margin-bottom: var(--space-xs); display: flex; align-items: center; gap: 8px;">
-                <span style="width: 6px; height: 6px; background: var(--color-primary); display: block;"></span> Borden & Bestek
-              </li>
-              <li style="margin-bottom: var(--space-xs); display: flex; align-items: center; gap: 8px;">
-                <span style="width: 6px; height: 6px; background: var(--color-primary); display: block;"></span> Glaswerk
-              </li>
-              <li style="margin-bottom: var(--space-xs); display: flex; align-items: center; gap: 8px;">
-                <span style="width: 6px; height: 6px; background: var(--color-primary); display: block;"></span> Tafellinnen
-              </li>
-            </ul>
-          </div>
+        <div class="marquee-content" aria-hidden="true">
+          <span>LEVERING IN ${city.name.toUpperCase()}</span> <span class="separator">•</span>
+          <span>GEEN AFWAS</span> <span class="separator">•</span>
+          <span>SERVIES & MEUBILAIR</span> <span class="separator">•</span>
+          <span>VOOR ELK EVENT</span> <span class="separator">•</span>
+          <span>LEVERING IN ${city.name.toUpperCase()}</span> <span class="separator">•</span>
+          <span>GEEN AFWAS</span> <span class="separator">•</span>
+          <span>SERVIES & MEUBILAIR</span> <span class="separator">•</span>
+          <span>VOOR ELK EVENT</span> <span class="separator">•</span>
         </div>
-      </div>
-    </section>
-
-    <!-- Main Content Sections -->
-    <div class="container">
-      <div style="display: grid; grid-template-columns: 1fr; gap: 0;">
-        
-        ${content.sections.map((section, index) => `
-        <section class="content-section" data-animate="fade-up">
-          <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-xl);">
-            <div style="grid-column: span 12; md:grid-column: span 4;">
-              <h2 class="section-title" style="position: sticky; top: var(--space-2xl);">
-                ${section.title}
-              </h2>
-            </div>
-            <div style="grid-column: span 12; md:grid-column: span 8; font-size: var(--font-size-lg); line-height: 1.8;">
-              ${section.content.split('\n\n').map(para => 
-                para.startsWith('**') && para.endsWith('**') 
-                  ? `<h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-xl); margin: var(--space-xl) 0 var(--space-md); color: var(--color-black);">${para.replace(/\*\*/g, '')}</h3>`
-                  : para.startsWith('- ')
-                    ? `<ul style="margin: var(--space-md) 0; padding-left: var(--space-xl); border-left: 2px solid var(--color-light-gray);">${para.split('\n').map(li => 
-                        li.startsWith('- ') ? `<li style="margin-bottom: var(--space-sm); list-style: none;">${li.substring(2).replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</li>` : ''
-                      ).join('')}</ul>`
-                    : `<p style="margin-bottom: var(--space-md);">${para.replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</p>`
-              ).join('')}
-            </div>
-          </div>
-        </section>
-        `).join('')}
-
       </div>
     </div>
 
-    <!-- CTA Section (Brutalist) -->
-    <section style="padding: var(--space-5xl) 0;">
-      <div class="container">
-        <div class="cta-box" data-animate="scale">
-          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 10px, transparent 10px, transparent 20px);"></div>
-          
-          <h2 class="cta-box__title">Vraag Uw Offerte Aan</h2>
-          <p class="cta-box__text">
-            ${content.cta}
-          </p>
-          <div style="position: relative; z-index: 2; display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
-            <a href="/Tafel-Totaal/contact.html" class="btn btn--white btn--lg">Contacteer Ons</a>
-            <a href="/Tafel-Totaal/pakketten.html" class="btn btn--ghost btn--lg" style="color: white; border-color: white;">Bekijk Pakketten</a>
+    <!-- Architectural Hero Grid -->
+    <section class="hero-grid">
+      <!-- Block 1: Main Title -->
+      <div class="hero-cell hero-cell--title">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/Tafel-Totaal/">Home</a>
+          <span>/</span>
+          <a href="/Tafel-Totaal/locaties.html">Locaties</a>
+          <span>/</span>
+          <span class="active">${city.name}</span>
+        </nav>
+        
+        <h1 class="hero-title" data-animate="fade-up">
+          TAFELVERHUUR <br>
+          <span class="text-stroke">${city.name.toUpperCase()}</span>
+        </h1>
+      </div>
+
+      <!-- Block 2: Image/Visual -->
+      <div class="hero-cell hero-cell--visual">
+        <img src="/Tafel-Totaal/images/site/hero-table-setting.jpg" alt="Tafelverhuur ${city.name}" class="img-cover" loading="eager">
+        <div class="hero-overlay"></div>
+      </div>
+
+      <!-- Block 3: Introduction -->
+      <div class="hero-cell hero-cell--intro">
+        <p class="hero-lead" data-animate="fade-up" class="delay-1">
+          ${content.intro}
+        </p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value">100%</span>
+            <span class="stat-label">Service</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">0%</span>
+            <span class="stat-label">Afwas</span>
           </div>
         </div>
       </div>
+
+      <!-- Block 4: CTA -->
+      <div class="hero-cell hero-cell--cta">
+        <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary btn--full btn--lg">
+          Bekijk Pakketten
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <a href="/Tafel-Totaal/contact.html" class="btn btn--ghost btn--full">Offerte Aanvragen</a>
+      </div>
     </section>
-  `;
+
+    <!-- USPs Grid -->
+    <section class="usps-grid">
+      <div class="usp-item" data-animate="scale" class="delay-1">
+        <div class="usp-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </div>
+        <h3>Lokale Service</h3>
+        <p>Wij kennen ${city.name} en leveren stipt op tijd op uw locatie.</p>
+      </div>
+      
+      <div class="usp-item" data-animate="scale" class="delay-2">
+        <div class="usp-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h3>Wij Doen de Afwas</h3>
+        <p>Lever alles vuil in. Wij zorgen voor de professionele reiniging.</p>
+      </div>
+
+      <div class="usp-item" data-animate="scale" class="delay-3">
+        <div class="usp-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <h3>Alles voor uw Event</h3>
+        <p>Van borden en bestek tot tafels en stoelen.</p>
+      </div>
+    </section>
+
+    <!-- Main Content (Architectural Layout) -->
+    <div class="content-wrapper">
+      ${content.sections.map((section, index) => `
+      <section class="content-row" data-animate="fade-up">
+        <div class="content-label">
+          <span class="content-number">0${index + 1}</span>
+          <h2>${section.title}</h2>
+        </div>
+        <div class="content-body">
+          ${section.content.split('\n\n').map(para => 
+            para.startsWith('**') && para.endsWith('**') 
+              ? `<h3>${para.replace(/\*\*/g, '')}</h3>`
+              : para.startsWith('- ')
+                ? `<ul>${para.split('\n').map(li => 
+                    li.startsWith('- ') ? `<li>${li.substring(2).replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</li>` : ''
+                  ).join('')}</ul>`
+                : `<p>${para.replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</p>`
+          ).join('')}
+        </div>
+      </section>
+      `).join('')}
+    </div>
+
+    <!-- Products Showcase (Dynamic) -->
+    <section class="products-section">
+      <div class="section-header">
+        <h2>Populair in ${city.name}</h2>
+        <a href="/Tafel-Totaal/producten.html" class="btn-link">Bekijk Alles →</a>
+      </div>
+      
+      <div id="products-grid" class="products-grid">
+        <!-- Products will be loaded dynamically -->
+        <div class="loading-placeholder">Producten laden...</div>
+      </div>
+    </section>
+
+    <!-- Statement CTA -->
+    <section class="statement-section" data-animate>
+      <div class="statement-content">
+        <h2 class="statement-title">
+          KLAAR OM TE <br>
+          <span class="text-stroke-white">FEESTEN?</span>
+        </h2>
+        <p class="statement-text">
+          ${content.cta}
+        </p>
+        <div class="statement-actions">
+          <a href="/Tafel-Totaal/contact.html" class="btn btn--white btn--xl">Offerte Aanvragen</a>
+          <a href="/Tafel-Totaal/pakketten.html" class="btn btn--outline-white btn--xl">Bekijk Pakketten</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { loadHeader } from '/Tafel-Totaal/js/components/header.js';
+    import { loadFooter } from '/Tafel-Totaal/js/components/footer.js';
+    import { formatPrice } from '/Tafel-Totaal/js/lib/utils.js';
+    
+    // Load header and footer
+    loadHeader();
+    loadFooter();
+    
+    // Load featured products
+    async function loadProducts() {
+      try {
+        const API_BASE = window.location.hostname.includes('github.io')
+          ? 'https://tafel-totaal-production.up.railway.app'
+          : 'http://localhost:3000';
+        
+        const response = await fetch(\`\${API_BASE}/api/products?limit=4\`);
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+          renderProducts(data.data);
+        }
+      } catch (error) {
+        console.error('Error loading products:', error);
+      }
+    }
+    
+    function renderProducts(products) {
+      const grid = document.getElementById('products-grid');
+      if (!grid || !products.length) return;
+      
+      grid.innerHTML = products.map((product, i) => \`
+        <article class="product-card" data-animate="scale" style="animation-delay: \${i * 0.1}s;">
+          <a href="/Tafel-Totaal/product.html?id=\${product.id}" class="product-link">
+            <div class="product-image">
+              <img src="\${product.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg'}" 
+                   alt="\${product.name}" 
+                   loading="lazy">
+            </div>
+            <div class="product-info">
+              <span class="product-category">\${product.category_name || 'Product'}</span>
+              <h3 class="product-title">\${product.name}</h3>
+              <p class="product-price">\${formatPrice(product.price_per_day)} <span>/dag</span></p>
+            </div>
+          </a>
+        </article>
+      \`).join('');
+    }
+    
+    // Initialize
+    loadProducts();
+    
+    // Scroll animations observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    
+    document.querySelectorAll('[data-animate]').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>`;
 }
 
 // Process all cities
@@ -348,34 +500,13 @@ cities.forEach(city => {
   try {
     const filePath = path.join(__dirname, '../public/locaties', `${city.slug}.html`);
     
-    if (!fs.existsSync(filePath)) {
-      console.log(`⚠️  Skipping ${city.name} - file doesn't exist`);
-      errorCount++;
-      return;
-    }
+    // Generate full page content
+    const html = generateFullPageHTML(city);
     
-    let html = fs.readFileSync(filePath, 'utf8');
-    
-    // Find the insertion point (after product showcase, before CTA section)
-    const insertMarker = '<!-- CTA Section -->';
-    const insertIndex = html.indexOf(insertMarker);
-    
-    if (insertIndex === -1) {
-      console.log(`⚠️  Warning: Could not find insertion point in ${city.name}`);
-      errorCount++;
-      return;
-    }
-    
-    // Generate content
-    const contentHTML = generateContentHTML(city);
-    
-    // Insert content before map section
-    html = html.slice(0, insertIndex) + contentHTML + '\n    ' + html.slice(insertIndex);
-    
-    // Write back
+    // Write full page
     fs.writeFileSync(filePath, html, 'utf8');
     
-    console.log(`✅ ${city.name} - SEO content added`);
+    console.log(`✅ ${city.name} - Full page generated`);
     successCount++;
     
   } catch (error) {
@@ -384,4 +515,4 @@ cities.forEach(city => {
   }
 });
 
-console.log(`\n✨ Done! ${successCount} pages updated, ${errorCount} errors`);
+console.log(`\n✨ Done! ${successCount} pages generated, ${errorCount} errors`);
