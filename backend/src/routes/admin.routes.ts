@@ -4,6 +4,7 @@ import { validate } from '../middleware/validate.middleware';
 import { authenticateToken, requireAdmin } from '../middleware/auth.middleware';
 import * as adminController from '../controllers/adminController';
 import * as csvController from '../controllers/csvController';
+import * as packageController from '../controllers/packageController';
 import multer from 'multer';
 
 const upload = multer({ storage: multer.memoryStorage() });
@@ -100,5 +101,72 @@ router.get('/reports/orders', adminController.getOrdersReport);
 router.get('/reports/top-products', adminController.getTopProducts);
 router.get('/reports/top-customers', adminController.getTopCustomers);
 router.get('/reports/new-customers', adminController.getNewCustomersReport);
+
+// ============ PACKAGES MANAGEMENT ============
+
+const createPackageValidation = [
+  body('name').trim().notEmpty().withMessage('Package name is required'),
+  body('price_per_day').isFloat({ min: 0 }).withMessage('Valid price is required'),
+  body('persons').isInt({ min: 1 }).withMessage('Valid number of persons is required'),
+  body('slug').optional().trim(),
+  body('description').optional().trim(),
+  body('short_description').optional().trim(),
+  body('image_url').optional().trim(),
+  body('is_active').optional().isBoolean(),
+  body('is_featured').optional().isBoolean(),
+  body('sort_order').optional().isInt({ min: 0 }),
+];
+
+const updatePackageValidation = [
+  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+  body('name').optional().trim().notEmpty(),
+  body('price_per_day').optional().isFloat({ min: 0 }),
+  body('persons').optional().isInt({ min: 1 }),
+  body('slug').optional().trim(),
+  body('description').optional().trim(),
+  body('short_description').optional().trim(),
+  body('image_url').optional().trim(),
+  body('is_active').optional().isBoolean(),
+  body('is_featured').optional().isBoolean(),
+  body('sort_order').optional().isInt({ min: 0 }),
+];
+
+const deletePackageValidation = [
+  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+];
+
+const addPackageItemValidation = [
+  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+  body('product_id').isUUID().withMessage('Valid product ID is required'),
+  body('quantity').isInt({ min: 1 }).withMessage('Valid quantity is required'),
+  body('is_optional').optional().isBoolean(),
+  body('toggle_points').optional().isInt({ min: 0 }),
+  body('sort_order').optional().isInt({ min: 0 }),
+];
+
+const updatePackageItemValidation = [
+  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+  param('itemId').isInt({ min: 1 }).withMessage('Valid item ID is required'),
+  body('quantity').optional().isInt({ min: 1 }),
+  body('is_optional').optional().isBoolean(),
+  body('toggle_points').optional().isInt({ min: 0 }),
+  body('sort_order').optional().isInt({ min: 0 }),
+];
+
+const deletePackageItemValidation = [
+  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+  param('itemId').isInt({ min: 1 }).withMessage('Valid item ID is required'),
+];
+
+// Package CRUD routes
+router.get('/packages', packageController.adminGetAllPackages);
+router.post('/packages', validate(createPackageValidation), packageController.createPackage);
+router.put('/packages/:id', validate(updatePackageValidation), packageController.updatePackage);
+router.delete('/packages/:id', validate(deletePackageValidation), packageController.deletePackage);
+
+// Package items routes
+router.post('/packages/:id/items', validate(addPackageItemValidation), packageController.addPackageItem);
+router.put('/packages/:id/items/:itemId', validate(updatePackageItemValidation), packageController.updatePackageItem);
+router.delete('/packages/:id/items/:itemId', validate(deletePackageItemValidation), packageController.deletePackageItem);
 
 export default router;
