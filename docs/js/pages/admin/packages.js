@@ -5,6 +5,7 @@
 import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
+import { getUploadUrl, validateImageFile, CLOUDINARY_CONFIG } from '../../config/cloudinary.js';
 
 let currentPage = 1;
 let currentSearch = '';
@@ -106,6 +107,119 @@ function initModal() {
     e.preventDefault();
     await savePackage();
   });
+
+  // Initialize image upload
+  initImageUpload();
+}
+
+/**
+ * Initialize image upload functionality
+ */
+function initImageUpload() {
+  const uploadBtn = document.getElementById('upload-image-btn');
+  const fileInput = document.getElementById('image-upload');
+  const removeBtn = document.getElementById('remove-image-btn');
+
+  uploadBtn?.addEventListener('click', () => {
+    fileInput?.click();
+  });
+
+  fileInput?.addEventListener('change', async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      await uploadImage(file);
+    }
+  });
+
+  removeBtn?.addEventListener('click', () => {
+    removeImage();
+  });
+}
+
+/**
+ * Upload image to Cloudinary
+ */
+async function uploadImage(file) {
+  // Validate file
+  const validation = validateImageFile(file);
+  if (!validation.valid) {
+    showToast(validation.errors[0], 'error');
+    return;
+  }
+
+  const progressContainer = document.getElementById('upload-progress');
+  const progressBar = document.getElementById('progress-bar');
+  
+  try {
+    // Show progress
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '30%';
+
+    // Create form data
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_CONFIG.UPLOAD_PRESET);
+    formData.append('folder', CLOUDINARY_CONFIG.FOLDER);
+
+    progressBar.style.width = '60%';
+
+    // Upload to Cloudinary
+    const response = await fetch(getUploadUrl(), {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Upload failed');
+    }
+
+    const data = await response.json();
+    progressBar.style.width = '100%';
+
+    // Set image URL
+    const imageUrl = data.secure_url;
+    document.getElementById('edit-image-url').value = imageUrl;
+
+    // Show preview
+    showImagePreview(imageUrl);
+
+    // Hide progress
+    setTimeout(() => {
+      progressContainer.style.display = 'none';
+      progressBar.style.width = '0%';
+    }, 500);
+
+    showToast('Afbeelding geüpload', 'success');
+  } catch (error) {
+    console.error('Upload error:', error);
+    progressContainer.style.display = 'none';
+    progressBar.style.width = '0%';
+    showToast('Fout bij uploaden van afbeelding', 'error');
+  }
+}
+
+/**
+ * Show image preview
+ */
+function showImagePreview(url) {
+  const preview = document.getElementById('image-preview');
+  const img = document.getElementById('preview-img');
+  
+  if (preview && img) {
+    img.src = url;
+    preview.style.display = 'block';
+  }
+}
+
+/**
+ * Remove image
+ */
+function removeImage() {
+  document.getElementById('edit-image-url').value = '';
+  document.getElementById('image-preview').style.display = 'none';
+  document.getElementById('preview-img').src = '';
+  document.getElementById('image-upload').value = '';
+  showToast('Afbeelding verwijderd', 'success');
 }
 
 /**
@@ -157,13 +271,18 @@ function openNewPackageModal() {
   document.getElementById('edit-id').value = '';
   document.getElementById('edit-name').value = '';
   document.getElementById('edit-slug').value = '';
+  document.getElementById('edit-short-description').value = '';
   document.getElementById('edit-description').value = '';
+  document.getElementById('edit-image-url').value = '';
   document.getElementById('edit-price').value = '';
   document.getElementById('edit-deposit').value = '0';
   document.getElementById('edit-persons').value = '1';
   document.getElementById('edit-category').value = '';
   document.getElementById('edit-featured').checked = false;
   document.getElementById('edit-active').checked = true;
+  
+  // Clear image preview
+  removeImage();
   
   // Clear products
   renderPackageProducts();
@@ -339,13 +458,22 @@ function openEditModal(pkg) {
   document.getElementById('edit-id').value = pkg.id;
   document.getElementById('edit-name').value = pkg.name;
   document.getElementById('edit-slug').value = pkg.slug || '';
+  document.getElementById('edit-short-description').value = pkg.short_description || '';
   document.getElementById('edit-description').value = pkg.description || '';
+  document.getElementById('edit-image-url').value = pkg.image_url || '';
   document.getElementById('edit-price').value = pkg.price_per_day || 0;
   document.getElementById('edit-deposit').value = pkg.deposit_total || 0;
   document.getElementById('edit-persons').value = pkg.persons || 1;
   document.getElementById('edit-category').value = pkg.category || '';
   document.getElementById('edit-featured').checked = pkg.is_featured || false;
   document.getElementById('edit-active').checked = pkg.is_active;
+  
+  // Show image preview if exists
+  if (pkg.image_url) {
+    showImagePreview(pkg.image_url);
+  } else {
+    removeImage();
+  }
   
   // Render products
   renderPackageProducts();
@@ -468,17 +596,13 @@ async function savePackage() {
   const packageData = {
     name,
     slug: document.getElementById('edit-slug').value.trim() || null,
+    short_description: document.getElementById('edit-short-description').value.trim() || null,
     description: document.getElementById('edit-description').value.trim() || null,
+    image_url: document.getElementById('edit-image-url').value.trim() || null,
     price_per_day: parseFloat(document.getElementById('edit-price').value) || 0,
-    deposit_total: parseFloat(document.getElementById('edit-deposit').value) || 0,
     persons: parseInt(document.getElementById('edit-persons').value) || 1,
-    category: document.getElementById('edit-category').value || null,
     is_featured: document.getElementById('edit-featured').checked,
-    is_active: document.getElementById('edit-active').checked,
-    products: packageProducts.map(p => ({
-      product_id: p.product_id,
-      quantity: p.quantity
-    }))
+    is_active: document.getElementById('edit-active').checked
   };
 
   try {
