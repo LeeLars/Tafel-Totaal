@@ -5,7 +5,7 @@
 import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
-import { getUploadUrl, validateImageFile, CLOUDINARY_CONFIG } from '../../config/cloudinary.js';
+import { getUploadUrl, validateImageFile, CLOUDINARY_CONFIG, isCloudinaryConfigured } from '../../config/cloudinary.js';
 
 let currentPage = 1;
 let currentSearch = '';
@@ -20,6 +20,11 @@ let availableProducts = [];
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Packages page initializing...');
+  
+  // Check Cloudinary configuration
+  if (!isCloudinaryConfigured()) {
+    showCloudinaryWarning();
+  }
   
   // Initialize UI components first
   initFilters();
@@ -39,6 +44,43 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPackages();
   await loadAvailableProducts();
 });
+
+/**
+ * Show Cloudinary configuration warning
+ */
+function showCloudinaryWarning() {
+  const header = document.querySelector('.admin-content__header');
+  if (!header) return;
+  
+  const warning = document.createElement('div');
+  warning.style.cssText = `
+    background: #FEF3C7;
+    border: 2px solid #F59E0B;
+    padding: var(--space-md);
+    margin-top: var(--space-md);
+    display: flex;
+    align-items: start;
+    gap: var(--space-md);
+  `;
+  
+  warning.innerHTML = `
+    <div style="font-size: 24px;">⚠️</div>
+    <div style="flex: 1;">
+      <strong style="display: block; margin-bottom: var(--space-xs);">Cloudinary niet geconfigureerd</strong>
+      <p style="margin: 0 0 var(--space-sm); color: var(--color-dark-gray);">
+        Image upload werkt niet totdat Cloudinary correct is ingesteld.
+      </p>
+      <a href="https://github.com/LeeLars/Tafel-Totaal/blob/main/CLOUDINARY_SETUP.md" 
+         target="_blank" 
+         class="btn btn--secondary btn--sm"
+         style="display: inline-flex; align-items: center; gap: var(--space-xs);">
+        📖 Bekijk Setup Instructies
+      </a>
+    </div>
+  `;
+  
+  header.appendChild(warning);
+}
 
 /**
  * Initialize filters
@@ -152,8 +194,12 @@ async function uploadImage(file) {
   
   try {
     // Show progress
-    progressContainer.style.display = 'block';
-    progressBar.style.width = '30%';
+    if (progressContainer) {
+      progressContainer.style.display = 'block';
+    }
+    if (progressBar) {
+      progressBar.style.width = '30%';
+    }
 
     // Create form data
     const formData = new FormData();
@@ -161,7 +207,17 @@ async function uploadImage(file) {
     formData.append('upload_preset', CLOUDINARY_CONFIG.UPLOAD_PRESET);
     formData.append('folder', CLOUDINARY_CONFIG.FOLDER);
 
-    progressBar.style.width = '60%';
+    if (progressBar) {
+      progressBar.style.width = '60%';
+    }
+
+    console.log('Uploading to Cloudinary:', {
+      cloudName: CLOUDINARY_CONFIG.CLOUD_NAME,
+      preset: CLOUDINARY_CONFIG.UPLOAD_PRESET,
+      folder: CLOUDINARY_CONFIG.FOLDER,
+      fileName: file.name,
+      fileSize: file.size
+    });
 
     // Upload to Cloudinary
     const response = await fetch(getUploadUrl(), {
@@ -170,11 +226,28 @@ async function uploadImage(file) {
     });
 
     if (!response.ok) {
-      throw new Error('Upload failed');
+      const errorText = await response.text();
+      console.error('Cloudinary error response:', errorText);
+      
+      let errorMessage = 'Upload mislukt';
+      try {
+        const errorData = JSON.parse(errorText);
+        if (errorData.error?.message) {
+          errorMessage = errorData.error.message;
+        }
+      } catch (e) {
+        // Could not parse error
+      }
+      
+      throw new Error(errorMessage);
     }
 
     const data = await response.json();
-    progressBar.style.width = '100%';
+    console.log('Upload successful:', data);
+    
+    if (progressBar) {
+      progressBar.style.width = '100%';
+    }
 
     // Set image URL
     const imageUrl = data.secure_url;
@@ -185,16 +258,46 @@ async function uploadImage(file) {
 
     // Hide progress
     setTimeout(() => {
-      progressContainer.style.display = 'none';
-      progressBar.style.width = '0%';
+      if (progressContainer) {
+        progressContainer.style.display = 'none';
+      }
+      if (progressBar) {
+        progressBar.style.width = '0%';
+      }
     }, 500);
 
-    showToast('Afbeelding geüpload', 'success');
+    showToast('Afbeelding succesvol geüpload! ✓', 'success');
   } catch (error) {
     console.error('Upload error:', error);
-    progressContainer.style.display = 'none';
-    progressBar.style.width = '0%';
-    showToast('Fout bij uploaden van afbeelding', 'error');
+    
+    if (progressContainer) {
+      progressContainer.style.display = 'none';
+    }
+    if (progressBar) {
+      progressBar.style.width = '0%';
+    }
+    
+    // Show detailed error message
+    let errorMsg = 'Fout bij uploaden van afbeelding';
+    
+    if (error.message.includes('preset')) {
+      errorMsg = 'Cloudinary upload preset niet gevonden. Controleer de configuratie.';
+    } else if (error.message.includes('CORS')) {
+      errorMsg = 'CORS fout. Controleer Cloudinary instellingen.';
+    } else if (error.message) {
+      errorMsg = `Upload fout: ${error.message}`;
+    }
+    
+    showToast(errorMsg, 'error');
+    
+    // Show help message in console
+    console.error('=== CLOUDINARY SETUP VEREIST ===');
+    console.error('1. Ga naar https://cloudinary.com/console');
+    console.error('2. Ga naar Settings > Upload > Upload Presets');
+    console.error('3. Maak een nieuwe "unsigned" upload preset aan met naam: "packages"');
+    console.error('4. Zet de folder op: "tafel-totaal/packages"');
+    console.error('5. Schakel "Unique filename" en "Overwrite" in');
+    console.error('6. Sla op en probeer opnieuw');
   }
 }
 

@@ -12,12 +12,21 @@
  */
 
 export const CLOUDINARY_CONFIG = {
-  CLOUD_NAME: 'dchrgzyb4',
-  UPLOAD_PRESET: 'packages',
+  CLOUD_NAME: 'dchrgzyb4', // ← Controleer of dit je echte Cloudinary cloud name is
+  UPLOAD_PRESET: 'packages', // ← Dit preset moet bestaan in Cloudinary (unsigned)
   FOLDER: 'tafel-totaal/packages',
   MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
   ALLOWED_FORMATS: ['jpg', 'jpeg', 'png', 'gif', 'webp']
 };
+
+/**
+ * Check if Cloudinary is properly configured
+ */
+export function isCloudinaryConfigured() {
+  return CLOUDINARY_CONFIG.CLOUD_NAME && 
+         CLOUDINARY_CONFIG.CLOUD_NAME !== 'YOUR_CLOUD_NAME' &&
+         CLOUDINARY_CONFIG.UPLOAD_PRESET;
+}
 
 /**
  * Get Cloudinary upload URL
