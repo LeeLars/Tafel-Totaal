@@ -91,36 +91,47 @@ function renderPackages() {
  * Create package card HTML
  */
 function createPackageCard(pkg) {
-  const imageUrl = getPackageImageUrl(pkg);
-  const serviceLevelBadge = getServiceLevelBadge(pkg.service_level);
+  const imageUrl = pkg.image_url || getPackageImageUrl(pkg);
+  const isFeatured = pkg.is_featured;
+  const productCount = pkg.items?.length || 0;
   
   return `
-    <article class="package-card">
+    <article class="package-card" data-animate="fade">
       <a href="/Tafel-Totaal/pakket.html?id=${pkg.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${imageUrl}" alt="${pkg.name}" loading="lazy">
-          ${serviceLevelBadge ? `<span class="package-card__badge badge badge--primary">${serviceLevelBadge}</span>` : ''}
+          ${isFeatured ? `<span class="package-card__badge badge badge--primary">Populair</span>` : ''}
         </div>
         <div class="package-card__content">
           <h3 class="package-card__title">${pkg.name}</h3>
-          <p class="package-card__description">${pkg.short_description || pkg.description || ''}</p>
+          <p class="package-card__description">${pkg.short_description || pkg.description?.substring(0, 120) + '...' || 'Bekijk dit pakket voor meer informatie'}</p>
           <div class="package-card__meta">
             <span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="9" cy="7" r="4"></circle>
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
-              ${pkg.min_persons || 1} - ${pkg.max_persons || 100} personen
+              ${pkg.persons || 10} personen
             </span>
+            ${productCount > 0 ? `
+            <span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <path d="M12 8v8"></path>
+                <path d="M8 12h8"></path>
+              </svg>
+              ${productCount} producten
+            </span>
+            ` : ''}
           </div>
           <div class="package-card__footer">
             <div class="package-card__price">
-              ${formatPrice(pkg.base_price)}
-              <span>/ ${pkg.forfait_days || 3} dagen</span>
+              ${formatPrice(pkg.price_per_day)}
+              <span>/ dag</span>
             </div>
-            <span class="btn btn--primary btn--sm">Bekijk</span>
+            <span class="btn btn--primary btn--sm">Bekijk Details</span>
           </div>
         </div>
       </a>

@@ -18,12 +18,81 @@ let currentQuery = '';
 const CACHE_KEY = 'tafel_totaal_cities_cache_v1';
 const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
 
+// Static fallback list of all 60 cities
+const STATIC_CITIES = [
+  // West-Vlaanderen
+  { name: 'Brugge', slug: 'brugge', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Kortrijk', slug: 'kortrijk', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Oostende', slug: 'oostende', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Roeselare', slug: 'roeselare', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Waregem', slug: 'waregem', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Ieper', slug: 'ieper', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Menen', slug: 'menen', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Torhout', slug: 'torhout', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Izegem', slug: 'izegem', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Tielt', slug: 'tielt', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Knokke-Heist', slug: 'knokke-heist', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Blankenberge', slug: 'blankenberge', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Harelbeke', slug: 'harelbeke', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Wevelgem', slug: 'wevelgem', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Kuurne', slug: 'kuurne', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Deerlijk', slug: 'deerlijk', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Zwevegem', slug: 'zwevegem', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Poperinge', slug: 'poperinge', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Diksmuide', slug: 'diksmuide', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Oostkamp', slug: 'oostkamp', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Zedelgem', slug: 'zedelgem', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Lichtervelde', slug: 'lichtervelde', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Wervik', slug: 'wervik', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Wingene', slug: 'wingene', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Gistel', slug: 'gistel', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Moorslede', slug: 'moorslede', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Staden', slug: 'staden', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Kortemark', slug: 'kortemark', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Ardooie', slug: 'ardooie', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Anzegem', slug: 'anzegem', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  // Oost-Vlaanderen
+  { name: 'Gent', slug: 'gent', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Aalst', slug: 'aalst', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Sint-Niklaas', slug: 'sint-niklaas', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Dendermonde', slug: 'dendermonde', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Lokeren', slug: 'lokeren', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Oudenaarde', slug: 'oudenaarde', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Ninove', slug: 'ninove', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Zottegem', slug: 'zottegem', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Geraardsbergen', slug: 'geraardsbergen', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Eeklo', slug: 'eeklo', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Deinze', slug: 'deinze', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Ronse', slug: 'ronse', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Wetteren', slug: 'wetteren', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Lebbeke', slug: 'lebbeke', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Merelbeke', slug: 'merelbeke', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Beveren', slug: 'beveren', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Lede', slug: 'lede', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Erpe-Mere', slug: 'erpe-mere', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Waasmunster', slug: 'waasmunster', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Temse', slug: 'temse', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Lochristi', slug: 'lochristi', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Evergem', slug: 'evergem', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Zelzate', slug: 'zelzate', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Destelbergen', slug: 'destelbergen', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Nazareth', slug: 'nazareth', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Maldegem', slug: 'maldegem', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Hamme', slug: 'hamme', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Assenede', slug: 'assenede', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Kaprijke', slug: 'kaprijke', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
+  { name: 'Sint-Lievens-Houtem', slug: 'sint-lievens-houtem', province: 'Oost-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 }
+];
+
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   await loadHeader();
   await loadFooter();
   initFilters();
-  // Instant render from cache, then revalidate
+  // Start with static cities immediately for instant display
+  allCities = STATIC_CITIES;
+  applyFiltersAndRender();
+  // Then try to load from cache and API
   loadCities({ preferCache: true });
   loadCities({ preferCache: false });
 });
