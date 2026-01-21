@@ -208,52 +208,130 @@ function generateContentHTML(city) {
   const content = generateCityContent(city);
   
   return `
-    <!-- SEO Content Section -->
-    <section style="padding: var(--space-4xl) 0; background: var(--color-white);">
+    <!-- Location Detail Page CSS -->
+    <link rel="stylesheet" href="/Tafel-Totaal/css/pages/location-detail.css">
+
+    <!-- Hero Section (Brutalist) -->
+    <header class="location-hero">
       <div class="container">
-        <div style="max-width: 900px; margin: 0 auto;">
+        <div class="location-hero__content">
+          <nav class="breadcrumbs" aria-label="Breadcrumb" style="background: transparent; border: none; padding: 0; margin-bottom: var(--space-xl);">
+            <a href="/Tafel-Totaal/">Home</a>
+            <span style="margin: 0 var(--space-xs);">/</span>
+            <a href="/Tafel-Totaal/locaties.html">Locaties</a>
+            <span style="margin: 0 var(--space-xs);">/</span>
+            <span>${city.name}</span>
+          </nav>
           
-          <!-- Intro -->
-          <div data-animate="fade-up" style="margin-bottom: var(--space-3xl);">
-            <p style="font-size: var(--font-size-xl); line-height: 1.8; color: var(--color-dark-gray);">
-              ${content.intro}
-            </p>
+          <h1 class="location-hero__title" data-animate="fade-up">
+            Servies Verhuur<br>
+            <span style="color: var(--color-primary);">${city.name}</span>
+          </h1>
+          
+          <p class="location-hero__subtitle" data-animate="fade-up" class="delay-1">
+            ${content.intro}
+          </p>
+          
+          <div data-animate="fade-up" class="delay-2" style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+            <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary btn--lg">Bekijk Pakketten</a>
+            <a href="/Tafel-Totaal/producten.html" class="btn btn--white btn--lg">Losse Producten</a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Decorative Grid Lines -->
+      <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background: var(--color-black);"></div>
+      <div style="position: absolute; top: 0; right: 10%; width: 1px; height: 100%; background: var(--color-black); opacity: 0.1;"></div>
+    </header>
+
+    <!-- USPs (Bento Grid) -->
+    <section class="content-section" style="background-color: var(--color-white);">
+      <div class="container">
+        <div class="bento-grid">
+          <div class="bento-item bento-item--medium" data-animate="scale" class="delay-1">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+            </div>
+            <h3 class="section-title" style="font-size: var(--font-size-xl); margin-bottom: var(--space-sm);">Lokale Service</h3>
+            <p style="color: var(--color-dark-gray);">Levering in heel ${city.name} en omgeving. Wij kennen de regio en leveren stipt op tijd.</p>
+          </div>
+          
+          <div class="bento-item bento-item--medium" data-animate="scale" class="delay-2">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <h3 class="section-title" style="font-size: var(--font-size-xl); margin-bottom: var(--space-sm);">Wij Doen de Afwas</h3>
+            <p style="color: var(--color-dark-gray);">Geen zorgen na het feest. U levert het servies vuil in, wij zorgen voor de professionele reiniging.</p>
           </div>
 
-          ${content.sections.map((section, index) => `
-          <!-- Section ${index + 1} -->
-          <div data-animate="fade-up" class="delay-${index + 1}" style="margin-bottom: var(--space-3xl);">
-            <h2 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-3xl); margin-bottom: var(--space-lg); border-left: 4px solid var(--color-primary); padding-left: var(--space-md);">
-              ${section.title}
-            </h2>
-            <div style="font-size: var(--font-size-lg); line-height: 1.8; color: var(--color-dark-gray);">
+          <div class="bento-item bento-item--small" data-animate="scale" class="delay-3">
+            <h3 class="section-title" style="font-size: var(--font-size-lg);">Groot Assortiment</h3>
+            <ul style="list-style: none; padding: 0; margin: 0; color: var(--color-dark-gray);">
+              <li style="margin-bottom: var(--space-xs); display: flex; align-items: center; gap: 8px;">
+                <span style="width: 6px; height: 6px; background: var(--color-primary); display: block;"></span> Borden & Bestek
+              </li>
+              <li style="margin-bottom: var(--space-xs); display: flex; align-items: center; gap: 8px;">
+                <span style="width: 6px; height: 6px; background: var(--color-primary); display: block;"></span> Glaswerk
+              </li>
+              <li style="margin-bottom: var(--space-xs); display: flex; align-items: center; gap: 8px;">
+                <span style="width: 6px; height: 6px; background: var(--color-primary); display: block;"></span> Tafellinnen
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Sections -->
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 1fr; gap: 0;">
+        
+        ${content.sections.map((section, index) => `
+        <section class="content-section" data-animate="fade-up">
+          <div style="display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--space-xl);">
+            <div style="grid-column: span 12; md:grid-column: span 4;">
+              <h2 class="section-title" style="position: sticky; top: var(--space-2xl);">
+                ${section.title}
+              </h2>
+            </div>
+            <div style="grid-column: span 12; md:grid-column: span 8; font-size: var(--font-size-lg); line-height: 1.8;">
               ${section.content.split('\n\n').map(para => 
                 para.startsWith('**') && para.endsWith('**') 
                   ? `<h3 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-xl); margin: var(--space-xl) 0 var(--space-md); color: var(--color-black);">${para.replace(/\*\*/g, '')}</h3>`
                   : para.startsWith('- ')
-                    ? `<ul style="margin: var(--space-md) 0; padding-left: var(--space-xl);">${para.split('\n').map(li => 
-                        li.startsWith('- ') ? `<li style="margin-bottom: var(--space-sm);">${li.substring(2).replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</li>` : ''
+                    ? `<ul style="margin: var(--space-md) 0; padding-left: var(--space-xl); border-left: 2px solid var(--color-light-gray);">${para.split('\n').map(li => 
+                        li.startsWith('- ') ? `<li style="margin-bottom: var(--space-sm); list-style: none;">${li.substring(2).replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</li>` : ''
                       ).join('')}</ul>`
                     : `<p style="margin-bottom: var(--space-md);">${para.replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</p>`
               ).join('')}
             </div>
           </div>
-          `).join('')}
+        </section>
+        `).join('')}
 
-          <!-- CTA -->
-          <div data-animate="scale" style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); padding: var(--space-3xl); text-align: center; margin-top: var(--space-4xl); border: 1px solid var(--color-black);">
-            <h2 style="font-family: var(--font-display); text-transform: uppercase; color: var(--color-white); font-size: var(--font-size-2xl); margin-bottom: var(--space-lg);">
-              Vraag Uw Offerte Aan
-            </h2>
-            <p style="color: var(--color-white); font-size: var(--font-size-lg); margin-bottom: var(--space-xl); opacity: 0.95;">
-              ${content.cta}
-            </p>
-            <div style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
-              <a href="/Tafel-Totaal/contact.html" class="btn btn--white btn--lg">Contacteer Ons</a>
-              <a href="/Tafel-Totaal/pakketten.html" class="btn btn--secondary btn--lg">Bekijk Pakketten</a>
-            </div>
+      </div>
+    </div>
+
+    <!-- CTA Section (Brutalist) -->
+    <section style="padding: var(--space-5xl) 0;">
+      <div class="container">
+        <div class="cta-box" data-animate="scale">
+          <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 10px, transparent 10px, transparent 20px);"></div>
+          
+          <h2 class="cta-box__title">Vraag Uw Offerte Aan</h2>
+          <p class="cta-box__text">
+            ${content.cta}
+          </p>
+          <div style="position: relative; z-index: 2; display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
+            <a href="/Tafel-Totaal/contact.html" class="btn btn--white btn--lg">Contacteer Ons</a>
+            <a href="/Tafel-Totaal/pakketten.html" class="btn btn--ghost btn--lg" style="color: white; border-color: white;">Bekijk Pakketten</a>
           </div>
-
         </div>
       </div>
     </section>
