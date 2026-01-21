@@ -3,7 +3,6 @@
  */
 
 import { loadHeader } from '../components/header.js';
-import { loadFooter } from '../components/footer.js';
 
 const API_BASE_URL = window.location.hostname.includes('github.io')
   ? 'https://tafel-totaal-production.up.railway.app'
@@ -87,7 +86,6 @@ const STATIC_CITIES = [
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   await loadHeader();
-  await loadFooter();
   initFilters();
   // Start with static cities immediately for instant display
   allCities = STATIC_CITIES;
