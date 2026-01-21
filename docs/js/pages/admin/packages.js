@@ -499,14 +499,59 @@ function renderPackageProducts() {
     return;
   }
 
-  container.innerHTML = packageProducts.map((item, index) => `
-    <div class="package-product-item" style="display: flex; align-items: center; gap: var(--space-md); padding: var(--space-sm); border: 1px solid var(--color-light-gray); margin-bottom: var(--space-xs);">
-      <div style="flex: 1;">
+  // Separate required and optional products
+  const requiredProducts = packageProducts.filter(p => !p.is_optional);
+  const optionalProducts = packageProducts.filter(p => p.is_optional);
+
+  let html = '';
+
+  // Required products section
+  if (requiredProducts.length > 0) {
+    html += '<div style="margin-bottom: var(--space-lg);"><h4 style="font-size: var(--font-size-sm); text-transform: uppercase; color: var(--color-gray); margin-bottom: var(--space-sm);">Verplichte Producten</h4>';
+    html += requiredProducts.map((item, index) => {
+      const actualIndex = packageProducts.indexOf(item);
+      return createProductItemHTML(item, actualIndex, false);
+    }).join('');
+    html += '</div>';
+  }
+
+  // Optional products section
+  if (optionalProducts.length > 0) {
+    html += '<div style="margin-bottom: var(--space-md);"><h4 style="font-size: var(--font-size-sm); text-transform: uppercase; color: var(--color-gray); margin-bottom: var(--space-sm);">Optionele Producten (Toggle Points)</h4>';
+    html += optionalProducts.map((item, index) => {
+      const actualIndex = packageProducts.indexOf(item);
+      return createProductItemHTML(item, actualIndex, true);
+    }).join('');
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+}
+
+/**
+ * Create product item HTML
+ */
+function createProductItemHTML(item, index, isOptional) {
+  return `
+    <div class="package-product-item" style="display: grid; grid-template-columns: 1fr auto auto auto auto; gap: var(--space-sm); align-items: center; padding: var(--space-sm); border: 1px solid ${isOptional ? 'var(--color-primary)' : 'var(--color-light-gray)'}; margin-bottom: var(--space-xs); background: ${isOptional ? 'rgba(144, 61, 62, 0.05)' : 'transparent'};">
+      <div>
         <strong>${item.product_name || item.name}</strong>
+        ${isOptional ? '<br><small style="color: var(--color-primary);">Optioneel</small>' : ''}
       </div>
-      <div style="width: 100px;">
-        <input type="number" class="form-input form-input--sm" value="${item.quantity}" min="1" data-index="${index}" onchange="updateProductQuantity(${index}, this.value)">
+      <div style="display: flex; align-items: center; gap: var(--space-xs);">
+        <label style="font-size: var(--font-size-xs); color: var(--color-gray);">Aantal:</label>
+        <input type="number" class="form-input form-input--sm" value="${item.quantity || 1}" min="1" style="width: 70px;" onchange="updateProductQuantity(${index}, this.value)">
       </div>
+      ${isOptional ? `
+        <div style="display: flex; align-items: center; gap: var(--space-xs);">
+          <label style="font-size: var(--font-size-xs); color: var(--color-gray);">Points:</label>
+          <input type="number" class="form-input form-input--sm" value="${item.toggle_points || 0}" min="0" style="width: 70px;" onchange="updateProductTogglePoints(${index}, this.value)">
+        </div>
+      ` : '<div></div>'}
+      <label class="checkbox-label" style="margin: 0;">
+        <input type="checkbox" ${item.is_optional ? 'checked' : ''} onchange="toggleProductOptional(${index}, this.checked)">
+        <span style="font-size: var(--font-size-xs);">Optioneel</span>
+      </label>
       <button type="button" class="btn btn--ghost btn--sm" onclick="removeProduct(${index})" style="color: var(--color-error);">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -514,7 +559,7 @@ function renderPackageProducts() {
         </svg>
       </button>
     </div>
-  `).join('');
+  `;
 }
 
 /**
@@ -573,6 +618,29 @@ window.updateProductQuantity = function(index, quantity) {
 };
 
 /**
+ * Update product toggle points
+ */
+window.updateProductTogglePoints = function(index, points) {
+  if (packageProducts[index]) {
+    packageProducts[index].toggle_points = parseInt(points) || 0;
+  }
+};
+
+/**
+ * Toggle product optional flag
+ */
+window.toggleProductOptional = function(index, isOptional) {
+  if (packageProducts[index]) {
+    packageProducts[index].is_optional = isOptional;
+    if (!isOptional) {
+      // Reset toggle points when making product required
+      packageProducts[index].toggle_points = 0;
+    }
+    renderPackageProducts();
+  }
+};
+
+/**
  * Remove product from package
  */
 window.removeProduct = function(index) {
@@ -606,12 +674,23 @@ async function savePackage() {
   };
 
   try {
+    let packageId = id;
+
+    // Step 1: Create or update package
     if (isNewPackage) {
-      await adminAPI.createPackage(packageData);
+      const result = await adminAPI.createPackage(packageData);
+      packageId = result.data.id;
       showToast('Pakket aangemaakt', 'success');
     } else {
       await adminAPI.updatePackage(id, packageData);
       showToast('Pakket bijgewerkt', 'success');
+    }
+
+    // Step 2: Save product items
+    if (packageProducts.length > 0) {
+      // For now, we'll save products in the next phase when we have the backend endpoints
+      // This is a placeholder for the product items sync
+      console.log('Products to save:', packageProducts);
     }
 
     document.getElementById('edit-modal').classList.remove('active');
