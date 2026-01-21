@@ -12,7 +12,7 @@
  */
 
 export const CLOUDINARY_CONFIG = {
-  CLOUD_NAME: 'YOUR_CLOUD_NAME', // Replace with your Cloudinary cloud name
+  CLOUD_NAME: 'dchrgzyb4',
   UPLOAD_PRESET: 'packages',
   FOLDER: 'tafel-totaal/packages',
   MAX_FILE_SIZE: 5 * 1024 * 1024, // 5MB
