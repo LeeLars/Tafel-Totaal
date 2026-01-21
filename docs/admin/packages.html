@@ -49,6 +49,10 @@
     <div class="admin-layout">
       <!-- Sidebar -->
       <aside class="admin-sidebar">
+        <div class="admin-sidebar__header">
+          <h2 class="admin-sidebar__title">Admin Panel</h2>
+          <p class="admin-sidebar__subtitle">Tafel Totaal</p>
+        </div>
         <nav class="admin-nav">
           <a href="index.html" class="admin-nav__link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -64,6 +68,13 @@
               <path d="M16 10a4 4 0 0 1-8 0"></path>
             </svg>
             Bestellingen
+          </a>
+          <a href="picking.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            Order Picking
           </a>
           <a href="calendar.html" class="admin-nav__link">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -233,8 +244,48 @@
           </div>
 
           <div class="form-group">
-            <label for="edit-description">Beschrijving</label>
-            <textarea id="edit-description" class="form-input" rows="3"></textarea>
+            <label for="edit-short-description">Korte beschrijving</label>
+            <textarea id="edit-short-description" class="form-input" rows="2" maxlength="500"></textarea>
+            <small style="color: var(--color-gray);">Max 500 karakters</small>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-description">Uitgebreide beschrijving</label>
+            <textarea id="edit-description" class="form-input" rows="4"></textarea>
+          </div>
+
+          <!-- Image Upload Section -->
+          <div class="form-group">
+            <label>Pakket afbeelding</label>
+            <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <div id="image-preview" style="display: none; position: relative; width: 100%; max-width: 400px; border: 1px solid var(--color-light-gray);">
+                <img id="preview-img" src="" alt="Preview" style="width: 100%; height: auto; display: block;">
+                <button type="button" id="remove-image-btn" style="position: absolute; top: 8px; right: 8px; background: var(--color-error); color: white; border: none; padding: 8px; cursor: pointer;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                  </svg>
+                </button>
+              </div>
+              <div>
+                <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                <button type="button" id="upload-image-btn" class="btn btn--secondary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                  Afbeelding uploaden
+                </button>
+                <input type="hidden" id="edit-image-url">
+                <div id="upload-progress" style="display: none; margin-top: var(--space-sm);">
+                  <div style="background: var(--color-light-gray); height: 4px; border-radius: 2px; overflow: hidden;">
+                    <div id="progress-bar" style="background: var(--color-primary); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                  </div>
+                  <small style="color: var(--color-gray); margin-top: 4px; display: block;">Uploaden...</small>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="form-grid">
