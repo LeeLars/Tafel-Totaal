@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { query, queryOne, pool } from '../config/database';
+import { query, queryOne } from '../config/database';
 import { Package, PackageItem, Product } from '../types';
 
 interface PackageWithItems extends Package {
@@ -139,7 +139,7 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
 /**
  * Get all packages (admin - includes inactive)
  */
-export async function adminGetAllPackages(req: Request, res: Response): Promise<void> {
+export async function adminGetAllPackages(_req: Request, res: Response): Promise<void> {
   try {
     const packages = await query<PackageWithItems>(
       `SELECT p.*, 
