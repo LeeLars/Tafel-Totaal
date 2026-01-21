@@ -149,54 +149,41 @@
           </div>
         </div>
 
-        <!-- Picking Status Filter -->
+        <!-- Filters -->
         <div class="admin-card" style="margin-bottom: var(--space-lg);">
           <div class="admin-card__body">
-            <div class="filters-bar" style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
-              <select id="picking-status-filter" class="form-input">
-                <option value="">Alle picking statussen</option>
-                <option value="not_started">Niet gestart</option>
-                <option value="in_progress">Bezig</option>
-                <option value="completed">Klaar</option>
-              </select>
-              <select id="order-status-filter" class="form-input">
-                <option value="">Alle order statussen</option>
-                <option value="confirmed">Bevestigd</option>
-                <option value="preparing">In voorbereiding</option>
-                <option value="ready_for_delivery">Klaar voor levering</option>
-              </select>
+            <div style="display: flex; gap: var(--space-md); flex-wrap: wrap; align-items: center;">
+              <div style="flex: 1; min-width: 200px;">
+                <label style="display: block; font-weight: 600; margin-bottom: var(--space-xs); font-size: var(--font-size-sm);">Picking Status</label>
+                <select id="picking-status-filter" class="form-input">
+                  <option value="">Alle statussen</option>
+                  <option value="not_started">🔴 Niet gestart</option>
+                  <option value="in_progress">🟡 Bezig</option>
+                  <option value="completed">🟢 Klaar</option>
+                </select>
+              </div>
+              <div style="flex: 1; min-width: 200px;">
+                <label style="display: block; font-weight: 600; margin-bottom: var(--space-xs); font-size: var(--font-size-sm);">Sorteer op</label>
+                <select id="sort-filter" class="form-input">
+                  <option value="deadline">Deadline (urgent eerst)</option>
+                  <option value="customer">Klant (A-Z)</option>
+                  <option value="order_number">Bestelnummer</option>
+                </select>
+              </div>
+              <div style="flex: 1; min-width: 200px;">
+                <label style="display: block; font-weight: 600; margin-bottom: var(--space-xs); font-size: var(--font-size-sm);">Zoeken</label>
+                <input type="text" id="search-input" class="form-input" placeholder="Zoek op klant of bestelnummer...">
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Picking Orders Card -->
-        <div class="admin-card">
-          <div class="admin-card__header">
-            <h2 class="admin-card__title">Te Picken Orders</h2>
+        <!-- Picking Cards Grid -->
+        <div id="picking-grid" style="display: grid; gap: var(--space-lg);">
+          <div style="text-align: center; padding: 60px 0;">
+            <div class="spinner" style="margin: 0 auto 20px;"></div>
+            <p style="color: var(--color-gray);">Orders laden...</p>
           </div>
-          <div class="admin-table-wrapper">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th>Bestelling</th>
-                  <th>Klant</th>
-                  <th>Deadline</th>
-                  <th>Locatie</th>
-                  <th>Picking Status</th>
-                  <th>Order Status</th>
-                  <th>Acties</th>
-                </tr>
-              </thead>
-              <tbody id="picking-table">
-                <tr>
-                  <td colspan="7" style="text-align: center; padding: 40px;">
-                    <div class="spinner"></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="pagination" id="pagination"></div>
         </div>
       </div>
     </div>

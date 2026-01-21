@@ -371,15 +371,44 @@ function generateFullPageHTML(city) {
           <h2>${section.title}</h2>
         </div>
         <div class="content-body">
-          ${section.content.split('\n\n').map(para => 
-            para.startsWith('**') && para.endsWith('**') 
-              ? `<h3>${para.replace(/\*\*/g, '')}</h3>`
-              : para.startsWith('- ')
-                ? `<ul>${para.split('\n').map(li => 
-                    li.startsWith('- ') ? `<li>${li.substring(2).replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</li>` : ''
-                  ).join('')}</ul>`
-                : `<p>${para.replace(/\*\*/g, '<strong>').replace(/\*\*/g, '</strong>')}</p>`
-          ).join('')}
+          ${section.content.split('\n\n').map(para => {
+            // Convert **text** to <strong>text</strong>
+            const convertBold = (text) => text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            
+            // Check if paragraph is a standalone heading (starts and ends with **)
+            if (para.startsWith('**') && para.match(/^\*\*[^*]+\*\*$/)) {
+              return '<h3>' + para.replace(/\*\*/g, '') + '</h3>';
+            }
+            // Check if it's a list (contains lines starting with -)
+            else if (para.includes('\n- ') || para.startsWith('- ')) {
+              const lines = para.split('\n');
+              let html = '';
+              let inList = false;
+              
+              lines.forEach(line => {
+                if (line.startsWith('- ')) {
+                  if (!inList) {
+                    html += '<ul>';
+                    inList = true;
+                  }
+                  html += '<li>' + convertBold(line.substring(2)) + '</li>';
+                } else if (line.trim()) {
+                  if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                  }
+                  html += '<p>' + convertBold(line) + '</p>';
+                }
+              });
+              
+              if (inList) html += '</ul>';
+              return html;
+            }
+            // Regular paragraph
+            else {
+              return '<p>' + convertBold(para) + '</p>';
+            }
+          }).join('')}
         </div>
       </section>
       `).join('')}
@@ -406,7 +435,7 @@ function generateFullPageHTML(city) {
           <span class="text-stroke-white">FEESTEN?</span>
         </h2>
         <p class="statement-text">
-          ${content.cta}
+          ${content.cta.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')}
         </p>
         <div class="statement-actions">
           <a href="/Tafel-Totaal/contact.html" class="btn btn--white btn--xl">Offerte Aanvragen</a>
