@@ -31,7 +31,7 @@ interface AddPackageItemBody {
 
 export async function getAllPackages(req: Request, res: Response): Promise<void> {
   try {
-    const { service_level, min_persons, max_persons, is_featured } = req.query;
+    const { is_featured } = req.query;
 
     let sql = `
       SELECT p.*, 
@@ -39,16 +39,18 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
           json_agg(
             json_build_object(
               'id', pi.id,
-              'quantity_per_person', pi.quantity_per_person,
+              'product_id', pi.product_id,
+              'quantity', pi.quantity,
               'is_optional', pi.is_optional,
-              'extra_price', pi.extra_price,
+              'toggle_points', pi.toggle_points,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
                 'sku', pr.sku,
-                'images', pr.images
+                'images', pr.images,
+                'price_per_day', pr.price_per_day
               )
-            )
+            ) ORDER BY pi.sort_order, pi.id
           ) FILTER (WHERE pi.id IS NOT NULL), '[]'
         ) as items
       FROM packages p
@@ -58,22 +60,6 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
     `;
 
     const params: unknown[] = [];
-    let paramIndex = 1;
-
-    if (service_level) {
-      sql += ` AND p.service_level = $${paramIndex++}`;
-      params.push(service_level);
-    }
-
-    if (min_persons) {
-      sql += ` AND p.max_persons >= $${paramIndex++}`;
-      params.push(parseInt(min_persons as string, 10));
-    }
-
-    if (max_persons) {
-      sql += ` AND p.min_persons <= $${paramIndex++}`;
-      params.push(parseInt(max_persons as string, 10));
-    }
 
     if (is_featured === 'true') {
       sql += ` AND p.is_featured = true`;
@@ -100,9 +86,10 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
           json_agg(
             json_build_object(
               'id', pi.id,
-              'quantity_per_person', pi.quantity_per_person,
+              'product_id', pi.product_id,
+              'quantity', pi.quantity,
               'is_optional', pi.is_optional,
-              'extra_price', pi.extra_price,
+              'toggle_points', pi.toggle_points,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -111,7 +98,7 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
                 'images', pr.images,
                 'price_per_day', pr.price_per_day
               )
-            )
+            ) ORDER BY pi.sort_order, pi.id
           ) FILTER (WHERE pi.id IS NOT NULL), '[]'
         ) as items
       FROM packages p
