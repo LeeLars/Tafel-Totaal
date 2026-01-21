@@ -21,6 +21,10 @@ import loyaltyRoutes from './routes/loyalty.routes';
 
 const app: Express = express();
 
+// Trust proxy for Railway/Heroku/etc - required for express-rate-limit to work correctly
+// This tells Express to trust the X-Forwarded-* headers from the reverse proxy
+app.set('trust proxy', 1);
+
 const allowedOrigins = env.CORS_ALLOWED_ORIGINS
   .split(',')
   .map((o) => o.trim())
