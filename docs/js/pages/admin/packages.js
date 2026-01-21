@@ -228,15 +228,26 @@ async function uploadImage(file) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Cloudinary error response:', errorText);
+      console.error('Response status:', response.status);
+      console.error('Response statusText:', response.statusText);
       
       let errorMessage = 'Upload mislukt';
       try {
         const errorData = JSON.parse(errorText);
+        console.error('Parsed error data:', errorData);
+        
         if (errorData.error?.message) {
           errorMessage = errorData.error.message;
         }
+        
+        // Check for specific Cloudinary errors
+        if (errorText.includes('Invalid upload preset')) {
+          errorMessage = 'Upload preset "packages" bestaat niet in Cloudinary. Maak deze eerst aan.';
+        } else if (errorText.includes('Upload preset must be whitelisted')) {
+          errorMessage = 'Upload preset moet "unsigned" zijn in Cloudinary instellingen.';
+        }
       } catch (e) {
-        // Could not parse error
+        console.error('Could not parse error response:', e);
       }
       
       throw new Error(errorMessage);
@@ -432,7 +443,10 @@ async function loadPackages() {
       filters.is_featured = currentFeatured;
     }
 
+    console.log('Loading packages with filters:', filters);
     const response = await adminAPI.getPackages(filters);
+    console.log('Packages loaded successfully:', response);
+    
     allPackages = response.data || [];
     const pagination = response.pagination;
 
@@ -440,7 +454,9 @@ async function loadPackages() {
       tbody.innerHTML = `
         <tr>
           <td colspan="7" style="text-align: center; padding: 40px; color: var(--color-gray);">
-            Geen pakketten gevonden
+            <div style="margin-bottom: var(--space-md);">📦</div>
+            <div style="font-size: var(--font-size-lg); margin-bottom: var(--space-sm);">Geen pakketten gevonden</div>
+            <p style="color: var(--color-gray); margin: 0;">Klik op "Nieuw Pakket" om je eerste pakket aan te maken</p>
           </td>
         </tr>
       `;
@@ -450,7 +466,7 @@ async function loadPackages() {
 
     tbody.innerHTML = allPackages.map(pkg => createPackageRow(pkg)).join('');
     renderPagination(pagination);
-    
+
     // Add edit button handlers
     const editButtons = tbody.querySelectorAll('.edit-btn');
     console.log('Found edit buttons:', editButtons.length);
@@ -500,11 +516,34 @@ async function loadPackages() {
  */
 async function loadAvailableProducts() {
   try {
-    const response = await adminAPI.getProducts({ limit: 1000, is_active: true });
-    availableProducts = response.data || [];
+    // API has max limit of 100, so we need to fetch in batches if needed
+    let allProducts = [];
+    let page = 1;
+    let hasMore = true;
+    
+    while (hasMore) {
+      const response = await adminAPI.getProducts({ 
+        limit: 100,
+        page: page,
+        is_active: true 
+      });
+      
+      const products = response.data || [];
+      allProducts = [...allProducts, ...products];
+      
+      // Check if there are more pages
+      hasMore = response.pagination && response.pagination.has_next;
+      page++;
+      
+      // Safety limit to prevent infinite loops
+      if (page > 20) break;
+    }
+    
+    availableProducts = allProducts;
+    console.log(`Loaded ${availableProducts.length} products`);
   } catch (error) {
     console.error('Error loading products:', error);
-    availableProducts = [];
+    showToast('Kon producten niet laden', 'error');
   }
 }
 
