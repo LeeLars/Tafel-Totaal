@@ -5,6 +5,7 @@ import rateLimit from 'express-rate-limit';
 import { env, isDevelopment } from './config/env';
 import { testConnection, runLoyaltyMigration } from './config/database';
 import { runMigrations } from './config/migrations';
+import { runPackagesMigration } from './config/packages-migration';
 
 import authRoutes from './routes/auth.routes';
 import packagesRoutes from './routes/packages.routes';
@@ -116,6 +117,7 @@ async function startServer(): Promise<void> {
   // Run database migrations on startup
   await runMigrations();
   await runLoyaltyMigration();
+  await runPackagesMigration();
   
   app.listen(env.PORT, () => {
     console.log(`
