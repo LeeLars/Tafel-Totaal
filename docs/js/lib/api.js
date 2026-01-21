@@ -262,7 +262,7 @@ export const adminAPI = {
   
   updatePackage: (id, data) => 
     apiCall(`/api/admin/packages/${id}`, {
-      method: 'PATCH',
+      method: 'PUT',
       body: JSON.stringify(data)
     }),
   
