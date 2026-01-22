@@ -30,6 +30,7 @@
   <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
   <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
   <link rel="stylesheet" href="/Tafel-Totaal/css/pages/location-detail.css">
+  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/location-hero-new.css">
 </head>
 <body>
   <!-- Header -->
@@ -62,57 +63,77 @@
       </div>
     </div>
 
-    <!-- Architectural Hero Grid -->
-    <section class="hero-grid">
-      <!-- Block 1: Main Title -->
-      <div class="hero-cell hero-cell--title">
-        <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <!-- New Split-Screen Hero -->
+    <section class="location-hero">
+      <!-- Left: Content -->
+      <div class="location-hero__content">
+        <nav class="location-hero__breadcrumbs" aria-label="Breadcrumb">
           <a href="/Tafel-Totaal/">Home</a>
           <span>/</span>
           <a href="/Tafel-Totaal/locaties.html">Locaties</a>
           <span>/</span>
           <span class="active">Kaprijke</span>
         </nav>
-        
-        <h1 class="hero-title" data-animate="fade-up">
-          TAFELVERHUUR <br>
-          <span class="text-stroke">KAPRIJKE</span>
+
+        <div class="location-hero__badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          Oost-Vlaanderen
+        </div>
+
+        <h1 class="location-hero__title">
+          Tafelverhuur
+          <span class="location-hero__title-highlight">Kaprijke</span>
         </h1>
-      </div>
 
-      <!-- Block 2: Image/Visual -->
-      <div class="hero-cell hero-cell--visual">
-        <img src="/Tafel-Totaal/images/site/hero-table-setting.jpg" alt="Tafelverhuur Kaprijke" class="img-cover" loading="eager">
-        <div class="hero-overlay"></div>
-      </div>
-
-      <!-- Block 3: Introduction -->
-      <div class="hero-cell hero-cell--intro">
-        <p class="hero-lead" data-animate="fade-up" class="delay-1">
-          Tafel Totaal verzorgt professionele serviesverhuur in Kaprijke en omgeving. Ideaal voor familiefeesten, jubilea en andere bijzondere gelegenheden.
+        <p class="location-hero__description">
+          In de bruisende stad Kaprijke organiseert u een onvergetelijk feest met de serviesverhuur van Tafel Totaal. Van intieme diners tot grote recepties, wij verzorgen uw complete tafeldekking.
         </p>
-        <div class="hero-stats">
-          <div class="stat">
-            <span class="stat-value">100%</span>
-            <span class="stat-label">Service</span>
+
+        <div class="location-hero__info">
+          <div class="location-hero__info-item">
+            <span class="location-hero__info-label">Levering</span>
+            <span class="location-hero__info-value">€25</span>
           </div>
-          <div class="stat">
-            <span class="stat-value">0%</span>
-            <span class="stat-label">Afwas</span>
+          <div class="location-hero__info-item">
+            <span class="location-hero__info-label">Gratis binnen</span>
+            <span class="location-hero__info-value">15km</span>
           </div>
+        </div>
+
+        <div class="location-hero__cta">
+          <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary btn--lg">
+            Bekijk Pakketten
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="/Tafel-Totaal/contact.html" class="btn btn--secondary btn--lg">Offerte Aanvragen</a>
         </div>
       </div>
 
-      <!-- Block 4: CTA -->
-      <div class="hero-cell hero-cell--cta">
-        <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary btn--full btn--lg">
-          Bekijk Pakketten
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="5" y1="12" x2="19" y2="12"></line>
-            <polyline points="12 5 19 12 12 19"></polyline>
-          </svg>
-        </a>
-        <a href="/Tafel-Totaal/contact.html" class="btn btn--ghost btn--full">Offerte Aanvragen</a>
+      <!-- Right: Visual with Stats -->
+      <div class="location-hero__visual">
+        <img src="/Tafel-Totaal/images/site/hero-table-setting.jpg" alt="Tafelverhuur Kaprijke" class="location-hero__image" loading="eager">
+        <div class="location-hero__overlay">
+          <div class="location-hero__stats">
+            <div class="location-hero__stat">
+              <span class="location-hero__stat-value">500+</span>
+              <span class="location-hero__stat-label">Events</span>
+            </div>
+            <div class="location-hero__stat">
+              <span class="location-hero__stat-value">100%</span>
+              <span class="location-hero__stat-label">Service</span>
+            </div>
+            <div class="location-hero__stat">
+              <span class="location-hero__stat-value">0%</span>
+              <span class="location-hero__stat-label">Afwas</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 

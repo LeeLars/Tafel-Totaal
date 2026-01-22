@@ -1,0 +1,246 @@
+/* ============================================
+   NEW LOCATION HERO - Split Screen Design
+   Completely different from homepage hero
+   ============================================ */
+
+.location-hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 70vh;
+  background-color: var(--color-white);
+  border-bottom: 2px solid var(--color-black);
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .location-hero {
+    grid-template-columns: 1fr 1fr;
+    min-height: 80vh;
+  }
+}
+
+/* Left Side: Content */
+.location-hero__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-3xl) var(--space-2xl);
+  background: linear-gradient(135deg, var(--color-off-white) 0%, var(--color-white) 100%);
+  border-right: 2px solid var(--color-black);
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .location-hero__content {
+    padding: var(--space-4xl) var(--space-5xl);
+  }
+}
+
+/* Breadcrumbs */
+.location-hero__breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  margin-bottom: var(--space-xl);
+  color: var(--color-gray);
+}
+
+.location-hero__breadcrumbs a {
+  color: var(--color-gray);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.location-hero__breadcrumbs a:hover {
+  color: var(--color-primary);
+}
+
+.location-hero__breadcrumbs .active {
+  color: var(--color-black);
+  font-weight: 700;
+}
+
+/* Location Badge */
+.location-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-lg);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  margin-bottom: var(--space-lg);
+  width: fit-content;
+}
+
+.location-hero__badge svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Title */
+.location-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  margin-bottom: var(--space-lg);
+  color: var(--color-black);
+}
+
+.location-hero__title-highlight {
+  display: block;
+  color: var(--color-primary);
+  position: relative;
+}
+
+/* Description */
+.location-hero__description {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-dark-gray);
+  margin-bottom: var(--space-2xl);
+  max-width: 540px;
+}
+
+/* Info Grid */
+.location-hero__info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+  padding: var(--space-xl);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-black);
+}
+
+.location-hero__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.location-hero__info-label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-gray);
+}
+
+.location-hero__info-value {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  color: var(--color-primary);
+}
+
+/* CTA Buttons */
+.location-hero__cta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+  .location-hero__cta {
+    flex-direction: row;
+  }
+}
+
+/* Right Side: Visual */
+.location-hero__visual {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-black);
+  min-height: 400px;
+}
+
+@media (min-width: 1024px) {
+  .location-hero__visual {
+    min-height: auto;
+  }
+}
+
+.location-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+}
+
+/* Overlay Stats */
+.location-hero__overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+  padding: var(--space-3xl) var(--space-2xl);
+  color: var(--color-white);
+}
+
+.location-hero__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+}
+
+.location-hero__stat {
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.2);
+}
+
+.location-hero__stat:last-child {
+  border-right: none;
+}
+
+.location-hero__stat-value {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1;
+  margin-bottom: var(--space-sm);
+  color: var(--color-white);
+}
+
+.location-hero__stat-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+  color: rgba(255,255,255,0.7);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 1023px) {
+  .location-hero__content {
+    border-right: none;
+    border-bottom: 2px solid var(--color-black);
+  }
+  
+  .location-hero__stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-md);
+  }
+  
+  .location-hero__overlay {
+    padding: var(--space-2xl) var(--space-lg);
+  }
+}
+
+/* Animations */
+.location-hero__title,
+.location-hero__description,
+.location-hero__badge,
+.location-hero__info,
+.location-hero__cta {
+  opacity: 1;
+  transform: none;
+}
