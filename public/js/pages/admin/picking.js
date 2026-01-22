@@ -66,14 +66,15 @@ async function loadPickingOrders() {
   `;
 
   try {
-    // Get all orders that need picking (confirmed, preparing, ready_for_delivery)
+    // Get all orders that need picking
     const response = await adminAPI.getOrders({ limit: 100 });
     const orders = response.data || [];
     
-    // Filter orders that need picking
+    // Filter orders that need picking (all orders except delivered, cancelled, completed)
     allOrders = orders.filter(order => {
       const status = order.status;
-      return status === 'confirmed' || status === 'preparing' || status === 'ready_for_delivery';
+      // Exclude only final statuses
+      return status !== 'delivered' && status !== 'cancelled' && status !== 'completed' && status !== 'refunded';
     });
     
     // Load detailed picking info for each order

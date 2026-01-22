@@ -5,7 +5,10 @@
 import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
-import { getUploadUrl, validateImageFile, CLOUDINARY_CONFIG, isCloudinaryConfigured } from '../../config/cloudinary.js';
+
+const API_BASE_URL = window.location.hostname.includes('github.io') 
+  ? 'https://tafel-totaal-production.up.railway.app' 
+  : 'http://localhost:3000';
 
 let currentPage = 1;
 let currentSearch = '';
@@ -20,11 +23,6 @@ let availableProducts = [];
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('Packages page initializing...');
-  
-  // Check Cloudinary configuration
-  if (!isCloudinaryConfigured()) {
-    showCloudinaryWarning();
-  }
   
   // Initialize UI components first
   initFilters();
@@ -44,43 +42,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadPackages();
   await loadAvailableProducts();
 });
-
-/**
- * Show Cloudinary configuration warning
- */
-function showCloudinaryWarning() {
-  const header = document.querySelector('.admin-content__header');
-  if (!header) return;
-  
-  const warning = document.createElement('div');
-  warning.style.cssText = `
-    background: #FEF3C7;
-    border: 2px solid #F59E0B;
-    padding: var(--space-md);
-    margin-top: var(--space-md);
-    display: flex;
-    align-items: start;
-    gap: var(--space-md);
-  `;
-  
-  warning.innerHTML = `
-    <div style="font-size: 24px;">⚠️</div>
-    <div style="flex: 1;">
-      <strong style="display: block; margin-bottom: var(--space-xs);">Cloudinary niet geconfigureerd</strong>
-      <p style="margin: 0 0 var(--space-sm); color: var(--color-dark-gray);">
-        Image upload werkt niet totdat Cloudinary correct is ingesteld.
-      </p>
-      <a href="https://github.com/LeeLars/Tafel-Totaal/blob/main/CLOUDINARY_SETUP.md" 
-         target="_blank" 
-         class="btn btn--secondary btn--sm"
-         style="display: inline-flex; align-items: center; gap: var(--space-xs);">
-        📖 Bekijk Setup Instructies
-      </a>
-    </div>
-  `;
-  
-  header.appendChild(warning);
-}
 
 /**
  * Initialize filters
@@ -179,13 +140,17 @@ function initImageUpload() {
 }
 
 /**
- * Upload image to Cloudinary
+ * Upload image via backend (same as products)
  */
 async function uploadImage(file) {
   // Validate file
-  const validation = validateImageFile(file);
-  if (!validation.valid) {
-    showToast(validation.errors[0], 'error');
+  if (!file.type.startsWith('image/')) {
+    showToast('Alleen afbeeldingen zijn toegestaan', 'error');
+    return;
+  }
+  
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('Afbeelding mag maximaal 5MB zijn', 'error');
     return;
   }
 
@@ -203,54 +168,28 @@ async function uploadImage(file) {
 
     // Create form data
     const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', CLOUDINARY_CONFIG.UPLOAD_PRESET);
-    formData.append('folder', CLOUDINARY_CONFIG.FOLDER);
+    formData.append('image', file);
 
     if (progressBar) {
       progressBar.style.width = '60%';
     }
 
-    console.log('Uploading to Cloudinary:', {
-      cloudName: CLOUDINARY_CONFIG.CLOUD_NAME,
-      preset: CLOUDINARY_CONFIG.UPLOAD_PRESET,
-      folder: CLOUDINARY_CONFIG.FOLDER,
+    console.log('Uploading via backend:', {
       fileName: file.name,
       fileSize: file.size
     });
 
-    // Upload to Cloudinary
-    const response = await fetch(getUploadUrl(), {
+    // Upload via backend (same endpoint as products)
+    const response = await fetch(`${API_BASE_URL}/api/upload/image`, {
       method: 'POST',
+      credentials: 'include',
       body: formData
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Cloudinary error response:', errorText);
-      console.error('Response status:', response.status);
-      console.error('Response statusText:', response.statusText);
-      
-      let errorMessage = 'Upload mislukt';
-      try {
-        const errorData = JSON.parse(errorText);
-        console.error('Parsed error data:', errorData);
-        
-        if (errorData.error?.message) {
-          errorMessage = errorData.error.message;
-        }
-        
-        // Check for specific Cloudinary errors
-        if (errorText.includes('Invalid upload preset')) {
-          errorMessage = 'Upload preset "packages" bestaat niet in Cloudinary. Maak deze eerst aan.';
-        } else if (errorText.includes('Upload preset must be whitelisted')) {
-          errorMessage = 'Upload preset moet "unsigned" zijn in Cloudinary instellingen.';
-        }
-      } catch (e) {
-        console.error('Could not parse error response:', e);
-      }
-      
-      throw new Error(errorMessage);
+      console.error('Upload error response:', errorText);
+      throw new Error('Upload mislukt');
     }
 
     const data = await response.json();
@@ -260,8 +199,12 @@ async function uploadImage(file) {
       progressBar.style.width = '100%';
     }
 
+    if (!data.success || !data.data?.url) {
+      throw new Error('Geen URL ontvangen van server');
+    }
+
     // Set image URL
-    const imageUrl = data.secure_url;
+    const imageUrl = data.data.url;
     document.getElementById('edit-image-url').value = imageUrl;
 
     // Show preview
@@ -288,27 +231,7 @@ async function uploadImage(file) {
       progressBar.style.width = '0%';
     }
     
-    // Show detailed error message
-    let errorMsg = 'Fout bij uploaden van afbeelding';
-    
-    if (error.message.includes('preset')) {
-      errorMsg = 'Cloudinary upload preset niet gevonden. Controleer de configuratie.';
-    } else if (error.message.includes('CORS')) {
-      errorMsg = 'CORS fout. Controleer Cloudinary instellingen.';
-    } else if (error.message) {
-      errorMsg = `Upload fout: ${error.message}`;
-    }
-    
-    showToast(errorMsg, 'error');
-    
-    // Show help message in console
-    console.error('=== CLOUDINARY SETUP VEREIST ===');
-    console.error('1. Ga naar https://cloudinary.com/console');
-    console.error('2. Ga naar Settings > Upload > Upload Presets');
-    console.error('3. Maak een nieuwe "unsigned" upload preset aan met naam: "packages"');
-    console.error('4. Zet de folder op: "tafel-totaal/packages"');
-    console.error('5. Schakel "Unique filename" en "Overwrite" in');
-    console.error('6. Sla op en probeer opnieuw');
+    showToast(`Fout bij uploaden: ${error.message}`, 'error');
   }
 }
 
