@@ -478,16 +478,24 @@ async function loadAvailableProducts() {
  * Create package row HTML
  */
 function createPackageRow(pkg) {
-  const productCount = pkg.products?.length || 0;
+  // Backend returns 'items' not 'products', and 'base_price' not 'price_per_day'
+  const productCount = pkg.items?.length || 0;
+  const price = pkg.base_price || pkg.price_per_day || 0;
+  const imageUrl = pkg.images?.[0] || null;
   
   return `
     <tr>
       <td>
-        <strong>${pkg.name}</strong>
-        ${pkg.slug ? `<br><small style="color: var(--color-gray);">${pkg.slug}</small>` : ''}
+        <div style="display: flex; align-items: center; gap: var(--space-sm);">
+          ${imageUrl ? `<img src="${imageUrl}" alt="${pkg.name}" style="width: 40px; height: 40px; object-fit: cover; border: 1px solid var(--color-light-gray);">` : ''}
+          <div>
+            <strong>${pkg.name}</strong>
+            ${pkg.slug ? `<br><small style="color: var(--color-gray);">${pkg.slug}</small>` : ''}
+          </div>
+        </div>
       </td>
-      <td>${formatPrice(pkg.price_per_day)}</td>
-      <td>${pkg.persons || '-'}</td>
+      <td>${formatPrice(price)}</td>
+      <td>${pkg.min_persons || pkg.persons || '-'}</td>
       <td>${productCount} product${productCount !== 1 ? 'en' : ''}</td>
       <td>
         <span class="badge ${pkg.is_featured ? 'badge--success' : 'badge--secondary'}">
