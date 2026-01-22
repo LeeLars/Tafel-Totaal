@@ -278,15 +278,57 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.</p>
 
   <!-- Scripts -->
   <script type="module">
-    import { loadLocationHeader } from '/Tafel-Totaal/js/components/header.js';
-    import { loadFooter } from '/Tafel-Totaal/js/components/footer.js';
-    import { loadCTA } from '/Tafel-Totaal/js/components/cta.js';
     import { formatPrice } from '/Tafel-Totaal/js/lib/utils.js';
     
-    // Load header and footer
-    loadLocationHeader();
-    loadFooter();
-    loadCTA();
+    // Load header, footer and CTA components
+    async function loadLocationComponents() {
+      const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+      
+      // Load header
+      try {
+        const headerResponse = await fetch(`${basePath}/components/header-location.html`);
+        if (headerResponse.ok) {
+          document.getElementById('header-container').innerHTML = await headerResponse.text();
+          
+          // Initialize header after loading
+          const headerScript = document.createElement('script');
+          headerScript.type = 'module';
+          headerScript.textContent = `
+            import { initHeader } from '/Tafel-Totaal/js/components/header.js';
+            initHeader();
+          `;
+          document.body.appendChild(headerScript);
+        }
+      } catch (error) {
+        console.error('Error loading header:', error);
+      }
+      
+      // Load footer
+      try {
+        const footerResponse = await fetch(`${basePath}/components/footer.html`);
+        if (footerResponse.ok) {
+          document.getElementById('footer-container').innerHTML = await footerResponse.text();
+        }
+      } catch (error) {
+        console.error('Error loading footer:', error);
+      }
+      
+      // Load CTA
+      try {
+        const ctaResponse = await fetch(`${basePath}/components/cta.html`);
+        if (ctaResponse.ok) {
+          const ctaContainer = document.getElementById('cta-container');
+          if (ctaContainer) {
+            ctaContainer.innerHTML = await ctaResponse.text();
+          }
+        }
+      } catch (error) {
+        console.error('Error loading CTA:', error);
+      }
+    }
+    
+    // Initialize on page load
+    loadLocationComponents();
     
     // Load featured products
     async function loadProducts() {
@@ -344,9 +386,12 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.</p>
           ...data['oost-vlaanderen']
         ];
         
+        // Get current page slug from URL
+        const pageSlug = window.location.pathname.split('/').pop().replace('.html', '');
+        
         // Find sub-municipalities for this city
         const subMunicipalities = allLocations.filter(loc => 
-          loc.slug === 'destelbergen' && loc.parent !== null
+          loc.slug === pageSlug && loc.parent !== null
         );
         
         if (subMunicipalities.length > 0) {
