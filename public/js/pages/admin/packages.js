@@ -515,7 +515,15 @@ function createPackageRow(pkg) {
 function openEditModal(pkg) {
   console.log('openEditModal called with package:', pkg);
   editingPackage = pkg;
-  packageProducts = pkg.products || [];
+  // Backend returns 'items' array, not 'products'
+  packageProducts = (pkg.items || []).map(item => ({
+    id: item.id,
+    product_id: item.product_id,
+    product_name: item.product?.name || 'Onbekend product',
+    quantity: item.quantity || 1,
+    is_optional: item.is_optional || false,
+    toggle_points: item.toggle_points || 0
+  }));
   
   // Update modal title
   const modalTitle = document.getElementById('modal-title');
