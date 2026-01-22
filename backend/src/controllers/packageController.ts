@@ -2,6 +2,86 @@ import { Request, Response } from 'express';
 import { query, queryOne } from '../config/database';
 import { Package, PackageItem, Product } from '../types';
 
+/**
+ * Debug endpoint to check and create packages table if needed
+ */
+export async function debugPackagesTable(_req: Request, res: Response): Promise<void> {
+  try {
+    // Check if packages table exists
+    const tableCheck = await queryOne<{ exists: boolean }>(
+      `SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'packages'
+      )`
+    );
+
+    if (!tableCheck?.exists) {
+      // Create packages table
+      await query(`
+        CREATE TABLE IF NOT EXISTS packages (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          slug VARCHAR(255) UNIQUE NOT NULL,
+          description TEXT,
+          short_description VARCHAR(500),
+          image_url VARCHAR(500),
+          price_per_day DECIMAL(10,2) NOT NULL DEFAULT 0,
+          persons INTEGER NOT NULL DEFAULT 1,
+          is_active BOOLEAN NOT NULL DEFAULT true,
+          is_featured BOOLEAN NOT NULL DEFAULT false,
+          sort_order INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      // Create package_items table
+      await query(`
+        CREATE TABLE IF NOT EXISTS package_items (
+          id SERIAL PRIMARY KEY,
+          package_id INTEGER NOT NULL REFERENCES packages(id) ON DELETE CASCADE,
+          product_id UUID NOT NULL,
+          quantity INTEGER NOT NULL DEFAULT 1,
+          is_optional BOOLEAN NOT NULL DEFAULT false,
+          toggle_points INTEGER NOT NULL DEFAULT 0,
+          sort_order INTEGER NOT NULL DEFAULT 0,
+          created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+        )
+      `);
+
+      res.json({ 
+        success: true, 
+        message: 'Packages tables created successfully',
+        tables_created: ['packages', 'package_items']
+      });
+      return;
+    }
+
+    // Get table columns
+    const columns = await query<{ column_name: string; data_type: string }>(
+      `SELECT column_name, data_type 
+       FROM information_schema.columns 
+       WHERE table_name = 'packages'
+       ORDER BY ordinal_position`
+    );
+
+    // Count existing packages
+    const countResult = await queryOne<{ count: string }>('SELECT COUNT(*) as count FROM packages');
+
+    res.json({ 
+      success: true, 
+      message: 'Packages table exists',
+      table_exists: true,
+      columns: columns,
+      package_count: parseInt(countResult?.count || '0')
+    });
+  } catch (error) {
+    console.error('Debug packages table error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ success: false, error: errorMessage });
+  }
+}
+
 interface PackageWithItems extends Package {
   items: (PackageItem & { product: Product })[];
 }
@@ -159,7 +239,8 @@ export async function adminGetAllPackages(_req: Request, res: Response): Promise
     res.json({ success: true, data: packages });
   } catch (error) {
     console.error('Admin get packages error:', error);
-    res.status(500).json({ success: false, error: 'Failed to fetch packages' });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    res.status(500).json({ success: false, error: 'Failed to fetch packages', details: errorMessage });
   }
 }
 
@@ -207,10 +288,11 @@ export async function createPackage(req: Request, res: Response): Promise<void> 
     });
   } catch (error) {
     console.error('Create package error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     if ((error as any).code === '23505') {
       res.status(400).json({ success: false, error: 'Package slug already exists' });
     } else {
-      res.status(500).json({ success: false, error: 'Failed to create package' });
+      res.status(500).json({ success: false, error: 'Failed to create package', details: errorMessage });
     }
   }
 }

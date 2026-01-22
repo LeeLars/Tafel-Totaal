@@ -158,6 +158,9 @@ const deletePackageItemValidation = [
   param('itemId').isInt({ min: 1 }).withMessage('Valid item ID is required'),
 ];
 
+// Package debug route (check/create table)
+router.get('/packages/debug', packageController.debugPackagesTable);
+
 // Package CRUD routes
 router.get('/packages', packageController.adminGetAllPackages);
 router.post('/packages', validate(createPackageValidation), packageController.createPackage);
