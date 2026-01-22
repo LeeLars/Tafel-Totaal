@@ -250,13 +250,16 @@ function showImagePreview(url) {
 
 /**
  * Remove image
+ * @param {boolean} showNotification - Whether to show toast notification (default: true)
  */
-function removeImage() {
+function removeImage(showNotification = true) {
   document.getElementById('edit-image-url').value = '';
   document.getElementById('image-preview').style.display = 'none';
   document.getElementById('preview-img').src = '';
   document.getElementById('image-upload').value = '';
-  showToast('Afbeelding verwijderd', 'success');
+  if (showNotification) {
+    showToast('Afbeelding verwijderd', 'success');
+  }
 }
 
 /**
@@ -318,8 +321,8 @@ function openNewPackageModal() {
   document.getElementById('edit-featured').checked = false;
   document.getElementById('edit-active').checked = true;
   
-  // Clear image preview
-  removeImage();
+  // Clear image preview (without notification)
+  removeImage(false);
   
   // Clear products
   renderPackageProducts();
@@ -537,7 +540,7 @@ function openEditModal(pkg) {
   if (pkg.image_url) {
     showImagePreview(pkg.image_url);
   } else {
-    removeImage();
+    removeImage(false); // Reset without notification
   }
   
   // Render products
