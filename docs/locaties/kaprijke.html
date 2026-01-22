@@ -107,7 +107,7 @@
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </a>
-          <a href="/Tafel-Totaal/contact.html" class="btn btn--secondary btn--lg">Offerte Aanvragen</a>
+          <a href="/Tafel-Totaal/producten.html" class="btn btn--secondary btn--lg">Bekijk Losse Producten</a>
         </div>
       </div>
 
@@ -268,9 +268,6 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.</p>
         <div class="loading-placeholder">Producten laden...</div>
       </div>
     </section>
-
-    <!-- CTA Section -->
-    <div id="cta-container"></div>
   </main>
 
   <!-- Footer -->
@@ -286,7 +283,7 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.</p>
       
       // Load header
       try {
-        const headerResponse = await fetch(`${basePath}/components/header-location.html`);
+        const headerResponse = await fetch(`${basePath}/components/header.html`);
         if (headerResponse.ok) {
           document.getElementById('header-container').innerHTML = await headerResponse.text();
           
