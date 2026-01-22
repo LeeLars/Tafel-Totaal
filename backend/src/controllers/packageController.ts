@@ -139,14 +139,22 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
       sql += ` AND p.is_featured = true`;
     }
 
-    sql += ` GROUP BY p.id ORDER BY p.sort_order, p.name`;
+    sql += ` ORDER BY p.sort_order, p.name`;
 
+    console.log('Executing packages query:', sql);
     const packages = await query<PackageWithItems>(sql, params);
+    console.log('Query successful, found', packages.length, 'packages');
 
     res.json({ success: true, data: packages });
   } catch (error) {
     console.error('Get packages error:', error);
-    res.status(500).json({ success: false, error: 'Failed to fetch packages' });
+    console.error('Error details:', error instanceof Error ? error.message : 'Unknown error');
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack');
+    res.status(500).json({ 
+      success: false, 
+      error: 'Failed to fetch packages',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 }
 
