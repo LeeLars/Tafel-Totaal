@@ -20,6 +20,7 @@ const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
 // Static fallback list of all 60 cities
 const STATIC_CITIES = [
   // West-Vlaanderen
+  { name: 'Beernem', slug: 'beernem', province: 'West-Vlaanderen', delivery_fee: 0, free_delivery_radius_km: 50 }, // Vestigingsplaats
   { name: 'Brugge', slug: 'brugge', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
   { name: 'Kortrijk', slug: 'kortrijk', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
   { name: 'Oostende', slug: 'oostende', province: 'West-Vlaanderen', delivery_fee: 25, free_delivery_radius_km: 15 },
