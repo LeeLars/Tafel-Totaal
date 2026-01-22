@@ -120,9 +120,9 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
             json_build_object(
               'id', pi.id,
               'product_id', pi.product_id,
-              'quantity', pi.quantity,
+              'quantity_per_person', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', pi.toggle_points,
+              'extra_price', pi.extra_price,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -130,7 +130,7 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
                 'images', pr.images,
                 'price_per_day', pr.price_per_day
               )
-            ) ORDER BY pi.sort_order, pi.id
+            ) ORDER BY pi.id
           ) FILTER (WHERE pi.id IS NOT NULL), '[]'
         ) as items
       FROM packages p
@@ -167,9 +167,9 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
             json_build_object(
               'id', pi.id,
               'product_id', pi.product_id,
-              'quantity', pi.quantity,
+              'quantity_per_person', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', pi.toggle_points,
+              'extra_price', pi.extra_price,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -178,7 +178,7 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
                 'images', pr.images,
                 'price_per_day', pr.price_per_day
               )
-            ) ORDER BY pi.sort_order, pi.id
+            ) ORDER BY pi.id
           ) FILTER (WHERE pi.id IS NOT NULL), '[]'
         ) as items
       FROM packages p
@@ -215,10 +215,9 @@ export async function adminGetAllPackages(_req: Request, res: Response): Promise
             json_build_object(
               'id', pi.id,
               'product_id', pi.product_id,
-              'quantity', pi.quantity,
+              'quantity_per_person', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', pi.toggle_points,
-              'sort_order', pi.sort_order,
+              'extra_price', pi.extra_price,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -226,7 +225,7 @@ export async function adminGetAllPackages(_req: Request, res: Response): Promise
                 'images', pr.images,
                 'price_per_day', pr.price_per_day
               )
-            ) ORDER BY pi.sort_order, pi.id
+            ) ORDER BY pi.id
           ) FILTER (WHERE pi.id IS NOT NULL), '[]'
         ) as items
       FROM packages p
@@ -249,29 +248,37 @@ export async function adminGetAllPackages(_req: Request, res: Response): Promise
  */
 export async function createPackage(req: Request, res: Response): Promise<void> {
   try {
-    const body = req.body as CreatePackageBody;
+    const body = req.body;
     
     // Generate slug if not provided
     const slug = body.slug || body.name.toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-|-$/g, '');
 
-    const result = await queryOne<{ id: number }>(
+    // Map frontend fields to database schema
+    const result = await queryOne<{ id: string }>(
       `INSERT INTO packages (
-        name, slug, description, short_description, image_url,
-        price_per_day, persons, is_active, is_featured, sort_order
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+        name, slug, description, short_description, service_level, pricing_type,
+        base_price, price_per_extra_day, forfait_days, min_persons, max_persons,
+        deposit_percentage, images, is_featured, is_active, sort_order
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
       RETURNING id`,
       [
         body.name,
         slug,
         body.description || null,
         body.short_description || null,
-        body.image_url || null,
-        body.price_per_day,
-        body.persons || 1,
-        body.is_active !== false,
+        body.service_level || 'STANDAARD',
+        body.pricing_type || 'FORFAIT',
+        body.base_price || body.price_per_day || 0,
+        body.price_per_extra_day || 0,
+        body.forfait_days || 3,
+        body.min_persons || body.persons || 10,
+        body.max_persons || 100,
+        body.deposit_percentage || 20,
+        body.image_url ? JSON.stringify([body.image_url]) : '[]',
         body.is_featured || false,
+        body.is_active !== false,
         body.sort_order || 0
       ]
     );
