@@ -135,7 +135,7 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
               'product_id', pi.product_id,
               'quantity', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', COALESCE(pi.toggle_points, 0),
+              'toggle_points', 0,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -194,7 +194,7 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
               'product_id', pi.product_id,
               'quantity', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', COALESCE(pi.toggle_points, 0),
+              'toggle_points', 0,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -246,7 +246,7 @@ export async function adminGetAllPackages(_req: Request, res: Response): Promise
               'product_id', pi.product_id,
               'quantity', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', COALESCE(pi.toggle_points, 0),
+              'toggle_points', 0,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
