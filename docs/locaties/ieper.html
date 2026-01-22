@@ -254,22 +254,8 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.</p>
       </div>
     </section>
 
-    <!-- Statement CTA -->
-    <section class="statement-section" data-animate>
-      <div class="statement-content">
-        <h2 class="statement-title">
-          KLAAR OM TE <br>
-          <span class="text-stroke-white">FEESTEN?</span>
-        </h2>
-        <p class="statement-text">
-          Klaar om uw feest in Ieper te organiseren? <strong>Vraag vandaag nog een vrijblijvende offerte aan</strong> voor borden huren, servies verhuur en complete tafeldekking. Bel ons of vul het contactformulier in. Wij helpen u graag!
-        </p>
-        <div class="statement-actions">
-          <a href="/Tafel-Totaal/contact.html" class="btn btn--white btn--xl">Offerte Aanvragen</a>
-          <a href="/Tafel-Totaal/pakketten.html" class="btn btn--outline-white btn--xl">Bekijk Pakketten</a>
-        </div>
-      </div>
-    </section>
+    <!-- CTA Section -->
+    <div id="cta-container"></div>
   </main>
 
   <!-- Footer -->
@@ -279,11 +265,13 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.</p>
   <script type="module">
     import { loadLocationHeader } from '/Tafel-Totaal/js/components/header.js';
     import { loadFooter } from '/Tafel-Totaal/js/components/footer.js';
+    import { loadCTA } from '/Tafel-Totaal/js/components/cta.js';
     import { formatPrice } from '/Tafel-Totaal/js/lib/utils.js';
     
     // Load header and footer
     loadLocationHeader();
     loadFooter();
+    loadCTA();
     
     // Load featured products
     async function loadProducts() {
