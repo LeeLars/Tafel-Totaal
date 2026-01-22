@@ -123,28 +123,13 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
     const { is_featured } = req.query;
 
     let sql = `
-      SELECT p.*, 
-        COALESCE(
-          json_agg(
-            json_build_object(
-              'id', pi.id,
-              'product_id', pi.product_id,
-              'quantity', COALESCE(pi.quantity_per_person, pi.quantity, 1),
-              'is_optional', COALESCE(pi.is_optional, false),
-              'toggle_points', 0,
-              'product', json_build_object(
-                'id', pr.id,
-                'name', pr.name,
-                'sku', pr.sku,
-                'images', pr.images,
-                'price_per_day', pr.price_per_day
-              )
-            ) ORDER BY pi.id
-          ) FILTER (WHERE pi.id IS NOT NULL), '[]'
-        ) as items
+      SELECT p.id, p.name, p.slug, p.description, p.short_description, 
+             p.service_level, p.pricing_type, p.base_price, p.price_per_extra_day,
+             p.forfait_days, p.min_persons, p.max_persons, p.deposit_percentage,
+             p.images, p.is_featured, p.is_active, p.sort_order, 
+             p.created_at, p.updated_at,
+        '[]'::jsonb as items
       FROM packages p
-      LEFT JOIN package_items pi ON p.id = pi.package_id
-      LEFT JOIN products pr ON pi.product_id = pr.id
       WHERE p.is_active = true
     `;
 
@@ -170,31 +155,14 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
     const { id } = req.params;
 
     const pkg = await queryOne<PackageWithItems>(
-      `SELECT p.*, 
-        COALESCE(
-          json_agg(
-            json_build_object(
-              'id', pi.id,
-              'product_id', pi.product_id,
-              'quantity', COALESCE(pi.quantity_per_person, pi.quantity, 1),
-              'is_optional', COALESCE(pi.is_optional, false),
-              'toggle_points', 0,
-              'product', json_build_object(
-                'id', pr.id,
-                'name', pr.name,
-                'sku', pr.sku,
-                'description', pr.description,
-                'images', pr.images,
-                'price_per_day', pr.price_per_day
-              )
-            ) ORDER BY pi.id
-          ) FILTER (WHERE pi.id IS NOT NULL), '[]'
-        ) as items
+      `SELECT p.id, p.name, p.slug, p.description, p.short_description, 
+             p.service_level, p.pricing_type, p.base_price, p.price_per_extra_day,
+             p.forfait_days, p.min_persons, p.max_persons, p.deposit_percentage,
+             p.images, p.is_featured, p.is_active, p.sort_order, 
+             p.created_at, p.updated_at,
+        '[]'::jsonb as items
       FROM packages p
-      LEFT JOIN package_items pi ON p.id = pi.package_id
-      LEFT JOIN products pr ON pi.product_id = pr.id
-      WHERE p.id = $1 AND p.is_active = true
-      GROUP BY p.id`,
+      WHERE p.id = $1 AND p.is_active = true`,
       [id]
     );
 
@@ -218,29 +186,13 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
 export async function adminGetAllPackages(_req: Request, res: Response): Promise<void> {
   try {
     const packages = await query<PackageWithItems>(
-      `SELECT p.*, 
-        COALESCE(
-          json_agg(
-            json_build_object(
-              'id', pi.id,
-              'product_id', pi.product_id,
-              'quantity', COALESCE(pi.quantity_per_person, pi.quantity, 1),
-              'is_optional', COALESCE(pi.is_optional, false),
-              'toggle_points', 0,
-              'product', json_build_object(
-                'id', pr.id,
-                'name', pr.name,
-                'sku', pr.sku,
-                'images', pr.images,
-                'price_per_day', pr.price_per_day
-              )
-            ) ORDER BY pi.id
-          ) FILTER (WHERE pi.id IS NOT NULL), '[]'
-        ) as items
+      `SELECT p.id, p.name, p.slug, p.description, p.short_description, 
+             p.service_level, p.pricing_type, p.base_price, p.price_per_extra_day,
+             p.forfait_days, p.min_persons, p.max_persons, p.deposit_percentage,
+             p.images, p.is_featured, p.is_active, p.sort_order, 
+             p.created_at, p.updated_at,
+        '[]'::jsonb as items
       FROM packages p
-      LEFT JOIN package_items pi ON p.id = pi.package_id
-      LEFT JOIN products pr ON pi.product_id = pr.id
-      GROUP BY p.id
       ORDER BY p.sort_order, p.name`
     );
 
