@@ -292,14 +292,18 @@ function setActiveNavLink() {
 
 /**
  * Load header component into page
+ * @param {string} containerId - Element ID to inject header into
+ * @param {string} variant - Header variant to load ('default' or 'location')
  */
-export async function loadHeader(containerId = 'header-container') {
+export async function loadHeader(containerId = 'header-container', variant = 'default') {
   const container = document.getElementById(containerId);
   if (!container) return;
 
   try {
     const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
-    const response = await fetch(`${basePath}/components/header.html`);
+    const componentName = variant === 'location' ? 'header-location.html' : 'header.html';
+    
+    const response = await fetch(`${basePath}/components/${componentName}`);
     if (!response.ok) throw new Error('Failed to load header');
     
     const html = await response.text();
@@ -311,6 +315,13 @@ export async function loadHeader(containerId = 'header-container') {
   } catch (error) {
     console.error('Error loading header:', error);
   }
+}
+
+/**
+ * Convenience function to load location header
+ */
+export function loadLocationHeader(containerId = 'header-container') {
+  return loadHeader(containerId, 'location');
 }
 
 /**

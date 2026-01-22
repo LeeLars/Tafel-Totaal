@@ -3,7 +3,7 @@
  * Dynamic city/location page with SEO optimization
  */
 
-import { loadHeader } from '../components/header.js';
+import { loadLocationHeader } from '../components/header.js';
 import { loadFooter } from '../components/footer.js';
 
 const API_BASE_URL = window.location.hostname.includes('github.io')
@@ -18,7 +18,7 @@ const CITY_CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
-  await loadHeader();
+  await loadLocationHeader();
   await loadFooter();
   await loadLocationData();
 });

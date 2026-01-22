@@ -1,0 +1,542 @@
+<!-- Header Component (Location Variant) - Tafel Totaal -->
+<header class="site-header" id="site-header">
+  <div class="container">
+    <div class="header__inner">
+      <!-- Logo -->
+      <a href="/Tafel-Totaal/" class="header__logo">
+        <img src="/Tafel-Totaal/images/site/Logo-T-T-Zwart-transparant.png" alt="Tafel Totaal" width="180" height="40">
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="header__nav d-none d-lg-flex" aria-label="Hoofdnavigatie">
+        <ul class="header__menu">
+          <li><a href="/Tafel-Totaal/" class="header__link">Home</a></li>
+          <li><a href="/Tafel-Totaal/locaties.html" class="header__link">Alle Locaties</a></li>
+          <li><a href="/Tafel-Totaal/pakketten.html" class="header__link">Pakketten</a></li>
+          <li><a href="/Tafel-Totaal/contact.html" class="header__link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Header Actions -->
+      <div class="header__actions">
+        <!-- Cart Button with Hover Preview -->
+        <div class="header__cart-wrapper">
+          <a href="/Tafel-Totaal/winkelwagen.html" class="header__cart" aria-label="Winkelwagen">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="cart-badge" style="display: none;">0</span>
+          </a>
+          
+          <!-- Cart Preview Dropdown -->
+          <div class="cart-preview" id="cart-preview">
+            <div class="cart-preview__header">
+              <h3>Winkelwagen</h3>
+              <span class="cart-preview__count">0 items</span>
+            </div>
+            <div class="cart-preview__items" id="cart-preview-items">
+              <p style="text-align: center; color: var(--color-gray); padding: var(--space-lg);">Je winkelwagen is leeg</p>
+            </div>
+            <div class="cart-preview__footer">
+              <div class="cart-preview__total">
+                <span>Totaal:</span>
+                <strong id="cart-preview-total">€0,00</strong>
+              </div>
+              <a href="/Tafel-Totaal/winkelwagen.html" class="btn btn--primary btn--sm btn--full">Bekijk Winkelwagen</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Menu (Logged Out) -->
+        <div class="header__user" data-auth="logged-out">
+          <a href="/Tafel-Totaal/login.html" class="btn btn--sm btn--ghost">Inloggen</a>
+        </div>
+
+        <!-- User Menu (Logged In) -->
+        <div class="header__user-dropdown" data-auth="logged-in" style="display: none;">
+          <button class="header__user-btn" aria-expanded="false" aria-haspopup="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span data-auth="user-name">Account</span>
+            <svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="header__dropdown">
+            <a href="/Tafel-Totaal/account/overzicht.html" class="header__dropdown-item">Mijn Account</a>
+            <a href="/Tafel-Totaal/account/bestellingen.html" class="header__dropdown-item">Bestellingen</a>
+            <a href="/Tafel-Totaal/account/gegevens.html" class="header__dropdown-item">Gegevens</a>
+            <a href="/Tafel-Totaal/account/loyalty.html" class="header__dropdown-item">Loyalty</a>
+            <hr class="header__dropdown-divider">
+            <button class="header__dropdown-item" id="logout-btn">Uitloggen</button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="header__hamburger d-lg-none" aria-label="Menu openen" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Service Steps Navigation Bar (Location Variant) -->
+  <div class="header__categories d-none d-lg-block">
+    <div class="container">
+      <nav class="category-nav">
+        <!-- Step 1: Packages -->
+        <a href="/Tafel-Totaal/pakketten.html" class="category-link">
+          <div class="category-link__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </div>
+          <span>1. Kies Pakket</span>
+        </a>
+        
+        <!-- Step 2: Delivery -->
+        <div class="category-link" style="cursor: default;" onclick="event.preventDefault()">
+          <div class="category-link__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="1" y="3" width="15" height="13"></rect>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+              <circle cx="5.5" cy="18.5" r="2.5"></circle>
+              <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>
+          </div>
+          <span>2. Wij Leveren</span>
+        </div>
+
+        <!-- Step 3: No Dishes -->
+        <div class="category-link" style="cursor: default;" onclick="event.preventDefault()">
+          <div class="category-link__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+          </div>
+          <span>3. Geen Afwas</span>
+        </div>
+
+        <!-- Call to Action -->
+        <a href="/Tafel-Totaal/contact.html" class="category-link category-link--all">
+          <div class="category-link__icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+          </div>
+          <span>Vraag Offerte</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <nav class="header__mobile-nav d-lg-none" aria-label="Mobiele navigatie">
+    <ul class="header__mobile-menu">
+      <li><a href="/Tafel-Totaal/">Home</a></li>
+      <li><a href="/Tafel-Totaal/locaties.html">Alle Locaties</a></li>
+      <li><a href="/Tafel-Totaal/pakketten.html">Pakketten</a></li>
+      <li><a href="/Tafel-Totaal/contact.html">Contact</a></li>
+      <li class="header__mobile-divider"></li>
+      <li class="header__mobile-category-title">Onze Service</li>
+      <li><a href="/Tafel-Totaal/pakketten.html">1. Kies Pakket</a></li>
+      <li><span style="display: block; padding: var(--space-md); color: var(--color-gray);">2. Wij Leveren</span></li>
+      <li><span style="display: block; padding: var(--space-md); color: var(--color-gray);">3. Geen Afwas</span></li>
+      <li><a href="/Tafel-Totaal/contact.html" style="font-weight: bold; color: var(--color-primary);">Vraag Offerte</a></li>
+      <li class="header__mobile-divider"></li>
+      <li data-auth="logged-out"><a href="/Tafel-Totaal/login.html">Inloggen</a></li>
+      <li data-auth="logged-out"><a href="/Tafel-Totaal/registreren.html">Registreren</a></li>
+      <li data-auth="logged-in" style="display: none;"><a href="/Tafel-Totaal/account/overzicht.html">Mijn Account</a></li>
+      <li data-auth="logged-in" style="display: none;"><a href="/Tafel-Totaal/account/bestellingen.html">Bestellingen</a></li>
+      <li data-auth="logged-in" style="display: none;"><a href="/Tafel-Totaal/account/gegevens.html">Gegevens</a></li>
+      <li data-auth="logged-in" style="display: none;"><a href="/Tafel-Totaal/account/loyalty.html">Loyalty</a></li>
+      <li data-auth="logged-in" style="display: none;"><button id="mobile-logout-btn">Uitloggen</button></li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+/* Copy of Header Styles from header.html to ensure consistency */
+/* ============================================
+   HEADER STYLES - Brutalist Corporate
+   ============================================ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: var(--border-width) solid var(--border-color);
+  transition: all var(--transition-base);
+}
+
+.site-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.98);
+  box-shadow: var(--shadow-md);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  gap: var(--space-lg);
+}
+
+.header__logo img {
+  display: block;
+  height: 40px;
+  width: auto;
+}
+
+/* Navigation - Brutalist Uppercase */
+.header__nav {
+  flex: 1;
+  justify-content: center;
+}
+
+.header__menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
+
+.header__link {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--color-black);
+  padding: var(--space-sm) 0;
+  position: relative;
+  transition: color var(--transition-fast);
+}
+
+.header__link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: var(--color-primary);
+  transition: width var(--transition-base) var(--ease-out-expo);
+}
+
+.header__link:hover::after,
+.header__link.active::after {
+  width: 100%;
+}
+
+.header__link:hover {
+  color: var(--color-primary);
+}
+
+/* Actions */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.header__cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--color-black);
+  border-radius: var(--border-radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.header__cart:hover {
+  background-color: var(--color-off-white);
+  color: var(--color-primary);
+}
+
+.cart-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border-radius: var(--border-radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* User Dropdown */
+.header__user-dropdown {
+  position: relative;
+}
+
+.header__user-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-black);
+  border-radius: var(--border-radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.header__user-btn:hover {
+  background-color: var(--color-off-white);
+}
+
+.dropdown-arrow {
+  transition: transform var(--transition-fast);
+}
+
+.header__user-dropdown.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.header__dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-sm));
+  right: 0;
+  min-width: 200px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all var(--transition-fast);
+  z-index: var(--z-dropdown);
+}
+
+.header__user-dropdown.open .header__dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.header__dropdown-item {
+  display: block;
+  width: 100%;
+  padding: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-black);
+  text-align: left;
+  transition: background-color var(--transition-fast);
+}
+
+.header__dropdown-item:hover {
+  background-color: var(--color-off-white);
+  color: var(--color-primary);
+}
+
+.header__dropdown-divider {
+  margin: var(--space-sm) 0;
+  border: none;
+  border-top: 1px solid var(--color-light-gray);
+}
+
+/* Hamburger */
+.header__hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+}
+
+.hamburger-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: var(--color-black);
+  transition: all var(--transition-fast);
+}
+
+.header__hamburger.active .hamburger-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.header__hamburger.active .hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.header__hamburger.active .hamburger-line:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Mobile Navigation */
+.header__mobile-nav {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: var(--color-white);
+  border-top: 1px solid var(--color-light-gray);
+  box-shadow: var(--shadow-lg);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-base);
+  z-index: var(--z-dropdown);
+}
+
+.header__mobile-nav.open {
+  max-height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+}
+
+.header__mobile-menu {
+  padding: var(--space-md);
+}
+
+.header__mobile-menu li {
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+.header__mobile-menu li:last-child {
+  border-bottom: none;
+}
+
+.header__mobile-category-title {
+  display: block;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wider);
+  color: var(--color-gray);
+  background-color: var(--color-off-white);
+}
+
+.header__mobile-menu a,
+.header__mobile-menu button {
+  display: block;
+  width: 100%;
+  padding: var(--space-md);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--color-black);
+  text-align: left;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.header__mobile-menu a:hover,
+.header__mobile-menu button:hover {
+  color: var(--color-primary);
+  background-color: var(--color-off-white);
+}
+
+.header__mobile-divider {
+  height: 1px;
+  background-color: var(--color-light-gray);
+  margin: var(--space-sm) 0;
+}
+
+/* Category Navigation - Brutalist */
+.header__categories {
+  border-top: var(--border-width) solid var(--border-color);
+  border-bottom: var(--border-width) solid var(--border-color);
+  background-color: var(--color-white);
+}
+
+.category-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  padding: 0;
+}
+
+.category-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: var(--space-lg) var(--space-xl);
+  border-right: var(--border-width) solid var(--border-color);
+  border-radius: 0; /* Strict brutalist */
+  background-color: transparent;
+  position: relative;
+  overflow: hidden; /* For magnetic fill */
+  isolation: isolate; /* Create stacking context */
+  transition: color 0.4s var(--ease-out-expo);
+  z-index: 1;
+  letter-spacing: var(--letter-spacing-wide); /* Improved readability */
+}
+
+.category-link:first-child {
+  border-left: var(--border-width) solid var(--border-color);
+}
+
+.category-link:hover,
+.category-link.active {
+  color: var(--color-white); /* High contrast on hover/active */
+}
+
+/* Direction-Aware Magnetic Fill Effect */
+.category-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-primary);
+  transform: translateX(var(--fill-from, -101%));
+  transition: transform 0.4s var(--ease-out-expo);
+  z-index: -1;
+}
+
+/* On hover: fill to center */
+.category-link.is-hovering::before,
+.category-link.active::before {
+  transform: translateX(0);
+}
+
+.category-link__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--color-charcoal);
+  transition: color 0.4s var(--ease-out-expo), transform 0.4s var(--ease-out-expo);
+}
+
+.category-link:hover .category-link__icon,
+.category-link.active .category-link__icon {
+  color: var(--color-white);
+  transform: scale(1.1);
+}
+
+.category-link__icon svg {
+  width: 20px;
+  height: 20px;
+}
+</style>
