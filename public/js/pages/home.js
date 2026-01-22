@@ -156,8 +156,9 @@ async function loadFeaturedLocations() {
     const data = await response.json();
 
     if (data.success && data.data && data.data.length > 0) {
-      // Show first 6 cities
-      const featuredCities = data.data.slice(0, 6);
+      // Show first 4 or 8 cities (always even number)
+      const count = data.data.length >= 8 ? 8 : 4;
+      const featuredCities = data.data.slice(0, count);
       renderLocations(featuredCities);
     } else {
       renderFallbackLocations();
