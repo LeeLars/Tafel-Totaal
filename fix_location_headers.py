@@ -12,9 +12,9 @@ def fix_location_page(filepath):
         content = f.read()
     
     # Check if already has the inline script approach
-    if 'async function loadLocationComponents()' in content:
-        print(f"✓ {os.path.basename(filepath)} already fixed")
-        return False
+    # if 'async function loadLocationComponents()' in content:
+    #    print(f"✓ {os.path.basename(filepath)} already fixed")
+    #    return False
     
     # Find the script section
     script_pattern = r'(<script type="module">.*?</script>)'
@@ -26,7 +26,14 @@ def fix_location_page(filepath):
     
     old_script = match.group(1)
     
-    # Create new script with inline loading
+    # 1. HTML Cleanup for sub-municipalities list
+    # Replace inline style with class if present
+    content = content.replace(
+        '<div id="submunicipalities-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--space-sm); margin-top: var(--space-md);">',
+        '<div id="submunicipalities-list" class="sub-municipalities-grid">'
+    )
+
+    # 2. Create new script with inline loading and improved sub-municipalities rendering
     new_script = '''<script type="module">
     import { formatPrice } from '/Tafel-Totaal/js/lib/utils.js';
     
@@ -149,13 +156,18 @@ def fix_location_page(filepath):
           const list = document.getElementById('submunicipalities-list');
           
           list.innerHTML = subMunicipalities.map(sub => `
-            <div style="padding: var(--space-sm); background: var(--color-concrete); border: 1px solid var(--color-light-gray);">
-              <strong style="display: block; margin-bottom: 4px;">${sub.name}</strong>
-              <span style="font-size: var(--font-size-sm); color: var(--color-gray);">${sub.postal_codes.join(', ')}</span>
+            <div class="sub-municipality-card">
+              <span class="sub-municipality-name">${sub.name}</span>
+              <span class="sub-municipality-zip">${sub.postal_codes.join(', ')}</span>
             </div>
           `).join('');
           
-          section.style.display = 'flex';
+          section.style.display = 'grid'; // Uses grid layout from CSS class on parent content-row if needed, or just block
+          // Actually content-row is grid, section is the row. 
+          // We should just make sure it's visible. 
+          section.style.display = ''; // Let CSS handle it (grid from content-row class) or block
+          section.classList.remove('hidden'); // Ensure visibility
+          section.style.display = 'grid'; // Force grid to match other content rows
         }
       } catch (error) {
         console.error('Error loading sub-municipalities:', error);
