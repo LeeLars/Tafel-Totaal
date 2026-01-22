@@ -456,15 +456,14 @@ export async function addPackageItem(req: Request, res: Response): Promise<void>
 
     const result = await queryOne<{ id: number }>(
       `INSERT INTO package_items (
-        package_id, product_id, quantity_per_person, is_optional, toggle_points
-      ) VALUES ($1, $2, $3, $4, $5)
+        package_id, product_id, quantity_per_person, is_optional
+      ) VALUES ($1, $2, $3, $4)
       RETURNING id`,
       [
         id,
         body.product_id,
         body.quantity || 1,
-        body.is_optional || false,
-        body.toggle_points || 0
+        body.is_optional || false
       ]
     );
 
@@ -509,14 +508,6 @@ export async function updatePackageItem(req: Request, res: Response): Promise<vo
     if (body.is_optional !== undefined) {
       updates.push(`is_optional = $${paramIndex++}`);
       values.push(body.is_optional);
-    }
-    if (body.toggle_points !== undefined) {
-      updates.push(`toggle_points = $${paramIndex++}`);
-      values.push(body.toggle_points);
-    }
-    if (body.sort_order !== undefined) {
-      updates.push(`sort_order = $${paramIndex++}`);
-      values.push(body.sort_order);
     }
 
     if (updates.length === 0) {
