@@ -356,3 +356,4 @@ function formatPrice(amount) {
     currency: 'EUR'
   }).format(amount);
 }
+// Cache bust: 1769106544
