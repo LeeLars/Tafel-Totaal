@@ -129,10 +129,10 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
             json_build_object(
               'id', pi.id,
               'product_id', pi.product_id,
-              'quantity_per_person', pi.quantity_per_person,
-              'is_optional', pi.is_optional,
-              'extra_price', pi.extra_price,
-              'toggle_points', pi.toggle_points,
+              'quantity_per_person', COALESCE(pi.quantity_per_person, 1),
+              'is_optional', COALESCE(pi.is_optional, false),
+              'extra_price', COALESCE(pi.extra_price, 0),
+              'toggle_points', COALESCE(pi.toggle_points, 0),
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -177,10 +177,10 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
             json_build_object(
               'id', pi.id,
               'product_id', pi.product_id,
-              'quantity_per_person', pi.quantity_per_person,
-              'is_optional', pi.is_optional,
-              'extra_price', pi.extra_price,
-              'toggle_points', pi.toggle_points,
+              'quantity_per_person', COALESCE(pi.quantity_per_person, 1),
+              'is_optional', COALESCE(pi.is_optional, false),
+              'extra_price', COALESCE(pi.extra_price, 0),
+              'toggle_points', COALESCE(pi.toggle_points, 0),
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -226,10 +226,10 @@ export async function adminGetAllPackages(_req: Request, res: Response): Promise
             json_build_object(
               'id', pi.id,
               'product_id', pi.product_id,
-              'quantity_per_person', pi.quantity_per_person,
-              'is_optional', pi.is_optional,
-              'extra_price', pi.extra_price,
-              'toggle_points', pi.toggle_points,
+              'quantity_per_person', COALESCE(pi.quantity_per_person, 1),
+              'is_optional', COALESCE(pi.is_optional, false),
+              'extra_price', COALESCE(pi.extra_price, 0),
+              'toggle_points', COALESCE(pi.toggle_points, 0),
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
