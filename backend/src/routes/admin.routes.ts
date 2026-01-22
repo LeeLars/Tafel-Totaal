@@ -118,7 +118,7 @@ const createPackageValidation = [
 ];
 
 const updatePackageValidation = [
-  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+  param('id').isUUID().withMessage('Valid package ID is required'),
   body('name').optional().trim().notEmpty(),
   body('price_per_day').optional().isFloat({ min: 0 }),
   body('persons').optional().isInt({ min: 1 }),
@@ -132,11 +132,11 @@ const updatePackageValidation = [
 ];
 
 const deletePackageValidation = [
-  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+  param('id').isUUID().withMessage('Valid package ID is required'),
 ];
 
 const addPackageItemValidation = [
-  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+  param('id').isUUID().withMessage('Valid package ID is required'),
   body('product_id').isUUID().withMessage('Valid product ID is required'),
   body('quantity').isInt({ min: 1 }).withMessage('Valid quantity is required'),
   body('is_optional').optional().isBoolean(),
@@ -145,8 +145,8 @@ const addPackageItemValidation = [
 ];
 
 const updatePackageItemValidation = [
-  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
-  param('itemId').isInt({ min: 1 }).withMessage('Valid item ID is required'),
+  param('id').isUUID().withMessage('Valid package ID is required'),
+  param('itemId').isUUID().withMessage('Valid item ID is required'),
   body('quantity').optional().isInt({ min: 1 }),
   body('is_optional').optional().isBoolean(),
   body('toggle_points').optional().isInt({ min: 0 }),
@@ -154,8 +154,8 @@ const updatePackageItemValidation = [
 ];
 
 const deletePackageItemValidation = [
-  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
-  param('itemId').isInt({ min: 1 }).withMessage('Valid item ID is required'),
+  param('id').isUUID().withMessage('Valid package ID is required'),
+  param('itemId').isUUID().withMessage('Valid item ID is required'),
 ];
 
 // Package debug route (check/create table)

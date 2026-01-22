@@ -333,15 +333,18 @@ export async function updatePackage(req: Request, res: Response): Promise<void> 
       values.push(body.short_description);
     }
     if (body.image_url !== undefined) {
-      updates.push(`image_url = $${paramIndex++}`);
-      values.push(body.image_url);
+      // Convert single image_url to images array for database
+      updates.push(`images = $${paramIndex++}`);
+      values.push(body.image_url ? JSON.stringify([body.image_url]) : '[]');
     }
     if (body.price_per_day !== undefined) {
-      updates.push(`price_per_day = $${paramIndex++}`);
+      // Map price_per_day to base_price in database
+      updates.push(`base_price = $${paramIndex++}`);
       values.push(body.price_per_day);
     }
     if (body.persons !== undefined) {
-      updates.push(`persons = $${paramIndex++}`);
+      // Map persons to min_persons in database
+      updates.push(`min_persons = $${paramIndex++}`);
       values.push(body.persons);
     }
     if (body.is_active !== undefined) {
