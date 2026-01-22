@@ -283,6 +283,7 @@ function initAddProductModal() {
 
   addBtn?.addEventListener('click', () => {
     modal?.classList.add('active');
+    selectedProductIds.clear(); // Reset selection when opening modal
     renderProductSearch();
   });
 
@@ -630,8 +631,11 @@ function createProductItemHTML(item, index, isOptional) {
   `;
 }
 
+// Track selected products for multi-select
+let selectedProductIds = new Set();
+
 /**
- * Render product search results
+ * Render product search results with multi-select checkboxes
  */
 function renderProductSearch(query = '') {
   const container = document.getElementById('product-results');
@@ -641,19 +645,79 @@ function renderProductSearch(query = '') {
     ? availableProducts.filter(p => p.name.toLowerCase().includes(query))
     : availableProducts;
 
-  if (filtered.length === 0) {
-    container.innerHTML = '<p style="color: var(--color-gray); padding: var(--space-md);">Geen producten gevonden</p>';
+  // Filter out products already in package
+  const existingIds = new Set(packageProducts.map(p => p.product_id));
+  const available = filtered.filter(p => !existingIds.has(p.id));
+
+  if (available.length === 0) {
+    container.innerHTML = '<p style="color: var(--color-gray); padding: var(--space-md);">Geen producten gevonden of alle producten zijn al toegevoegd</p>';
     return;
   }
 
-  container.innerHTML = filtered.slice(0, 20).map(product => `
-    <div class="product-result-item" style="padding: var(--space-sm); border-bottom: 1px solid var(--color-light-gray); cursor: pointer;" onclick="addProductToPackage('${product.id}', '${product.name.replace(/'/g, "\\'")}')">
-      <strong>${product.name}</strong>
-      <br>
-      <small style="color: var(--color-gray);">${product.category_name || 'Geen categorie'}</small>
-    </div>
-  `).join('');
+  // Show count of selected
+  const selectedCount = selectedProductIds.size;
+  const headerHtml = selectedCount > 0 
+    ? `<div style="padding: var(--space-sm); background: var(--color-primary-subtle); border-bottom: 1px solid var(--color-primary); display: flex; justify-content: space-between; align-items: center;">
+        <span><strong>${selectedCount}</strong> product${selectedCount !== 1 ? 'en' : ''} geselecteerd</span>
+        <button type="button" class="btn btn--primary btn--sm" onclick="addSelectedProductsToPackage()">Toevoegen</button>
+       </div>`
+    : '';
+
+  container.innerHTML = headerHtml + available.slice(0, 50).map(product => {
+    const isSelected = selectedProductIds.has(product.id);
+    return `
+      <label class="product-result-item" style="padding: var(--space-sm); border-bottom: 1px solid var(--color-light-gray); cursor: pointer; display: flex; align-items: center; gap: var(--space-sm); ${isSelected ? 'background: var(--color-primary-subtle);' : ''}" onclick="event.stopPropagation();">
+        <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="toggleProductSelection('${product.id}', '${product.name.replace(/'/g, "\\'")}', this.checked)" style="width: 18px; height: 18px;">
+        <div style="flex: 1;">
+          <strong>${product.name}</strong>
+          <br>
+          <small style="color: var(--color-gray);">${product.category_name || 'Geen categorie'}</small>
+        </div>
+      </label>
+    `;
+  }).join('');
 }
+
+/**
+ * Toggle product selection for multi-select
+ */
+window.toggleProductSelection = function(productId, productName, isChecked) {
+  if (isChecked) {
+    selectedProductIds.add(productId);
+  } else {
+    selectedProductIds.delete(productId);
+  }
+  // Re-render to update header count
+  const searchInput = document.getElementById('product-search');
+  renderProductSearch(searchInput?.value || '');
+};
+
+/**
+ * Add all selected products to package
+ */
+window.addSelectedProductsToPackage = function() {
+  if (selectedProductIds.size === 0) {
+    showToast('Selecteer eerst producten', 'error');
+    return;
+  }
+
+  selectedProductIds.forEach(productId => {
+    const product = availableProducts.find(p => p.id === productId);
+    if (product && !packageProducts.find(p => p.product_id === productId)) {
+      packageProducts.push({
+        product_id: productId,
+        product_name: product.name,
+        quantity: 1
+      });
+    }
+  });
+
+  const count = selectedProductIds.size;
+  selectedProductIds.clear();
+  renderPackageProducts();
+  document.getElementById('add-product-modal').classList.remove('active');
+  showToast(`${count} product${count !== 1 ? 'en' : ''} toegevoegd`, 'success');
+};
 
 /**
  * Add product to package
