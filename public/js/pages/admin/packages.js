@@ -818,18 +818,85 @@ async function savePackage() {
       showToast('Pakket bijgewerkt', 'success');
     }
 
-    // Step 2: Save product items
-    if (packageProducts.length > 0) {
-      // For now, we'll save products in the next phase when we have the backend endpoints
-      // This is a placeholder for the product items sync
-      console.log('Products to save:', packageProducts);
-    }
+    // Step 2: Sync product items
+    await syncPackageItems(packageId);
 
     document.getElementById('edit-modal').classList.remove('active');
     await loadPackages();
   } catch (error) {
     console.error('Error saving package:', error);
     showToast(error.message || 'Fout bij opslaan', 'error');
+  }
+}
+
+/**
+ * Sync package items - delete removed, add new, update existing
+ */
+async function syncPackageItems(packageId) {
+  // Get current items from server (if editing existing package)
+  const existingItems = editingPackage?.items || [];
+  const existingItemIds = new Set(existingItems.map(item => item.id));
+  const currentProductIds = new Set(packageProducts.map(p => p.product_id));
+  
+  // Find items to delete (exist on server but not in current list)
+  const itemsToDelete = existingItems.filter(item => !currentProductIds.has(item.product_id));
+  
+  // Find items to add (in current list but not on server)
+  const existingProductIds = new Set(existingItems.map(item => item.product_id));
+  const itemsToAdd = packageProducts.filter(p => !existingProductIds.has(p.product_id));
+  
+  // Find items to update (exist in both, check for changes)
+  const itemsToUpdate = packageProducts.filter(p => {
+    const existing = existingItems.find(item => item.product_id === p.product_id);
+    if (!existing) return false;
+    // Check if any field changed
+    return existing.quantity !== p.quantity || 
+           existing.is_optional !== p.is_optional || 
+           existing.toggle_points !== (p.toggle_points || 0);
+  });
+
+  console.log('Sync items:', { itemsToDelete, itemsToAdd, itemsToUpdate });
+
+  // Delete removed items
+  for (const item of itemsToDelete) {
+    try {
+      await adminAPI.deletePackageItem(packageId, item.id);
+      console.log('Deleted item:', item.id);
+    } catch (error) {
+      console.error('Error deleting item:', error);
+    }
+  }
+
+  // Add new items
+  for (const item of itemsToAdd) {
+    try {
+      await adminAPI.addPackageItem(packageId, {
+        product_id: item.product_id,
+        quantity: item.quantity || 1,
+        is_optional: item.is_optional || false,
+        toggle_points: item.toggle_points || 0
+      });
+      console.log('Added item:', item.product_id);
+    } catch (error) {
+      console.error('Error adding item:', error);
+    }
+  }
+
+  // Update changed items
+  for (const item of itemsToUpdate) {
+    const existing = existingItems.find(e => e.product_id === item.product_id);
+    if (existing) {
+      try {
+        await adminAPI.updatePackageItem(packageId, existing.id, {
+          quantity: item.quantity || 1,
+          is_optional: item.is_optional || false,
+          toggle_points: item.toggle_points || 0
+        });
+        console.log('Updated item:', existing.id);
+      } catch (error) {
+        console.error('Error updating item:', error);
+      }
+    }
   }
 }
 

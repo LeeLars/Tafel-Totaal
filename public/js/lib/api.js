@@ -271,6 +271,24 @@ export const adminAPI = {
       method: 'DELETE'
     }),
   
+  // Package Items
+  addPackageItem: (packageId, data) =>
+    apiCall(`/api/admin/packages/${packageId}/items`, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+  
+  updatePackageItem: (packageId, itemId, data) =>
+    apiCall(`/api/admin/packages/${packageId}/items/${itemId}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    }),
+  
+  deletePackageItem: (packageId, itemId) =>
+    apiCall(`/api/admin/packages/${packageId}/items/${itemId}`, {
+      method: 'DELETE'
+    }),
+  
   // Customers
   getCustomers: (filters = {}) => {
     const params = new URLSearchParams(filters).toString();

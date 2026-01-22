@@ -128,8 +128,27 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
              p.forfait_days, p.min_persons, p.max_persons, p.deposit_percentage,
              p.images, p.is_featured, p.is_active, p.sort_order, 
              p.created_at, p.updated_at,
-        '[]'::jsonb as items
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', pi.id,
+              'product_id', pi.product_id,
+              'quantity', pi.quantity_per_person,
+              'is_optional', pi.is_optional,
+              'toggle_points', COALESCE(pi.toggle_points, 0),
+              'product', json_build_object(
+                'id', pr.id,
+                'name', pr.name,
+                'sku', pr.sku,
+                'images', pr.images,
+                'price_per_day', pr.price_per_day
+              )
+            ) ORDER BY pi.id
+          ) FILTER (WHERE pi.id IS NOT NULL), '[]'
+        ) as items
       FROM packages p
+      LEFT JOIN package_items pi ON p.id = pi.package_id
+      LEFT JOIN products pr ON pi.product_id = pr.id
       WHERE p.is_active = true
     `;
 
@@ -139,7 +158,7 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
       sql += ` AND p.is_featured = true`;
     }
 
-    sql += ` ORDER BY p.sort_order, p.name`;
+    sql += ` GROUP BY p.id ORDER BY p.sort_order, p.name`;
 
     console.log('Executing packages query:', sql);
     const packages = await query<PackageWithItems>(sql, params);
@@ -168,9 +187,30 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
              p.forfait_days, p.min_persons, p.max_persons, p.deposit_percentage,
              p.images, p.is_featured, p.is_active, p.sort_order, 
              p.created_at, p.updated_at,
-        '[]'::jsonb as items
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', pi.id,
+              'product_id', pi.product_id,
+              'quantity', pi.quantity_per_person,
+              'is_optional', pi.is_optional,
+              'toggle_points', COALESCE(pi.toggle_points, 0),
+              'product', json_build_object(
+                'id', pr.id,
+                'name', pr.name,
+                'sku', pr.sku,
+                'description', pr.description,
+                'images', pr.images,
+                'price_per_day', pr.price_per_day
+              )
+            ) ORDER BY pi.id
+          ) FILTER (WHERE pi.id IS NOT NULL), '[]'
+        ) as items
       FROM packages p
-      WHERE p.id = $1 AND p.is_active = true`,
+      LEFT JOIN package_items pi ON p.id = pi.package_id
+      LEFT JOIN products pr ON pi.product_id = pr.id
+      WHERE p.id = $1 AND p.is_active = true
+      GROUP BY p.id`,
       [id]
     );
 
@@ -199,8 +239,28 @@ export async function adminGetAllPackages(_req: Request, res: Response): Promise
              p.forfait_days, p.min_persons, p.max_persons, p.deposit_percentage,
              p.images, p.is_featured, p.is_active, p.sort_order, 
              p.created_at, p.updated_at,
-        '[]'::jsonb as items
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', pi.id,
+              'product_id', pi.product_id,
+              'quantity', pi.quantity_per_person,
+              'is_optional', pi.is_optional,
+              'toggle_points', COALESCE(pi.toggle_points, 0),
+              'product', json_build_object(
+                'id', pr.id,
+                'name', pr.name,
+                'sku', pr.sku,
+                'images', pr.images,
+                'price_per_day', pr.price_per_day
+              )
+            ) ORDER BY pi.id
+          ) FILTER (WHERE pi.id IS NOT NULL), '[]'
+        ) as items
       FROM packages p
+      LEFT JOIN package_items pi ON p.id = pi.package_id
+      LEFT JOIN products pr ON pi.product_id = pr.id
+      GROUP BY p.id
       ORDER BY p.sort_order, p.name`
     );
 
@@ -396,16 +456,15 @@ export async function addPackageItem(req: Request, res: Response): Promise<void>
 
     const result = await queryOne<{ id: number }>(
       `INSERT INTO package_items (
-        package_id, product_id, quantity, is_optional, toggle_points, sort_order
-      ) VALUES ($1, $2, $3, $4, $5, $6)
+        package_id, product_id, quantity_per_person, is_optional, toggle_points
+      ) VALUES ($1, $2, $3, $4, $5)
       RETURNING id`,
       [
         id,
         body.product_id,
         body.quantity || 1,
         body.is_optional || false,
-        body.toggle_points || 0,
-        body.sort_order || 0
+        body.toggle_points || 0
       ]
     );
 
@@ -444,7 +503,7 @@ export async function updatePackageItem(req: Request, res: Response): Promise<vo
     let paramIndex = 1;
 
     if (body.quantity !== undefined) {
-      updates.push(`quantity = $${paramIndex++}`);
+      updates.push(`quantity_per_person = $${paramIndex++}`);
       values.push(body.quantity);
     }
     if (body.is_optional !== undefined) {
