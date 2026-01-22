@@ -13,7 +13,7 @@ const getPackagesValidation = [
 ];
 
 const getPackageByIdValidation = [
-  param('id').isInt({ min: 1 }).withMessage('Valid package ID is required'),
+  param('id').isUUID().withMessage('Valid package ID is required'),
 ];
 
 router.get('/', validate(getPackagesValidation), packageController.getAllPackages);
