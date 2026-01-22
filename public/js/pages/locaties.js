@@ -8,7 +8,10 @@ const API_BASE_URL = window.location.hostname.includes('github.io')
   ? 'https://tafel-totaal-production.up.railway.app'
   : 'http://localhost:3000';
 
+const BASE_PATH = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+
 let allCities = [];
+let allLocations = []; // Includes all municipalities and sub-municipalities
 let filteredCities = [];
 let currentProvince = '';
 let currentSort = 'name_asc';
@@ -88,10 +91,33 @@ const STATIC_CITIES = [
 document.addEventListener('DOMContentLoaded', async () => {
   await loadHeader();
   initFilters();
-  // Use only static cities - no API calls that could overwrite with fewer cities
+  // Load all locations including sub-municipalities
+  await loadAllLocations();
+  // Use only static cities for display
   allCities = STATIC_CITIES;
   applyFiltersAndRender();
 });
+
+/**
+ * Load all locations (including sub-municipalities) for search
+ */
+async function loadAllLocations() {
+  try {
+    const response = await fetch(`${BASE_PATH}/data/all-locations.json`);
+    const data = await response.json();
+    
+    // Flatten all locations from both provinces
+    allLocations = [
+      ...data['west-vlaanderen'],
+      ...data['oost-vlaanderen']
+    ];
+    
+    console.log(`Loaded ${allLocations.length} locations (including sub-municipalities)`);
+  } catch (error) {
+    console.error('Error loading all locations:', error);
+    allLocations = [];
+  }
+}
 
 /**
  * Load all cities from API
@@ -162,11 +188,23 @@ function applyFiltersAndRender() {
 
   if (currentQuery) {
     const q = currentQuery.toLowerCase();
+    
+    // Search in allLocations (includes sub-municipalities)
+    const matchingLocations = allLocations.filter(loc => {
+      const name = (loc.name || '').toLowerCase();
+      const postalCodes = (loc.postal_codes || []).join(' ').toLowerCase();
+      return name.includes(q) || postalCodes.includes(q);
+    });
+    
+    // Get unique slugs from matching locations
+    const matchingSlugs = new Set(matchingLocations.map(loc => loc.slug));
+    
+    // Filter cities by matching slugs or direct name match
     filteredCities = filteredCities.filter(city => {
       const name = (city.name || '').toLowerCase();
       const province = (city.province || '').toLowerCase();
       const slug = (city.slug || '').toLowerCase();
-      return name.includes(q) || province.includes(q) || slug.includes(q);
+      return matchingSlugs.has(slug) || name.includes(q) || province.includes(q) || slug.includes(q);
     });
   }
 
