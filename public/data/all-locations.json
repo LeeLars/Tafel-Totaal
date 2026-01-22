@@ -1,320 +1,4391 @@
 {
   "west-vlaanderen": [
-    {"name": "Brugge", "slug": "brugge", "postal_codes": ["8000"], "parent": null},
-    {"name": "Assebroek", "slug": "brugge", "postal_codes": ["8310"], "parent": "Brugge"},
-    {"name": "Sint-Andries", "slug": "brugge", "postal_codes": ["8200"], "parent": "Brugge"},
-    {"name": "Sint-Michiels", "slug": "brugge", "postal_codes": ["8200"], "parent": "Brugge"},
-    {"name": "Koolkerke", "slug": "brugge", "postal_codes": ["8000"], "parent": "Brugge"},
-    {"name": "Dudzele", "slug": "brugge", "postal_codes": ["8380"], "parent": "Brugge"},
-    {"name": "Lissewege", "slug": "brugge", "postal_codes": ["8380"], "parent": "Brugge"},
-    {"name": "Zeebrugge", "slug": "brugge", "postal_codes": ["8380"], "parent": "Brugge"},
-    
-    {"name": "Oostkamp", "slug": "oostkamp", "postal_codes": ["8020"], "parent": null},
-    {"name": "Hertsberge", "slug": "oostkamp", "postal_codes": ["8020"], "parent": "Oostkamp"},
-    {"name": "Waardamme", "slug": "oostkamp", "postal_codes": ["8020"], "parent": "Oostkamp"},
-    
-    {"name": "Zedelgem", "slug": "zedelgem", "postal_codes": ["8210"], "parent": null},
-    {"name": "Aartrijke", "slug": "zedelgem", "postal_codes": ["8211"], "parent": "Zedelgem"},
-    {"name": "Loppem", "slug": "zedelgem", "postal_codes": ["8210"], "parent": "Zedelgem"},
-    {"name": "Veldegem", "slug": "zedelgem", "postal_codes": ["8210"], "parent": "Zedelgem"},
-    
-    {"name": "Knokke-Heist", "slug": "knokke-heist", "postal_codes": ["8300", "8301"], "parent": null},
-    {"name": "Knokke", "slug": "knokke-heist", "postal_codes": ["8300"], "parent": "Knokke-Heist"},
-    {"name": "Heist", "slug": "knokke-heist", "postal_codes": ["8301"], "parent": "Knokke-Heist"},
-    {"name": "Ramskapelle", "slug": "knokke-heist", "postal_codes": ["8301"], "parent": "Knokke-Heist"},
-    {"name": "Westkapelle", "slug": "knokke-heist", "postal_codes": ["8300"], "parent": "Knokke-Heist"},
-    
-    {"name": "Damme", "slug": "brugge", "postal_codes": ["8340"], "parent": "Brugge"},
-    {"name": "Hoeke", "slug": "brugge", "postal_codes": ["8340"], "parent": "Brugge"},
-    {"name": "Lapscheure", "slug": "brugge", "postal_codes": ["8340"], "parent": "Brugge"},
-    {"name": "Moerkerke", "slug": "brugge", "postal_codes": ["8340"], "parent": "Brugge"},
-    {"name": "Oostkerke", "slug": "brugge", "postal_codes": ["8340"], "parent": "Brugge"},
-    {"name": "Sijsele", "slug": "brugge", "postal_codes": ["8340"], "parent": "Brugge"},
-    
-    {"name": "Oostende", "slug": "oostende", "postal_codes": ["8400"], "parent": null},
-    {"name": "Stene", "slug": "oostende", "postal_codes": ["8400"], "parent": "Oostende"},
-    {"name": "Zandvoorde", "slug": "oostende", "postal_codes": ["8400"], "parent": "Oostende"},
-    
-    {"name": "Bredene", "slug": "oostende", "postal_codes": ["8450"], "parent": "Oostende"},
-    
-    {"name": "De Haan", "slug": "oostende", "postal_codes": ["8420"], "parent": "Oostende"},
-    {"name": "Klemskerke", "slug": "oostende", "postal_codes": ["8420"], "parent": "Oostende"},
-    {"name": "Wenduine", "slug": "oostende", "postal_codes": ["8420"], "parent": "Oostende"},
-    
-    {"name": "Gistel", "slug": "gistel", "postal_codes": ["8470"], "parent": null},
-    {"name": "Moere", "slug": "gistel", "postal_codes": ["8470"], "parent": "Gistel"},
-    {"name": "Snaaskerke", "slug": "gistel", "postal_codes": ["8470"], "parent": "Gistel"},
-    
-    {"name": "Oudenburg", "slug": "oostende", "postal_codes": ["8460"], "parent": "Oostende"},
-    {"name": "Ettelgem", "slug": "oostende", "postal_codes": ["8460"], "parent": "Oostende"},
-    {"name": "Roksem", "slug": "oostende", "postal_codes": ["8460"], "parent": "Oostende"},
-    {"name": "Westkerke", "slug": "oostende", "postal_codes": ["8460"], "parent": "Oostende"},
-    
-    {"name": "Kortrijk", "slug": "kortrijk", "postal_codes": ["8500"], "parent": null},
-    {"name": "Aalbeke", "slug": "kortrijk", "postal_codes": ["8511"], "parent": "Kortrijk"},
-    {"name": "Bellegem", "slug": "kortrijk", "postal_codes": ["8510"], "parent": "Kortrijk"},
-    {"name": "Bissegem", "slug": "kortrijk", "postal_codes": ["8501"], "parent": "Kortrijk"},
-    {"name": "Heule", "slug": "kortrijk", "postal_codes": ["8501"], "parent": "Kortrijk"},
-    {"name": "Marke", "slug": "kortrijk", "postal_codes": ["8510"], "parent": "Kortrijk"},
-    {"name": "Rollegem", "slug": "kortrijk", "postal_codes": ["8510"], "parent": "Kortrijk"},
-    
-    {"name": "Kuurne", "slug": "kuurne", "postal_codes": ["8520"], "parent": null},
-    {"name": "Harelbeke", "slug": "harelbeke", "postal_codes": ["8530"], "parent": null},
-    
-    {"name": "Zwevegem", "slug": "zwevegem", "postal_codes": ["8550"], "parent": null},
-    {"name": "Heestert", "slug": "zwevegem", "postal_codes": ["8551"], "parent": "Zwevegem"},
-    {"name": "Moen", "slug": "zwevegem", "postal_codes": ["8552"], "parent": "Zwevegem"},
-    {"name": "Otegem", "slug": "zwevegem", "postal_codes": ["8553"], "parent": "Zwevegem"},
-    
-    {"name": "Deerlijk", "slug": "deerlijk", "postal_codes": ["8540"], "parent": null},
-    
-    {"name": "Wevelgem", "slug": "wevelgem", "postal_codes": ["8560"], "parent": null},
-    {"name": "Gullegem", "slug": "wevelgem", "postal_codes": ["8560"], "parent": "Wevelgem"},
-    {"name": "Moorsele", "slug": "wevelgem", "postal_codes": ["8560"], "parent": "Wevelgem"},
-    
-    {"name": "Diksmuide", "slug": "diksmuide", "postal_codes": ["8600"], "parent": null},
-    {"name": "Beerst", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Driekapellen", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Esen", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Kaaskerke", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Keiem", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Lampernisse", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Nieuwkapelle", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Oudekapelle", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Pervijze", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Sint-Jacobs-Kapelle", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Stuivekenskerke", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Vladslo", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    {"name": "Woumen", "slug": "diksmuide", "postal_codes": ["8600"], "parent": "Diksmuide"},
-    
-    {"name": "Veurne", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Avekapelle", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Booitshoeke", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Bulskamp", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "De Moeren", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Eggewaartskapelle", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Houtem", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Steenkerke", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Vinkem", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Wulveringem", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    {"name": "Zoutenaaie", "slug": "diksmuide", "postal_codes": ["8630"], "parent": "Diksmuide"},
-    
-    {"name": "Tielt", "slug": "tielt", "postal_codes": ["8700"], "parent": null},
-    {"name": "Aarsele", "slug": "tielt", "postal_codes": ["8700"], "parent": "Tielt"},
-    {"name": "Kanegem", "slug": "tielt", "postal_codes": ["8700"], "parent": "Tielt"},
-    
-    {"name": "Meulebeke", "slug": "tielt", "postal_codes": ["8760"], "parent": "Tielt"},
-    {"name": "Oostrozebeke", "slug": "tielt", "postal_codes": ["8780"], "parent": "Tielt"},
-    
-    {"name": "Wielsbeke", "slug": "tielt", "postal_codes": ["8710"], "parent": "Tielt"},
-    {"name": "Ooigem", "slug": "tielt", "postal_codes": ["8710"], "parent": "Tielt"},
-    {"name": "Sint-Baafs-Vijve", "slug": "tielt", "postal_codes": ["8710"], "parent": "Tielt"},
-    
-    {"name": "Pittem", "slug": "tielt", "postal_codes": ["8740"], "parent": "Tielt"},
-    {"name": "Egem", "slug": "tielt", "postal_codes": ["8740"], "parent": "Tielt"},
-    
-    {"name": "Ruiselede", "slug": "tielt", "postal_codes": ["8755"], "parent": "Tielt"},
-    
-    {"name": "Wingene", "slug": "wingene", "postal_codes": ["8750"], "parent": null},
-    {"name": "Zwevezele", "slug": "wingene", "postal_codes": ["8750"], "parent": "Wingene"},
-    
-    {"name": "Roeselare", "slug": "roeselare", "postal_codes": ["8800"], "parent": null},
-    {"name": "Beveren", "slug": "roeselare", "postal_codes": ["8800"], "parent": "Roeselare"},
-    {"name": "Oekene", "slug": "roeselare", "postal_codes": ["8800"], "parent": "Roeselare"},
-    {"name": "Rumbeke", "slug": "roeselare", "postal_codes": ["8800"], "parent": "Roeselare"},
-    
-    {"name": "Izegem", "slug": "izegem", "postal_codes": ["8870"], "parent": null},
-    {"name": "Emelgem", "slug": "izegem", "postal_codes": ["8870"], "parent": "Izegem"},
-    {"name": "Kachtem", "slug": "izegem", "postal_codes": ["8870"], "parent": "Izegem"},
-    
-    {"name": "Ledegem", "slug": "izegem", "postal_codes": ["8880"], "parent": "Izegem"},
-    {"name": "Rollegem-Kapelle", "slug": "izegem", "postal_codes": ["8880"], "parent": "Izegem"},
-    {"name": "Sint-Eloois-Winkel", "slug": "izegem", "postal_codes": ["8880"], "parent": "Izegem"},
-    
-    {"name": "Lichtervelde", "slug": "lichtervelde", "postal_codes": ["8810"], "parent": null},
-    
-    {"name": "Staden", "slug": "staden", "postal_codes": ["8840"], "parent": null},
-    {"name": "Oostnieuwkerke", "slug": "staden", "postal_codes": ["8840"], "parent": "Staden"},
-    {"name": "Westrozebeke", "slug": "staden", "postal_codes": ["8840"], "parent": "Staden"},
-    
-    {"name": "Ieper", "slug": "ieper", "postal_codes": ["8900"], "parent": null},
-    {"name": "Boezinge", "slug": "ieper", "postal_codes": ["8904"], "parent": "Ieper"},
-    {"name": "Brielen", "slug": "ieper", "postal_codes": ["8900"], "parent": "Ieper"},
-    {"name": "Dikkebus", "slug": "ieper", "postal_codes": ["8900"], "parent": "Ieper"},
-    {"name": "Hollebeke", "slug": "ieper", "postal_codes": ["8902"], "parent": "Ieper"},
-    {"name": "Sint-Jan", "slug": "ieper", "postal_codes": ["8900"], "parent": "Ieper"},
-    {"name": "Voormezele", "slug": "ieper", "postal_codes": ["8902"], "parent": "Ieper"},
-    {"name": "Zillebeke", "slug": "ieper", "postal_codes": ["8902"], "parent": "Ieper"},
-    
-    {"name": "Poperinge", "slug": "poperinge", "postal_codes": ["8970"], "parent": null},
-    {"name": "Krombeke", "slug": "poperinge", "postal_codes": ["8972"], "parent": "Poperinge"},
-    {"name": "Proven", "slug": "poperinge", "postal_codes": ["8972"], "parent": "Poperinge"},
-    {"name": "Reningelst", "slug": "poperinge", "postal_codes": ["8970"], "parent": "Poperinge"},
-    {"name": "Watou", "slug": "poperinge", "postal_codes": ["8978"], "parent": "Poperinge"},
-    
-    {"name": "Wervik", "slug": "wervik", "postal_codes": ["8940"], "parent": null},
-    {"name": "Geluwe", "slug": "wervik", "postal_codes": ["8940"], "parent": "Wervik"},
-    
-    {"name": "Menen", "slug": "menen", "postal_codes": ["8930"], "parent": null},
-    {"name": "Lauwe", "slug": "menen", "postal_codes": ["8930"], "parent": "Menen"},
-    {"name": "Rekkem", "slug": "menen", "postal_codes": ["8930"], "parent": "Menen"},
-    
-    {"name": "Beernem", "slug": "beernem", "postal_codes": ["8730"], "parent": null},
-    {"name": "Blankenberge", "slug": "blankenberge", "postal_codes": ["8370"], "parent": null},
-    {"name": "Torhout", "slug": "torhout", "postal_codes": ["8820"], "parent": null},
-    {"name": "Waregem", "slug": "waregem", "postal_codes": ["8790"], "parent": null},
-    {"name": "Anzegem", "slug": "anzegem", "postal_codes": ["8570"], "parent": null},
-    {"name": "Ardooie", "slug": "ardooie", "postal_codes": ["8850"], "parent": null},
-    {"name": "Kortemark", "slug": "kortemark", "postal_codes": ["8610"], "parent": null},
-    {"name": "Moorslede", "slug": "moorslede", "postal_codes": ["8890"], "parent": null}
+    {
+      "name": "Aalbeke",
+      "slug": "kortrijk",
+      "postal_codes": [
+        "8511"
+      ],
+      "parent": "Kortrijk"
+    },
+    {
+      "name": "Aarsele",
+      "slug": "tielt",
+      "postal_codes": [
+        "8700"
+      ],
+      "parent": "Tielt"
+    },
+    {
+      "name": "Aartrijke",
+      "slug": "zedelgem",
+      "postal_codes": [
+        "8211"
+      ],
+      "parent": "Zedelgem"
+    },
+    {
+      "name": "Adinkerke",
+      "slug": "de-panne",
+      "postal_codes": [
+        "8660"
+      ],
+      "parent": "De Panne"
+    },
+    {
+      "name": "Alveringem",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8690"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Anzegem",
+      "slug": "anzegem",
+      "postal_codes": [
+        "8570"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Ardooie",
+      "slug": "ardooie",
+      "postal_codes": [
+        "8850"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Assebroek",
+      "slug": "brugge",
+      "postal_codes": [
+        "8310"
+      ],
+      "parent": "Brugge"
+    },
+    {
+      "name": "Avekapelle",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Avelgem",
+      "slug": "avelgem",
+      "postal_codes": [
+        "8580"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Bavikhove",
+      "slug": "harelbeke",
+      "postal_codes": [
+        "8531"
+      ],
+      "parent": "Harelbeke"
+    },
+    {
+      "name": "Beernem",
+      "slug": "beernem",
+      "postal_codes": [
+        "8730"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Beerst",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Bekegem",
+      "slug": "ichtegem",
+      "postal_codes": [
+        "8480"
+      ],
+      "parent": "Ichtegem"
+    },
+    {
+      "name": "Bellegem",
+      "slug": "kortrijk",
+      "postal_codes": [
+        "8510"
+      ],
+      "parent": "Kortrijk"
+    },
+    {
+      "name": "Beselare",
+      "slug": "zonnebeke",
+      "postal_codes": [
+        "8980"
+      ],
+      "parent": "Zonnebeke"
+    },
+    {
+      "name": "Beveren",
+      "slug": "waregem",
+      "postal_codes": [
+        "8791"
+      ],
+      "parent": "Waregem"
+    },
+    {
+      "name": "Beveren",
+      "slug": "roeselare",
+      "postal_codes": [
+        "8800"
+      ],
+      "parent": "Roeselare"
+    },
+    {
+      "name": "Beveren-aan-de-IJzer",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8691"
+      ],
+      "parent": "Alveringem"
+    },
+    {
+      "name": "Bikschote",
+      "slug": "langemark",
+      "postal_codes": [
+        "8920"
+      ],
+      "parent": "Langemark-Poelkapelle"
+    },
+    {
+      "name": "Bissegem",
+      "slug": "kortrijk",
+      "postal_codes": [
+        "8501"
+      ],
+      "parent": "Kortrijk"
+    },
+    {
+      "name": "Blankenberge",
+      "slug": "blankenberge",
+      "postal_codes": [
+        "8370"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Boezinge",
+      "slug": "ieper",
+      "postal_codes": [
+        "8904"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Booitshoeke",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Bossuit",
+      "slug": "avelgem",
+      "postal_codes": [
+        "8583"
+      ],
+      "parent": "Avelgem"
+    },
+    {
+      "name": "Bovekerke",
+      "slug": "koekelare",
+      "postal_codes": [
+        "8680"
+      ],
+      "parent": "Koekelare"
+    },
+    {
+      "name": "Bredene",
+      "slug": "bredene",
+      "postal_codes": [
+        "8450"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Brielen",
+      "slug": "ieper",
+      "postal_codes": [
+        "8900"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Brugge",
+      "slug": "brugge",
+      "postal_codes": [
+        "8000"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Bulskamp",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Dadizele",
+      "slug": "moorslede",
+      "postal_codes": [
+        "8890"
+      ],
+      "parent": "Moorslede"
+    },
+    {
+      "name": "Damme",
+      "slug": "damme",
+      "postal_codes": [
+        "8340"
+      ],
+      "parent": null
+    },
+    {
+      "name": "De Haan",
+      "slug": "de-haan",
+      "postal_codes": [
+        "8420"
+      ],
+      "parent": null
+    },
+    {
+      "name": "De Moeren",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "De Panne",
+      "slug": "de-panne",
+      "postal_codes": [
+        "8660"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Deerlijk",
+      "slug": "deerlijk",
+      "postal_codes": [
+        "8540"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Dentergem",
+      "slug": "dentergem",
+      "postal_codes": [
+        "8720"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Desselgem",
+      "slug": "waregem",
+      "postal_codes": [
+        "8792"
+      ],
+      "parent": "Waregem"
+    },
+    {
+      "name": "Dikkebus",
+      "slug": "ieper",
+      "postal_codes": [
+        "8900"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Diksmuide",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Dranouter",
+      "slug": "heuvelland",
+      "postal_codes": [
+        "8951"
+      ],
+      "parent": "Heuvelland"
+    },
+    {
+      "name": "Driekapellen",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Dudzele",
+      "slug": "brugge",
+      "postal_codes": [
+        "8380"
+      ],
+      "parent": "Brugge"
+    },
+    {
+      "name": "Eernegem",
+      "slug": "ichtegem",
+      "postal_codes": [
+        "8480"
+      ],
+      "parent": "Ichtegem"
+    },
+    {
+      "name": "Egem",
+      "slug": "pittem",
+      "postal_codes": [
+        "8740"
+      ],
+      "parent": "Pittem"
+    },
+    {
+      "name": "Eggewaartskapelle",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Elverdinge",
+      "slug": "ieper",
+      "postal_codes": [
+        "8906"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Emelgem",
+      "slug": "izegem",
+      "postal_codes": [
+        "8870"
+      ],
+      "parent": "Izegem"
+    },
+    {
+      "name": "Esen",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Ettelgem",
+      "slug": "oudenburg",
+      "postal_codes": [
+        "8460"
+      ],
+      "parent": "Oudenburg"
+    },
+    {
+      "name": "Geluveld",
+      "slug": "zonnebeke",
+      "postal_codes": [
+        "8980"
+      ],
+      "parent": "Zonnebeke"
+    },
+    {
+      "name": "Geluwe",
+      "slug": "wervik",
+      "postal_codes": [
+        "8940"
+      ],
+      "parent": "Wervik"
+    },
+    {
+      "name": "Gijverinkhove",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8691"
+      ],
+      "parent": "Alveringem"
+    },
+    {
+      "name": "Gijzelbrechtegem",
+      "slug": "anzegem",
+      "postal_codes": [
+        "8570"
+      ],
+      "parent": "Anzegem"
+    },
+    {
+      "name": "Gistel",
+      "slug": "gistel",
+      "postal_codes": [
+        "8470"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Gits",
+      "slug": "hooglede",
+      "postal_codes": [
+        "8830"
+      ],
+      "parent": "Hooglede"
+    },
+    {
+      "name": "Gullegem",
+      "slug": "wevelgem",
+      "postal_codes": [
+        "8560"
+      ],
+      "parent": "Wevelgem"
+    },
+    {
+      "name": "Handzame",
+      "slug": "kortemark",
+      "postal_codes": [
+        "8610"
+      ],
+      "parent": "Kortemark"
+    },
+    {
+      "name": "Harelbeke",
+      "slug": "harelbeke",
+      "postal_codes": [
+        "8530"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Heestert",
+      "slug": "zwevegem",
+      "postal_codes": [
+        "8551"
+      ],
+      "parent": "Zwevegem"
+    },
+    {
+      "name": "Heist-aan-Zee",
+      "slug": "knokke",
+      "postal_codes": [
+        "8301"
+      ],
+      "parent": "Knokke-Heist"
+    },
+    {
+      "name": "Helkijn",
+      "slug": "spiere",
+      "postal_codes": [
+        "8587"
+      ],
+      "parent": "Spiere-Helkijn"
+    },
+    {
+      "name": "Hertsberge",
+      "slug": "oostkamp",
+      "postal_codes": [
+        "8020"
+      ],
+      "parent": "Oostkamp"
+    },
+    {
+      "name": "Heule",
+      "slug": "kortrijk",
+      "postal_codes": [
+        "8501"
+      ],
+      "parent": "Kortrijk"
+    },
+    {
+      "name": "Hoeke",
+      "slug": "damme",
+      "postal_codes": [
+        "8340"
+      ],
+      "parent": "Damme"
+    },
+    {
+      "name": "Hollebeke",
+      "slug": "ieper",
+      "postal_codes": [
+        "8902"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Hooglede",
+      "slug": "hooglede",
+      "postal_codes": [
+        "8830"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Hoogstade",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8690"
+      ],
+      "parent": "Alveringem"
+    },
+    {
+      "name": "Houtave",
+      "slug": "zuienkerke",
+      "postal_codes": [
+        "8377"
+      ],
+      "parent": "Zuienkerke"
+    },
+    {
+      "name": "Houtem",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Houthulst",
+      "slug": "houthulst",
+      "postal_codes": [
+        "8650"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Hulste",
+      "slug": "harelbeke",
+      "postal_codes": [
+        "8531"
+      ],
+      "parent": "Harelbeke"
+    },
+    {
+      "name": "Ichtegem",
+      "slug": "ichtegem",
+      "postal_codes": [
+        "8480"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Ieper",
+      "slug": "ieper",
+      "postal_codes": [
+        "8900"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Ingelmunster",
+      "slug": "ingelmunster",
+      "postal_codes": [
+        "8770"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Ingooigem",
+      "slug": "anzegem",
+      "postal_codes": [
+        "8570"
+      ],
+      "parent": "Anzegem"
+    },
+    {
+      "name": "Izegem",
+      "slug": "izegem",
+      "postal_codes": [
+        "8870"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Izenberge",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8691"
+      ],
+      "parent": "Alveringem"
+    },
+    {
+      "name": "Jabbeke",
+      "slug": "jabbeke",
+      "postal_codes": [
+        "8490"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Kaaskerke",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Kachtem",
+      "slug": "izegem",
+      "postal_codes": [
+        "8870"
+      ],
+      "parent": "Izegem"
+    },
+    {
+      "name": "Kanegem",
+      "slug": "tielt",
+      "postal_codes": [
+        "8700"
+      ],
+      "parent": "Tielt"
+    },
+    {
+      "name": "Kaster",
+      "slug": "anzegem",
+      "postal_codes": [
+        "8572"
+      ],
+      "parent": "Anzegem"
+    },
+    {
+      "name": "Keiem",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Kemmel",
+      "slug": "heuvelland",
+      "postal_codes": [
+        "8956"
+      ],
+      "parent": "Heuvelland"
+    },
+    {
+      "name": "Kerkhove",
+      "slug": "avelgem",
+      "postal_codes": [
+        "8581"
+      ],
+      "parent": "Avelgem"
+    },
+    {
+      "name": "Klemskerke",
+      "slug": "de-haan",
+      "postal_codes": [
+        "8420"
+      ],
+      "parent": "De Haan"
+    },
+    {
+      "name": "Klerken",
+      "slug": "houthulst",
+      "postal_codes": [
+        "8650"
+      ],
+      "parent": "Houthulst"
+    },
+    {
+      "name": "Knokke",
+      "slug": "knokke",
+      "postal_codes": [
+        "8300"
+      ],
+      "parent": "Knokke-Heist"
+    },
+    {
+      "name": "Koekelare",
+      "slug": "koekelare",
+      "postal_codes": [
+        "8680"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Koksijde",
+      "slug": "koksijde",
+      "postal_codes": [
+        "8670"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Kooigem",
+      "slug": "kortrijk",
+      "postal_codes": [
+        "8510"
+      ],
+      "parent": "Kortrijk"
+    },
+    {
+      "name": "Koolkerke",
+      "slug": "brugge",
+      "postal_codes": [
+        "8000"
+      ],
+      "parent": "Brugge"
+    },
+    {
+      "name": "Koolskamp",
+      "slug": "ardooie",
+      "postal_codes": [
+        "8851"
+      ],
+      "parent": "Ardooie"
+    },
+    {
+      "name": "Kortemark",
+      "slug": "kortemark",
+      "postal_codes": [
+        "8610"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Kortrijk",
+      "slug": "kortrijk",
+      "postal_codes": [
+        "8500"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Krombeke",
+      "slug": "poperinge",
+      "postal_codes": [
+        "8972"
+      ],
+      "parent": "Poperinge"
+    },
+    {
+      "name": "Kuurne",
+      "slug": "kuurne",
+      "postal_codes": [
+        "8520"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Lampernisse",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Langemark",
+      "slug": "langemark",
+      "postal_codes": [
+        "8920"
+      ],
+      "parent": "Langemark-Poelkapelle"
+    },
+    {
+      "name": "Lapscheure",
+      "slug": "damme",
+      "postal_codes": [
+        "8340"
+      ],
+      "parent": "Damme"
+    },
+    {
+      "name": "Lauwe",
+      "slug": "menen",
+      "postal_codes": [
+        "8930"
+      ],
+      "parent": "Menen"
+    },
+    {
+      "name": "Ledegem",
+      "slug": "ledegem",
+      "postal_codes": [
+        "8880"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Leffinge",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8432"
+      ],
+      "parent": "Middelkerke"
+    },
+    {
+      "name": "Leisele",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8691"
+      ],
+      "parent": "Alveringem"
+    },
+    {
+      "name": "Leke",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Lendelede",
+      "slug": "lendelede",
+      "postal_codes": [
+        "8860"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Lichtervelde",
+      "slug": "lichtervelde",
+      "postal_codes": [
+        "8810"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Lissewege",
+      "slug": "brugge",
+      "postal_codes": [
+        "8380"
+      ],
+      "parent": "Brugge"
+    },
+    {
+      "name": "Lo",
+      "slug": "lo",
+      "postal_codes": [
+        "8647"
+      ],
+      "parent": "Lo-Reninge"
+    },
+    {
+      "name": "Loker",
+      "slug": "heuvelland",
+      "postal_codes": [
+        "8958"
+      ],
+      "parent": "Heuvelland"
+    },
+    {
+      "name": "Lombardsijde",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8434"
+      ],
+      "parent": "Middelkerke"
+    },
+    {
+      "name": "Loppem",
+      "slug": "zedelgem",
+      "postal_codes": [
+        "8210"
+      ],
+      "parent": "Zedelgem"
+    },
+    {
+      "name": "Mannekensvere",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8433"
+      ],
+      "parent": "Middelkerke"
+    },
+    {
+      "name": "Marke",
+      "slug": "kortrijk",
+      "postal_codes": [
+        "8510"
+      ],
+      "parent": "Kortrijk"
+    },
+    {
+      "name": "Markegem",
+      "slug": "dentergem",
+      "postal_codes": [
+        "8720"
+      ],
+      "parent": "Dentergem"
+    },
+    {
+      "name": "Meetkerke",
+      "slug": "zuienkerke",
+      "postal_codes": [
+        "8377"
+      ],
+      "parent": "Zuienkerke"
+    },
+    {
+      "name": "Menen",
+      "slug": "menen",
+      "postal_codes": [
+        "8930"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Merkem",
+      "slug": "houthulst",
+      "postal_codes": [
+        "8650"
+      ],
+      "parent": "Houthulst"
+    },
+    {
+      "name": "Mesen",
+      "slug": "mesen",
+      "postal_codes": [
+        "8957"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Meulebeke",
+      "slug": "tielt",
+      "postal_codes": [
+        "8760"
+      ],
+      "parent": "Tielt"
+    },
+    {
+      "name": "Middelkerke",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8430"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Moen",
+      "slug": "zwevegem",
+      "postal_codes": [
+        "8552"
+      ],
+      "parent": "Zwevegem"
+    },
+    {
+      "name": "Moere",
+      "slug": "gistel",
+      "postal_codes": [
+        "8470"
+      ],
+      "parent": "Gistel"
+    },
+    {
+      "name": "Moerkerke",
+      "slug": "damme",
+      "postal_codes": [
+        "8340"
+      ],
+      "parent": "Damme"
+    },
+    {
+      "name": "Moorsele",
+      "slug": "wevelgem",
+      "postal_codes": [
+        "8560"
+      ],
+      "parent": "Wevelgem"
+    },
+    {
+      "name": "Moorslede",
+      "slug": "moorslede",
+      "postal_codes": [
+        "8890"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Nieuwkapelle",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Nieuwkerke",
+      "slug": "heuvelland",
+      "postal_codes": [
+        "8950"
+      ],
+      "parent": "Heuvelland"
+    },
+    {
+      "name": "Nieuwmunster",
+      "slug": "zuienkerke",
+      "postal_codes": [
+        "8377"
+      ],
+      "parent": "Zuienkerke"
+    },
+    {
+      "name": "Nieuwpoort",
+      "slug": "nieuwpoort",
+      "postal_codes": [
+        "8620"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Noordschote",
+      "slug": "lo",
+      "postal_codes": [
+        "8647"
+      ],
+      "parent": "Lo-Reninge"
+    },
+    {
+      "name": "Oedelem",
+      "slug": "beernem",
+      "postal_codes": [
+        "8730"
+      ],
+      "parent": "Beernem"
+    },
+    {
+      "name": "Oekene",
+      "slug": "roeselare",
+      "postal_codes": [
+        "8800"
+      ],
+      "parent": "Roeselare"
+    },
+    {
+      "name": "Oeren",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8690"
+      ],
+      "parent": "Alveringem"
+    },
+    {
+      "name": "Oeselgem",
+      "slug": "dentergem",
+      "postal_codes": [
+        "8720"
+      ],
+      "parent": "Dentergem"
+    },
+    {
+      "name": "Ooigem",
+      "slug": "wielsbeke",
+      "postal_codes": [
+        "8710"
+      ],
+      "parent": "Wielsbeke"
+    },
+    {
+      "name": "Oostduinkerke",
+      "slug": "koksijde",
+      "postal_codes": [
+        "8670"
+      ],
+      "parent": "Koksijde"
+    },
+    {
+      "name": "Oostende",
+      "slug": "oostende",
+      "postal_codes": [
+        "8400"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Oostkamp",
+      "slug": "oostkamp",
+      "postal_codes": [
+        "8020"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Oostkerke",
+      "slug": "damme",
+      "postal_codes": [
+        "8340"
+      ],
+      "parent": "Damme"
+    },
+    {
+      "name": "Oostkerke",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Oostnieuwkerke",
+      "slug": "staden",
+      "postal_codes": [
+        "8840"
+      ],
+      "parent": "Staden"
+    },
+    {
+      "name": "Oostrozebeke",
+      "slug": "oostrozebeke",
+      "postal_codes": [
+        "8780"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Oostvleteren",
+      "slug": "vleteren",
+      "postal_codes": [
+        "8640"
+      ],
+      "parent": "Vleteren"
+    },
+    {
+      "name": "Otegem",
+      "slug": "zwevegem",
+      "postal_codes": [
+        "8553"
+      ],
+      "parent": "Zwevegem"
+    },
+    {
+      "name": "Oudekapelle",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Oudenburg",
+      "slug": "oudenburg",
+      "postal_codes": [
+        "8460"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Outrijve",
+      "slug": "avelgem",
+      "postal_codes": [
+        "8582"
+      ],
+      "parent": "Avelgem"
+    },
+    {
+      "name": "Passendale",
+      "slug": "zonnebeke",
+      "postal_codes": [
+        "8980"
+      ],
+      "parent": "Zonnebeke"
+    },
+    {
+      "name": "Pervijze",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Pittem",
+      "slug": "pittem",
+      "postal_codes": [
+        "8740"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Poelkapelle",
+      "slug": "langemark",
+      "postal_codes": [
+        "8920"
+      ],
+      "parent": "Langemark-Poelkapelle"
+    },
+    {
+      "name": "Pollinkhove",
+      "slug": "lo",
+      "postal_codes": [
+        "8647"
+      ],
+      "parent": "Lo-Reninge"
+    },
+    {
+      "name": "Poperinge",
+      "slug": "poperinge",
+      "postal_codes": [
+        "8970"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Proven",
+      "slug": "poperinge",
+      "postal_codes": [
+        "8972"
+      ],
+      "parent": "Poperinge"
+    },
+    {
+      "name": "Ramskapelle",
+      "slug": "knokke",
+      "postal_codes": [
+        "8301"
+      ],
+      "parent": "Knokke-Heist"
+    },
+    {
+      "name": "Ramskapelle",
+      "slug": "nieuwpoort",
+      "postal_codes": [
+        "8620"
+      ],
+      "parent": "Nieuwpoort"
+    },
+    {
+      "name": "Rekkem",
+      "slug": "menen",
+      "postal_codes": [
+        "8930"
+      ],
+      "parent": "Menen"
+    },
+    {
+      "name": "Reninge",
+      "slug": "lo",
+      "postal_codes": [
+        "8647"
+      ],
+      "parent": "Lo-Reninge"
+    },
+    {
+      "name": "Reningelst",
+      "slug": "poperinge",
+      "postal_codes": [
+        "8970"
+      ],
+      "parent": "Poperinge"
+    },
+    {
+      "name": "Roesbrugge-Haringe",
+      "slug": "poperinge",
+      "postal_codes": [
+        "8972"
+      ],
+      "parent": "Poperinge"
+    },
+    {
+      "name": "Roeselare",
+      "slug": "roeselare",
+      "postal_codes": [
+        "8800"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Roksem",
+      "slug": "oudenburg",
+      "postal_codes": [
+        "8460"
+      ],
+      "parent": "Oudenburg"
+    },
+    {
+      "name": "Rollegem",
+      "slug": "kortrijk",
+      "postal_codes": [
+        "8510"
+      ],
+      "parent": "Kortrijk"
+    },
+    {
+      "name": "Rollegem-Kapelle",
+      "slug": "ledegem",
+      "postal_codes": [
+        "8880"
+      ],
+      "parent": "Ledegem"
+    },
+    {
+      "name": "Ruddervoorde",
+      "slug": "oostkamp",
+      "postal_codes": [
+        "8020"
+      ],
+      "parent": "Oostkamp"
+    },
+    {
+      "name": "Ruiselede",
+      "slug": "wingene",
+      "postal_codes": [
+        "8755"
+      ],
+      "parent": "Wingene"
+    },
+    {
+      "name": "Rumbeke",
+      "slug": "roeselare",
+      "postal_codes": [
+        "8800"
+      ],
+      "parent": "Roeselare"
+    },
+    {
+      "name": "Schore",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8433"
+      ],
+      "parent": "Middelkerke"
+    },
+    {
+      "name": "Schuiferskapelle",
+      "slug": "tielt",
+      "postal_codes": [
+        "8700"
+      ],
+      "parent": "Tielt"
+    },
+    {
+      "name": "Sijsele",
+      "slug": "damme",
+      "postal_codes": [
+        "8340"
+      ],
+      "parent": "Damme"
+    },
+    {
+      "name": "Sint-Andries",
+      "slug": "brugge",
+      "postal_codes": [
+        "8200"
+      ],
+      "parent": "Brugge"
+    },
+    {
+      "name": "Sint-Baafs-Vijve",
+      "slug": "wielsbeke",
+      "postal_codes": [
+        "8710"
+      ],
+      "parent": "Wielsbeke"
+    },
+    {
+      "name": "Sint-Denijs",
+      "slug": "zwevegem",
+      "postal_codes": [
+        "8554"
+      ],
+      "parent": "Zwevegem"
+    },
+    {
+      "name": "Sint-Eloois-Vijve",
+      "slug": "waregem",
+      "postal_codes": [
+        "8793"
+      ],
+      "parent": "Waregem"
+    },
+    {
+      "name": "Sint-Eloois-Winkel",
+      "slug": "ledegem",
+      "postal_codes": [
+        "8880"
+      ],
+      "parent": "Ledegem"
+    },
+    {
+      "name": "Sint-Jacobs-Kapelle",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Sint-Jan",
+      "slug": "ieper",
+      "postal_codes": [
+        "8900"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Sint-Joris",
+      "slug": "nieuwpoort",
+      "postal_codes": [
+        "8620"
+      ],
+      "parent": "Nieuwpoort"
+    },
+    {
+      "name": "Sint-Joris",
+      "slug": "beernem",
+      "postal_codes": [
+        "8730"
+      ],
+      "parent": "Beernem"
+    },
+    {
+      "name": "Sint-Kruis",
+      "slug": "brugge",
+      "postal_codes": [
+        "8310"
+      ],
+      "parent": "Brugge"
+    },
+    {
+      "name": "Sint-Michiels",
+      "slug": "brugge",
+      "postal_codes": [
+        "8200"
+      ],
+      "parent": "Brugge"
+    },
+    {
+      "name": "Sint-Pieters-Kapelle",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8433"
+      ],
+      "parent": "Middelkerke"
+    },
+    {
+      "name": "Sint-Rijkers",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8690"
+      ],
+      "parent": "Alveringem"
+    },
+    {
+      "name": "Slijpe",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8433"
+      ],
+      "parent": "Middelkerke"
+    },
+    {
+      "name": "Snaaskerke",
+      "slug": "gistel",
+      "postal_codes": [
+        "8470"
+      ],
+      "parent": "Gistel"
+    },
+    {
+      "name": "Snellegem",
+      "slug": "jabbeke",
+      "postal_codes": [
+        "8490"
+      ],
+      "parent": "Jabbeke"
+    },
+    {
+      "name": "Spiere",
+      "slug": "spiere",
+      "postal_codes": [
+        "8587"
+      ],
+      "parent": "Spiere-Helkijn"
+    },
+    {
+      "name": "Staden",
+      "slug": "staden",
+      "postal_codes": [
+        "8840"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Stalhille",
+      "slug": "jabbeke",
+      "postal_codes": [
+        "8490"
+      ],
+      "parent": "Jabbeke"
+    },
+    {
+      "name": "Stavele",
+      "slug": "alveringem",
+      "postal_codes": [
+        "8691"
+      ],
+      "parent": "Alveringem"
+    },
+    {
+      "name": "Steenkerke",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Stene",
+      "slug": "oostende",
+      "postal_codes": [
+        "8400"
+      ],
+      "parent": "Oostende"
+    },
+    {
+      "name": "Stuivekenskerke",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Tiegem",
+      "slug": "anzegem",
+      "postal_codes": [
+        "8573"
+      ],
+      "parent": "Anzegem"
+    },
+    {
+      "name": "Tielt",
+      "slug": "tielt",
+      "postal_codes": [
+        "8700"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Torhout",
+      "slug": "torhout",
+      "postal_codes": [
+        "8820"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Uitkerke",
+      "slug": "blankenberge",
+      "postal_codes": [
+        "8370"
+      ],
+      "parent": "Blankenberge"
+    },
+    {
+      "name": "Varsenare",
+      "slug": "jabbeke",
+      "postal_codes": [
+        "8490"
+      ],
+      "parent": "Jabbeke"
+    },
+    {
+      "name": "Veldegem",
+      "slug": "zedelgem",
+      "postal_codes": [
+        "8210"
+      ],
+      "parent": "Zedelgem"
+    },
+    {
+      "name": "Veurne",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Vichte",
+      "slug": "anzegem",
+      "postal_codes": [
+        "8570"
+      ],
+      "parent": "Anzegem"
+    },
+    {
+      "name": "Vinkem",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Vladslo",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Vlamertinge",
+      "slug": "ieper",
+      "postal_codes": [
+        "8908"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Vlissegem",
+      "slug": "de-haan",
+      "postal_codes": [
+        "8421"
+      ],
+      "parent": "De Haan"
+    },
+    {
+      "name": "Voormezele",
+      "slug": "ieper",
+      "postal_codes": [
+        "8902"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Waardamme",
+      "slug": "oostkamp",
+      "postal_codes": [
+        "8020"
+      ],
+      "parent": "Oostkamp"
+    },
+    {
+      "name": "Waarmaarde",
+      "slug": "avelgem",
+      "postal_codes": [
+        "8581"
+      ],
+      "parent": "Avelgem"
+    },
+    {
+      "name": "Wakken",
+      "slug": "dentergem",
+      "postal_codes": [
+        "8720"
+      ],
+      "parent": "Dentergem"
+    },
+    {
+      "name": "Waregem",
+      "slug": "waregem",
+      "postal_codes": [
+        "8790"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Watou",
+      "slug": "poperinge",
+      "postal_codes": [
+        "8978"
+      ],
+      "parent": "Poperinge"
+    },
+    {
+      "name": "Wenduine",
+      "slug": "de-haan",
+      "postal_codes": [
+        "8420"
+      ],
+      "parent": "De Haan"
+    },
+    {
+      "name": "Werken",
+      "slug": "kortemark",
+      "postal_codes": [
+        "8610"
+      ],
+      "parent": "Kortemark"
+    },
+    {
+      "name": "Wervik",
+      "slug": "wervik",
+      "postal_codes": [
+        "8940"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Westende",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8434"
+      ],
+      "parent": "Middelkerke"
+    },
+    {
+      "name": "Westkapelle",
+      "slug": "knokke",
+      "postal_codes": [
+        "8300"
+      ],
+      "parent": "Knokke-Heist"
+    },
+    {
+      "name": "Westkerke",
+      "slug": "oudenburg",
+      "postal_codes": [
+        "8460"
+      ],
+      "parent": "Oudenburg"
+    },
+    {
+      "name": "Westouter",
+      "slug": "heuvelland",
+      "postal_codes": [
+        "8954"
+      ],
+      "parent": "Heuvelland"
+    },
+    {
+      "name": "Westrozebeke",
+      "slug": "staden",
+      "postal_codes": [
+        "8840"
+      ],
+      "parent": "Staden"
+    },
+    {
+      "name": "Westvleteren",
+      "slug": "vleteren",
+      "postal_codes": [
+        "8640"
+      ],
+      "parent": "Vleteren"
+    },
+    {
+      "name": "Wevelgem",
+      "slug": "wevelgem",
+      "postal_codes": [
+        "8560"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Wielsbeke",
+      "slug": "wielsbeke",
+      "postal_codes": [
+        "8710"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Wijtschate",
+      "slug": "heuvelland",
+      "postal_codes": [
+        "8953"
+      ],
+      "parent": "Heuvelland"
+    },
+    {
+      "name": "Wilskerke",
+      "slug": "middelkerke",
+      "postal_codes": [
+        "8431"
+      ],
+      "parent": "Middelkerke"
+    },
+    {
+      "name": "Wingene",
+      "slug": "wingene",
+      "postal_codes": [
+        "8750"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Woesten",
+      "slug": "vleteren",
+      "postal_codes": [
+        "8640"
+      ],
+      "parent": "Vleteren"
+    },
+    {
+      "name": "Woumen",
+      "slug": "diksmuide",
+      "postal_codes": [
+        "8600"
+      ],
+      "parent": "Diksmuide"
+    },
+    {
+      "name": "Wulpen",
+      "slug": "koksijde",
+      "postal_codes": [
+        "8670"
+      ],
+      "parent": "Koksijde"
+    },
+    {
+      "name": "Wulvergem",
+      "slug": "heuvelland",
+      "postal_codes": [
+        "8952"
+      ],
+      "parent": "Heuvelland"
+    },
+    {
+      "name": "Wulveringem",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Zande",
+      "slug": "koekelare",
+      "postal_codes": [
+        "8680"
+      ],
+      "parent": "Koekelare"
+    },
+    {
+      "name": "Zandvoorde",
+      "slug": "oostende",
+      "postal_codes": [
+        "8400"
+      ],
+      "parent": "Oostende"
+    },
+    {
+      "name": "Zandvoorde",
+      "slug": "zonnebeke",
+      "postal_codes": [
+        "8980"
+      ],
+      "parent": "Zonnebeke"
+    },
+    {
+      "name": "Zarren",
+      "slug": "kortemark",
+      "postal_codes": [
+        "8610"
+      ],
+      "parent": "Kortemark"
+    },
+    {
+      "name": "Zedelgem",
+      "slug": "zedelgem",
+      "postal_codes": [
+        "8210"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Zeebrugge",
+      "slug": "brugge",
+      "postal_codes": [
+        "8380"
+      ],
+      "parent": "Brugge"
+    },
+    {
+      "name": "Zerkegem",
+      "slug": "jabbeke",
+      "postal_codes": [
+        "8490"
+      ],
+      "parent": "Jabbeke"
+    },
+    {
+      "name": "Zevekote",
+      "slug": "gistel",
+      "postal_codes": [
+        "8470"
+      ],
+      "parent": "Gistel"
+    },
+    {
+      "name": "Zillebeke",
+      "slug": "ieper",
+      "postal_codes": [
+        "8902"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Zonnebeke",
+      "slug": "zonnebeke",
+      "postal_codes": [
+        "8980"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Zoutenaaie",
+      "slug": "veurne",
+      "postal_codes": [
+        "8630"
+      ],
+      "parent": "Veurne"
+    },
+    {
+      "name": "Zuidschote",
+      "slug": "ieper",
+      "postal_codes": [
+        "8904"
+      ],
+      "parent": "Ieper"
+    },
+    {
+      "name": "Zuienkerke",
+      "slug": "zuienkerke",
+      "postal_codes": [
+        "8377"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Zwevegem",
+      "slug": "zwevegem",
+      "postal_codes": [
+        "8550"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Zwevezele",
+      "slug": "wingene",
+      "postal_codes": [
+        "8750"
+      ],
+      "parent": "Wingene"
+    }
   ],
   "oost-vlaanderen": [
-    {"name": "Gent", "slug": "gent", "postal_codes": ["9000"], "parent": null},
-    {"name": "Afsnee", "slug": "gent", "postal_codes": ["9051"], "parent": "Gent"},
-    {"name": "Desteldonk", "slug": "gent", "postal_codes": ["9042"], "parent": "Gent"},
-    {"name": "Drongen", "slug": "gent", "postal_codes": ["9031"], "parent": "Gent"},
-    {"name": "Gentbrugge", "slug": "gent", "postal_codes": ["9050"], "parent": "Gent"},
-    {"name": "Ledeberg", "slug": "gent", "postal_codes": ["9050"], "parent": "Gent"},
-    {"name": "Mariakerke", "slug": "gent", "postal_codes": ["9030"], "parent": "Gent"},
-    {"name": "Mendonk", "slug": "gent", "postal_codes": ["9042"], "parent": "Gent"},
-    {"name": "Oostakker", "slug": "gent", "postal_codes": ["9041"], "parent": "Gent"},
-    {"name": "Sint-Amandsberg", "slug": "gent", "postal_codes": ["9040"], "parent": "Gent"},
-    {"name": "Sint-Denijs-Westrem", "slug": "gent", "postal_codes": ["9051"], "parent": "Gent"},
-    {"name": "Wondelgem", "slug": "gent", "postal_codes": ["9032"], "parent": "Gent"},
-    {"name": "Zwijnaarde", "slug": "gent", "postal_codes": ["9052"], "parent": "Gent"},
-    
-    {"name": "Sint-Niklaas", "slug": "sint-niklaas", "postal_codes": ["9100"], "parent": null},
-    {"name": "Belsele", "slug": "sint-niklaas", "postal_codes": ["9111"], "parent": "Sint-Niklaas"},
-    {"name": "Sinaai", "slug": "sint-niklaas", "postal_codes": ["9112"], "parent": "Sint-Niklaas"},
-    
-    {"name": "Lokeren", "slug": "lokeren", "postal_codes": ["9160"], "parent": null},
-    {"name": "Moerbeke", "slug": "lokeren", "postal_codes": ["9180"], "parent": "Lokeren"},
-    
-    {"name": "Waasmunster", "slug": "waasmunster", "postal_codes": ["9250"], "parent": null},
-    
-    {"name": "Stekene", "slug": "sint-niklaas", "postal_codes": ["9190"], "parent": "Sint-Niklaas"},
-    {"name": "Kemzeke", "slug": "sint-niklaas", "postal_codes": ["9190"], "parent": "Sint-Niklaas"},
-    
-    {"name": "Dendermonde", "slug": "dendermonde", "postal_codes": ["9200"], "parent": null},
-    {"name": "Appels", "slug": "dendermonde", "postal_codes": ["9200"], "parent": "Dendermonde"},
-    {"name": "Baasrode", "slug": "dendermonde", "postal_codes": ["9200"], "parent": "Dendermonde"},
-    {"name": "Grembergen", "slug": "dendermonde", "postal_codes": ["9200"], "parent": "Dendermonde"},
-    {"name": "Mespelare", "slug": "dendermonde", "postal_codes": ["9200"], "parent": "Dendermonde"},
-    {"name": "Oudegem", "slug": "dendermonde", "postal_codes": ["9200"], "parent": "Dendermonde"},
-    {"name": "Schoonaarde", "slug": "dendermonde", "postal_codes": ["9200"], "parent": "Dendermonde"},
-    
-    {"name": "Lebbeke", "slug": "lebbeke", "postal_codes": ["9280"], "parent": null},
-    {"name": "Wieze", "slug": "lebbeke", "postal_codes": ["9280"], "parent": "Lebbeke"},
-    
-    {"name": "Buggenhout", "slug": "dendermonde", "postal_codes": ["9255"], "parent": "Dendermonde"},
-    {"name": "Opdorp", "slug": "dendermonde", "postal_codes": ["9255"], "parent": "Dendermonde"},
-    
-    {"name": "Aalst", "slug": "aalst", "postal_codes": ["9300"], "parent": null},
-    {"name": "Baardegem", "slug": "aalst", "postal_codes": ["9310"], "parent": "Aalst"},
-    {"name": "Erembodegem", "slug": "aalst", "postal_codes": ["9320"], "parent": "Aalst"},
-    {"name": "Gijzegem", "slug": "aalst", "postal_codes": ["9308"], "parent": "Aalst"},
-    {"name": "Herdersem", "slug": "aalst", "postal_codes": ["9310"], "parent": "Aalst"},
-    {"name": "Hofstade", "slug": "aalst", "postal_codes": ["9308"], "parent": "Aalst"},
-    {"name": "Meldert", "slug": "aalst", "postal_codes": ["9310"], "parent": "Aalst"},
-    {"name": "Moorsel", "slug": "aalst", "postal_codes": ["9310"], "parent": "Aalst"},
-    {"name": "Nieuwerkerken", "slug": "aalst", "postal_codes": ["9320"], "parent": "Aalst"},
-    
-    {"name": "Erpe-Mere", "slug": "erpe-mere", "postal_codes": ["9420"], "parent": null},
-    {"name": "Erpe", "slug": "erpe-mere", "postal_codes": ["9420"], "parent": "Erpe-Mere"},
-    {"name": "Mere", "slug": "erpe-mere", "postal_codes": ["9420"], "parent": "Erpe-Mere"},
-    {"name": "Ottergem", "slug": "erpe-mere", "postal_codes": ["9420"], "parent": "Erpe-Mere"},
-    {"name": "Burst", "slug": "erpe-mere", "postal_codes": ["9420"], "parent": "Erpe-Mere"},
-    
-    {"name": "Ninove", "slug": "ninove", "postal_codes": ["9400"], "parent": null},
-    {"name": "Denderwindeke", "slug": "ninove", "postal_codes": ["9400"], "parent": "Ninove"},
-    {"name": "Lieferinge", "slug": "ninove", "postal_codes": ["9400"], "parent": "Ninove"},
-    {"name": "Meerbeke", "slug": "ninove", "postal_codes": ["9402"], "parent": "Ninove"},
-    {"name": "Neigem", "slug": "ninove", "postal_codes": ["9403"], "parent": "Ninove"},
-    {"name": "Okegem", "slug": "ninove", "postal_codes": ["9400"], "parent": "Ninove"},
-    {"name": "Pollare", "slug": "ninove", "postal_codes": ["9401"], "parent": "Ninove"},
-    {"name": "Voorde", "slug": "ninove", "postal_codes": ["9400"], "parent": "Ninove"},
-    
-    {"name": "Zottegem", "slug": "zottegem", "postal_codes": ["9620"], "parent": null},
-    {"name": "Elene", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    {"name": "Erwetegem", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    {"name": "Godveerdegem", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    {"name": "Grotenberge", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    {"name": "Leeuwergem", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    {"name": "Oombergen", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    {"name": "Sint-Goriks-Oudenhove", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    {"name": "Strijpen", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    {"name": "Velzeke-Ruddershove", "slug": "zottegem", "postal_codes": ["9620"], "parent": "Zottegem"},
-    
-    {"name": "Geraardsbergen", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": null},
-    {"name": "Goeferdinge", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": "Geraardsbergen"},
-    {"name": "Grimminge", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": "Geraardsbergen"},
-    {"name": "Idegem", "slug": "geraardsbergen", "postal_codes": ["9506"], "parent": "Geraardsbergen"},
-    {"name": "Moerbeke", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": "Geraardsbergen"},
-    {"name": "Nederboelare", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": "Geraardsbergen"},
-    {"name": "Onkerzele", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": "Geraardsbergen"},
-    {"name": "Overboelare", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": "Geraardsbergen"},
-    {"name": "Schendelbeke", "slug": "geraardsbergen", "postal_codes": ["9506"], "parent": "Geraardsbergen"},
-    {"name": "Smeerebbe-Vloerzegem", "slug": "geraardsbergen", "postal_codes": ["9506"], "parent": "Geraardsbergen"},
-    {"name": "Viane", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": "Geraardsbergen"},
-    {"name": "Zarlardinge", "slug": "geraardsbergen", "postal_codes": ["9500"], "parent": "Geraardsbergen"},
-    
-    {"name": "Ronse", "slug": "ronse", "postal_codes": ["9600"], "parent": null},
-    
-    {"name": "Oudenaarde", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": null},
-    {"name": "Eine", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Ename", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Heurne", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Leupegem", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Mater", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Melden", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Mullem", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Nederename", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Volkegem", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    {"name": "Welden", "slug": "oudenaarde", "postal_codes": ["9700"], "parent": "Oudenaarde"},
-    
-    {"name": "Deinze", "slug": "deinze", "postal_codes": ["9800"], "parent": null},
-    {"name": "Astene", "slug": "deinze", "postal_codes": ["9800"], "parent": "Deinze"},
-    {"name": "Bachte-Maria-Leerne", "slug": "deinze", "postal_codes": ["9800"], "parent": "Deinze"},
-    {"name": "Gottem", "slug": "deinze", "postal_codes": ["9800"], "parent": "Deinze"},
-    {"name": "Grammene", "slug": "deinze", "postal_codes": ["9800"], "parent": "Deinze"},
-    {"name": "Meigem", "slug": "deinze", "postal_codes": ["9800"], "parent": "Deinze"},
-    {"name": "Petegem-aan-de-Leie", "slug": "deinze", "postal_codes": ["9800"], "parent": "Deinze"},
-    {"name": "Vinkt", "slug": "deinze", "postal_codes": ["9800"], "parent": "Deinze"},
-    {"name": "Zeveren", "slug": "deinze", "postal_codes": ["9800"], "parent": "Deinze"},
-    
-    {"name": "Nazareth", "slug": "deinze", "postal_codes": ["9810"], "parent": "Deinze"},
-    {"name": "Eke", "slug": "deinze", "postal_codes": ["9810"], "parent": "Deinze"},
-    {"name": "De Pinte", "slug": "deinze", "postal_codes": ["9840"], "parent": "Deinze"},
-    
-    {"name": "Eeklo", "slug": "eeklo", "postal_codes": ["9900"], "parent": null},
-    
-    {"name": "Maldegem", "slug": "maldegem", "postal_codes": ["9990"], "parent": null},
-    {"name": "Adegem", "slug": "maldegem", "postal_codes": ["9991"], "parent": "Maldegem"},
-    {"name": "Middelburg", "slug": "maldegem", "postal_codes": ["9992"], "parent": "Maldegem"},
-    
-    {"name": "Assenede", "slug": "assenede", "postal_codes": ["9960"], "parent": null},
-    {"name": "Boekhoute", "slug": "assenede", "postal_codes": ["9961"], "parent": "Assenede"},
-    {"name": "Bassevelde", "slug": "assenede", "postal_codes": ["9968"], "parent": "Assenede"},
-    {"name": "Oosteeklo", "slug": "assenede", "postal_codes": ["9968"], "parent": "Assenede"},
-    
-    {"name": "Kaprijke", "slug": "kaprijke", "postal_codes": ["9970"], "parent": null},
-    {"name": "Lembeke", "slug": "kaprijke", "postal_codes": ["9971"], "parent": "Kaprijke"},
-    
-    {"name": "Evergem", "slug": "evergem", "postal_codes": ["9940"], "parent": null},
-    {"name": "Ertvelde", "slug": "evergem", "postal_codes": ["9940"], "parent": "Evergem"},
-    {"name": "Kluizen", "slug": "evergem", "postal_codes": ["9940"], "parent": "Evergem"},
-    {"name": "Sleidinge", "slug": "evergem", "postal_codes": ["9940"], "parent": "Evergem"},
-    
-    {"name": "Wetteren", "slug": "wetteren", "postal_codes": ["9230"], "parent": null},
-    {"name": "Lede", "slug": "lede", "postal_codes": ["9340"], "parent": null},
-    {"name": "Merelbeke", "slug": "merelbeke", "postal_codes": ["9820"], "parent": null},
-    {"name": "Beveren", "slug": "beveren", "postal_codes": ["9120"], "parent": null},
-    {"name": "Lochristi", "slug": "lochristi", "postal_codes": ["9080"], "parent": null},
-    {"name": "Destelbergen", "slug": "destelbergen", "postal_codes": ["9070"], "parent": null},
-    {"name": "Nazareth", "slug": "nazareth", "postal_codes": ["9810"], "parent": null},
-    {"name": "Temse", "slug": "temse", "postal_codes": ["9140"], "parent": null},
-    {"name": "Hamme", "slug": "hamme", "postal_codes": ["9220"], "parent": null},
-    {"name": "Sint-Lievens-Houtem", "slug": "sint-lievens-houtem", "postal_codes": ["9520"], "parent": null},
-    {"name": "Zelzate", "slug": "zelzate", "postal_codes": ["9060"], "parent": null}
+    {
+      "name": "Aaigem",
+      "slug": "erpe",
+      "postal_codes": [
+        "9420"
+      ],
+      "parent": "Erpe-Mere"
+    },
+    {
+      "name": "Aalst",
+      "slug": "aalst",
+      "postal_codes": [
+        "9300"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Aalter",
+      "slug": "aalter",
+      "postal_codes": [
+        "9880"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Adegem",
+      "slug": "maldegem",
+      "postal_codes": [
+        "9991"
+      ],
+      "parent": "Maldegem"
+    },
+    {
+      "name": "Afsnee",
+      "slug": "gent",
+      "postal_codes": [
+        "9051"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Appels",
+      "slug": "dendermonde",
+      "postal_codes": [
+        "9200"
+      ],
+      "parent": "Dendermonde"
+    },
+    {
+      "name": "Appelterre-Eichem",
+      "slug": "ninove",
+      "postal_codes": [
+        "9400"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Aspelare",
+      "slug": "ninove",
+      "postal_codes": [
+        "9404"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Asper",
+      "slug": "gavere",
+      "postal_codes": [
+        "9890"
+      ],
+      "parent": "Gavere"
+    },
+    {
+      "name": "Assenede",
+      "slug": "assenede",
+      "postal_codes": [
+        "9960"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Astene",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Baaigem",
+      "slug": "gavere",
+      "postal_codes": [
+        "9890"
+      ],
+      "parent": "Gavere"
+    },
+    {
+      "name": "Baardegem",
+      "slug": "aalst",
+      "postal_codes": [
+        "9310"
+      ],
+      "parent": "Aalst"
+    },
+    {
+      "name": "Baasrode",
+      "slug": "dendermonde",
+      "postal_codes": [
+        "9200"
+      ],
+      "parent": "Dendermonde"
+    },
+    {
+      "name": "Bachte-Maria-Leerne",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Balegem",
+      "slug": "oosterzele",
+      "postal_codes": [
+        "9860"
+      ],
+      "parent": "Oosterzele"
+    },
+    {
+      "name": "Bambrugge",
+      "slug": "erpe",
+      "postal_codes": [
+        "9420"
+      ],
+      "parent": "Erpe-Mere"
+    },
+    {
+      "name": "Bassevelde",
+      "slug": "assenede",
+      "postal_codes": [
+        "9968"
+      ],
+      "parent": "Assenede"
+    },
+    {
+      "name": "Bavegem",
+      "slug": "sint",
+      "postal_codes": [
+        "9520"
+      ],
+      "parent": "Sint-Lievens-Houtem"
+    },
+    {
+      "name": "Bazel",
+      "slug": "beveren",
+      "postal_codes": [
+        "9150"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Beerlegem",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Beervelde",
+      "slug": "lochristi",
+      "postal_codes": [
+        "9080"
+      ],
+      "parent": "Lochristi"
+    },
+    {
+      "name": "Bellem",
+      "slug": "aalter",
+      "postal_codes": [
+        "9881"
+      ],
+      "parent": "Aalter"
+    },
+    {
+      "name": "Belsele",
+      "slug": "sint-niklaas",
+      "postal_codes": [
+        "9111"
+      ],
+      "parent": "Sint-Niklaas"
+    },
+    {
+      "name": "Berchem",
+      "slug": "kluisbergen",
+      "postal_codes": [
+        "9690"
+      ],
+      "parent": "Kluisbergen"
+    },
+    {
+      "name": "Berlare",
+      "slug": "berlare",
+      "postal_codes": [
+        "9290"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Bevere",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Beveren-Waas",
+      "slug": "beveren",
+      "postal_codes": [
+        "9120"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Boekhoute",
+      "slug": "assenede",
+      "postal_codes": [
+        "9961"
+      ],
+      "parent": "Assenede"
+    },
+    {
+      "name": "Borsbeke",
+      "slug": "herzele",
+      "postal_codes": [
+        "9552"
+      ],
+      "parent": "Herzele"
+    },
+    {
+      "name": "Bottelare",
+      "slug": "merelbeke",
+      "postal_codes": [
+        "9820"
+      ],
+      "parent": "Merelbeke-Melle"
+    },
+    {
+      "name": "Brakel",
+      "slug": "brakel",
+      "postal_codes": [
+        "9660"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Buggenhout",
+      "slug": "buggenhout",
+      "postal_codes": [
+        "9255"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Burcht",
+      "slug": "beveren",
+      "postal_codes": [
+        "2070"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Burst",
+      "slug": "erpe",
+      "postal_codes": [
+        "9420"
+      ],
+      "parent": "Erpe-Mere"
+    },
+    {
+      "name": "Daknam",
+      "slug": "lokeren",
+      "postal_codes": [
+        "9160"
+      ],
+      "parent": "Lokeren"
+    },
+    {
+      "name": "De Klinge",
+      "slug": "sint",
+      "postal_codes": [
+        "9170"
+      ],
+      "parent": "Sint-Gillis-Waas"
+    },
+    {
+      "name": "De Pinte",
+      "slug": "nazareth",
+      "postal_codes": [
+        "9840"
+      ],
+      "parent": "Nazareth-De Pinte"
+    },
+    {
+      "name": "Deftinge",
+      "slug": "lierde",
+      "postal_codes": [
+        "9570"
+      ],
+      "parent": "Lierde"
+    },
+    {
+      "name": "Deinze",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Denderbelle",
+      "slug": "lebbeke",
+      "postal_codes": [
+        "9280"
+      ],
+      "parent": "Lebbeke"
+    },
+    {
+      "name": "Denderhoutem",
+      "slug": "haaltert",
+      "postal_codes": [
+        "9450"
+      ],
+      "parent": "Haaltert"
+    },
+    {
+      "name": "Denderleeuw",
+      "slug": "denderleeuw",
+      "postal_codes": [
+        "9470"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Dendermonde",
+      "slug": "dendermonde",
+      "postal_codes": [
+        "9200"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Denderwindeke",
+      "slug": "ninove",
+      "postal_codes": [
+        "9400"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Destelbergen",
+      "slug": "destelbergen",
+      "postal_codes": [
+        "9070"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Desteldonk",
+      "slug": "gent",
+      "postal_codes": [
+        "9042"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Deurle",
+      "slug": "sint-martens-latem",
+      "postal_codes": [
+        "9831"
+      ],
+      "parent": "Sint-Martens-Latem"
+    },
+    {
+      "name": "Dikkele",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Dikkelvenne",
+      "slug": "gavere",
+      "postal_codes": [
+        "9890"
+      ],
+      "parent": "Gavere"
+    },
+    {
+      "name": "Doel",
+      "slug": "beveren",
+      "postal_codes": [
+        "9130"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Drongen",
+      "slug": "gent",
+      "postal_codes": [
+        "9031"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Edelare",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Eeklo",
+      "slug": "eeklo",
+      "postal_codes": [
+        "9900"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Eine",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Eke",
+      "slug": "nazareth",
+      "postal_codes": [
+        "9810"
+      ],
+      "parent": "Nazareth-De Pinte"
+    },
+    {
+      "name": "Eksaarde",
+      "slug": "lokeren",
+      "postal_codes": [
+        "9160"
+      ],
+      "parent": "Lokeren"
+    },
+    {
+      "name": "Elene",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Elsegem",
+      "slug": "wortegem",
+      "postal_codes": [
+        "9790"
+      ],
+      "parent": "Wortegem-Petegem"
+    },
+    {
+      "name": "Elst",
+      "slug": "brakel",
+      "postal_codes": [
+        "9660"
+      ],
+      "parent": "Brakel"
+    },
+    {
+      "name": "Elversele",
+      "slug": "temse",
+      "postal_codes": [
+        "9140"
+      ],
+      "parent": "Temse"
+    },
+    {
+      "name": "Ename",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Erembodegem",
+      "slug": "aalst",
+      "postal_codes": [
+        "9320"
+      ],
+      "parent": "Aalst"
+    },
+    {
+      "name": "Erondegem",
+      "slug": "erpe",
+      "postal_codes": [
+        "9420"
+      ],
+      "parent": "Erpe-Mere"
+    },
+    {
+      "name": "Erpe",
+      "slug": "erpe",
+      "postal_codes": [
+        "9420"
+      ],
+      "parent": "Erpe-Mere"
+    },
+    {
+      "name": "Ertvelde",
+      "slug": "evergem",
+      "postal_codes": [
+        "9940"
+      ],
+      "parent": "Evergem"
+    },
+    {
+      "name": "Erwetegem",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Etikhove",
+      "slug": "maarkedal",
+      "postal_codes": [
+        "9680"
+      ],
+      "parent": "Maarkedal"
+    },
+    {
+      "name": "Everbeek",
+      "slug": "brakel",
+      "postal_codes": [
+        "9660"
+      ],
+      "parent": "Brakel"
+    },
+    {
+      "name": "Evergem",
+      "slug": "evergem",
+      "postal_codes": [
+        "9940"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Gavere",
+      "slug": "gavere",
+      "postal_codes": [
+        "9890"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Gent",
+      "slug": "gent",
+      "postal_codes": [
+        "9000"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Gentbrugge",
+      "slug": "gent",
+      "postal_codes": [
+        "9050"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Geraardsbergen",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Gijzegem",
+      "slug": "aalst",
+      "postal_codes": [
+        "9308"
+      ],
+      "parent": "Aalst"
+    },
+    {
+      "name": "Gijzenzele",
+      "slug": "oosterzele",
+      "postal_codes": [
+        "9860"
+      ],
+      "parent": "Oosterzele"
+    },
+    {
+      "name": "Godveerdegem",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Goeferdinge",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Gontrode",
+      "slug": "merelbeke",
+      "postal_codes": [
+        "9090"
+      ],
+      "parent": "Merelbeke-Melle"
+    },
+    {
+      "name": "Gottem",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Grammene",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Grembergen",
+      "slug": "dendermonde",
+      "postal_codes": [
+        "9200"
+      ],
+      "parent": "Dendermonde"
+    },
+    {
+      "name": "Grimminge",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9506"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Grotenberge",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Haaltert",
+      "slug": "haaltert",
+      "postal_codes": [
+        "9450"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Haasdonk",
+      "slug": "beveren",
+      "postal_codes": [
+        "9120"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Hamme",
+      "slug": "hamme",
+      "postal_codes": [
+        "9220"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Hansbeke",
+      "slug": "deinze",
+      "postal_codes": [
+        "9850"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Heldergem",
+      "slug": "haaltert",
+      "postal_codes": [
+        "9450"
+      ],
+      "parent": "Haaltert"
+    },
+    {
+      "name": "Hemelveerdegem",
+      "slug": "lierde",
+      "postal_codes": [
+        "9571"
+      ],
+      "parent": "Lierde"
+    },
+    {
+      "name": "Herdersem",
+      "slug": "aalst",
+      "postal_codes": [
+        "9310"
+      ],
+      "parent": "Aalst"
+    },
+    {
+      "name": "Herzele",
+      "slug": "herzele",
+      "postal_codes": [
+        "9550"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Heurne",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Heusden",
+      "slug": "destelbergen",
+      "postal_codes": [
+        "9070"
+      ],
+      "parent": "Destelbergen"
+    },
+    {
+      "name": "Hillegem",
+      "slug": "herzele",
+      "postal_codes": [
+        "9550"
+      ],
+      "parent": "Herzele"
+    },
+    {
+      "name": "Hofstade",
+      "slug": "aalst",
+      "postal_codes": [
+        "9308"
+      ],
+      "parent": "Aalst"
+    },
+    {
+      "name": "Huise",
+      "slug": "kruisem",
+      "postal_codes": [
+        "9750"
+      ],
+      "parent": "Kruisem"
+    },
+    {
+      "name": "Hundelgem",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Iddergem",
+      "slug": "denderleeuw",
+      "postal_codes": [
+        "9472"
+      ],
+      "parent": "Denderleeuw"
+    },
+    {
+      "name": "Idegem",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9506"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Impe",
+      "slug": "lede",
+      "postal_codes": [
+        "9340"
+      ],
+      "parent": "Lede"
+    },
+    {
+      "name": "Kalken",
+      "slug": "laarne",
+      "postal_codes": [
+        "9270"
+      ],
+      "parent": "Laarne"
+    },
+    {
+      "name": "Kallo",
+      "slug": "beveren",
+      "postal_codes": [
+        "9120",
+        "9130"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Kaprijke",
+      "slug": "kaprijke",
+      "postal_codes": [
+        "9970"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Kemzeke",
+      "slug": "stekene",
+      "postal_codes": [
+        "9190"
+      ],
+      "parent": "Stekene"
+    },
+    {
+      "name": "Kerksken",
+      "slug": "haaltert",
+      "postal_codes": [
+        "9451"
+      ],
+      "parent": "Haaltert"
+    },
+    {
+      "name": "Kieldrecht",
+      "slug": "beveren",
+      "postal_codes": [
+        "9130"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Kluizen",
+      "slug": "evergem",
+      "postal_codes": [
+        "9940"
+      ],
+      "parent": "Evergem"
+    },
+    {
+      "name": "Knesselare",
+      "slug": "aalter",
+      "postal_codes": [
+        "9910"
+      ],
+      "parent": "Aalter"
+    },
+    {
+      "name": "Kruibeke",
+      "slug": "beveren",
+      "postal_codes": [
+        "9150"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Kruishoutem",
+      "slug": "kruisem",
+      "postal_codes": [
+        "9770"
+      ],
+      "parent": "Kruisem"
+    },
+    {
+      "name": "Kwaremont",
+      "slug": "kluisbergen",
+      "postal_codes": [
+        "9690"
+      ],
+      "parent": "Kluisbergen"
+    },
+    {
+      "name": "Laarne",
+      "slug": "laarne",
+      "postal_codes": [
+        "9270"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Landegem",
+      "slug": "deinze",
+      "postal_codes": [
+        "9850"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Landskouter",
+      "slug": "oosterzele",
+      "postal_codes": [
+        "9860"
+      ],
+      "parent": "Oosterzele"
+    },
+    {
+      "name": "Lebbeke",
+      "slug": "lebbeke",
+      "postal_codes": [
+        "9280"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Lede",
+      "slug": "lede",
+      "postal_codes": [
+        "9340"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Ledeberg",
+      "slug": "gent",
+      "postal_codes": [
+        "9050"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Leeuwergem",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Lembeke",
+      "slug": "kaprijke",
+      "postal_codes": [
+        "9971"
+      ],
+      "parent": "Kaprijke"
+    },
+    {
+      "name": "Lemberge",
+      "slug": "merelbeke",
+      "postal_codes": [
+        "9820"
+      ],
+      "parent": "Merelbeke-Melle"
+    },
+    {
+      "name": "Letterhoutem",
+      "slug": "sint-lievens-houtem",
+      "postal_codes": [
+        "9521"
+      ],
+      "parent": "Sint-Lievens-Houtem"
+    },
+    {
+      "name": "Leupegem",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Lieferinge",
+      "slug": "ninove",
+      "postal_codes": [
+        "9400"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Lochristi",
+      "slug": "lochristi",
+      "postal_codes": [
+        "9080"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Lokeren",
+      "slug": "lokeren",
+      "postal_codes": [
+        "9160"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Lotenhulle",
+      "slug": "aalter",
+      "postal_codes": [
+        "9880"
+      ],
+      "parent": "Aalter"
+    },
+    {
+      "name": "Lovendegem",
+      "slug": "lievegem",
+      "postal_codes": [
+        "9920"
+      ],
+      "parent": "Lievegem"
+    },
+    {
+      "name": "Maarke-Kerkem",
+      "slug": "maarkedal",
+      "postal_codes": [
+        "9680"
+      ],
+      "parent": "Maarkedal"
+    },
+    {
+      "name": "Machelen",
+      "slug": "zulte",
+      "postal_codes": [
+        "9870"
+      ],
+      "parent": "Zulte"
+    },
+    {
+      "name": "Maldegem",
+      "slug": "maldegem",
+      "postal_codes": [
+        "9990"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Mariakerke",
+      "slug": "gent",
+      "postal_codes": [
+        "9030"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Massemen",
+      "slug": "wetteren",
+      "postal_codes": [
+        "9230"
+      ],
+      "parent": "Wetteren"
+    },
+    {
+      "name": "Mater",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Meerbeke",
+      "slug": "ninove",
+      "postal_codes": [
+        "9402"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Meerdonk",
+      "slug": "sint",
+      "postal_codes": [
+        "9170"
+      ],
+      "parent": "Sint-Gillis-Waas"
+    },
+    {
+      "name": "Meigem",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Meilegem",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Melden",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Meldert",
+      "slug": "aalst",
+      "postal_codes": [
+        "9310"
+      ],
+      "parent": "Aalst"
+    },
+    {
+      "name": "Melle",
+      "slug": "merelbeke",
+      "postal_codes": [
+        "9090"
+      ],
+      "parent": "Merelbeke-Melle"
+    },
+    {
+      "name": "Melsele",
+      "slug": "beveren",
+      "postal_codes": [
+        "9120"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Melsen",
+      "slug": "merelbeke",
+      "postal_codes": [
+        "9820"
+      ],
+      "parent": "Merelbeke-Melle"
+    },
+    {
+      "name": "Mendonk",
+      "slug": "gent",
+      "postal_codes": [
+        "9042"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Mere",
+      "slug": "erpe",
+      "postal_codes": [
+        "9420"
+      ],
+      "parent": "Erpe-Mere"
+    },
+    {
+      "name": "Merelbeke",
+      "slug": "merelbeke",
+      "postal_codes": [
+        "9820"
+      ],
+      "parent": "Merelbeke-Melle"
+    },
+    {
+      "name": "Merendree",
+      "slug": "deinze",
+      "postal_codes": [
+        "9850"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Mespelare",
+      "slug": "dendermonde",
+      "postal_codes": [
+        "9200"
+      ],
+      "parent": "Dendermonde"
+    },
+    {
+      "name": "Michelbeke",
+      "slug": "brakel",
+      "postal_codes": [
+        "9660"
+      ],
+      "parent": "Brakel"
+    },
+    {
+      "name": "Middelburg",
+      "slug": "maldegem",
+      "postal_codes": [
+        "9992"
+      ],
+      "parent": "Maldegem"
+    },
+    {
+      "name": "Moerbeke",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Moerbeke-Waas",
+      "slug": "lokeren",
+      "postal_codes": [
+        "9180"
+      ],
+      "parent": "Lokeren"
+    },
+    {
+      "name": "Moerzeke",
+      "slug": "hamme",
+      "postal_codes": [
+        "9220"
+      ],
+      "parent": "Hamme"
+    },
+    {
+      "name": "Moorsel",
+      "slug": "aalst",
+      "postal_codes": [
+        "9310"
+      ],
+      "parent": "Aalst"
+    },
+    {
+      "name": "Moortsele",
+      "slug": "oosterzele",
+      "postal_codes": [
+        "9860"
+      ],
+      "parent": "Oosterzele"
+    },
+    {
+      "name": "Moregem",
+      "slug": "wortegem",
+      "postal_codes": [
+        "9790"
+      ],
+      "parent": "Wortegem-Petegem"
+    },
+    {
+      "name": "Mullem",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Munkzwalm",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Munte",
+      "slug": "merelbeke",
+      "postal_codes": [
+        "9820"
+      ],
+      "parent": "Merelbeke-Melle"
+    },
+    {
+      "name": "Nazareth",
+      "slug": "nazareth",
+      "postal_codes": [
+        "9810"
+      ],
+      "parent": "Nazareth-De Pinte"
+    },
+    {
+      "name": "Nederboelare",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Nederbrakel",
+      "slug": "brakel",
+      "postal_codes": [
+        "9660"
+      ],
+      "parent": "Brakel"
+    },
+    {
+      "name": "Nederename",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Nederhasselt",
+      "slug": "ninove",
+      "postal_codes": [
+        "9400"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Nederzwalm-Hermelgem",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9636"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Neigem",
+      "slug": "ninove",
+      "postal_codes": [
+        "9403"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Nevele",
+      "slug": "deinze",
+      "postal_codes": [
+        "9850"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Nieuwenhove",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9506"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Nieuwerkerken",
+      "slug": "aalst",
+      "postal_codes": [
+        "9320"
+      ],
+      "parent": "Aalst"
+    },
+    {
+      "name": "Nieuwkerken-Waas",
+      "slug": "sint",
+      "postal_codes": [
+        "9100"
+      ],
+      "parent": "Sint-Niklaas"
+    },
+    {
+      "name": "Ninove",
+      "slug": "ninove",
+      "postal_codes": [
+        "9400"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Nokere",
+      "slug": "kruisem",
+      "postal_codes": [
+        "9771"
+      ],
+      "parent": "Kruisem"
+    },
+    {
+      "name": "Nukerke",
+      "slug": "maarkedal",
+      "postal_codes": [
+        "9681"
+      ],
+      "parent": "Maarkedal"
+    },
+    {
+      "name": "Okegem",
+      "slug": "ninove",
+      "postal_codes": [
+        "9400"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Olsene",
+      "slug": "zulte",
+      "postal_codes": [
+        "9870"
+      ],
+      "parent": "Zulte"
+    },
+    {
+      "name": "Onkerzele",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Ooike",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Ooike",
+      "slug": "wortegem",
+      "postal_codes": [
+        "9790"
+      ],
+      "parent": "Wortegem-Petegem"
+    },
+    {
+      "name": "Oombergen",
+      "slug": "sint",
+      "postal_codes": [
+        "9520"
+      ],
+      "parent": "Sint-Lievens-Houtem"
+    },
+    {
+      "name": "Oombergen",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Oordegem",
+      "slug": "lede",
+      "postal_codes": [
+        "9340"
+      ],
+      "parent": "Lede"
+    },
+    {
+      "name": "Oostakker",
+      "slug": "gent",
+      "postal_codes": [
+        "9041"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Oosteeklo",
+      "slug": "assenede",
+      "postal_codes": [
+        "9968"
+      ],
+      "parent": "Assenede"
+    },
+    {
+      "name": "Oosterzele",
+      "slug": "oosterzele",
+      "postal_codes": [
+        "9860"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Oostwinkel",
+      "slug": "lievegem",
+      "postal_codes": [
+        "9931"
+      ],
+      "parent": "Lievegem"
+    },
+    {
+      "name": "Opbrakel",
+      "slug": "brakel",
+      "postal_codes": [
+        "9660"
+      ],
+      "parent": "Brakel"
+    },
+    {
+      "name": "Opdorp",
+      "slug": "buggenhout",
+      "postal_codes": [
+        "9255"
+      ],
+      "parent": "Buggenhout"
+    },
+    {
+      "name": "Ophasselt",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Ottergem",
+      "slug": "erpe",
+      "postal_codes": [
+        "9420"
+      ],
+      "parent": "Erpe-Mere"
+    },
+    {
+      "name": "Oudegem",
+      "slug": "dendermonde",
+      "postal_codes": [
+        "9200"
+      ],
+      "parent": "Dendermonde"
+    },
+    {
+      "name": "Oudenaarde",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Outer",
+      "slug": "ninove",
+      "postal_codes": [
+        "9406"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Ouwegem",
+      "slug": "kruisem",
+      "postal_codes": [
+        "9750"
+      ],
+      "parent": "Kruisem"
+    },
+    {
+      "name": "Overboelare",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Overmere",
+      "slug": "berlare",
+      "postal_codes": [
+        "9290"
+      ],
+      "parent": "Berlare"
+    },
+    {
+      "name": "Parike",
+      "slug": "brakel",
+      "postal_codes": [
+        "9661"
+      ],
+      "parent": "Brakel"
+    },
+    {
+      "name": "Paulatem",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Petegem-aan-de-Leie",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Petegem-aan-de-Schelde",
+      "slug": "wortegem",
+      "postal_codes": [
+        "9790"
+      ],
+      "parent": "Wortegem-Petegem"
+    },
+    {
+      "name": "Poeke",
+      "slug": "aalter",
+      "postal_codes": [
+        "9880"
+      ],
+      "parent": "Aalter"
+    },
+    {
+      "name": "Poesele",
+      "slug": "deinze",
+      "postal_codes": [
+        "9850"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Pollare",
+      "slug": "ninove",
+      "postal_codes": [
+        "9401"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Ressegem",
+      "slug": "herzele",
+      "postal_codes": [
+        "9551"
+      ],
+      "parent": "Herzele"
+    },
+    {
+      "name": "Roborst",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Ronse",
+      "slug": "ronse",
+      "postal_codes": [
+        "9600"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Ronsele",
+      "slug": "lievegem",
+      "postal_codes": [
+        "9932"
+      ],
+      "parent": "Lievegem"
+    },
+    {
+      "name": "Rozebeke",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Ruien",
+      "slug": "kluisbergen",
+      "postal_codes": [
+        "9690"
+      ],
+      "parent": "Kluisbergen"
+    },
+    {
+      "name": "Rupelmonde",
+      "slug": "beveren",
+      "postal_codes": [
+        "9150"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Schelderode",
+      "slug": "merelbeke",
+      "postal_codes": [
+        "9820"
+      ],
+      "parent": "Merelbeke-Melle"
+    },
+    {
+      "name": "Scheldewindeke",
+      "slug": "oosterzele",
+      "postal_codes": [
+        "9860"
+      ],
+      "parent": "Oosterzele"
+    },
+    {
+      "name": "Schellebelle",
+      "slug": "wichelen",
+      "postal_codes": [
+        "9260"
+      ],
+      "parent": "Wichelen"
+    },
+    {
+      "name": "Schendelbeke",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9506"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Schoonaarde",
+      "slug": "dendermonde",
+      "postal_codes": [
+        "9200"
+      ],
+      "parent": "Dendermonde"
+    },
+    {
+      "name": "Schorisse",
+      "slug": "maarkedal",
+      "postal_codes": [
+        "9688"
+      ],
+      "parent": "Maarkedal"
+    },
+    {
+      "name": "Semmerzake",
+      "slug": "gavere",
+      "postal_codes": [
+        "9890"
+      ],
+      "parent": "Gavere"
+    },
+    {
+      "name": "Serskamp",
+      "slug": "wichelen",
+      "postal_codes": [
+        "9260"
+      ],
+      "parent": "Wichelen"
+    },
+    {
+      "name": "Sinaai-Waas",
+      "slug": "sint-niklaas",
+      "postal_codes": [
+        "9112"
+      ],
+      "parent": "Sint-Niklaas"
+    },
+    {
+      "name": "Sint-Amandsberg",
+      "slug": "gent",
+      "postal_codes": [
+        "9040"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Sint-Antelinks",
+      "slug": "herzele",
+      "postal_codes": [
+        "9550"
+      ],
+      "parent": "Herzele"
+    },
+    {
+      "name": "Sint-Blasius-Boekel",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Sint-Denijs-Boekel",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Sint-Denijs-Westrem",
+      "slug": "gent",
+      "postal_codes": [
+        "9051"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Sint-Gillis-Dendermonde",
+      "slug": "dendermonde",
+      "postal_codes": [
+        "9200"
+      ],
+      "parent": "Dendermonde"
+    },
+    {
+      "name": "Sint-Gillis-Waas",
+      "slug": "sint-gillis-waas",
+      "postal_codes": [
+        "9170"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Sint-Goriks-Oudenhove",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Sint-Jan-in-Eremo",
+      "slug": "sint-laureins",
+      "postal_codes": [
+        "9982"
+      ],
+      "parent": "Sint-Laureins"
+    },
+    {
+      "name": "Sint-Kornelis-Horebeke",
+      "slug": "horebeke",
+      "postal_codes": [
+        "9667"
+      ],
+      "parent": "Horebeke"
+    },
+    {
+      "name": "Sint-Kruis-Winkel",
+      "slug": "gent",
+      "postal_codes": [
+        "9042"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Sint-Laureins",
+      "slug": "sint-laureins",
+      "postal_codes": [
+        "9980"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Sint-Lievens-Esse",
+      "slug": "herzele",
+      "postal_codes": [
+        "9550"
+      ],
+      "parent": "Herzele"
+    },
+    {
+      "name": "Sint-Lievens-Houtem",
+      "slug": "sint-lievens-houtem",
+      "postal_codes": [
+        "9520"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Sint-Margriete",
+      "slug": "sint-laureins",
+      "postal_codes": [
+        "9981"
+      ],
+      "parent": "Sint-Laureins"
+    },
+    {
+      "name": "Sint-Maria-Horebeke",
+      "slug": "horebeke",
+      "postal_codes": [
+        "9667"
+      ],
+      "parent": "Horebeke"
+    },
+    {
+      "name": "Sint-Maria-Latem",
+      "slug": "zwalm",
+      "postal_codes": [
+        "9630"
+      ],
+      "parent": "Zwalm"
+    },
+    {
+      "name": "Sint-Maria-Lierde",
+      "slug": "lierde",
+      "postal_codes": [
+        "9570"
+      ],
+      "parent": "Lierde"
+    },
+    {
+      "name": "Sint-Maria-Oudenhove",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Sint-Maria-Oudenhove",
+      "slug": "brakel",
+      "postal_codes": [
+        "9660"
+      ],
+      "parent": "Brakel"
+    },
+    {
+      "name": "Sint-Martens-Latem",
+      "slug": "sint-martens-latem",
+      "postal_codes": [
+        "9830"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Sint-Martens-Leerne",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Sint-Martens-Lierde",
+      "slug": "lierde",
+      "postal_codes": [
+        "9572"
+      ],
+      "parent": "Lierde"
+    },
+    {
+      "name": "Sint-Niklaas",
+      "slug": "sint-niklaas",
+      "postal_codes": [
+        "9100"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Sint-Pauwels",
+      "slug": "sint-gillis-waas",
+      "postal_codes": [
+        "9170"
+      ],
+      "parent": "Sint-Gillis-Waas"
+    },
+    {
+      "name": "Sleidinge",
+      "slug": "evergem",
+      "postal_codes": [
+        "9940"
+      ],
+      "parent": "Evergem"
+    },
+    {
+      "name": "Smeerebbe-Vloerzegem",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9506"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Smetlede",
+      "slug": "lede",
+      "postal_codes": [
+        "9340"
+      ],
+      "parent": "Lede"
+    },
+    {
+      "name": "Steendorp",
+      "slug": "temse",
+      "postal_codes": [
+        "9140"
+      ],
+      "parent": "Temse"
+    },
+    {
+      "name": "Steenhuize-Wijnhuize",
+      "slug": "herzele",
+      "postal_codes": [
+        "9550"
+      ],
+      "parent": "Herzele"
+    },
+    {
+      "name": "Stekene",
+      "slug": "stekene",
+      "postal_codes": [
+        "9190"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Strijpen",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Temse",
+      "slug": "temse",
+      "postal_codes": [
+        "9140"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Tielrode",
+      "slug": "temse",
+      "postal_codes": [
+        "9140"
+      ],
+      "parent": "Temse"
+    },
+    {
+      "name": "Uitbergen",
+      "slug": "berlare",
+      "postal_codes": [
+        "9290"
+      ],
+      "parent": "Berlare"
+    },
+    {
+      "name": "Ursel",
+      "slug": "aalter",
+      "postal_codes": [
+        "9910"
+      ],
+      "parent": "Aalter"
+    },
+    {
+      "name": "Velzeke-Ruddershove",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": "Zottegem"
+    },
+    {
+      "name": "Verrebroek",
+      "slug": "beveren",
+      "postal_codes": [
+        "9130"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Viane",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Vinderhoute",
+      "slug": "lievegem",
+      "postal_codes": [
+        "9921"
+      ],
+      "parent": "Lievegem"
+    },
+    {
+      "name": "Vinkt",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Vlekkem",
+      "slug": "erpe",
+      "postal_codes": [
+        "9420"
+      ],
+      "parent": "Erpe-Mere"
+    },
+    {
+      "name": "Vlierzele",
+      "slug": "sint-lievens-houtem",
+      "postal_codes": [
+        "9520"
+      ],
+      "parent": "Sint-Lievens-Houtem"
+    },
+    {
+      "name": "Volkegem",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Voorde",
+      "slug": "ninove",
+      "postal_codes": [
+        "9400"
+      ],
+      "parent": "Ninove"
+    },
+    {
+      "name": "Vosselare",
+      "slug": "deinze",
+      "postal_codes": [
+        "9850"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Vrasene",
+      "slug": "beveren",
+      "postal_codes": [
+        "9120"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    },
+    {
+      "name": "Vurste",
+      "slug": "gavere",
+      "postal_codes": [
+        "9890"
+      ],
+      "parent": "Gavere"
+    },
+    {
+      "name": "Waarbeke",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9506"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Waarschoot",
+      "slug": "lievegem",
+      "postal_codes": [
+        "9950"
+      ],
+      "parent": "Lievegem"
+    },
+    {
+      "name": "Waasmunster",
+      "slug": "waasmunster",
+      "postal_codes": [
+        "9250"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Wachtebeke",
+      "slug": "lochristi",
+      "postal_codes": [
+        "9185"
+      ],
+      "parent": "Lochristi"
+    },
+    {
+      "name": "Wannegem-Lede",
+      "slug": "kruisem",
+      "postal_codes": [
+        "9772"
+      ],
+      "parent": "Kruisem"
+    },
+    {
+      "name": "Wanzele",
+      "slug": "lede",
+      "postal_codes": [
+        "9340"
+      ],
+      "parent": "Lede"
+    },
+    {
+      "name": "Waterland-Oudeman",
+      "slug": "sint-laureins",
+      "postal_codes": [
+        "9988"
+      ],
+      "parent": "Sint-Laureins"
+    },
+    {
+      "name": "Watervliet",
+      "slug": "sint-laureins",
+      "postal_codes": [
+        "9988"
+      ],
+      "parent": "Sint-Laureins"
+    },
+    {
+      "name": "Welden",
+      "slug": "oudenaarde",
+      "postal_codes": [
+        "9700"
+      ],
+      "parent": "Oudenaarde"
+    },
+    {
+      "name": "Welle",
+      "slug": "denderleeuw",
+      "postal_codes": [
+        "9473"
+      ],
+      "parent": "Denderleeuw"
+    },
+    {
+      "name": "Westrem",
+      "slug": "wetteren",
+      "postal_codes": [
+        "9230"
+      ],
+      "parent": "Wetteren"
+    },
+    {
+      "name": "Wetteren",
+      "slug": "wetteren",
+      "postal_codes": [
+        "9230"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Wichelen",
+      "slug": "wichelen",
+      "postal_codes": [
+        "9260"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Wieze",
+      "slug": "lebbeke",
+      "postal_codes": [
+        "9280"
+      ],
+      "parent": "Lebbeke"
+    },
+    {
+      "name": "Wondelgem",
+      "slug": "gent",
+      "postal_codes": [
+        "9032"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Wontergem",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Wortegem",
+      "slug": "wortegem",
+      "postal_codes": [
+        "9790"
+      ],
+      "parent": "Wortegem-Petegem"
+    },
+    {
+      "name": "Woubrechtegem",
+      "slug": "herzele",
+      "postal_codes": [
+        "9550"
+      ],
+      "parent": "Herzele"
+    },
+    {
+      "name": "Zaffelare",
+      "slug": "lochristi",
+      "postal_codes": [
+        "9080"
+      ],
+      "parent": "Lochristi"
+    },
+    {
+      "name": "Zandbergen",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9506"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Zarlardinge",
+      "slug": "geraardsbergen",
+      "postal_codes": [
+        "9500"
+      ],
+      "parent": "Geraardsbergen"
+    },
+    {
+      "name": "Zegelsem",
+      "slug": "brakel",
+      "postal_codes": [
+        "9660"
+      ],
+      "parent": "Brakel"
+    },
+    {
+      "name": "Zele",
+      "slug": "zele",
+      "postal_codes": [
+        "9240"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Zelzate",
+      "slug": "zelzate",
+      "postal_codes": [
+        "9060"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Zeveneken",
+      "slug": "lochristi",
+      "postal_codes": [
+        "9080"
+      ],
+      "parent": "Lochristi"
+    },
+    {
+      "name": "Zeveren",
+      "slug": "deinze",
+      "postal_codes": [
+        "9800"
+      ],
+      "parent": "Deinze"
+    },
+    {
+      "name": "Zevergem",
+      "slug": "nazareth",
+      "postal_codes": [
+        "9840"
+      ],
+      "parent": "Nazareth-De Pinte"
+    },
+    {
+      "name": "Zingem",
+      "slug": "kruisem",
+      "postal_codes": [
+        "9750"
+      ],
+      "parent": "Kruisem"
+    },
+    {
+      "name": "Zomergem",
+      "slug": "lievegem",
+      "postal_codes": [
+        "9930"
+      ],
+      "parent": "Lievegem"
+    },
+    {
+      "name": "Zonnegem",
+      "slug": "sint-lievens-houtem",
+      "postal_codes": [
+        "9520"
+      ],
+      "parent": "Sint-Lievens-Houtem"
+    },
+    {
+      "name": "Zottegem",
+      "slug": "zottegem",
+      "postal_codes": [
+        "9620"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Zulte",
+      "slug": "zulte",
+      "postal_codes": [
+        "9870"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Zulzeke",
+      "slug": "kluisbergen",
+      "postal_codes": [
+        "9690"
+      ],
+      "parent": "Kluisbergen"
+    },
+    {
+      "name": "Zwijnaarde",
+      "slug": "gent",
+      "postal_codes": [
+        "9052"
+      ],
+      "parent": "Gent"
+    },
+    {
+      "name": "Zwijndrecht",
+      "slug": "beveren",
+      "postal_codes": [
+        "2070"
+      ],
+      "parent": "Beveren-Kruibeke-Zwijndrecht"
+    }
   ]
 }
