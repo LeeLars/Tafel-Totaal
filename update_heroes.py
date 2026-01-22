@@ -84,12 +84,8 @@ def get_new_hero(city_slug, city_name, province):
 
         <div class="location-hero__info">
           <div class="location-hero__info-item">
-            <span class="location-hero__info-label">Levering</span>
-            <span class="location-hero__info-value">€25</span>
-          </div>
-          <div class="location-hero__info-item">
-            <span class="location-hero__info-label">Gratis binnen</span>
-            <span class="location-hero__info-value">15km</span>
+            <span class="location-hero__info-label">Prijzen</span>
+            <span class="location-hero__info-value" style="font-size: var(--font-size-base); font-family: var(--font-body);">Bereken uw prijs in de checkout</span>
           </div>
         </div>
 
