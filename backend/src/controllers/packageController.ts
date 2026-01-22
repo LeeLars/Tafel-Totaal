@@ -4,9 +4,18 @@ import { Package, PackageItem, Product } from '../types';
 
 /**
  * Debug endpoint to check and create packages table if needed
+ * Also runs migrations for missing columns
  */
 export async function debugPackagesTable(_req: Request, res: Response): Promise<void> {
   try {
+    // First, ensure toggle_points column exists (migration)
+    try {
+      await query(`ALTER TABLE package_items ADD COLUMN IF NOT EXISTS toggle_points INTEGER DEFAULT 0`);
+      console.log('toggle_points column ensured');
+    } catch (migrationError) {
+      console.log('toggle_points migration skipped or failed:', migrationError);
+    }
+
     // Check if packages table exists
     const tableCheck = await queryOne<{ exists: boolean }>(
       `SELECT EXISTS (
