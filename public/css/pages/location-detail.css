@@ -271,11 +271,13 @@
     border-bottom: none;
     border-right: var(--border-width) solid var(--border-color);
     padding: var(--space-2xl);
-    position: sticky;
-    top: 0;
-    height: 100vh; /* Sticky requirement */
-    max-height: 400px;
   }
+}
+
+.content-label h2 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .content-number {

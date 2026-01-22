@@ -87,12 +87,9 @@ const STATIC_CITIES = [
 document.addEventListener('DOMContentLoaded', async () => {
   await loadHeader();
   initFilters();
-  // Start with static cities immediately for instant display
+  // Use only static cities - no API calls that could overwrite with fewer cities
   allCities = STATIC_CITIES;
   applyFiltersAndRender();
-  // Then try to load from cache and API
-  loadCities({ preferCache: true });
-  loadCities({ preferCache: false });
 });
 
 /**
@@ -238,7 +235,6 @@ function setCachedCities(cities) {
  */
 function createCityCard(city) {
   const postalCodesCount = Array.isArray(city.postal_codes) ? city.postal_codes.length : 0;
-  const freeRadius = city.free_delivery_radius_km || 15;
 
   return `
     <a href="/Tafel-Totaal/locaties/${city.slug}.html" class="city-card" style="
@@ -263,22 +259,24 @@ function createCityCard(city) {
         </div>
       </div>
 
+      <p style="font-size: var(--font-size-sm); color: var(--color-dark-gray); line-height: 1.5; margin-bottom: var(--space-md);">
+        Professionele servies- en tafelverhuur voor uw evenement in ${city.name} en omgeving.
+      </p>
+
       <div style="display: flex; flex-direction: column; gap: var(--space-sm); margin-bottom: var(--space-md);">
-        <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--font-size-sm);">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="3" width="15" height="13"></rect>
-            <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
-            <circle cx="5.5" cy="18.5" r="2.5"></circle>
-            <circle cx="18.5" cy="18.5" r="2.5"></circle>
-          </svg>
-          <span>Bezorging: ${formatPrice(city.delivery_fee)}</span>
-        </div>
         <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--font-size-sm); color: var(--color-success);">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
-          <span>Gratis binnen ${freeRadius}km</span>
+          <span>Beschikbaar voor levering</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--font-size-sm); color: var(--color-success);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>Pakketten & losse items</span>
         </div>
         ${postalCodesCount > 0 ? `
           <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--font-size-sm); color: var(--color-gray);">
@@ -291,7 +289,7 @@ function createCityCard(city) {
       </div>
 
       <div style="display: flex; align-items: center; justify-content: space-between; padding-top: var(--space-md); border-top: 1px solid var(--color-light-gray);">
-        <span style="font-weight: 600; text-transform: uppercase; font-size: var(--font-size-sm);">Meer info</span>
+        <span style="font-weight: 600; text-transform: uppercase; font-size: var(--font-size-sm);">Bekijk Details</span>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="5" y1="12" x2="19" y2="12"></line>
           <polyline points="12 5 19 12 12 19"></polyline>
