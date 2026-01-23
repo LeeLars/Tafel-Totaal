@@ -23,7 +23,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -39,7 +39,7 @@ async function checkAlreadyLoggedIn() {
     const response = await authAPI.me();
     if (response.success && response.data) {
       // Already logged in, redirect
-      const returnUrl = getQueryParam('returnUrl') || '/Tafel-Totaal/account/overzicht.html';
+      const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
       window.location.href = returnUrl;
     }
   } catch (error) {
@@ -131,7 +131,7 @@ function initRegisterForm() {
         showToast('Account succesvol aangemaakt!', 'success');
         
         // Redirect to return URL or account
-        const returnUrl = getQueryParam('returnUrl') || '/Tafel-Totaal/account/overzicht.html';
+        const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
         setTimeout(() => {
           window.location.href = returnUrl;
         }, 500);

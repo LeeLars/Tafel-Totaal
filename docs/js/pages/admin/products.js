@@ -8,12 +8,18 @@ import { requireAdmin } from '../../lib/guards.js';
 import { initCSVUpload, initBulkActions, handleCheckboxChange, updateBulkToolbar } from './products-csv-bulk.js';
 import { initImageUpload, setCurrentImages, getCurrentImages, clearImages } from './product-images.js';
 
+const API_BASE_URL = false 
+  ? 'https://tafel-totaal-production.up.railway.app' 
+  : 'http://localhost:3000';
+
 let currentPage = 1;
 let currentSearch = '';
 let currentStatus = '';
 let editingProduct = null;
 let allProducts = []; // Store products for edit button access
 let isNewProduct = false; // Track if we're creating a new product
+let categories = [];
+let subcategories = [];
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
@@ -35,9 +41,75 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
   
-  console.log('User authenticated, loading products...');
+  console.log('User authenticated, loading data...');
+  await loadCategories();
   await loadProducts();
 });
+
+/**
+ * Load categories and subcategories
+ */
+async function loadCategories() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/categories`);
+    const result = await response.json();
+    
+    if (result.success) {
+      categories = result.data || [];
+      populateCategoryDropdown();
+    }
+  } catch (error) {
+    console.error('Error loading categories:', error);
+  }
+}
+
+/**
+ * Populate category dropdown
+ */
+function populateCategoryDropdown() {
+  const categorySelect = document.getElementById('edit-category');
+  if (!categorySelect) return;
+  
+  // Clear existing options except first
+  categorySelect.innerHTML = '<option value="">Selecteer categorie...</option>';
+  
+  categories.forEach(cat => {
+    const option = document.createElement('option');
+    option.value = cat.id;
+    option.textContent = cat.name;
+    categorySelect.appendChild(option);
+  });
+}
+
+/**
+ * Load subcategories for a category
+ */
+async function loadSubcategories(categoryId) {
+  const subcategorySelect = document.getElementById('edit-subcategory');
+  if (!subcategorySelect) return;
+  
+  // Reset subcategory dropdown
+  subcategorySelect.innerHTML = '<option value="">Geen subcategorie</option>';
+  
+  if (!categoryId) return;
+  
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/categories/${categoryId}/subcategories`);
+    const result = await response.json();
+    
+    if (result.success) {
+      const subs = result.data || [];
+      subs.forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub.id;
+        option.textContent = sub.name;
+        subcategorySelect.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error('Error loading subcategories:', error);
+  }
+}
 
 /**
  * Initialize filters
@@ -108,6 +180,14 @@ function initModal() {
     e.preventDefault();
     await saveProduct();
   });
+
+  // Category change handler to load subcategories
+  const categorySelect = document.getElementById('edit-category');
+  if (categorySelect) {
+    categorySelect.addEventListener('change', (e) => {
+      loadSubcategories(e.target.value);
+    });
+  }
 }
 
 /**
@@ -129,6 +209,8 @@ function openNewProductModal() {
   document.getElementById('edit-name').value = '';
   document.getElementById('edit-sku').value = '';
   document.getElementById('edit-description').value = '';
+  document.getElementById('edit-category').value = '';
+  document.getElementById('edit-subcategory').value = '';
   document.getElementById('edit-price').value = '';
   document.getElementById('edit-deposit').value = '0';
   document.getElementById('edit-stock').value = '';
@@ -241,7 +323,7 @@ function createProductRow(product) {
   const stockClass = availableStock <= 0 ? 'text-error' : availableStock < 10 ? 'text-warning' : '';
   
   // Get first image or use placeholder
-  const imageUrl = product.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg';
+  const imageUrl = product.images?.[0] || '/images/products/placeholder.jpg';
   const hasImage = product.images && product.images.length > 0;
   
   return `
@@ -303,12 +385,22 @@ function openEditModal(product) {
   document.getElementById('edit-name').value = product.name;
   document.getElementById('edit-sku').value = product.sku || '';
   document.getElementById('edit-description').value = product.description || '';
+  document.getElementById('edit-category').value = product.category_id || '';
   document.getElementById('edit-price').value = product.price_per_day || 0;
   document.getElementById('edit-deposit').value = product.damage_compensation_per_item || 0;
   document.getElementById('edit-stock').value = product.stock_total || 0;
   document.getElementById('edit-buffer').value = product.stock_buffer || 0;
   document.getElementById('edit-turnaround').value = product.turnaround_days || 1;
   document.getElementById('edit-active').checked = product.is_active;
+  
+  // Load subcategories for the selected category, then set subcategory
+  if (product.category_id) {
+    loadSubcategories(product.category_id).then(() => {
+      document.getElementById('edit-subcategory').value = product.subcategory_id || '';
+    });
+  } else {
+    document.getElementById('edit-subcategory').value = '';
+  }
   
   // Load existing images
   setCurrentImages(product.images || []);
@@ -334,10 +426,20 @@ async function saveProduct() {
     return;
   }
   
+  const categoryId = document.getElementById('edit-category').value;
+  const subcategoryId = document.getElementById('edit-subcategory').value;
+  
+  if (!categoryId) {
+    showToast('Categorie is verplicht', 'error');
+    return;
+  }
+  
   const data = {
     name: name,
     sku: document.getElementById('edit-sku').value.trim() || undefined,
     description: document.getElementById('edit-description').value.trim() || undefined,
+    category_id: categoryId,
+    subcategory_id: subcategoryId || undefined,
     price_per_day: parseFloat(document.getElementById('edit-price').value) || 0,
     damage_compensation_per_item: parseFloat(document.getElementById('edit-deposit').value) || 0,
     stock_total: parseInt(document.getElementById('edit-stock').value) || 0,

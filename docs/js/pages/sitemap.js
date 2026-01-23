@@ -5,7 +5,7 @@
 import { loadHeader } from '../components/header.js';
 import { loadFooter } from '../components/footer.js';
 
-const API_BASE_URL = window.location.hostname.includes('github.io')
+const API_BASE_URL = false
   ? 'https://tafel-totaal-production.up.railway.app'
   : 'http://localhost:3000';
 
@@ -44,7 +44,7 @@ async function loadLocations() {
 
     // Replace content with dynamic list
     grid.innerHTML = sorted.map(c => {
-      const url = `/Tafel-Totaal/locaties/${encodeURIComponent(c.slug)}.html`;
+      const url = `/locaties/${encodeURIComponent(c.slug)}.html`;
       return `
         <li>
           <a href="${url}" class="sitemap-link">

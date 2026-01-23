@@ -26,7 +26,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -101,7 +101,7 @@ function createCartItemHTML(item) {
       </div>
       <div class="cart-item__info">
         <h3 class="cart-item__title">
-          <a href="/Tafel-Totaal/${item.type === 'package' ? 'pakket' : 'product'}.html?id=${item.product_id || item.package_id}">${item.name}</a>
+          <a href="/${item.type === 'package' ? 'pakket' : 'product'}.html?id=${item.product_id || item.package_id}">${item.name}</a>
         </h3>
         <p class="cart-item__meta">${itemType}${personsText ? ` • ${personsText}` : ''}</p>
         ${item.start_date && item.end_date ? `
@@ -168,11 +168,11 @@ function getItemImageUrl(item) {
 
   // Use deterministic fallback from site images
   const fallbacks = [
-    '/Tafel-Totaal/images/site/hero-table-setting.jpg',
-    '/Tafel-Totaal/images/site/gala-theme.jpg',
-    '/Tafel-Totaal/images/site/corporate-dinner.jpg',
-    '/Tafel-Totaal/images/site/garden-dinner.jpg',
-    '/Tafel-Totaal/images/site/hero-homepage.jpg'
+    '/images/site/hero-table-setting.jpg',
+    '/images/site/gala-theme.jpg',
+    '/images/site/corporate-dinner.jpg',
+    '/images/site/garden-dinner.jpg',
+    '/images/site/hero-homepage.jpg'
   ];
 
   const key = String(item.id || item.product_id || item.package_id || item.name);

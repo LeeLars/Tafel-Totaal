@@ -4,11 +4,11 @@
 
 import { loadHeader } from '../components/header.js';
 
-const API_BASE_URL = window.location.hostname.includes('github.io')
+const API_BASE_URL = false
   ? 'https://tafel-totaal-production.up.railway.app'
   : 'http://localhost:3000';
 
-const BASE_PATH = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+const BASE_PATH = '';
 
 let allCities = [];
 let allLocations = []; // Includes all municipalities and sub-municipalities
@@ -276,7 +276,7 @@ function createCityCard(city) {
   const postalCodesCount = Array.isArray(city.postal_codes) ? city.postal_codes.length : 0;
 
   return `
-    <a href="/Tafel-Totaal/locaties/${city.slug}.html" class="city-card" style="
+    <a href="/locaties/${city.slug}.html" class="city-card" style="
       display: block;
       padding: var(--space-xl);
       background: var(--color-white);

@@ -138,7 +138,7 @@ function initLogoutButtons() {
     }
     
     // Always redirect to homepage
-    window.location.replace('/Tafel-Totaal/');
+    window.location.replace('/');
   };
 
   if (logoutBtn) {
@@ -300,7 +300,7 @@ export async function loadHeader(containerId = 'header-container', variant = 'de
   if (!container) return;
 
   try {
-    const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+    const basePath = '';
     const componentName = variant === 'location' ? 'header-location.html' : 'header.html';
     
     const response = await fetch(`${basePath}/components/${componentName}`);
@@ -405,7 +405,7 @@ function renderCartItems(cart) {
     total += computedLineTotal;
     itemCount += quantity;
 
-    const imageUrl = item.image || '/Tafel-Totaal/images/placeholder.jpg';
+    const imageUrl = item.image || '/images/placeholder.jpg';
     const itemName = item.name || (item.type === 'package' ? 'Pakket' : 'Product');
     const details = [];
     if (item.type) details.push(item.type === 'package' ? 'Pakket' : 'Product');
@@ -416,7 +416,7 @@ function renderCartItems(cart) {
 
     return `
       <div class="cart-preview__item">
-        <img src="${imageUrl}" alt="${itemName}" class="cart-preview__item-image" onerror="this.src='/Tafel-Totaal/images/placeholder.jpg'">
+        <img src="${imageUrl}" alt="${itemName}" class="cart-preview__item-image" onerror="this.src='/images/placeholder.jpg'">
         <div class="cart-preview__item-info">
           <div class="cart-preview__item-name">${itemName}</div>
           ${details.length > 0 ? `<div class="cart-preview__item-details">${details.join(' • ')}</div>` : ''}

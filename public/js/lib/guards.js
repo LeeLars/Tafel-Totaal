@@ -8,9 +8,7 @@ import { authAPI } from './api.js';
 let cachedUser = null;
 
 function getSiteBasePath() {
-  // GitHub Pages project site is served from /<repo>/
-  // For local dev / normal hosting, keep it root.
-  return window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+  return '';
 }
 
 /**
@@ -60,7 +58,7 @@ export async function requireAuth(returnUrl = window.location.pathname + window.
  * Require admin role - redirects if not admin
  * @param {string} redirectUrl - URL to redirect to if not admin
  */
-export async function requireAdmin(redirectUrl = '/Tafel-Totaal/') {
+export async function requireAdmin(redirectUrl = '/') {
   const user = await checkAuth();
   
   if (!user) {

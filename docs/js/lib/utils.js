@@ -6,7 +6,7 @@
  * Get base path for GitHub Pages compatibility
  */
 export function getBasePath() {
-  return window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+  return '';
 }
 
 export function formatPrice(amount) {

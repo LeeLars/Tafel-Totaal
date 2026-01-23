@@ -6,7 +6,7 @@
 import { loadLocationHeader } from '../components/header.js';
 import { loadFooter } from '../components/footer.js';
 
-const API_BASE_URL = window.location.hostname.includes('github.io')
+const API_BASE_URL = false
   ? 'https://tafel-totaal-production.up.railway.app'
   : 'http://localhost:3000';
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
  * Supports both /locaties/brugge.html and ?slug=brugge formats
  */
 async function loadLocationData() {
-  // Extract slug from URL path: /Tafel-Totaal/locaties/brugge.html -> brugge
+  // Extract slug from URL path: /locaties/brugge.html -> brugge
   let slug = null;
   const path = window.location.pathname;
   const match = path.match(/\/locaties\/([^\/]+)\.html$/);
@@ -127,7 +127,7 @@ async function loadRelatedLocations() {
       .slice(0, 10);
 
     container.innerHTML = related.map(c => {
-      return `<a class="btn btn--secondary btn--sm" href="/Tafel-Totaal/locaties/${encodeURIComponent(c.slug)}.html">Tafelverhuur ${escapeHtml(c.name)}</a>`;
+      return `<a class="btn btn--secondary btn--sm" href="/locaties/${encodeURIComponent(c.slug)}.html">Tafelverhuur ${escapeHtml(c.name)}</a>`;
     }).join('');
   } catch {
     // ignore
@@ -141,7 +141,7 @@ function injectJsonLd() {
 
     const title = currentCity.meta_title || `Tafelverhuur ${currentCity.name} | Tafel Totaal`;
     const description = currentCity.meta_description || `Professionele tafelverhuur in ${currentCity.name}.`;
-    const url = currentSlug ? `https://leelars.github.io/Tafel-Totaal/locaties/${encodeURIComponent(currentSlug)}.html` : 'https://leelars.github.io/Tafel-Totaal/locaties.html';
+    const url = currentSlug ? `https://tafeltotaal.com/locaties/${encodeURIComponent(currentSlug)}.html` : 'https://tafeltotaal.com/locaties.html';
 
     const ld = {
       '@context': 'https://schema.org',
@@ -157,7 +157,7 @@ function injectJsonLd() {
       provider: {
         '@type': 'Organization',
         name: 'Tafel Totaal',
-        url: 'https://leelars.github.io/Tafel-Totaal/'
+        url: 'https://tafeltotaal.com/'
       },
       url
     };
@@ -270,7 +270,7 @@ function updateMetaTags() {
   // Canonical
   const canonical = document.getElementById('canonical-link');
   if (canonical && currentSlug) {
-    canonical.setAttribute('href', `https://leelars.github.io/Tafel-Totaal/locaties/${encodeURIComponent(currentSlug)}.html`);
+    canonical.setAttribute('href', `https://tafeltotaal.com/locaties/${encodeURIComponent(currentSlug)}.html`);
   }
   
   // Update meta description

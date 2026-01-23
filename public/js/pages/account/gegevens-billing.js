@@ -4,7 +4,7 @@
 
 import { showToast } from '../../lib/utils.js';
 
-const API_BASE_URL = window.location.hostname.includes('github.io') 
+const API_BASE_URL = false 
   ? 'https://tafel-totaal-production.up.railway.app' 
   : 'http://localhost:3000';
 

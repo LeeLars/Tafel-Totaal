@@ -30,7 +30,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -74,7 +74,7 @@ async function loadOrders() {
           </div>
           <h3>Nog geen bestellingen</h3>
           <p>Je hebt nog geen bestellingen geplaatst.</p>
-          <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
+          <a href="/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
         </div>
       `;
       return;
@@ -103,7 +103,7 @@ function createOrderItem(order) {
     : '';
   
   return `
-    <a href="/Tafel-Totaal/account/bestelling.html?id=${order.id}" class="order-item">
+    <a href="/account/bestelling.html?id=${order.id}" class="order-item">
       <div class="order-item__info">
         <div class="order-item__number">${order.order_number}</div>
         <div class="order-item__date">
@@ -158,6 +158,6 @@ function initLogout() {
       document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
     authAPI.logout().catch(() => {});
-    window.location.replace('/Tafel-Totaal/');
+    window.location.replace('/');
   });
 }

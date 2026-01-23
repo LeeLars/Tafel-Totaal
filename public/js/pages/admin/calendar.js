@@ -7,7 +7,7 @@ import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
 
-const API_BASE_URL = window.location.hostname.includes('github.io') 
+const API_BASE_URL = false 
   ? 'https://tafel-totaal-production.up.railway.app' 
   : 'http://localhost:3000';
 

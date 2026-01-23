@@ -10,7 +10,7 @@
   <title>Contact | Tafel Totaal</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +18,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/content.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/home.css"> <!-- Hero Styles -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/content.css">
+  <link rel="stylesheet" href="/css/pages/home.css"> <!-- Hero Styles -->
 </head>
 <body>
   <!-- Header -->
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Block 2: Image -->
-        <div class="hero-cell hero-cell--visual" style="background-image: url('/Tafel-Totaal/images/site/hero-contact.png');">
+        <div class="hero-cell hero-cell--visual" style="background-image: url('/images/site/hero-contact.png');">
           <div class="hero-overlay"></div>
         </div>
 
@@ -200,9 +200,9 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { loadHeader } from '/Tafel-Totaal/js/components/header.js';
-    import { showToast, isValidEmail } from '/Tafel-Totaal/js/lib/utils.js';
-    import { initAnimations } from '/Tafel-Totaal/js/lib/animations.js';
+    import { loadHeader } from '/js/components/header.js';
+    import { showToast, isValidEmail } from '/js/lib/utils.js';
+    import { initAnimations } from '/js/lib/animations.js';
     
     document.addEventListener('DOMContentLoaded', async () => {
       await loadHeader();
@@ -215,7 +215,7 @@
       const container = document.getElementById('footer-container');
       if (!container) return;
       try {
-        const response = await fetch('/Tafel-Totaal/components/footer.html');
+        const response = await fetch('/components/footer.html');
         if (response.ok) container.innerHTML = await response.text();
       } catch (e) {}
     }

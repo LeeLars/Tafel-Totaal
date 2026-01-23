@@ -28,7 +28,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -101,7 +101,7 @@ function createPackageCard(pkg) {
   
   return `
     <article class="package-card" data-animate="fade">
-      <a href="/Tafel-Totaal/pakket.html?id=${pkg.id}" class="package-card__link">
+      <a href="/pakket.html?id=${pkg.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${imageUrl}" alt="${pkg.name}" loading="lazy">
           ${isFeatured ? `<span class="package-card__badge badge badge--primary">Populair</span>` : ''}
@@ -148,11 +148,11 @@ function getPackageImageUrl(pkg) {
   if (direct) return direct;
 
   const fallbacks = [
-    '/Tafel-Totaal/images/site/hero-table-setting.jpg',
-    '/Tafel-Totaal/images/site/gala-theme.jpg',
-    '/Tafel-Totaal/images/site/corporate-dinner.jpg',
-    '/Tafel-Totaal/images/site/garden-dinner.jpg',
-    '/Tafel-Totaal/images/site/hero-homepage.jpg'
+    '/images/site/hero-table-setting.jpg',
+    '/images/site/gala-theme.jpg',
+    '/images/site/corporate-dinner.jpg',
+    '/images/site/garden-dinner.jpg',
+    '/images/site/hero-homepage.jpg'
   ];
 
   const key = String(pkg.id || pkg.slug || pkg.name || 'package');

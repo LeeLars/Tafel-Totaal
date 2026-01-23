@@ -34,7 +34,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -185,6 +185,6 @@ function initLogout() {
       document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
     authAPI.logout().catch(() => {});
-    window.location.replace('/Tafel-Totaal/');
+    window.location.replace('/');
   });
 }

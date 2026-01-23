@@ -37,7 +37,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -226,11 +226,11 @@ function renderProducts() {
 function createProductCard(product) {
   // Map backend category names to display names if needed
   const categoryName = product.category_name || product.category || 'Overig';
-  const imageUrl = product.image_url || product.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg';
+  const imageUrl = product.image_url || product.images?.[0] || '/images/products/placeholder.jpg';
   
   return `
     <article class="package-card">
-      <a href="/Tafel-Totaal/product.html?id=${product.id}" class="package-card__link">
+      <a href="/product.html?id=${product.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${imageUrl}" 
                alt="${product.name}" 

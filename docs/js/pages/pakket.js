@@ -64,7 +64,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
   } catch (error) {
@@ -186,7 +186,7 @@ function renderGallery() {
   } else if (currentPackage.images && currentPackage.images.length > 0) {
     images = currentPackage.images;
   } else {
-    images = ['/Tafel-Totaal/images/packages/placeholder.jpg'];
+    images = ['/images/packages/placeholder.jpg'];
   }
   
   if (mainImg) {
@@ -303,7 +303,7 @@ function renderContents() {
     // Get image from product
     const productImages = item.product?.images || [];
     // Handle both array of strings and string (legacy)
-    let imageUrl = '/Tafel-Totaal/images/products/placeholder.jpg';
+    let imageUrl = '/images/products/placeholder.jpg';
     
     if (Array.isArray(productImages) && productImages.length > 0) {
       imageUrl = productImages[0];
@@ -752,7 +752,7 @@ document.getElementById('add-to-cart-btn')?.addEventListener('click', async () =
       addons: selectedAddons,
       unit_price: calculatePackagePrice(),
       line_total: calculatePackagePrice(),
-      image: currentPackage.images?.[0] || '/Tafel-Totaal/images/packages/placeholder.jpg'
+      image: currentPackage.images?.[0] || '/images/packages/placeholder.jpg'
     });
 
     if (result.success) {

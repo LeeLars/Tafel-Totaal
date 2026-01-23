@@ -65,7 +65,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+    const basePath = '';
     const response = await fetch(`${basePath}/components/footer.html`);
     if (!response.ok) throw new Error('Failed to load footer');
     
@@ -145,7 +145,7 @@ function createMockProduct(productId) {
     stock_buffer: 50,
     images: [
       'https://res.cloudinary.com/dchrgzyb4/image/upload/v1767985412/tafel-totaal/products/f5vufoadhi58ff1ta52c.webp',
-      '/Tafel-Totaal/images/products/placeholder.jpg'
+      '/images/products/placeholder.jpg'
     ]
   };
 }
@@ -276,9 +276,9 @@ function renderRelatedProducts(products) {
 
   container.innerHTML = products.map(p => `
     <article class="package-card">
-      <a href="/Tafel-Totaal/product.html?id=${p.id}" class="package-card__link">
+      <a href="/product.html?id=${p.id}" class="package-card__link">
         <div class="package-card__image">
-          <img src="${p.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg'}" alt="${p.name}" loading="lazy">
+          <img src="${p.images?.[0] || '/images/products/placeholder.jpg'}" alt="${p.name}" loading="lazy">
           <span class="package-card__badge">${p.category_name || p.category || 'Overig'}</span>
         </div>
         <div class="package-card__content">
@@ -336,7 +336,7 @@ function renderProduct(product) {
   updatePresetAvailability(availableStock);
 
   // Images
-  const images = product.images || ['/Tafel-Totaal/images/products/placeholder.jpg'];
+  const images = product.images || ['/images/products/placeholder.jpg'];
   renderImages(images);
 }
 
@@ -693,7 +693,7 @@ function updateTotalPrice() {
       // Update quote link with details
       const subject = `Offerte aanvraag: ${currentProduct.name}`;
       const body = `Ik wil graag een offerte voor:\nProduct: ${currentProduct.name}\nAantal: ${selectedQuantity}\nPeriode: ${formatDateShort(startDate)} tot ${formatDateShort(endDate)} (${billingDays} dagen)`;
-      quoteBtn.href = `/Tafel-Totaal/contact.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      quoteBtn.href = `/contact.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
   } else {
     if (addToCartBtn) {
@@ -762,7 +762,7 @@ function initAddToCart() {
         event_type: eventType,        // 'single' or 'multi'
         billing_days: billingDays,    // Actual days charged (1 for single-day)
         days: days,
-        image: currentProduct.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg'
+        image: currentProduct.images?.[0] || '/images/products/placeholder.jpg'
       });
 
       showToast('Product toegevoegd aan winkelwagen', 'success');

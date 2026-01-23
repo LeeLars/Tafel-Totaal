@@ -5,7 +5,7 @@
 import { adminAPI } from '../../lib/api.js';
 import { showToast } from '../../lib/utils.js';
 
-const API_BASE_URL = window.location.hostname.includes('github.io') 
+const API_BASE_URL = false 
   ? 'https://tafel-totaal-production.up.railway.app' 
   : 'http://localhost:3000';
 
@@ -42,9 +42,9 @@ export function initCSVUpload() {
   }
   
   if (templateLink) {
-    templateLink.href = window.location.hostname.includes('github.io')
-      ? '/Tafel-Totaal/templates/products-template.csv'
-      : '/Tafel-Totaal/templates/products-template.csv';
+    templateLink.href = false
+      ? '/templates/products-template.csv'
+      : '/templates/products-template.csv';
   }
 }
 

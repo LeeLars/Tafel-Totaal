@@ -8,16 +8,16 @@
   <title>Servies & Tafelverhuur Koksijde | Tafel Totaal</title>
   <meta name="description" content="Professionele servies- en tafelverhuur in Koksijde. Levering mogelijk!">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://leelars.github.io/Tafel-Totaal/locaties/koksijde.html">
+  <link rel="canonical" href="https://tafeltotaal.com/locaties/koksijde.html">
   
   <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Servies & Tafelverhuur Koksijde | Tafel Totaal">
   <meta property="og:description" content="Professionele servies- en tafelverhuur in Koksijde. Levering mogelijk!">
-  <meta property="og:image" content="/Tafel-Totaal/images/site/Logo-T-T-Zwart-transparant.png">
+  <meta property="og:image" content="/images/site/Logo-T-T-Zwart-transparant.png">
   
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/Tafel-Totaal/images/site/Favicon-tafel-totaal.png">
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,12 +25,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="/Tafel-Totaal/css/variables.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/base.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/components.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/utilities.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/location-detail.css">
-  <link rel="stylesheet" href="/Tafel-Totaal/css/pages/location-hero-new.css">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/location-detail.css">
+  <link rel="stylesheet" href="/css/pages/location-hero-new.css">
 </head>
 <body>
   <!-- Header -->
@@ -68,9 +68,9 @@
       <!-- Left: Content -->
       <div class="location-hero__content">
         <nav class="location-hero__breadcrumbs" aria-label="Breadcrumb">
-          <a href="/Tafel-Totaal/">Home</a>
+          <a href="/">Home</a>
           <span>/</span>
-          <a href="/Tafel-Totaal/locaties.html">Locaties</a>
+          <a href="/locaties.html">Locaties</a>
           <span>/</span>
           <span class="active">Koksijde</span>
         </nav>
@@ -100,20 +100,20 @@
         </div>
 
         <div class="location-hero__cta">
-          <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary btn--lg">
+          <a href="/pakketten.html" class="btn btn--primary btn--lg">
             Bekijk Pakketten
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </a>
-          <a href="/Tafel-Totaal/producten.html" class="btn btn--secondary btn--lg">Bekijk Losse Producten</a>
+          <a href="/producten.html" class="btn btn--secondary btn--lg">Bekijk Losse Producten</a>
         </div>
       </div>
 
       <!-- Right: Visual with Stats -->
       <div class="location-hero__visual">
-        <img src="/Tafel-Totaal/images/site/hero-table-setting.jpg" alt="Tafelverhuur Koksijde" class="location-hero__image" loading="eager">
+        <img src="/images/site/hero-table-setting.jpg" alt="Tafelverhuur Koksijde" class="location-hero__image" loading="eager">
         <div class="location-hero__overlay">
           <div class="location-hero__stats">
             <div class="location-hero__stat">
@@ -213,7 +213,7 @@
     <section class="products-section">
       <div class="section-header">
         <h2>Populair in Koksijde</h2>
-        <a href="/Tafel-Totaal/producten.html" class="btn-link">Bekijk Alles →</a>
+        <a href="/producten.html" class="btn-link">Bekijk Alles →</a>
       </div>
       
       <div id="products-grid" class="products-grid">
@@ -227,7 +227,7 @@
 
   <!-- Scripts -->
   <script type="module">
-    import { formatPrice } from '/Tafel-Totaal/js/lib/utils.js';
+    import { formatPrice } from '/js/lib/utils.js';
     
     async function loadLocationComponents() {
       const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
@@ -239,7 +239,7 @@
           const headerScript = document.createElement('script');
           headerScript.type = 'module';
           headerScript.textContent = `
-            import { initHeader } from '/Tafel-Totaal/js/components/header.js';
+            import { initHeader } from '/js/components/header.js';
             initHeader();
           `;
           document.body.appendChild(headerScript);
@@ -283,9 +283,9 @@
       
       grid.innerHTML = products.map((product, i) => `
         <article class="product-card" data-animate="scale" style="animation-delay: ${i * 0.1}s;">
-          <a href="/Tafel-Totaal/product.html?id=${product.id}" class="product-link">
+          <a href="/product.html?id=${product.id}" class="product-link">
             <div class="product-image">
-              <img src="${product.images?.[0] || '/Tafel-Totaal/images/products/placeholder.jpg'}" 
+              <img src="${product.images?.[0] || '/images/products/placeholder.jpg'}" 
                    alt="${product.name}" 
                    loading="lazy">
             </div>

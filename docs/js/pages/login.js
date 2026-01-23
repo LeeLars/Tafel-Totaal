@@ -24,7 +24,7 @@ async function loadFooter() {
 
   try {
     // Use base path for GitHub Pages compatibility
-    const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+    const basePath = '';
     const response = await fetch(`${basePath}/components/footer.html`);
     if (!response.ok) throw new Error('Failed to load footer');
     container.innerHTML = await response.text();
@@ -41,7 +41,7 @@ async function checkAlreadyLoggedIn() {
     const response = await authAPI.me();
     if (response.success && response.data) {
       // Already logged in, redirect
-      const returnUrl = getQueryParam('returnUrl') || '/Tafel-Totaal/account/overzicht.html';
+      const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
       window.location.href = returnUrl;
       return;
     }
@@ -55,7 +55,7 @@ async function checkAlreadyLoggedIn() {
     try {
       const user = JSON.parse(storedUser);
       if (user) {
-        const returnUrl = getQueryParam('returnUrl') || '/Tafel-Totaal/account/overzicht.html';
+        const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
         window.location.href = returnUrl;
       }
     } catch (e) {
@@ -128,9 +128,9 @@ function initLoginForm() {
         if (!redirectUrl) {
           // Default redirect based on user role
           if (response.data?.role === 'admin') {
-            redirectUrl = '/Tafel-Totaal/admin/index.html';
+            redirectUrl = '/admin/index.html';
           } else {
-            redirectUrl = '/Tafel-Totaal/account/overzicht.html';
+            redirectUrl = '/account/overzicht.html';
           }
         }
         

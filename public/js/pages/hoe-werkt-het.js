@@ -22,7 +22,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const basePath = window.location.hostname.includes('github.io') ? '/Tafel-Totaal' : '';
+    const basePath = '';
     const response = await fetch(`${basePath}/components/footer.html`);
     if (!response.ok) throw new Error('Failed to load footer');
     

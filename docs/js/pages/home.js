@@ -7,7 +7,7 @@ import { packagesAPI } from '../lib/api.js';
 import { formatPrice } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
 
-const API_BASE_URL = window.location.hostname.includes('github.io')
+const API_BASE_URL = false
   ? 'https://tafel-totaal-production.up.railway.app'
   : 'http://localhost:3000';
 
@@ -28,7 +28,7 @@ async function loadFooter() {
   if (!container) return;
 
   try {
-    const response = await fetch('/Tafel-Totaal/components/footer.html');
+    const response = await fetch('/components/footer.html');
     if (!response.ok) throw new Error('Failed to load footer');
     
     const html = await response.text();
@@ -90,7 +90,7 @@ function createPackageCard(pkg) {
   
   return `
     <article class="package-card">
-      <a href="/Tafel-Totaal/pakket.html?id=${pkg.id}" class="package-card__link">
+      <a href="/pakket.html?id=${pkg.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${imageUrl}" alt="${pkg.name}" loading="lazy">
           ${serviceLevelBadge ? `<span class="package-card__badge">${serviceLevelBadge}</span>` : ''}
@@ -116,11 +116,11 @@ function getPackageImageUrl(pkg) {
   if (direct) return direct;
 
   const fallbacks = [
-    '/Tafel-Totaal/images/site/hero-table-setting.jpg',
-    '/Tafel-Totaal/images/site/gala-theme.jpg',
-    '/Tafel-Totaal/images/site/corporate-dinner.jpg',
-    '/Tafel-Totaal/images/site/garden-dinner.jpg',
-    '/Tafel-Totaal/images/site/hero-homepage.jpg'
+    '/images/site/hero-table-setting.jpg',
+    '/images/site/gala-theme.jpg',
+    '/images/site/corporate-dinner.jpg',
+    '/images/site/garden-dinner.jpg',
+    '/images/site/hero-homepage.jpg'
   ];
 
   const key = String(pkg.id || pkg.slug || pkg.name || 'package');
@@ -177,7 +177,7 @@ function renderLocations(cities) {
   if (!grid) return;
 
   grid.innerHTML = cities.map(city => `
-    <a href="/Tafel-Totaal/locaties/${city.slug}.html" class="location-card">
+    <a href="/locaties/${city.slug}.html" class="location-card">
       <div class="location-card__icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>

@@ -292,7 +292,7 @@ function renderSummary() {
     itemsContainer.innerHTML = cart.map(item => `
       <div class="checkout-summary__item">
         <div class="checkout-summary__item-image">
-          <img src="${item.image || '/Tafel-Totaal/images/packages/placeholder.jpg'}" alt="${item.name}">
+          <img src="${item.image || '/images/packages/placeholder.jpg'}" alt="${item.name}">
         </div>
         <div class="checkout-summary__item-info">
           <div class="checkout-summary__item-name">${item.name}</div>
@@ -1522,7 +1522,7 @@ async function placeOrder() {
       await clearCart();
       
       // Redirect to order confirmation page
-      window.location.href = `/Tafel-Totaal/bestelling-bevestigd.html?order=${response.data.order_id}`;
+      window.location.href = `/bestelling-bevestigd.html?order=${response.data.order_id}`;
     } else {
       throw new Error('Reservering kon niet worden aangemaakt');
     }
