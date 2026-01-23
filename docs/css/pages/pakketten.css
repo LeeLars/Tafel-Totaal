@@ -380,20 +380,25 @@
 }
 
 /* ============================================
-   PACKAGE CARD (reused from home)
+   PACKAGE CARD (Brutalist Design)
    ============================================ */
 
-.package-card {
+.packages-grid .package-card {
   background-color: var(--color-white);
-  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-black);
+  border-radius: 0;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transition: z-index 0s, transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-expo);
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.package-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+.packages-grid .package-card:hover {
+  z-index: 10;
+  transform: scale(1.02);
+  box-shadow: var(--shadow-xl);
 }
 
 .package-card__link {
