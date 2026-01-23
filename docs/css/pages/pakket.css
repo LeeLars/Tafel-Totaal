@@ -712,7 +712,13 @@
 
 .package-contents-inline {
   background-color: var(--color-white);
-  padding-top: var(--space-md);
+  padding: var(--space-md);
+  position: sticky;
+  top: 80px;
+  z-index: 10;
+  border: 1px solid var(--border-color);
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 
 .package-contents__title {
