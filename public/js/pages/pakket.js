@@ -236,7 +236,7 @@ function renderPersonsOptions() {
 }
 
 /**
- * Render add-ons (optional products with toggle points)
+ * Render add-ons (optional products)
  */
 function renderAddons() {
   const section = document.getElementById('addons-section');
@@ -255,43 +255,23 @@ function renderAddons() {
 
   section.style.display = '';
   
-  // Calculate total toggle points available
-  const totalPoints = optionalItems.reduce((sum, item) => sum + (item.toggle_points || 0), 0);
-  
-  list.innerHTML = `
-    ${totalPoints > 0 ? `
-      <div class="toggle-points-info" style="padding: var(--space-md); background: var(--color-concrete); border: 1px solid var(--color-light-gray); margin-bottom: var(--space-md);">
-        <strong>Toggle Points:</strong> 
-        <span id="points-used">0</span> / ${totalPoints} gebruikt
+  list.innerHTML = optionalItems.map(item => `
+    <div class="addon-item" data-item-id="${item.id}" data-product-id="${item.product_id}">
+      <div class="addon-item__info">
+        <div class="addon-item__checkbox"></div>
+        <span class="addon-item__name">${item.product?.name || item.name || 'Product'}</span>
       </div>
-    ` : ''}
-    ${optionalItems.map(item => `
-      <div class="addon-item" data-item-id="${item.id}" data-product-id="${item.product_id}" data-points="${item.toggle_points || 0}">
-        <div class="addon-item__info">
-          <div class="addon-item__checkbox"></div>
-          <span class="addon-item__name">${item.product?.name || item.name || 'Product'}</span>
-          ${item.toggle_points > 0 ? `<span class="addon-item__points">${item.toggle_points} pts</span>` : ''}
-        </div>
-        <span class="addon-item__quantity">×${item.quantity || 1}</span>
-      </div>
-    `).join('')}
-  `;
+      <span class="addon-item__quantity">×${item.quantity || 1}</span>
+    </div>
+  `).join('');
 
-  // Add-on click handlers with toggle points validation
+  // Add-on click handlers
   list.querySelectorAll('.addon-item').forEach(item => {
     item.addEventListener('click', () => {
       const itemId = item.dataset.itemId;
-      const points = parseInt(item.dataset.points) || 0;
       const isSelected = item.classList.contains('selected');
       
       if (!isSelected) {
-        // Check if we have enough points
-        const currentPoints = calculateUsedPoints();
-        if (currentPoints + points > totalPoints) {
-          showToast('Niet genoeg toggle points beschikbaar', 'error');
-          return;
-        }
-        
         item.classList.add('selected');
         selectedAddons.push(itemId);
       } else {
@@ -299,31 +279,9 @@ function renderAddons() {
         selectedAddons = selectedAddons.filter(id => id !== itemId);
       }
       
-      updateTogglePointsDisplay();
       updatePriceSummary();
     });
   });
-}
-
-/**
- * Calculate used toggle points
- */
-function calculateUsedPoints() {
-  const items = currentPackage.items || [];
-  return selectedAddons.reduce((sum, addonId) => {
-    const item = items.find(i => i.id === addonId);
-    return sum + (item?.toggle_points || 0);
-  }, 0);
-}
-
-/**
- * Update toggle points display
- */
-function updateTogglePointsDisplay() {
-  const pointsUsedEl = document.getElementById('points-used');
-  if (pointsUsedEl) {
-    pointsUsedEl.textContent = calculateUsedPoints();
-  }
 }
 
 /**

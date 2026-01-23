@@ -8,14 +8,6 @@ import { Package, PackageItem, Product } from '../types';
  */
 export async function debugPackagesTable(_req: Request, res: Response): Promise<void> {
   try {
-    // First, ensure toggle_points column exists (migration)
-    try {
-      await query(`ALTER TABLE package_items ADD COLUMN IF NOT EXISTS toggle_points INTEGER DEFAULT 0`);
-      console.log('toggle_points column ensured');
-    } catch (migrationError) {
-      console.log('toggle_points migration skipped or failed:', migrationError);
-    }
-
     // Check if packages table exists
     const tableCheck = await queryOne<{ exists: boolean }>(
       `SELECT EXISTS (
@@ -52,7 +44,6 @@ export async function debugPackagesTable(_req: Request, res: Response): Promise<
           product_id UUID NOT NULL,
           quantity INTEGER NOT NULL DEFAULT 1,
           is_optional BOOLEAN NOT NULL DEFAULT false,
-          toggle_points INTEGER NOT NULL DEFAULT 0,
           sort_order INTEGER NOT NULL DEFAULT 0,
           created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
         )
@@ -114,7 +105,6 @@ interface AddPackageItemBody {
   product_id: string;
   quantity: number;
   is_optional?: boolean;
-  toggle_points?: number;
   sort_order?: number;
 }
 
@@ -135,7 +125,6 @@ export async function getAllPackages(req: Request, res: Response): Promise<void>
               'product_id', pi.product_id,
               'quantity', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', 0,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -194,7 +183,6 @@ export async function getPackageById(req: Request, res: Response): Promise<void>
               'product_id', pi.product_id,
               'quantity', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', 0,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,
@@ -246,7 +234,6 @@ export async function adminGetAllPackages(_req: Request, res: Response): Promise
               'product_id', pi.product_id,
               'quantity', pi.quantity_per_person,
               'is_optional', pi.is_optional,
-              'toggle_points', 0,
               'product', json_build_object(
                 'id', pr.id,
                 'name', pr.name,

@@ -147,7 +147,6 @@ CREATE TABLE package_items (
   quantity_per_person INTEGER NOT NULL DEFAULT 1,
   is_optional BOOLEAN DEFAULT false,
   extra_price DECIMAL(10,2) DEFAULT 0,
-  toggle_points INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT NOW(),
   UNIQUE(package_id, product_id)
 );

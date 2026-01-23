@@ -140,7 +140,6 @@ const addPackageItemValidation = [
   body('product_id').isUUID().withMessage('Valid product ID is required'),
   body('quantity').isInt({ min: 1 }).withMessage('Valid quantity is required'),
   body('is_optional').optional().isBoolean(),
-  body('toggle_points').optional().isInt({ min: 0 }),
   body('sort_order').optional().isInt({ min: 0 }),
 ];
 
@@ -149,7 +148,6 @@ const updatePackageItemValidation = [
   param('itemId').isUUID().withMessage('Valid item ID is required'),
   body('quantity').optional().isInt({ min: 1 }),
   body('is_optional').optional().isBoolean(),
-  body('toggle_points').optional().isInt({ min: 0 }),
   body('sort_order').optional().isInt({ min: 0 }),
 ];
 

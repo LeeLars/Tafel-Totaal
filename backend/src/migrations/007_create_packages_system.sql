@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS package_items (
   product_id INT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   quantity INT NOT NULL DEFAULT 1,
   is_optional BOOLEAN DEFAULT false,
-  toggle_points INT DEFAULT 0,
   sort_order INT DEFAULT 0,
   created_at TIMESTAMP DEFAULT NOW(),
   UNIQUE(package_id, product_id)

@@ -529,8 +529,7 @@ function openEditModal(pkg) {
     product_id: item.product_id,
     product_name: item.product?.name || 'Onbekend product',
     quantity: item.quantity || 1,
-    is_optional: item.is_optional || false,
-    toggle_points: item.toggle_points || 0
+    is_optional: item.is_optional || false
   }));
   
   // Update modal title
@@ -602,7 +601,7 @@ function renderPackageProducts() {
 
   // Optional products section
   if (optionalProducts.length > 0) {
-    html += '<div style="margin-bottom: var(--space-md);"><h4 style="font-size: var(--font-size-sm); text-transform: uppercase; color: var(--color-gray); margin-bottom: var(--space-sm);">Optionele Producten (Toggle Points)</h4>';
+    html += '<div style="margin-bottom: var(--space-lg);"><h4 style="font-size: var(--font-size-sm); text-transform: uppercase; color: var(--color-gray); margin-bottom: var(--space-sm);">Optionele Producten</h4>';
     html += optionalProducts.map((item, index) => {
       const actualIndex = packageProducts.indexOf(item);
       return createProductItemHTML(item, actualIndex, true);
@@ -627,12 +626,7 @@ function createProductItemHTML(item, index, isOptional) {
         <label style="font-size: var(--font-size-xs); color: var(--color-gray);">Aantal:</label>
         <input type="number" class="form-input form-input--sm" value="${item.quantity || 1}" min="1" style="width: 70px;" onchange="updateProductQuantity(${index}, this.value)">
       </div>
-      ${isOptional ? `
-        <div style="display: flex; align-items: center; gap: var(--space-xs);">
-          <label style="font-size: var(--font-size-xs); color: var(--color-gray);">Points:</label>
-          <input type="number" class="form-input form-input--sm" value="${item.toggle_points || 0}" min="0" style="width: 70px;" onchange="updateProductTogglePoints(${index}, this.value)">
-        </div>
-      ` : '<div></div>'}
+      <div></div>
       <label class="checkbox-label" style="margin: 0;">
         <input type="checkbox" ${item.is_optional ? 'checked' : ''} onchange="toggleProductOptional(${index}, this.checked)">
         <span style="font-size: var(--font-size-xs);">Optioneel</span>
@@ -765,14 +759,6 @@ window.updateProductQuantity = function(index, quantity) {
   }
 };
 
-/**
- * Update product toggle points
- */
-window.updateProductTogglePoints = function(index, points) {
-  if (packageProducts[index]) {
-    packageProducts[index].toggle_points = parseInt(points) || 0;
-  }
-};
 
 /**
  * Toggle product optional flag
@@ -780,10 +766,6 @@ window.updateProductTogglePoints = function(index, points) {
 window.toggleProductOptional = function(index, isOptional) {
   if (packageProducts[index]) {
     packageProducts[index].is_optional = isOptional;
-    if (!isOptional) {
-      // Reset toggle points when making product required
-      packageProducts[index].toggle_points = 0;
-    }
     renderPackageProducts();
   }
 };
@@ -867,8 +849,7 @@ async function syncPackageItems(packageId) {
     if (!existing) return false;
     // Check if any field changed
     return existing.quantity !== p.quantity || 
-           existing.is_optional !== p.is_optional || 
-           existing.toggle_points !== (p.toggle_points || 0);
+           existing.is_optional !== p.is_optional;
   });
 
   console.log('Sync items:', { itemsToDelete, itemsToAdd, itemsToUpdate });
@@ -889,8 +870,7 @@ async function syncPackageItems(packageId) {
       await adminAPI.addPackageItem(packageId, {
         product_id: item.product_id,
         quantity: item.quantity || 1,
-        is_optional: item.is_optional || false,
-        toggle_points: item.toggle_points || 0
+        is_optional: item.is_optional || false
       });
       console.log('Added item:', item.product_id);
     } catch (error) {
@@ -905,8 +885,7 @@ async function syncPackageItems(packageId) {
       try {
         await adminAPI.updatePackageItem(packageId, existing.id, {
           quantity: item.quantity || 1,
-          is_optional: item.is_optional || false,
-          toggle_points: item.toggle_points || 0
+          is_optional: item.is_optional || false
         });
         console.log('Updated item:', existing.id);
       } catch (error) {
