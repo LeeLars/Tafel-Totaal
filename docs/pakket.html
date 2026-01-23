@@ -60,19 +60,29 @@
       <section class="package-detail">
         <div class="container">
           <div class="package-detail__grid">
-            <!-- Left: Images -->
-            <div class="package-gallery">
-              <div class="package-gallery__main">
-                <div class="dish-badge">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                  </svg>
-                  Wij doen de afwas!
+            <!-- Left: Images & Content -->
+            <div class="package-left-col">
+              <div class="package-gallery">
+                <div class="package-gallery__main">
+                  <div class="dish-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Wij doen de afwas!
+                  </div>
+                  <img src="/Tafel-Totaal/images/packages/placeholder.jpg" alt="" id="gallery-main" loading="lazy">
                 </div>
-                <img src="/Tafel-Totaal/images/packages/placeholder.jpg" alt="" id="gallery-main" loading="lazy">
+                <div class="package-gallery__thumbs" id="gallery-thumbs">
+                  <!-- Thumbnails loaded via JS -->
+                </div>
               </div>
-              <div class="package-gallery__thumbs" id="gallery-thumbs">
-                <!-- Thumbnails loaded via JS -->
+
+              <!-- Package Contents (Moved) -->
+              <div class="package-contents-inline">
+                <h3 class="package-contents__title">In dit pakket</h3>
+                <div class="package-contents__grid" id="package-contents">
+                  <!-- Contents loaded via JS -->
+                </div>
               </div>
             </div>
 
@@ -220,16 +230,6 @@
                 </a>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Package Contents -->
-      <section class="package-contents">
-        <div class="container">
-          <h2>Wat zit er in dit pakket?</h2>
-          <div class="package-contents__grid" id="package-contents">
-            <!-- Contents loaded via JS -->
           </div>
         </div>
       </section>

@@ -299,12 +299,29 @@ function renderContents() {
     return;
   }
 
-  container.innerHTML = requiredItems.map(item => `
+  container.innerHTML = requiredItems.map(item => {
+    // Get image from product
+    const productImages = item.product?.images || [];
+    // Handle both array of strings and string (legacy)
+    let imageUrl = '/Tafel-Totaal/images/products/placeholder.jpg';
+    
+    if (Array.isArray(productImages) && productImages.length > 0) {
+      imageUrl = productImages[0];
+    } else if (typeof productImages === 'string' && productImages) {
+      imageUrl = productImages;
+    }
+
+    return `
     <div class="package-content__item">
-      <span class="package-content__name">${item.product?.name || item.name || 'Product'}</span>
-      <span class="package-content__quantity">×${item.quantity || 1}</span>
+      <div class="package-content__image">
+        <img src="${imageUrl}" alt="${item.product?.name || item.name}" loading="lazy">
+      </div>
+      <div class="package-content__info">
+        <span class="package-content__name">${item.product?.name || item.name || 'Product'}</span>
+        <span class="package-content__quantity">×${item.quantity || 1}</span>
+      </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 /**

@@ -94,6 +94,10 @@ function createPackageCard(pkg) {
   const imageUrl = pkg.image_url || getPackageImageUrl(pkg);
   const isFeatured = pkg.is_featured;
   const productCount = pkg.items?.length || 0;
+  // Backend returns base_price, not price_per_day
+  const price = pkg.base_price || pkg.price_per_day || 0;
+  // Backend returns min_persons, not persons
+  const persons = pkg.min_persons || pkg.persons || 10;
   
   return `
     <article class="package-card" data-animate="fade">
@@ -113,7 +117,7 @@ function createPackageCard(pkg) {
                 <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
-              ${pkg.persons || 10} personen
+              ${persons} personen
             </span>
             ${productCount > 0 ? `
             <span>
@@ -128,7 +132,7 @@ function createPackageCard(pkg) {
           </div>
           <div class="package-card__footer">
             <div class="package-card__price">
-              ${formatPrice(pkg.price_per_day)}
+              ${formatPrice(price)}
               <span>/ dag</span>
             </div>
             <span class="btn btn--primary btn--sm">Bekijk Details</span>
