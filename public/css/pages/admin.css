@@ -41,7 +41,7 @@
     display: block;
     position: sticky;
     top: 72px;
-    height: calc(100vh - 72px);
+    height: 100vh;
     overflow-y: auto;
   }
 }

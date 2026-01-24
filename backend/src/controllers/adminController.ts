@@ -225,27 +225,12 @@ export async function getPickingDetails(req: Request, res: Response): Promise<vo
   try {
     const { id } = req.params;
 
+    // Get order basic info
     const order = await queryOne(
-      `SELECT o.*,
-              json_agg(
-                json_build_object(
-                  'id', oi.id,
-                  'item_type', oi.item_type,
-                  'product_id', oi.product_id,
-                  'package_id', oi.package_id,
-                  'quantity', oi.quantity,
-                  'picked', COALESCE(oi.picked, false),
-                  'picked_at', oi.picked_at,
-                  'product_name', p.name,
-                  'product_sku', p.sku,
-                  'warehouse_location', p.warehouse_location
-                )
-              ) as items
+      `SELECT o.*, c.first_name, c.last_name, c.email as customer_email
        FROM orders o
-       LEFT JOIN order_items oi ON o.id = oi.order_id
-       LEFT JOIN products p ON oi.product_id = p.id
-       WHERE o.id = $1
-       GROUP BY o.id`,
+       LEFT JOIN customers c ON o.customer_id = c.id
+       WHERE o.id = $1`,
       [id]
     );
 
@@ -254,7 +239,115 @@ export async function getPickingDetails(req: Request, res: Response): Promise<vo
       return;
     }
 
-    res.json({ success: true, data: order });
+    // Get order items
+    interface OrderItemRow {
+      id: string;
+      item_type: string;
+      product_id: string | null;
+      package_id: number | null;
+      quantity: number;
+      persons: number | null;
+      picked: boolean;
+      picked_at: string | null;
+      product_name: string | null;
+      product_sku: string | null;
+      warehouse_location: string | null;
+      package_name: string | null;
+    }
+    
+    const orderItems = await query<OrderItemRow>(
+      `SELECT oi.*, p.name as product_name, p.sku as product_sku, p.warehouse_location,
+              pkg.name as package_name
+       FROM order_items oi
+       LEFT JOIN products p ON oi.product_id = p.id
+       LEFT JOIN packages pkg ON oi.package_id = pkg.id
+       WHERE oi.order_id = $1`,
+      [id]
+    );
+
+    // Expand package items into individual products for picking
+    interface ExpandedItem {
+      id: string;
+      order_item_id: string;
+      item_type: string;
+      product_id: string | null;
+      package_id: number | null;
+      package_name: string | null;
+      quantity: number;
+      picked: boolean;
+      picked_at: string | null;
+      product_name: string | null;
+      product_sku: string | null;
+      warehouse_location: string | null;
+    }
+    
+    const expandedItems: ExpandedItem[] = [];
+    
+    interface PackageProductRow {
+      product_id: string;
+      quantity_per_person: number;
+      is_optional: boolean;
+      product_name: string;
+      product_sku: string;
+      warehouse_location: string | null;
+    }
+    
+    for (const item of orderItems) {
+      if (item.item_type === 'package' && item.package_id) {
+        // Get all products in this package
+        const packageProducts = await query<PackageProductRow>(
+          `SELECT pi.product_id, pi.quantity_per_person, pi.is_optional,
+                  p.name as product_name, p.sku as product_sku, p.warehouse_location
+           FROM package_items pi
+           JOIN products p ON pi.product_id = p.id
+           WHERE pi.package_id = $1 AND pi.is_optional = false`,
+          [item.package_id]
+        );
+        
+        // Calculate quantity based on persons
+        const persons = item.persons || 1;
+        for (const pkgProduct of packageProducts) {
+          expandedItems.push({
+            id: `${item.id}-${pkgProduct.product_id}`,
+            order_item_id: item.id,
+            item_type: 'package_product',
+            product_id: pkgProduct.product_id,
+            package_id: item.package_id,
+            package_name: item.package_name,
+            quantity: pkgProduct.quantity_per_person * persons,
+            picked: item.picked || false,
+            picked_at: item.picked_at,
+            product_name: pkgProduct.product_name,
+            product_sku: pkgProduct.product_sku,
+            warehouse_location: pkgProduct.warehouse_location
+          });
+        }
+      } else if (item.item_type === 'product') {
+        expandedItems.push({
+          id: item.id,
+          order_item_id: item.id,
+          item_type: 'product',
+          product_id: item.product_id,
+          package_id: null,
+          package_name: null,
+          quantity: item.quantity,
+          picked: item.picked || false,
+          picked_at: item.picked_at,
+          product_name: item.product_name,
+          product_sku: item.product_sku,
+          warehouse_location: item.warehouse_location
+        });
+      }
+    }
+
+    res.json({ 
+      success: true, 
+      data: { 
+        ...order, 
+        items: expandedItems,
+        original_items: orderItems // Keep original for reference
+      } 
+    });
   } catch (error) {
     console.error('Get picking details error:', error);
     res.status(500).json({ success: false, error: 'Failed to fetch picking details' });
