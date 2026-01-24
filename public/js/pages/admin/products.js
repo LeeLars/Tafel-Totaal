@@ -8,9 +8,9 @@ import { requireAdmin } from '../../lib/guards.js';
 import { initCSVUpload, initBulkActions, handleCheckboxChange, updateBulkToolbar } from './products-csv-bulk.js';
 import { initImageUpload, setCurrentImages, getCurrentImages, clearImages } from './product-images.js';
 
-const API_BASE_URL = false 
-  ? 'https://tafel-totaal-production.up.railway.app' 
-  : 'http://localhost:3000';
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000' 
+  : 'https://tafel-totaal-production.up.railway.app';
 
 let currentPage = 1;
 let currentSearch = '';
