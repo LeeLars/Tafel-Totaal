@@ -690,30 +690,86 @@
 
     async function loadLoyaltyData() {
       try {
-        console.log('Loading loyalty data...');
+        // Debug: Check auth state
+        const user = getCurrentUser();
+        const hasToken = !!localStorage.getItem('authToken');
+        const hasUser = !!localStorage.getItem('user');
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        
+        console.log('=== LOYALTY DEBUG INFO ===');
+        console.log('Current user:', user);
+        console.log('Has authToken:', hasToken);
+        console.log('Has user in localStorage:', hasUser);
+        console.log('isLoggedIn flag:', isLoggedIn);
+        console.log('API Base URL:', window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://tafel-totaal-production.up.railway.app');
+        
+        if (!user) {
+          console.warn('No user found - showing login message');
+          showError('Je bent niet ingelogd. <a href="/login.html">Klik hier om in te loggen</a>');
+          return;
+        }
+        
+        if (!hasToken) {
+          console.warn('No auth token found - user needs to re-login');
+          showError('Authenticatie token ontbreekt. <a href="/login.html?redirect=' + encodeURIComponent(window.location.pathname) + '">Log opnieuw in om verder te gaan</a>');
+          return;
+        }
+        
+        console.log('Loading loyalty data from API...');
         const response = await loyaltyAPI.getCustomerLoyalty();
         console.log('Loyalty API response:', response);
         
         if (response && response.success && response.data) {
           loyaltyData = response.data;
-          console.log('Loyalty data loaded:', loyaltyData);
+          console.log('✓ Loyalty data loaded successfully:', loyaltyData);
           renderLoyaltyDashboard();
         } else {
-          console.error('Loyalty API error:', response);
+          console.error('Loyalty API returned unsuccessful response:', response);
           // Show default empty state instead of error
           renderDefaultLoyaltyState();
         }
       } catch (error) {
-        console.error('Loyalty load error:', error);
+        console.error('=== LOYALTY LOAD ERROR ===');
+        console.error('Error object:', error);
+        console.error('Error status:', error.status);
+        console.error('Error message:', error.message);
+        console.error('Error data:', error.data);
+        console.error('Error stack:', error.stack);
         
         // Check if it's an auth error
         if (error.status === 401) {
-          showError('Sessie verlopen. <a href="/login.html?redirect=' + encodeURIComponent(window.location.pathname) + '">Klik hier om opnieuw in te loggen</a>');
+          const hasToken = !!localStorage.getItem('authToken');
+          const tokenPreview = localStorage.getItem('authToken')?.substring(0, 20) + '...';
+          
+          console.error('401 Unauthorized - Auth failed');
+          console.error('Token present:', hasToken);
+          console.error('Token preview:', tokenPreview);
+          
+          let errorMsg = '<strong>Authenticatie mislukt (401)</strong><br>';
+          errorMsg += 'Je sessie is verlopen of ongeldig.<br>';
+          errorMsg += '<small>Debug: Token aanwezig: ' + (hasToken ? 'Ja' : 'Nee') + '</small><br>';
+          errorMsg += '<a href="/login.html?redirect=' + encodeURIComponent(window.location.pathname) + '" class="btn btn--primary" style="margin-top: 10px;">Opnieuw inloggen</a>';
+          
+          showError(errorMsg);
           return;
         }
         
-        // For other errors, show default empty state (better UX for new users)
-        renderDefaultLoyaltyState();
+        // For other errors, show detailed error message
+        let errorMsg = '<strong>Fout bij laden loyalty gegevens</strong><br>';
+        errorMsg += 'Status: ' + (error.status || 'Onbekend') + '<br>';
+        errorMsg += 'Bericht: ' + (error.message || 'Geen details beschikbaar') + '<br>';
+        
+        if (error.status === 500) {
+          errorMsg += '<small>Server error - probeer het later opnieuw</small><br>';
+        } else if (error.status === 404) {
+          errorMsg += '<small>Loyalty endpoint niet gevonden - mogelijk backend issue</small><br>';
+        } else if (!error.status) {
+          errorMsg += '<small>Geen verbinding met server - check internet/backend status</small><br>';
+        }
+        
+        errorMsg += '<button onclick="location.reload()" class="btn btn--secondary" style="margin-top: 10px;">Opnieuw proberen</button>';
+        
+        showError(errorMsg);
       }
     }
 
