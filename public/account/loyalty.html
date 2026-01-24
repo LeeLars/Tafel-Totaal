@@ -145,7 +145,7 @@
               </div>
               <div class="points-summary__card">
                 <div class="points-summary__value" id="lifetime-points">0</div>
-                <div class="points-summary__label">Totaal verdiend</div>
+                <div class="points-summary__label">Punten dit jaar</div>
               </div>
               <div class="points-summary__card">
                 <div class="points-summary__value" id="yearly-spend-display">€ 0</div>
@@ -845,14 +845,15 @@
 
       const { loyalty, tier, progress, redemption, tiers, yearlySpend } = loyaltyData;
 
-      // Render tier slider
-      renderTierSlider(tiers, tier?.id, loyalty?.lifetime_points || 0);
+      // Render tier slider using yearly_points (tiers reset each year)
+      const yearlyPoints = loyalty?.yearly_points ?? 0;
+      renderTierSlider(tiers, tier?.id, yearlyPoints);
 
       // Update points summary cards
       const availablePoints = loyalty?.available_points ?? 0;
-      const lifetimePoints = loyalty?.lifetime_points ?? 0;
       document.getElementById('available-points').textContent = availablePoints.toLocaleString('nl-NL');
-      document.getElementById('lifetime-points').textContent = lifetimePoints.toLocaleString('nl-NL');
+      // Show yearly points instead of lifetime (tiers are based on yearly points)
+      document.getElementById('lifetime-points').textContent = yearlyPoints.toLocaleString('nl-NL');
 
       // Update yearly spend display
       const yearlyAmount = yearlySpend?.amount ?? 0;

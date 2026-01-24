@@ -3,7 +3,7 @@
  * Handles multi-step checkout flow and order placement
  */
 
-import { checkoutAPI } from '../lib/api.js';
+import { checkoutAPI, loyaltyAPI } from '../lib/api.js';
 import { formatPrice, formatDateShort, showToast, isValidEmail, isValidPhone } from '../lib/utils.js';
 import { getCart, clearCart } from '../services/cart.js';
 import { getCurrentUser } from '../services/auth.js';
@@ -13,7 +13,9 @@ let currentStep = 1;
 let checkoutData = {
   customer: {},
   delivery: {},
-  items: []
+  items: [],
+  loyalty: null, // Customer loyalty data (tier, discount, etc.)
+  loyaltyDiscount: 0 // Calculated tier discount amount
 };
 
 // Delivery constants
@@ -249,6 +251,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   checkoutData.items = cart;
   
+  // Load loyalty data if user is logged in
+  await loadLoyaltyData();
+  
   prefillUserData();
   renderSummary();
   populateEventDates();
@@ -256,6 +261,32 @@ document.addEventListener('DOMContentLoaded', async () => {
   initDeliveryToggle();
   initStepNavigation();
 });
+
+/**
+ * Load customer loyalty data for tier discount
+ */
+async function loadLoyaltyData() {
+  const user = getCurrentUser();
+  if (!user) {
+    console.log('No user logged in - no loyalty discount');
+    return;
+  }
+
+  try {
+    const response = await loyaltyAPI.getCustomerLoyalty();
+    if (response && response.success && response.data) {
+      checkoutData.loyalty = response.data;
+      console.log('Loyalty data loaded:', {
+        tier: response.data.tier?.name,
+        discount: response.data.tier?.discount_percentage,
+        yearlyPoints: response.data.loyalty?.yearly_points
+      });
+    }
+  } catch (error) {
+    console.log('Could not load loyalty data:', error.message);
+    // Continue without loyalty discount
+  }
+}
 
 /**
  * Show empty cart state
@@ -320,6 +351,35 @@ function updateTotals() {
     subtotal += item.line_total || (item.unit_price * item.quantity);
   });
 
+  // Calculate loyalty tier discount
+  let loyaltyDiscount = 0;
+  const loyaltyDiscountRow = document.getElementById('loyalty-discount-row');
+  const loyaltyDiscountEl = document.getElementById('checkout-loyalty-discount');
+  
+  if (checkoutData.loyalty && checkoutData.loyalty.tier) {
+    const discountPercentage = parseFloat(checkoutData.loyalty.tier.discount_percentage) || 0;
+    if (discountPercentage > 0) {
+      loyaltyDiscount = Math.round(subtotal * (discountPercentage / 100) * 100) / 100;
+      checkoutData.loyaltyDiscount = loyaltyDiscount;
+      
+      // Show loyalty discount row
+      if (loyaltyDiscountRow) {
+        loyaltyDiscountRow.style.display = 'flex';
+        loyaltyDiscountRow.querySelector('.checkout-summary__label').innerHTML = 
+          `<span class="loyalty-badge" style="background: ${checkoutData.loyalty.tier.color}; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-right: 8px;">${checkoutData.loyalty.tier.name}</span> ${discountPercentage}% korting`;
+      }
+      if (loyaltyDiscountEl) {
+        loyaltyDiscountEl.textContent = `-${formatPrice(loyaltyDiscount)}`;
+        loyaltyDiscountEl.style.color = 'var(--color-success)';
+      }
+    }
+  } else {
+    // Hide loyalty discount row if no tier discount
+    if (loyaltyDiscountRow) {
+      loyaltyDiscountRow.style.display = 'none';
+    }
+  }
+
   // Use calculated delivery cost from route calculation, or 0 for pickup
   let deliveryCost = 0;
   if (deliveryMethod === 'DELIVERY') {
@@ -331,7 +391,9 @@ function updateTotals() {
     deliveryMethod,
     deliveryCostFromData: checkoutData.deliveryCost,
     finalDeliveryCost: deliveryCost,
-    subtotal
+    subtotal,
+    loyaltyDiscount,
+    tier: checkoutData.loyalty?.tier?.name
   });
 
   // Damage Compensation (NOT paid upfront - only shown for reference)
@@ -362,8 +424,8 @@ function updateTotals() {
   });
   compensation = Math.round(compensation * 100) / 100;
 
-  // Total does NOT include compensation as it's not paid upfront
-  const total = subtotal + deliveryCost;
+  // Total includes loyalty discount (subtracted from subtotal)
+  const total = subtotal - loyaltyDiscount + deliveryCost;
 
   document.getElementById('checkout-subtotal').textContent = formatPrice(subtotal);
   

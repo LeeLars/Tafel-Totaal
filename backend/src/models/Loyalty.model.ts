@@ -29,6 +29,9 @@ export interface CustomerLoyalty {
   total_points: number;
   available_points: number;
   lifetime_points: number;
+  yearly_points: number;
+  yearly_points_year: number;
+  previous_year_points: number;
   current_tier_id: string | null;
   tier_start_date: Date | null;
   last_activity_date: Date | null;
@@ -228,18 +231,20 @@ export const LoyaltyModel = {
     const newAvailable = Math.max(0, loyalty.available_points + pointsChange);
     const newTotal = loyalty.total_points + (pointsChange > 0 ? pointsChange : 0);
     const newLifetime = loyalty.lifetime_points + (pointsChange > 0 ? pointsChange : 0);
+    const newYearlyPoints = (loyalty.yearly_points || 0) + (pointsChange > 0 ? pointsChange : 0);
 
-    // Update loyalty record
-    const updatedLoyalty = await queryOne<CustomerLoyalty>(
+    // Update loyalty record (yearly_points triggers tier update via database trigger)
+    await queryOne<CustomerLoyalty>(
       `UPDATE customer_loyalty 
        SET available_points = $1,
            total_points = $2,
            lifetime_points = $3,
+           yearly_points = $4,
            last_activity_date = NOW(),
            updated_at = NOW()
-       WHERE customer_id = $4
+       WHERE customer_id = $5
        RETURNING *`,
-      [newAvailable, newTotal, newLifetime, customerId]
+      [newAvailable, newTotal, newLifetime, newYearlyPoints, customerId]
     );
 
     // Create transaction record
@@ -250,14 +255,8 @@ export const LoyaltyModel = {
       [customerId, orderId || null, pointsChange, transactionType, description, newAvailable]
     );
 
-    // Check and update tier
-    const newTier = await this.getTierForPoints(newLifetime);
-    if (newTier && newTier.id !== updatedLoyalty!.current_tier_id) {
-      await query(
-        `UPDATE customer_loyalty SET current_tier_id = $1, tier_start_date = NOW() WHERE customer_id = $2`,
-        [newTier.id, customerId]
-      );
-    }
+    // Tier is now updated automatically by database trigger based on yearly_points
+    // No need to manually update tier here
 
     // Refresh loyalty data with tier
     const finalLoyalty = await this.getCustomerLoyalty(customerId);
@@ -416,6 +415,9 @@ export const LoyaltyModel = {
   } {
     const currentTier = loyalty.tier || tiers.find(t => t.id === loyalty.current_tier_id) || null;
     
+    // Use yearly_points for tier calculation (points reset each year)
+    const yearlyPoints = loyalty.yearly_points || 0;
+    
     // Find next tier
     const sortedTiers = [...tiers].sort((a, b) => a.min_points - b.min_points);
     const currentIndex = currentTier ? sortedTiers.findIndex(t => t.id === currentTier.id) : -1;
@@ -423,14 +425,14 @@ export const LoyaltyModel = {
       ? sortedTiers[currentIndex + 1] 
       : null;
 
-    // Calculate progress
+    // Calculate progress based on yearly points
     let pointsToNextTier = 0;
     let progressPercentage = 100;
 
     if (nextTier && currentTier) {
-      pointsToNextTier = nextTier.min_points - loyalty.lifetime_points;
+      pointsToNextTier = nextTier.min_points - yearlyPoints;
       const tierRange = nextTier.min_points - currentTier.min_points;
-      const pointsInTier = loyalty.lifetime_points - currentTier.min_points;
+      const pointsInTier = yearlyPoints - currentTier.min_points;
       progressPercentage = Math.min(100, Math.max(0, (pointsInTier / tierRange) * 100));
     }
 
