@@ -10,6 +10,7 @@ import { runPackagesMigration } from './config/packages-migration';
 import authRoutes from './routes/auth.routes';
 import packagesRoutes from './routes/packages.routes';
 import productsRoutes from './routes/products.routes';
+import categoriesRoutes from './routes/categories.routes';
 import cartRoutes from './routes/cart.routes';
 import checkoutRoutes from './routes/checkout.routes';
 import ordersRoutes from './routes/orders.routes';
@@ -75,6 +76,7 @@ app.get('/health', (_req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/packages', packagesRoutes);
 app.use('/api/products', productsRoutes);
+app.use('/api/categories', categoriesRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/checkout', checkoutRoutes);
 app.use('/api/orders', ordersRoutes);

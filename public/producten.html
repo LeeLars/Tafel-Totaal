@@ -56,32 +56,45 @@
             <!-- Category Filter -->
             <div class="filter-group">
               <h3 class="filter-group__title">Categorie</h3>
-              <div class="filter-group__options">
+              <div class="filter-group__options" id="category-filters">
                 <label class="filter-checkbox">
-                  <input type="checkbox" name="category" value="servies">
+                  <input type="radio" name="category" value="" checked>
+                  <span class="filter-checkbox__mark"></span>
+                  <span class="filter-checkbox__label">Alle Producten</span>
+                </label>
+                <label class="filter-checkbox">
+                  <input type="radio" name="category" value="servies">
                   <span class="filter-checkbox__mark"></span>
                   <span class="filter-checkbox__label">Servies</span>
                 </label>
                 <label class="filter-checkbox">
-                  <input type="checkbox" name="category" value="bestek">
+                  <input type="radio" name="category" value="bestek">
                   <span class="filter-checkbox__mark"></span>
                   <span class="filter-checkbox__label">Bestek</span>
                 </label>
                 <label class="filter-checkbox">
-                  <input type="checkbox" name="category" value="glaswerk">
+                  <input type="radio" name="category" value="glaswerk">
                   <span class="filter-checkbox__mark"></span>
                   <span class="filter-checkbox__label">Glaswerk</span>
                 </label>
                 <label class="filter-checkbox">
-                  <input type="checkbox" name="category" value="decoratie">
+                  <input type="radio" name="category" value="decoratie">
                   <span class="filter-checkbox__mark"></span>
                   <span class="filter-checkbox__label">Decoratie</span>
                 </label>
                 <label class="filter-checkbox">
-                  <input type="checkbox" name="category" value="tafels-stoelen">
+                  <input type="radio" name="category" value="tafels-stoelen">
                   <span class="filter-checkbox__mark"></span>
                   <span class="filter-checkbox__label">Tafels & Stoelen</span>
                 </label>
+              </div>
+            </div>
+
+            <!-- Subcategory Filter (dynamically populated) -->
+            <div class="filter-group" id="subcategory-filter-group" style="display: none;">
+              <h3 class="filter-group__title">Subcategorie</h3>
+              <div class="filter-group__options" id="subcategory-filters">
+                <!-- Dynamically populated based on selected category -->
               </div>
             </div>
 

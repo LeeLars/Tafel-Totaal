@@ -11,9 +11,47 @@ import { loadHeader } from '../components/header.js';
 let products = [];
 let filteredProducts = [];
 let filters = {
-  categories: [],
+  category: '',
+  subcategory: '',
   priceRange: [],
-  sort: 'name'
+  sort: 'name-asc'
+};
+
+// Subcategories mapping (matches database structure)
+const SUBCATEGORIES = {
+  'servies': [
+    { slug: 'dinerborden', name: 'Dinerborden' },
+    { slug: 'dessertborden', name: 'Dessertborden' },
+    { slug: 'kommen-schalen', name: 'Kommen & Schalen' },
+    { slug: 'theesets', name: 'Theesets' },
+    { slug: 'serveerschalen-etageres', name: 'Serveerschalen & Etagères' }
+  ],
+  'bestek': [
+    { slug: 'messen', name: 'Messen' },
+    { slug: 'vorken', name: 'Vorken' },
+    { slug: 'lepels', name: 'Lepels' },
+    { slug: 'dessertbestek', name: 'Dessertbestek' },
+    { slug: 'serveertangen-lepels', name: 'Serveertangen & -lepels' }
+  ],
+  'glaswerk': [
+    { slug: 'wijnglazen', name: 'Wijnglazen' },
+    { slug: 'champagneglazen', name: 'Champagneglazen' },
+    { slug: 'cocktailglazen', name: 'Cocktailglazen' },
+    { slug: 'water-frisdrankglazen', name: 'Water- & Frisdrankglazen' },
+    { slug: 'koffie-theeglazen', name: 'Koffie- & Theeglazen' }
+  ],
+  'decoratie': [
+    { slug: 'tafellinnen', name: 'Tafellinnen' },
+    { slug: 'kaarsen-houders', name: 'Kaarsen & Houders' },
+    { slug: 'tafelaccessoires', name: 'Tafelaccessoires' },
+    { slug: 'presentatie-aankleding', name: 'Presentatie & Aankleding' }
+  ],
+  'tafels-stoelen': [
+    { slug: 'tafels', name: 'Tafels' },
+    { slug: 'stoelen', name: 'Stoelen' },
+    { slug: 'statafels', name: 'Statafels' },
+    { slug: 'barkrukken', name: 'Barkrukken' }
+  ]
 };
 
 // Initialize page
@@ -49,9 +87,14 @@ async function loadFooter() {
  * Initialize filters and event listeners
  */
 function initFilters() {
-  // Checkbox filters (categories & price)
-  document.querySelectorAll('.filter-checkbox input').forEach(checkbox => {
-    checkbox.addEventListener('change', handleFilterChange);
+  // Category radio buttons
+  document.querySelectorAll('input[name="category"]').forEach(radio => {
+    radio.addEventListener('change', handleCategoryChange);
+  });
+
+  // Price checkbox filters
+  document.querySelectorAll('input[name="price"]').forEach(checkbox => {
+    checkbox.addEventListener('change', handlePriceChange);
   });
 
   // Sort select
@@ -66,29 +109,181 @@ function initFilters() {
   // Reset button
   const resetBtn = document.getElementById('reset-filters');
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-checkbox input').forEach(cb => cb.checked = false);
-      if (sortSelect) sortSelect.value = 'name';
-      
-      filters = {
-        categories: [],
-        priceRange: [],
-        sort: 'name'
-      };
-      
-      applyFilters();
-    });
+    resetBtn.addEventListener('click', resetFilters);
   }
 
   // Check URL params for initial filters
   const categoryParam = getQueryParam('category');
+  const subcategoryParam = getQueryParam('subcategory');
+  
   if (categoryParam) {
-    const checkbox = document.querySelector(`input[name="category"][value="${categoryParam}"]`);
-    if (checkbox) {
-      checkbox.checked = true;
-      filters.categories.push(categoryParam);
+    const radio = document.querySelector(`input[name="category"][value="${categoryParam}"]`);
+    if (radio) {
+      radio.checked = true;
+      filters.category = categoryParam;
+      renderSubcategories(categoryParam);
+      
+      // If subcategory param exists, select it after rendering
+      if (subcategoryParam) {
+        setTimeout(() => {
+          const subRadio = document.querySelector(`input[name="subcategory"][value="${subcategoryParam}"]`);
+          if (subRadio) {
+            subRadio.checked = true;
+            filters.subcategory = subcategoryParam;
+          }
+        }, 0);
+      }
     }
   }
+}
+
+/**
+ * Handle category change
+ */
+function handleCategoryChange(e) {
+  const category = e.target.value;
+  filters.category = category;
+  filters.subcategory = ''; // Reset subcategory when category changes
+  
+  // Update URL
+  if (category) {
+    setQueryParam('category', category);
+  } else {
+    // Remove category param
+    const url = new URL(window.location);
+    url.searchParams.delete('category');
+    url.searchParams.delete('subcategory');
+    window.history.replaceState({}, '', url);
+  }
+  
+  // Render subcategories for selected category
+  renderSubcategories(category);
+  applyFilters();
+}
+
+/**
+ * Handle subcategory change
+ */
+function handleSubcategoryChange(e) {
+  filters.subcategory = e.target.value;
+  
+  // Update URL
+  if (filters.subcategory) {
+    setQueryParam('subcategory', filters.subcategory);
+  } else {
+    const url = new URL(window.location);
+    url.searchParams.delete('subcategory');
+    window.history.replaceState({}, '', url);
+  }
+  
+  applyFilters();
+}
+
+/**
+ * Handle price filter change
+ */
+function handlePriceChange(e) {
+  const { value, checked } = e.target;
+  
+  if (checked) {
+    filters.priceRange.push(value);
+  } else {
+    filters.priceRange = filters.priceRange.filter(p => p !== value);
+  }
+  
+  applyFilters();
+}
+
+/**
+ * Render subcategories based on selected category
+ */
+function renderSubcategories(category) {
+  const container = document.getElementById('subcategory-filters');
+  const group = document.getElementById('subcategory-filter-group');
+  
+  if (!container || !group) return;
+  
+  // Hide if no category or category has no subcategories
+  if (!category || !SUBCATEGORIES[category]) {
+    group.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+  
+  // Show subcategory filter group
+  group.style.display = 'block';
+  
+  // Build subcategory options
+  const subcats = SUBCATEGORIES[category];
+  container.innerHTML = `
+    <label class="filter-checkbox">
+      <input type="radio" name="subcategory" value="" checked>
+      <span class="filter-checkbox__mark"></span>
+      <span class="filter-checkbox__label">Alle ${getCategoryName(category)}</span>
+    </label>
+    ${subcats.map(sub => `
+      <label class="filter-checkbox">
+        <input type="radio" name="subcategory" value="${sub.slug}">
+        <span class="filter-checkbox__mark"></span>
+        <span class="filter-checkbox__label">${sub.name}</span>
+      </label>
+    `).join('')}
+  `;
+  
+  // Add event listeners to new radio buttons
+  container.querySelectorAll('input[name="subcategory"]').forEach(radio => {
+    radio.addEventListener('change', handleSubcategoryChange);
+  });
+}
+
+/**
+ * Get display name for category
+ */
+function getCategoryName(slug) {
+  const names = {
+    'servies': 'Servies',
+    'bestek': 'Bestek',
+    'glaswerk': 'Glaswerk',
+    'decoratie': 'Decoratie',
+    'tafels-stoelen': 'Tafels & Stoelen'
+  };
+  return names[slug] || slug;
+}
+
+/**
+ * Reset all filters
+ */
+function resetFilters() {
+  // Reset category
+  const allProductsRadio = document.querySelector('input[name="category"][value=""]');
+  if (allProductsRadio) allProductsRadio.checked = true;
+  
+  // Reset price checkboxes
+  document.querySelectorAll('input[name="price"]').forEach(cb => cb.checked = false);
+  
+  // Reset sort
+  const sortSelect = document.getElementById('sort-select');
+  if (sortSelect) sortSelect.value = 'name-asc';
+  
+  // Reset state
+  filters = {
+    category: '',
+    subcategory: '',
+    priceRange: [],
+    sort: 'name-asc'
+  };
+  
+  // Hide subcategories
+  const group = document.getElementById('subcategory-filter-group');
+  if (group) group.style.display = 'none';
+  
+  // Clear URL params
+  const url = new URL(window.location);
+  url.searchParams.delete('category');
+  url.searchParams.delete('subcategory');
+  window.history.replaceState({}, '', url);
+  
+  applyFilters();
 }
 
 /**
@@ -109,29 +304,6 @@ function initMobileFilters() {
 
   toggleBtn.addEventListener('click', toggleFilters);
   overlay.addEventListener('click', toggleFilters);
-}
-
-/**
- * Handle filter changes
- */
-function handleFilterChange(e) {
-  const { name, value, checked } = e.target;
-
-  if (name === 'category') {
-    if (checked) {
-      filters.categories.push(value);
-    } else {
-      filters.categories = filters.categories.filter(c => c !== value);
-    }
-  } else if (name === 'price') {
-    if (checked) {
-      filters.priceRange.push(value);
-    } else {
-      filters.priceRange = filters.priceRange.filter(p => p !== value);
-    }
-  }
-
-  applyFilters();
 }
 
 /**
@@ -162,19 +334,27 @@ async function loadProducts() {
 function applyFilters() {
   filteredProducts = products.filter(product => {
     // Filter by category
-    if (filters.categories.length > 0) {
-      if (!filters.categories.includes(product.category_slug)) {
+    if (filters.category) {
+      if (product.category_slug !== filters.category) {
+        return false;
+      }
+    }
+
+    // Filter by subcategory
+    if (filters.subcategory) {
+      if (product.subcategory_slug !== filters.subcategory) {
         return false;
       }
     }
 
     // Filter by price
     if (filters.priceRange.length > 0) {
-      const price = product.price;
+      const price = product.price_per_day || product.price || 0;
       const matchesPrice = filters.priceRange.some(range => {
         if (range === '0-1') return price <= 1;
         if (range === '1-2') return price > 1 && price <= 2;
-        if (range === '2+') return price > 2;
+        if (range === '2-5') return price > 2 && price <= 5;
+        if (range === '5+') return price > 5;
         return false;
       });
       if (!matchesPrice) return false;
@@ -185,12 +365,17 @@ function applyFilters() {
 
   // Sort
   filteredProducts.sort((a, b) => {
+    const priceA = a.price_per_day || a.price || 0;
+    const priceB = b.price_per_day || b.price || 0;
+    
     switch (filters.sort) {
       case 'price-asc':
-        return a.price - b.price;
+        return priceA - priceB;
       case 'price-desc':
-        return b.price - a.price;
-      case 'name':
+        return priceB - priceA;
+      case 'name-desc':
+        return b.name.localeCompare(a.name);
+      case 'name-asc':
       default:
         return a.name.localeCompare(b.name);
     }
