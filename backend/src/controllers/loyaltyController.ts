@@ -31,9 +31,11 @@ export async function getTiers(_req: Request, res: Response): Promise<void> {
  */
 export async function getCustomerLoyalty(req: Request, res: Response): Promise<void> {
   try {
-    const customerId = (req as any).user?.id;
+    // JWT payload uses 'userId', not 'id'
+    const customerId = (req as any).user?.userId || (req as any).user?.id;
     
     if (!customerId) {
+      console.log('[LOYALTY] No customerId found in req.user:', (req as any).user);
       res.status(401).json({ success: false, error: 'Authentication required' });
       return;
     }
@@ -94,7 +96,7 @@ export async function getCustomerLoyalty(req: Request, res: Response): Promise<v
  */
 export async function getTransactionHistory(req: Request, res: Response): Promise<void> {
   try {
-    const customerId = (req as any).user?.id;
+    const customerId = (req as any).user?.userId || (req as any).user?.id;
     
     if (!customerId) {
       res.status(401).json({ success: false, error: 'Authentication required' });
@@ -130,7 +132,7 @@ export async function getTransactionHistory(req: Request, res: Response): Promis
  */
 export async function calculateDiscount(req: Request, res: Response): Promise<void> {
   try {
-    const customerId = (req as any).user?.id;
+    const customerId = (req as any).user?.userId || (req as any).user?.id;
     const { subtotal, points_to_redeem = 0 } = req.body;
 
     if (!subtotal || subtotal <= 0) {
@@ -193,7 +195,7 @@ export async function calculateDiscount(req: Request, res: Response): Promise<vo
  */
 export async function redeemPoints(req: Request, res: Response): Promise<void> {
   try {
-    const customerId = (req as any).user?.id;
+    const customerId = (req as any).user?.userId || (req as any).user?.id;
     
     if (!customerId) {
       res.status(401).json({ success: false, error: 'Authentication required' });
@@ -234,7 +236,7 @@ export async function redeemPoints(req: Request, res: Response): Promise<void> {
  */
 export async function getMilestones(req: Request, res: Response): Promise<void> {
   try {
-    const customerId = (req as any).user?.id;
+    const customerId = (req as any).user?.userId || (req as any).user?.id;
     
     if (!customerId) {
       res.status(401).json({ success: false, error: 'Authentication required' });
@@ -266,7 +268,7 @@ export async function getMilestones(req: Request, res: Response): Promise<void> 
  */
 export async function adminAdjustPoints(req: Request, res: Response): Promise<void> {
   try {
-    const adminId = (req as any).user?.id;
+    const adminId = (req as any).user?.userId || (req as any).user?.id;
     const { customer_id, points, reason } = req.body;
 
     if (!customer_id || points === undefined || !reason) {
