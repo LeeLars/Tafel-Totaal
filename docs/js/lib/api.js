@@ -11,11 +11,15 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
 async function apiCall(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
   
+  // Get token from localStorage for cross-origin requests
+  const token = localStorage.getItem('authToken');
+  
   const config = {
     ...options,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
       ...options.headers
     }
   };

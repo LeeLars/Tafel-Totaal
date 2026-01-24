@@ -111,10 +111,14 @@ function initLoginForm() {
       const response = await authAPI.login(email, password);
 
       if (response.success) {
-        // Store user data in localStorage as fallback for cross-origin cookie issues
+        // Store user data and token in localStorage for cross-origin cookie issues
         if (response.data) {
           localStorage.setItem('user', JSON.stringify(response.data));
           localStorage.setItem('isLoggedIn', 'true');
+        }
+        // Store token for API Authorization header (cross-origin fallback)
+        if (response.token) {
+          localStorage.setItem('authToken', response.token);
         }
         
         showToast('Succesvol ingelogd!', 'success');

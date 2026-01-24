@@ -76,6 +76,7 @@ export async function login(req: Request, res: Response): Promise<void> {
             last_name: adminUser.last_name,
             role: adminUser.role,
           },
+          token, // Include token for cross-origin localStorage fallback
         });
         return;
       }
@@ -111,6 +112,7 @@ export async function login(req: Request, res: Response): Promise<void> {
         last_name: customer.last_name,
         role: 'customer',
       },
+      token, // Include token for cross-origin localStorage fallback
     });
   } catch (error) {
     console.error('Login error:', error);

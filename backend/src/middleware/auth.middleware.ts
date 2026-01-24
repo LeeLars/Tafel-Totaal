@@ -12,7 +12,15 @@ declare global {
 }
 
 export function authenticateToken(req: Request, res: Response, next: NextFunction): void {
-  const token = req.cookies?.auth_token;
+  // Try cookie first, then Authorization header (for cross-origin requests)
+  let token = req.cookies?.auth_token;
+  
+  if (!token) {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    }
+  }
 
   if (!token) {
     res.status(401).json({ success: false, error: 'Authentication required' });
@@ -30,7 +38,15 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
 }
 
 export function optionalAuth(req: Request, _res: Response, next: NextFunction): void {
-  const token = req.cookies?.auth_token;
+  // Try cookie first, then Authorization header (for cross-origin requests)
+  let token = req.cookies?.auth_token;
+  
+  if (!token) {
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    }
+  }
 
   if (token) {
     try {
