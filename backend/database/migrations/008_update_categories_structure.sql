@@ -4,10 +4,16 @@
 -- Run this migration carefully - it preserves existing products
 -- ============================================
 
--- Step 1: Deactivate old categories (don't delete to preserve foreign keys)
+-- Step 1: Clear ALL product subcategory references first (to avoid FK constraint)
+UPDATE products SET subcategory_id = NULL;
+
+-- Step 2: Delete ALL existing subcategories (we'll recreate them)
+DELETE FROM subcategories;
+
+-- Step 3: Deactivate old categories (don't delete to preserve foreign keys)
 UPDATE categories SET is_active = false WHERE slug NOT IN ('servies', 'bestek', 'glaswerk', 'decoratie', 'tafels-stoelen');
 
--- Step 2: Upsert main categories (insert or update if exists)
+-- Step 4: Upsert main categories (insert or update if exists)
 INSERT INTO categories (name, slug, description, sort_order, is_active) VALUES
 ('Servies', 'servies', 'Borden, kommen, schalen en serveermateriaal', 1, true),
 ('Bestek', 'bestek', 'Messen, vorken, lepels en serveertangen', 2, true),
@@ -20,11 +26,6 @@ ON CONFLICT (slug) DO UPDATE SET
   sort_order = EXCLUDED.sort_order,
   is_active = true,
   updated_at = NOW();
-
--- Step 3: Clear old subcategories for these categories
-DELETE FROM subcategories WHERE category_id IN (
-  SELECT id FROM categories WHERE slug IN ('servies', 'bestek', 'glaswerk', 'decoratie', 'tafels-stoelen')
-);
 
 -- Step 4: Insert SERVIES subcategories
 INSERT INTO subcategories (category_id, name, slug, sort_order, is_active) VALUES
