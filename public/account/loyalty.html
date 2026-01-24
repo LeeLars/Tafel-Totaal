@@ -671,38 +671,7 @@
       await loadLoyaltyData();
     });
 
-    async function loadLoyaltyData() {
-      try {
-        console.log('Loading loyalty data...');
-        const response = await loyaltyAPI.getCustomerLoyalty();
-        console.log('Loyalty API response:', response);
-        
-        if (response && response.success && response.data) {
-          loyaltyData = response.data;
-          console.log('Loyalty data loaded:', loyaltyData);
-          renderLoyaltyDashboard();
-        } else {
-          console.error('Loyalty API error:', response);
-          const errorMsg = response?.error || 'Onbekende fout';
-          showError('Kon loyalty gegevens niet laden: ' + errorMsg);
-        }
-      } catch (error) {
-        console.error('Loyalty load error:', error);
-        console.error('Error details:', error.message, error.stack);
-        
-        // Show error message without redirecting (to prevent loops)
-        let errorMsg = 'Er ging iets mis bij het laden van je loyalty gegevens.';
-        if (error.message) {
-          errorMsg += ' ' + error.message;
-        }
-        if (error.status === 401) {
-          errorMsg = 'Sessie verlopen. <a href="/login.html?redirect=' + encodeURIComponent(window.location.pathname) + '">Klik hier om opnieuw in te loggen</a>';
-        }
-        showError(errorMsg);
-      }
-    }
-
-    // Default gradient colors for tiers (fallback)
+    // Default gradient colors for tiers (must be defined before use)
     const TIER_GRADIENTS = {
       bronze: ['#CD7F32', '#B87333', '#A0522D', '#8B4513', '#CD853F', '#D2691E', '#DEB887'],
       silver: ['#C0C0C0', '#A8A8A8', '#D3D3D3', '#BEBEBE', '#B0B0B0', '#C8C8C8', '#E0E0E0'],
@@ -718,6 +687,70 @@
       platinum: '#F5F9FF',
       diamond: '#E6FFFF'
     };
+
+    async function loadLoyaltyData() {
+      try {
+        console.log('Loading loyalty data...');
+        const response = await loyaltyAPI.getCustomerLoyalty();
+        console.log('Loyalty API response:', response);
+        
+        if (response && response.success && response.data) {
+          loyaltyData = response.data;
+          console.log('Loyalty data loaded:', loyaltyData);
+          renderLoyaltyDashboard();
+        } else {
+          console.error('Loyalty API error:', response);
+          // Show default empty state instead of error
+          renderDefaultLoyaltyState();
+        }
+      } catch (error) {
+        console.error('Loyalty load error:', error);
+        
+        // Check if it's an auth error
+        if (error.status === 401) {
+          showError('Sessie verlopen. <a href="/login.html?redirect=' + encodeURIComponent(window.location.pathname) + '">Klik hier om opnieuw in te loggen</a>');
+          return;
+        }
+        
+        // For other errors, show default empty state (better UX for new users)
+        renderDefaultLoyaltyState();
+      }
+    }
+
+    function renderDefaultLoyaltyState() {
+      document.getElementById('loyalty-loading').style.display = 'none';
+      document.getElementById('loyalty-dashboard').style.display = 'block';
+
+      // Create default data for new users
+      const defaultTiers = [
+        { id: '1', name: 'Brons', slug: 'bronze', min_points: 0, max_points: 499, discount_percentage: 0, points_boost_percentage: 0, benefits: ['Punten sparen bij elke bestelling', 'Toegang tot loyalty programma'], color: '#CD7F32', gradient_colors: TIER_GRADIENTS.bronze },
+        { id: '2', name: 'Zilver', slug: 'silver', min_points: 500, max_points: 1499, discount_percentage: 5, points_boost_percentage: 5, benefits: ['5% korting op alle bestellingen', '+5% extra punten per bestelling'], color: '#C0C0C0', gradient_colors: TIER_GRADIENTS.silver },
+        { id: '3', name: 'Goud', slug: 'gold', min_points: 1500, max_points: 2999, discount_percentage: 10, points_boost_percentage: 7, benefits: ['10% korting op alle bestellingen', '+7% extra punten per bestelling'], color: '#FFD700', gradient_colors: TIER_GRADIENTS.gold },
+        { id: '4', name: 'Platinum', slug: 'platinum', min_points: 3000, max_points: 4999, discount_percentage: 15, points_boost_percentage: 10, benefits: ['15% korting op alle bestellingen', '+10% extra punten per bestelling'], color: '#E5E4E2', gradient_colors: TIER_GRADIENTS.platinum },
+        { id: '5', name: 'Diamant', slug: 'diamond', min_points: 5000, max_points: null, discount_percentage: 20, points_boost_percentage: 15, benefits: ['20% korting op alle bestellingen', '+15% extra punten per bestelling'], color: '#B9F2FF', gradient_colors: TIER_GRADIENTS.diamond }
+      ];
+
+      // Render tier slider with default tiers, bronze as current
+      renderTierSlider(defaultTiers, '1', 0);
+
+      // Set default values
+      document.getElementById('available-points').textContent = '0';
+      document.getElementById('lifetime-points').textContent = '0';
+      document.getElementById('yearly-spend-display').textContent = '€ 0';
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+      document.getElementById('redemption-value').textContent = '€ 0,00';
+
+      // Hide yearly progress tag (no retention message for new users)
+      const retentionTag = document.getElementById('tier-retention-tag');
+      if (retentionTag) retentionTag.style.display = 'none';
+
+      // Set progress bar to 0
+      document.getElementById('yearly-progress-fill').style.width = '0%';
+      document.getElementById('yearly-progress-mark').style.left = '0%';
+
+      // Show empty transaction history
+      document.getElementById('history-container').innerHTML = '<p class="loyalty-history__empty">Nog geen transacties. Plaats je eerste bestelling om punten te verdienen!</p>';
+    }
 
     function renderLoyaltyDashboard() {
       console.log('Rendering loyalty dashboard with data:', loyaltyData);

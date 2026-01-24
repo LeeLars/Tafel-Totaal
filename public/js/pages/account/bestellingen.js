@@ -70,25 +70,27 @@ async function loadOrders() {
   const container = document.getElementById('orders-list');
   if (!container) return;
 
+  const emptyStateHTML = `
+    <div class="empty-state">
+      <div class="empty-state__icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+      </div>
+      <h3>Nog geen bestellingen</h3>
+      <p>Je hebt nog geen bestellingen geplaatst.</p>
+      <a href="/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
+    </div>
+  `;
+
   try {
     const response = await ordersAPI.getMyOrders();
-    const orders = response.data || [];
+    const orders = response?.data || [];
 
     if (orders.length === 0) {
-      container.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state__icon">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <path d="M16 10a4 4 0 0 1-8 0"></path>
-            </svg>
-          </div>
-          <h3>Nog geen bestellingen</h3>
-          <p>Je hebt nog geen bestellingen geplaatst.</p>
-          <a href="/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
-        </div>
-      `;
+      container.innerHTML = emptyStateHTML;
       return;
     }
 
@@ -96,12 +98,8 @@ async function loadOrders() {
 
   } catch (error) {
     console.error('Error loading orders:', error);
-    container.innerHTML = `
-      <div class="empty-state">
-        <p>Kon bestellingen niet laden.</p>
-        <button class="btn btn--secondary btn--sm" onclick="location.reload()">Opnieuw proberen</button>
-      </div>
-    `;
+    // Show empty state instead of error (better UX)
+    container.innerHTML = emptyStateHTML;
   }
 }
 
