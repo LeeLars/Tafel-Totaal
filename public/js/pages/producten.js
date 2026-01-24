@@ -497,7 +497,9 @@ function renderProducts() {
     return;
   }
 
-  grid.innerHTML = filteredProducts.map(product => createProductCard(product)).join('');
+  const productsHTML = filteredProducts.map(product => createProductCard(product)).join('');
+  const quoteCard = createQuoteCard();
+  grid.innerHTML = productsHTML + quoteCard;
 }
 
 /**
@@ -530,6 +532,25 @@ function createProductCard(product) {
           </div>
         </div>
       </a>
+    </article>
+  `;
+}
+
+/**
+ * Create quote card HTML for empty grid slots
+ */
+function createQuoteCard() {
+  return `
+    <article class="quote-card">
+      <svg class="quote-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 21c3 0 7-1 7-8V5c0-2.25-1.75-4-4-4S2 2.75 2 5v12c0 2.25 1.75 4 4 4zm14 0c3 0 7-1 7-8V5c0-2.25-1.75-4-4-4s-4 1.75-4 4v12c0 2.25 1.75 4 4 4z"/>
+      </svg>
+      <div class="quote-card__quote">
+        "Elegante tafels voor onvergetelijke momenten"
+      </div>
+      <div class="quote-card__attribution">
+        — Tafel Totaal
+      </div>
     </article>
   `;
 }
