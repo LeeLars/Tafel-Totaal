@@ -7,35 +7,55 @@ import { authAPI } from '../lib/api.js';
 
 let currentUser = null;
 let authListeners = [];
+let isInitialized = false;
+let initPromise = null;
 
 export async function initAuth() {
-  try {
-    // First try API (cookie-based auth)
-    const response = await authAPI.me();
-    currentUser = response.data;
-    // Sync to localStorage
-    if (currentUser) {
-      localStorage.setItem('user', JSON.stringify(currentUser));
-      localStorage.setItem('isLoggedIn', 'true');
-    }
-    notifyListeners();
-    updateAuthUI();
-  } catch (error) {
-    // Fallback to localStorage if API fails (cross-origin cookie issue)
-    const storedUser = localStorage.getItem('user');
-    if (storedUser && localStorage.getItem('isLoggedIn') === 'true') {
-      try {
-        currentUser = JSON.parse(storedUser);
-        notifyListeners();
-        updateAuthUI();
-        return;
-      } catch (e) {
-        // Invalid stored data
-      }
-    }
-    currentUser = null;
-    updateAuthUI();
+  // Prevent multiple simultaneous initializations
+  if (initPromise) {
+    return initPromise;
   }
+  
+  if (isInitialized && currentUser) {
+    return currentUser;
+  }
+
+  initPromise = (async () => {
+    try {
+      // First try API (cookie-based auth)
+      const response = await authAPI.me();
+      currentUser = response.data;
+      // Sync to localStorage
+      if (currentUser) {
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        localStorage.setItem('isLoggedIn', 'true');
+      }
+      isInitialized = true;
+      notifyListeners();
+      updateAuthUI();
+    } catch (error) {
+      // Fallback to localStorage if API fails (cross-origin cookie issue)
+      const storedUser = localStorage.getItem('user');
+      if (storedUser && localStorage.getItem('isLoggedIn') === 'true') {
+        try {
+          currentUser = JSON.parse(storedUser);
+          isInitialized = true;
+          notifyListeners();
+          updateAuthUI();
+          return currentUser;
+        } catch (e) {
+          // Invalid stored data
+        }
+      }
+      currentUser = null;
+      isInitialized = true;
+      updateAuthUI();
+    }
+    initPromise = null;
+    return currentUser;
+  })();
+  
+  return initPromise;
 }
 
 export async function login(email, password) {
@@ -126,4 +146,5 @@ function updateAuthUI() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', initAuth);
+// Note: initAuth() should be called manually by each page that needs auth
+// This prevents double initialization and race conditions

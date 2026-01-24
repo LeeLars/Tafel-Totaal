@@ -634,21 +634,46 @@
       }
     }
 
+    // Prevent redirect loops
+    let hasRedirected = false;
+    
     document.addEventListener('DOMContentLoaded', async () => {
       await loadHeader();
       await loadFooter();
+      
+      // Initialize auth and wait for result
       await initAuth();
       
       const user = getCurrentUser();
+      
+      // Check if user is logged in
       if (!user) {
-        window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
-        return;
+        // Check localStorage as fallback before redirecting
+        const storedUser = localStorage.getItem('user');
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        
+        if (!storedUser || isLoggedIn !== 'true') {
+          // Only redirect once to prevent loops
+          if (!hasRedirected && !sessionStorage.getItem('loyalty_redirect_attempted')) {
+            hasRedirected = true;
+            sessionStorage.setItem('loyalty_redirect_attempted', 'true');
+            window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
+          } else {
+            // Show error instead of infinite redirect
+            showError('Je bent niet ingelogd. <a href="/login.html">Klik hier om in te loggen</a>');
+          }
+          return;
+        }
       }
+      
+      // Clear redirect flag on successful load
+      sessionStorage.removeItem('loyalty_redirect_attempted');
 
       // Update sidebar
-      document.getElementById('user-name').textContent = `${user.first_name} ${user.last_name}`;
-      document.getElementById('user-email').textContent = user.email;
-      document.getElementById('user-avatar').textContent = user.first_name.charAt(0).toUpperCase();
+      const displayUser = user || JSON.parse(localStorage.getItem('user') || '{}');
+      document.getElementById('user-name').textContent = `${displayUser.first_name || ''} ${displayUser.last_name || ''}`;
+      document.getElementById('user-email').textContent = displayUser.email || '';
+      document.getElementById('user-avatar').textContent = (displayUser.first_name || 'U').charAt(0).toUpperCase();
 
       // Logout handler
       document.getElementById('logout-btn').addEventListener('click', (e) => {
@@ -685,16 +710,13 @@
         console.error('Loyalty load error:', error);
         console.error('Error details:', error.message, error.stack);
         
-        // Show more specific error message
+        // Show error message without redirecting (to prevent loops)
         let errorMsg = 'Er ging iets mis bij het laden van je loyalty gegevens.';
         if (error.message) {
           errorMsg += ' ' + error.message;
         }
         if (error.status === 401) {
-          errorMsg = 'Je bent niet ingelogd. Redirect naar login...';
-          setTimeout(() => {
-            window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
-          }, 1500);
+          errorMsg = 'Sessie verlopen. <a href="/login.html?redirect=' + encodeURIComponent(window.location.pathname) + '">Klik hier om opnieuw in te loggen</a>';
         }
         showError(errorMsg);
       }
