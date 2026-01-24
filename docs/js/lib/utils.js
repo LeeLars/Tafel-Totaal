@@ -3,7 +3,7 @@
  */
 
 /**
- * Get base path for GitHub Pages compatibility
+ * Get base path for site
  */
 export function getBasePath() {
   return '';

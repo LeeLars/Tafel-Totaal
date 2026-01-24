@@ -8,8 +8,6 @@ import { authAPI } from './api.js';
 let cachedUser = null;
 
 function getSiteBasePath() {
-  // GitHub Pages project site is served from /<repo>/
-  // For local dev / normal hosting, keep it root.
   return '';
 }
 

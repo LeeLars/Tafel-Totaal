@@ -230,6 +230,7 @@ function renderPersonsOptions() {
 
   select.innerHTML = options;
   select.addEventListener('change', () => {
+    renderContents(); // Update package contents with new quantities
     updatePriceSummary();
     checkAvailability();
   });
@@ -285,7 +286,37 @@ function renderAddons() {
 }
 
 /**
+ * Get quantity multiplier for an item based on its type
+ * Some items scale per person (plates, cutlery), others don't (candles, decorations)
+ */
+function getQuantityMultiplier(item, persons) {
+  const productName = (item.product?.name || item.name || '').toLowerCase();
+  const baseQuantity = item.quantity || 1;
+  
+  // Items that DON'T scale with person count (shared items)
+  const sharedItems = [
+    'kaars', 'candle', 'kandelaar', 'candlestick',
+    'vaas', 'vase', 'decoratie', 'decoration',
+    'tafelkleed', 'tablecloth', 'tafelloper', 'runner',
+    'serveerplank', 'serving board', 'schaal', 'bowl',
+    'kan', 'pitcher', 'karaf', 'carafe'
+  ];
+  
+  // Check if item is a shared item
+  const isShared = sharedItems.some(keyword => productName.includes(keyword));
+  
+  if (isShared) {
+    // Shared items: use base quantity (e.g., 1 candle for 4 people)
+    return baseQuantity;
+  } else {
+    // Per-person items: multiply by person count (e.g., 1 plate × 4 people = 4 plates)
+    return baseQuantity * persons;
+  }
+}
+
+/**
  * Render package contents (required products)
+ * Quantities update dynamically based on selected person count
  */
 function renderContents() {
   const container = document.getElementById('package-contents');
@@ -293,6 +324,7 @@ function renderContents() {
 
   const items = currentPackage.items || [];
   const requiredItems = items.filter(item => !item.is_optional);
+  const persons = parseInt(document.getElementById('persons-select')?.value) || 1;
   
   if (requiredItems.length === 0) {
     container.innerHTML = '<p class="text-center text-gray">Geen inhoud beschikbaar</p>';
@@ -311,6 +343,9 @@ function renderContents() {
       imageUrl = productImages;
     }
 
+    // Calculate dynamic quantity based on person count
+    const displayQuantity = getQuantityMultiplier(item, persons);
+
     return `
     <div class="package-content__item">
       <div class="package-content__image">
@@ -318,7 +353,7 @@ function renderContents() {
       </div>
       <div class="package-content__info">
         <span class="package-content__name">${item.product?.name || item.name || 'Product'}</span>
-        <span class="package-content__quantity">×${item.quantity || 1}</span>
+        <span class="package-content__quantity" data-base-qty="${item.quantity || 1}">×${displayQuantity}</span>
       </div>
     </div>
   `}).join('');
