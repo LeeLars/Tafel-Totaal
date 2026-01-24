@@ -96,7 +96,7 @@ async function loadPickingOrders() {
     console.error('Error loading picking orders:', error);
     grid.innerHTML = `
       <div style="text-align: center; padding: 60px 0;">
-        <p style="color: var(--color-error); font-size: var(--font-size-lg);">❌ Kon orders niet laden</p>
+        <p style="color: var(--color-error); font-size: var(--font-size-lg);">Kon orders niet laden</p>
         <button class="btn btn--primary" onclick="location.reload()">Opnieuw proberen</button>
       </div>
     `;
@@ -150,7 +150,7 @@ function renderOrders() {
   if (filtered.length === 0) {
     grid.innerHTML = `
       <div style="text-align: center; padding: 60px 0;">
-        <p style="color: var(--color-gray); font-size: var(--font-size-lg);">📦 Geen orders gevonden</p>
+        <p style="color: var(--color-gray); font-size: var(--font-size-lg);">Geen orders gevonden</p>
         <p style="color: var(--color-gray);">Pas de filters aan om meer resultaten te zien</p>
       </div>
     `;
@@ -183,11 +183,24 @@ function createPickingCard(order) {
   const individualProducts = [];
   
   (order.items || []).forEach(item => {
-    if (item.item_type === 'package' && item.package_id) {
+    // Handle expanded package products (from getPickingDetails)
+    if (item.item_type === 'package_product' && item.package_id) {
       if (!packages[item.package_id]) {
-        packages[item.package_id] = [];
+        packages[item.package_id] = {
+          name: item.package_name || `Pakket`,
+          items: []
+        };
       }
-      packages[item.package_id].push(item);
+      packages[item.package_id].items.push(item);
+    } else if (item.item_type === 'package' && item.package_id) {
+      // Legacy format - package as single item
+      if (!packages[item.package_id]) {
+        packages[item.package_id] = {
+          name: item.package_name || `Pakket`,
+          items: []
+        };
+      }
+      packages[item.package_id].items.push(item);
     } else if (item.item_type === 'product') {
       individualProducts.push(item);
     }
@@ -215,7 +228,7 @@ function createPickingCard(order) {
           </div>
           
           <div style="text-align: right;">
-            ${isUrgent ? '<div style="color: #DC2626; font-weight: 600; font-size: var(--font-size-sm); margin-bottom: var(--space-xs);">⚠️ URGENT</div>' : ''}
+            ${isUrgent ? '<div style="color: #DC2626; font-weight: 600; font-size: var(--font-size-sm); margin-bottom: var(--space-xs);">URGENT</div>' : ''}
             <div style="font-size: var(--font-size-sm); color: var(--color-gray);">
               <strong>Deadline:</strong> ${deadline}
             </div>
@@ -239,12 +252,12 @@ function createPickingCard(order) {
       <div class="admin-card__body" style="padding: var(--space-lg);">
         ${Object.keys(packages).length > 0 ? `
           <div style="margin-bottom: var(--space-xl);">
-            <h4 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-md); border-bottom: 2px solid var(--color-black); padding-bottom: var(--space-sm);">📦 PAKKETTEN</h4>
-            ${Object.entries(packages).map(([packageId, items], idx) => `
+            <h4 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-md); border-bottom: 2px solid var(--color-black); padding-bottom: var(--space-sm);">PAKKETTEN</h4>
+            ${Object.entries(packages).map(([packageId, pkg]) => `
               <div style="background: var(--color-concrete); border: 1px solid var(--color-black); padding: var(--space-md); margin-bottom: var(--space-md);">
-                <div style="font-weight: 600; margin-bottom: var(--space-sm); font-size: var(--font-size-md);">Pakket #${idx + 1}</div>
+                <div style="font-weight: 600; margin-bottom: var(--space-sm); font-size: var(--font-size-md);">${pkg.name}</div>
                 <div style="display: grid; gap: var(--space-sm);">
-                  ${items.map(item => createProductRow(item, order.id)).join('')}
+                  ${pkg.items.map(item => createProductRow(item, order.id)).join('')}
                 </div>
               </div>
             `).join('')}
@@ -253,7 +266,7 @@ function createPickingCard(order) {
         
         ${individualProducts.length > 0 ? `
           <div>
-            <h4 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-md); border-bottom: 2px solid var(--color-black); padding-bottom: var(--space-sm);">🔧 LOSSE PRODUCTEN</h4>
+            <h4 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-lg); margin-bottom: var(--space-md); border-bottom: 2px solid var(--color-black); padding-bottom: var(--space-sm);">LOSSE PRODUCTEN</h4>
             <div style="display: grid; gap: var(--space-sm);">
               ${individualProducts.map(item => createProductRow(item, order.id)).join('')}
             </div>
@@ -268,7 +281,7 @@ function createPickingCard(order) {
         <div style="display: flex; gap: var(--space-md); justify-content: flex-end;">
           <a href="/admin/order.html?id=${order.id}" class="btn btn--ghost">Bekijk Order</a>
           ${progressPercent === 100 && pickingStatus !== 'completed' ? `
-            <button class="btn btn--primary" onclick="markOrderComplete('${order.id}')">✓ Markeer als Klaar</button>
+            <button class="btn btn--primary" onclick="markOrderComplete('${order.id}')">Markeer als Klaar</button>
           ` : progressPercent > 0 && progressPercent < 100 ? `
             <button class="btn btn--secondary" onclick="updatePickingStatus('${order.id}', 'in_progress')">Doorgaan met Picken</button>
           ` : `
@@ -303,7 +316,7 @@ function createProductRow(item, orderId) {
           </div>
           <div style="font-size: var(--font-size-sm); color: var(--color-gray); margin-top: 2px;">
             <span style="background: var(--color-black); color: var(--color-white); padding: 2px 6px; font-family: var(--font-mono); font-size: 11px; margin-right: var(--space-xs);">${item.product_sku || 'N/A'}</span>
-            <span>📍 ${location}</span>
+            <span>Locatie: ${location}</span>
           </div>
         </div>
         <div style="font-weight: 600; font-size: var(--font-size-lg); min-width: 60px; text-align: right;">
@@ -326,7 +339,7 @@ function attachCheckboxHandlers() {
       
       try {
         await adminAPI.updateItemPicked(orderId, itemId, isPicked);
-        showToast(isPicked ? 'Item gepickt ✓' : 'Item niet gepickt', 'success');
+        showToast(isPicked ? 'Item gepickt' : 'Item niet gepickt', 'success');
         
         // Reload to update progress
         await loadPickingOrders();
@@ -362,7 +375,7 @@ window.markOrderComplete = async function(orderId) {
   try {
     await adminAPI.updatePickingStatus(orderId, { picking_status: 'completed' });
     await adminAPI.updateOrderStatus(orderId, { status: 'ready_for_delivery' });
-    showToast('Order klaar voor levering! ✓', 'success');
+    showToast('Order klaar voor levering', 'success');
     await loadPickingOrders();
   } catch (error) {
     console.error('Error completing order:', error);
@@ -377,21 +390,21 @@ function getPickingStatusInfo(status) {
   const statusMap = {
     'not_started': { 
       label: 'Niet gestart',
-      icon: '🔴',
+      icon: '●',
       class: 'pending',
       color: '#DC2626',
       bgColor: 'rgba(220, 38, 38, 0.1)'
     },
     'in_progress': { 
       label: 'Bezig',
-      icon: '🟡',
+      icon: '●',
       class: 'preparing',
       color: '#F59E0B',
       bgColor: 'rgba(245, 158, 11, 0.1)'
     },
     'completed': { 
       label: 'Klaar',
-      icon: '🟢',
+      icon: '●',
       class: 'confirmed',
       color: '#16A34A',
       bgColor: 'rgba(22, 163, 74, 0.1)'
