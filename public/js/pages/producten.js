@@ -387,7 +387,7 @@ function renderTagFilters() {
       <label class="filter-checkbox">
         <input type="checkbox" name="tag" value="${tag.slug}" data-group="${group.slug}">
         <span class="filter-checkbox__mark"></span>
-        <span class="filter-checkbox__label">${tag.icon || ''} ${tag.name}</span>
+        <span class="filter-checkbox__label">${tag.name}</span>
       </label>
     `).join('');
     

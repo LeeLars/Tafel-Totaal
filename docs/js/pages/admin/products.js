@@ -151,7 +151,7 @@ function renderTagCheckboxes() {
     container.innerHTML = group.tags.map(tag => `
       <label style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--color-light-gray); cursor: pointer; font-size: var(--font-size-sm);">
         <input type="checkbox" class="tag-checkbox" value="${tag.id}" data-slug="${tag.slug}">
-        ${tag.icon || ''} ${tag.name}
+        ${tag.name}
       </label>
     `).join('');
   });
@@ -289,7 +289,6 @@ function openNewProductModal() {
   document.getElementById('edit-price').value = '';
   document.getElementById('edit-deposit').value = '0';
   document.getElementById('edit-stock').value = '';
-  document.getElementById('edit-buffer').value = '0';
   document.getElementById('edit-turnaround').value = '1';
   document.getElementById('edit-active').checked = true;
   
@@ -397,9 +396,9 @@ async function loadProducts() {
  * Create product table row
  */
 function createProductRow(product) {
-  // Calculate available stock: total - buffer - reserved
+  // Calculate available stock: total - reserved (no buffer)
   const reservedQty = product.reserved_quantity || 0;
-  const availableStock = product.stock_total - product.stock_buffer - reservedQty;
+  const availableStock = product.stock_total - reservedQty;
   const stockClass = availableStock <= 0 ? 'text-error' : availableStock < 10 ? 'text-warning' : '';
   
   // Get first image or use placeholder
@@ -434,7 +433,6 @@ function createProductRow(product) {
         <small style="color: var(--color-gray);">/ ${product.stock_total}</small>
         ${reservedQty > 0 ? `<br><small style="color: var(--color-warning);">(${reservedQty} gereserveerd)</small>` : ''}
       </td>
-      <td>${product.stock_buffer}</td>
       <td>
         <span class="status-badge status-badge--${product.is_active ? 'confirmed' : 'cancelled'}">
           <span class="status-badge__dot"></span>
@@ -470,7 +468,6 @@ function openEditModal(product) {
   document.getElementById('edit-price').value = product.price_per_day || 0;
   document.getElementById('edit-deposit').value = product.damage_compensation_per_item || 0;
   document.getElementById('edit-stock').value = product.stock_total || 0;
-  document.getElementById('edit-buffer').value = product.stock_buffer || 0;
   document.getElementById('edit-turnaround').value = product.turnaround_days || 1;
   document.getElementById('edit-active').checked = product.is_active;
   
@@ -527,7 +524,7 @@ async function saveProduct() {
     price_per_day: parseFloat(document.getElementById('edit-price').value) || 0,
     damage_compensation_per_item: parseFloat(document.getElementById('edit-deposit').value) || 0,
     stock_total: parseInt(document.getElementById('edit-stock').value) || 0,
-    stock_buffer: parseInt(document.getElementById('edit-buffer').value) || 0,
+    stock_buffer: 0,
     turnaround_days: parseInt(document.getElementById('edit-turnaround').value) || 1,
     is_active: document.getElementById('edit-active').checked,
     images: getCurrentImages()

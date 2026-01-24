@@ -78,7 +78,7 @@ export const AvailabilityService = {
         excludeSessionId
       );
       
-      const adjustedAvailable = product.stock_total - product.stock_buffer - sessionReserved;
+      const adjustedAvailable = product.stock_total - sessionReserved;
       
       return {
         available: adjustedAvailable >= quantity,

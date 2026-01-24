@@ -219,7 +219,6 @@
                   <th>Categorie</th>
                   <th>Prijs/dag</th>
                   <th>Voorraad</th>
-                  <th>Buffer</th>
                   <th>Status</th>
                   <th>Acties</th>
                 </tr>
@@ -317,15 +316,9 @@
             </div>
           </div>
           
-          <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
-            <div class="form-group">
-              <label class="form-label">Totale voorraad *</label>
-              <input type="number" id="edit-stock" class="form-input" min="0" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Buffer (reserve)</label>
-              <input type="number" id="edit-buffer" class="form-input" min="0" value="0">
-            </div>
+          <div class="form-group">
+            <label class="form-label">Totale voorraad *</label>
+            <input type="number" id="edit-stock" class="form-input" min="0" required>
           </div>
           
           <div class="form-group">
