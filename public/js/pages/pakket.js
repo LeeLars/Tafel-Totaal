@@ -399,14 +399,12 @@ function initDatePickers() {
   const endDateInput = document.getElementById('end-date');
   const eventDateInput = document.getElementById('event-date');
   
-  // Set minimum date to tomorrow
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const minDate = tomorrow.toISOString().split('T')[0];
+  // Set min date to today (not tomorrow like before)
+  const today = new Date().toISOString().split('T')[0];
   
-  if (startDateInput) startDateInput.min = minDate;
-  if (endDateInput) endDateInput.min = minDate;
-  if (eventDateInput) eventDateInput.min = minDate;
+  if (startDateInput) startDateInput.min = today;
+  if (endDateInput) endDateInput.min = today;
+  if (eventDateInput) eventDateInput.min = today;
 
   // Single Date Logic - for single day events, calculate rental period automatically
   // NOTE: Event listener must be added BEFORE we dispatch the change event for saved dates
@@ -449,6 +447,11 @@ function initDatePickers() {
       if (endDate && startDate > endDate) {
         endDate = null;
         if (endDateInput) endDateInput.value = '';
+      }
+      
+      // For multi-day events, billing days = actual rental days
+      if (startDate && endDate) {
+        billingDays = calculateDays(startDate, endDate);
       }
       
       updateRentalDaysHint();
@@ -523,7 +526,7 @@ function initDatePickers() {
     // Auto-populate from saved event date if exists
     // This MUST be after event listeners are set up so the change event works
     const savedEventDate = getSavedEventDate();
-    if (savedEventDate && savedEventDate >= minDate) {
+    if (savedEventDate && savedEventDate >= today) {
       if (eventDateInput && eventType === 'single') {
         eventDateInput.value = savedEventDate;
         // Trigger the change event to calculate rental period and price
