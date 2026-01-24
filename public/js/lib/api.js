@@ -14,6 +14,11 @@ async function apiCall(endpoint, options = {}) {
   // Get token from localStorage for cross-origin requests
   const token = localStorage.getItem('authToken');
   
+  // Debug: Log token status for auth endpoints
+  if (endpoint.includes('/auth/') || endpoint.includes('/loyalty/') || endpoint.includes('/orders/')) {
+    console.log(`[API] ${endpoint} - Token present: ${!!token}, Token length: ${token?.length || 0}`);
+  }
+  
   const config = {
     ...options,
     credentials: 'include',
@@ -23,6 +28,11 @@ async function apiCall(endpoint, options = {}) {
       ...options.headers
     }
   };
+  
+  // Debug: Log headers being sent
+  if (endpoint.includes('/loyalty/')) {
+    console.log('[API] Request headers:', JSON.stringify(config.headers));
+  }
 
   try {
     const response = await fetch(url, config);

@@ -15,14 +15,19 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
   // Try cookie first, then Authorization header (for cross-origin requests)
   let token = req.cookies?.auth_token;
   
+  // Debug logging
+  const authHeader = req.headers.authorization;
+  console.log(`[AUTH] Path: ${req.path}, Cookie token: ${!!token}, Auth header: ${!!authHeader}`);
+  
   if (!token) {
-    const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       token = authHeader.substring(7);
+      console.log(`[AUTH] Using Bearer token from header, length: ${token.length}`);
     }
   }
 
   if (!token) {
+    console.log(`[AUTH] No token found - returning 401`);
     res.status(401).json({ success: false, error: 'Authentication required' });
     return;
   }
