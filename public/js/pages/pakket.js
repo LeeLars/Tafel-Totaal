@@ -758,10 +758,10 @@ document.getElementById('add-to-cart-btn')?.addEventListener('click', async () =
   if (!currentPackage) return;
 
   const btn = document.getElementById('add-to-cart-btn');
-  const startDate = document.getElementById('start-date')?.value;
-  const endDate = document.getElementById('end-date')?.value;
   const persons = parseInt(document.getElementById('persons-select')?.value) || 1;
 
+  // Use global startDate/endDate variables (set by date pickers for both single and multi-day)
+  // NOT the DOM input values, because for single-day events those inputs are hidden/empty
   if (!startDate || !endDate) {
     showToast('Selecteer eerst een verhuurperiode', 'error');
     return;
