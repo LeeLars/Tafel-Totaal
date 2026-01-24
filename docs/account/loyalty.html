@@ -98,38 +98,58 @@
           <!-- Loyalty Dashboard (hidden until loaded) -->
           <div id="loyalty-dashboard" style="display: none;">
             
-            <!-- Current Tier Card -->
-            <div class="account-card loyalty-tier-card" id="tier-card">
-              <div class="loyalty-tier-header">
-                <div class="loyalty-tier-badge" id="tier-badge">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="tier-icon">
-                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                  </svg>
-                  <span id="tier-name">Brons</span>
-                </div>
-                <div class="loyalty-points">
-                  <span class="loyalty-points__value" id="available-points">0</span>
-                  <span class="loyalty-points__label">beschikbare punten</span>
+            <!-- Tafel Totaal Club Section -->
+            <div class="loyalty-section">
+              <div class="loyalty-section__header">
+                <div>
+                  <h2 class="loyalty-section__title">Tafel Totaal Club</h2>
+                  <p class="loyalty-section__subtitle">Verdien exclusieve kortingen en leuke upgrades voor je verhuurervaring.</p>
                 </div>
               </div>
-              
-              <!-- Progress to Next Tier -->
-              <div class="loyalty-progress" id="tier-progress">
-                <div class="loyalty-progress__header">
-                  <span>Voortgang naar <strong id="next-tier-name">Zilver</strong></span>
-                  <span id="points-to-next">500 punten nodig</span>
+
+              <!-- Tier Slider (Print.com style) -->
+              <div class="tier-slider">
+                <div class="tier-slider__track" id="tier-slider-track">
+                  <!-- Tier cards will be rendered here by JS -->
                 </div>
-                <div class="loyalty-progress__bar">
-                  <div class="loyalty-progress__fill" id="progress-fill" style="width: 0%;"></div>
+                <div class="tier-slider__dots" id="tier-slider-dots">
+                  <!-- Dots will be rendered here by JS -->
                 </div>
               </div>
-              
-              <!-- Current Benefits -->
-              <div class="loyalty-benefits">
-                <h3>Jouw voordelen</h3>
-                <ul class="loyalty-benefits__list" id="benefits-list">
-                  <li>Punten sparen bij elke bestelling</li>
-                </ul>
+
+              <!-- Yearly Spend Progress Bar -->
+              <div class="yearly-progress" id="yearly-progress">
+                <div class="yearly-progress__header">
+                  <span class="yearly-progress__title">Bestelwaarde dit jaar (<span id="current-year">2026</span>)</span>
+                  <span class="yearly-progress__tag" id="tier-retention-tag"></span>
+                </div>
+                <div class="yearly-progress__bar-container">
+                  <div class="yearly-progress__track">
+                    <div class="yearly-progress__fill" id="yearly-progress-fill" style="width: 0%;"></div>
+                  </div>
+                  <div class="yearly-progress__mark" id="yearly-progress-mark" style="left: 0%;"></div>
+                </div>
+                <div class="yearly-progress__points">
+                  <span>€ 0</span>
+                  <span id="yearly-mid-point">€ 2.500</span>
+                  <span id="yearly-max-point">€ 5.000</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Points Summary Cards -->
+            <div class="points-summary">
+              <div class="points-summary__card">
+                <div class="points-summary__value" id="available-points">0</div>
+                <div class="points-summary__label">Beschikbare punten</div>
+              </div>
+              <div class="points-summary__card">
+                <div class="points-summary__value" id="lifetime-points">0</div>
+                <div class="points-summary__label">Totaal verdiend</div>
+              </div>
+              <div class="points-summary__card">
+                <div class="points-summary__value" id="yearly-spend-display">€ 0</div>
+                <div class="points-summary__label">Besteed dit jaar</div>
               </div>
             </div>
 
@@ -141,10 +161,10 @@
               <div class="loyalty-redemption">
                 <div class="loyalty-redemption__info">
                   <div class="loyalty-redemption__value">
-                    <span id="redemption-value">€0,00</span>
+                    <span id="redemption-value">€ 0,00</span>
                     <span class="loyalty-redemption__label">beschikbaar als korting</span>
                   </div>
-                  <p class="loyalty-redemption__hint">100 punten = €10 korting (max 40% van je bestelling)</p>
+                  <p class="loyalty-redemption__hint">100 punten = € 10 korting (max 40% van je bestelling)</p>
                 </div>
                 <a href="/pakketten.html" class="btn btn--primary">
                   Bestelling Plaatsen
@@ -153,16 +173,6 @@
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>
                 </a>
-              </div>
-            </div>
-
-            <!-- All Tiers Overview -->
-            <div class="account-card">
-              <div class="account-card__header">
-                <h2 class="account-card__title">Alle Niveaus</h2>
-              </div>
-              <div class="loyalty-tiers-grid" id="tiers-grid">
-                <!-- Tiers will be rendered here -->
               </div>
             </div>
 
@@ -186,113 +196,317 @@
   <div id="footer-container"></div>
 
   <style>
-    /* Loyalty Specific Styles */
-    .loyalty-tier-card {
-      background: linear-gradient(135deg, var(--color-black) 0%, #2a2a2a 100%);
-      color: var(--color-white);
+    /* ============================================
+       LOYALTY PROGRAM - Print.com Style
+       Premium membership slider with gradients
+       ============================================ */
+
+    /* Main Loyalty Section */
+    .loyalty-section {
+      margin-bottom: var(--space-xl);
     }
 
-    .loyalty-tier-header {
+    .loyalty-section__header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: var(--space-lg);
-      margin-bottom: var(--space-xl);
+      margin-bottom: var(--space-md);
     }
 
-    .loyalty-tier-badge {
-      display: flex;
-      align-items: center;
-      gap: var(--space-sm);
-      padding: var(--space-sm) var(--space-md);
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .loyalty-tier-badge svg {
-      width: 24px;
-      height: 24px;
-    }
-
-    .loyalty-tier-badge span {
+    .loyalty-section__title {
       font-family: var(--font-display);
-      font-size: var(--font-size-lg);
-      text-transform: uppercase;
-    }
-
-    .loyalty-tier-badge.bronze { color: #CD7F32; }
-    .loyalty-tier-badge.silver { color: #C0C0C0; }
-    .loyalty-tier-badge.gold { color: #FFD700; }
-    .loyalty-tier-badge.platinum { color: #E5E4E2; }
-
-    .loyalty-points {
-      text-align: right;
-    }
-
-    .loyalty-points__value {
-      display: block;
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 5vw, 3rem);
-      line-height: 1;
-    }
-
-    .loyalty-points__label {
-      font-size: var(--font-size-sm);
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .loyalty-progress {
-      margin-bottom: var(--space-xl);
-    }
-
-    .loyalty-progress__header {
-      display: flex;
-      justify-content: space-between;
-      font-size: var(--font-size-sm);
-      margin-bottom: var(--space-sm);
-      color: rgba(255, 255, 255, 0.8);
-    }
-
-    .loyalty-progress__bar {
-      height: 8px;
-      background: rgba(255, 255, 255, 0.2);
-      overflow: hidden;
-    }
-
-    .loyalty-progress__fill {
-      height: 100%;
-      background: var(--color-primary);
-      transition: width 0.5s ease;
-    }
-
-    .loyalty-benefits h3 {
-      font-size: var(--font-size-sm);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: rgba(255, 255, 255, 0.6);
-      margin-bottom: var(--space-sm);
-    }
-
-    .loyalty-benefits__list {
-      list-style: none;
-      padding: 0;
+      font-size: var(--font-size-xl);
       margin: 0;
     }
 
-    .loyalty-benefits__list li {
+    .loyalty-section__subtitle {
+      color: var(--color-gray);
+      font-size: var(--font-size-sm);
+      margin-top: var(--space-xs);
+    }
+
+    /* Tier Slider Container */
+    .tier-slider {
+      position: relative;
+      overflow: hidden;
+      margin-bottom: var(--space-lg);
+    }
+
+    .tier-slider__track {
       display: flex;
+      gap: var(--space-md);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: var(--space-sm) 0;
+    }
+
+    .tier-slider__track::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Individual Tier Card (Print.com style) */
+    .tier-card {
+      flex: 0 0 280px;
+      min-height: 320px;
+      border-radius: 16px;
+      padding: var(--space-xl);
+      position: relative;
+      scroll-snap-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tier-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .tier-card.current {
+      box-shadow: 0 8px 32px rgba(144, 61, 62, 0.3);
+    }
+
+    .tier-card.locked {
+      opacity: 0.7;
+      filter: grayscale(30%);
+    }
+
+    /* Active Badge */
+    .tier-card__badge {
+      position: absolute;
+      top: var(--space-md);
+      left: var(--space-md);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--color-black);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Tier Avatar Circle */
+    .tier-card__avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: var(--space-sm);
-      padding: var(--space-xs) 0;
+      justify-content: center;
+      margin: 0 auto var(--space-lg);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .tier-card__avatar-title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      font-weight: 700;
+      color: var(--color-white);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .tier-card__avatar-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Tier Content */
+    .tier-card__content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tier-card__title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-xl);
+      color: var(--color-white);
+      margin-bottom: var(--space-xs);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .tier-card__subtitle {
+      font-size: var(--font-size-sm);
+      color: rgba(255, 255, 255, 0.8);
+      margin-bottom: var(--space-md);
+    }
+
+    /* Benefits List */
+    .tier-card__benefits {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex: 1;
+    }
+
+    .tier-card__benefits li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-xs);
+      font-size: var(--font-size-sm);
+      color: var(--color-white);
+      margin-bottom: var(--space-xs);
+      line-height: 1.4;
+    }
+
+    .tier-card__benefits li::before {
+      content: '✓';
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    /* Locked State */
+    .tier-card__locked {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .tier-card__locked-icon {
+      width: 32px;
+      height: 32px;
+      margin-bottom: var(--space-sm);
+      opacity: 0.7;
+    }
+
+    .tier-card__locked-text {
       font-size: var(--font-size-sm);
     }
 
-    .loyalty-benefits__list li::before {
-      content: '✓';
-      color: var(--color-success);
-      font-weight: bold;
+    /* Slider Dots */
+    .tier-slider__dots {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-xs);
+      margin-top: var(--space-md);
     }
 
+    .tier-slider__dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--color-light-gray);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tier-slider__dot.active {
+      background: var(--color-primary);
+      transform: scale(1.2);
+    }
+
+    /* Yearly Spend Progress */
+    .yearly-progress {
+      background: var(--color-white);
+      border: 1px solid var(--color-light-gray);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .yearly-progress__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-md);
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+    }
+
+    .yearly-progress__title {
+      font-weight: 600;
+      font-size: var(--font-size-md);
+    }
+
+    .yearly-progress__tag {
+      background: #FFF3CD;
+      color: #856404;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 4px;
+    }
+
+    .yearly-progress__bar-container {
+      position: relative;
+      margin-bottom: var(--space-sm);
+    }
+
+    .yearly-progress__track {
+      height: 8px;
+      background: var(--color-light-gray);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .yearly-progress__fill {
+      height: 100%;
+      background: var(--color-primary);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .yearly-progress__mark {
+      position: absolute;
+      top: -4px;
+      width: 16px;
+      height: 16px;
+      background: var(--color-white);
+      border: 3px solid var(--color-primary);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      transition: left 0.5s ease;
+    }
+
+    .yearly-progress__points {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--font-size-sm);
+      color: var(--color-gray);
+    }
+
+    /* Points Summary Card */
+    .points-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .points-summary__card {
+      background: var(--color-white);
+      border: 1px solid var(--color-light-gray);
+      padding: var(--space-lg);
+      text-align: center;
+    }
+
+    .points-summary__value {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      color: var(--color-primary);
+      line-height: 1;
+    }
+
+    .points-summary__label {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray);
+      margin-top: var(--space-xs);
+    }
+
+    /* Redemption Card */
     .loyalty-redemption {
       display: flex;
       justify-content: space-between;
@@ -319,68 +533,7 @@
       margin-top: var(--space-xs);
     }
 
-    .loyalty-tiers-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--space-md);
-    }
-
-    .loyalty-tier-item {
-      padding: var(--space-lg);
-      border: 1px solid var(--color-light-gray);
-      text-align: center;
-      position: relative;
-    }
-
-    .loyalty-tier-item.current {
-      border-color: var(--color-primary);
-      background: rgba(144, 61, 62, 0.05);
-    }
-
-    .loyalty-tier-item.current::after {
-      content: 'HUIDIG';
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--color-primary);
-      color: var(--color-white);
-      font-size: 10px;
-      font-weight: bold;
-      padding: 2px 8px;
-      letter-spacing: 0.05em;
-    }
-
-    .loyalty-tier-item__icon {
-      width: 40px;
-      height: 40px;
-      margin: 0 auto var(--space-sm);
-    }
-
-    .loyalty-tier-item__name {
-      font-family: var(--font-display);
-      font-size: var(--font-size-lg);
-      margin-bottom: var(--space-xs);
-    }
-
-    .loyalty-tier-item__points {
-      font-size: var(--font-size-sm);
-      color: var(--color-gray);
-      margin-bottom: var(--space-sm);
-    }
-
-    .loyalty-tier-item__discount {
-      font-size: var(--font-size-xl);
-      font-weight: bold;
-      color: var(--color-primary);
-    }
-
-    .loyalty-tier-item__boost {
-      font-size: var(--font-size-xs);
-      color: var(--color-success);
-      margin-top: var(--space-xs);
-    }
-
+    /* Transaction History */
     .loyalty-history__empty {
       text-align: center;
       color: var(--color-gray);
@@ -435,19 +588,26 @@
       color: var(--color-error);
     }
 
-    @media (max-width: 640px) {
-      .loyalty-tier-header {
-        flex-direction: column;
-        text-align: center;
+    /* Responsive */
+    @media (max-width: 768px) {
+      .tier-card {
+        flex: 0 0 260px;
+        min-height: 280px;
       }
 
-      .loyalty-points {
-        text-align: center;
+      .tier-card__avatar {
+        width: 80px;
+        height: 80px;
       }
 
       .loyalty-redemption {
         flex-direction: column;
         text-align: center;
+      }
+
+      .yearly-progress__header {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -540,68 +700,185 @@
       }
     }
 
+    // Default gradient colors for tiers (fallback)
+    const TIER_GRADIENTS = {
+      bronze: ['#CD7F32', '#B87333', '#A0522D', '#8B4513', '#CD853F', '#D2691E', '#DEB887'],
+      silver: ['#C0C0C0', '#A8A8A8', '#D3D3D3', '#BEBEBE', '#B0B0B0', '#C8C8C8', '#E0E0E0'],
+      gold: ['#FFD700', '#FFC125', '#DAA520', '#B8860B', '#FFB90F', '#EEAD0E', '#CD950C'],
+      platinum: ['#E5E4E2', '#EAEFF3', '#D9E4ED', '#FFFFFF', '#D4DEE5', '#E8E8E8', '#E1CAE7'],
+      diamond: ['#B9F2FF', '#87CEEB', '#ADD8E6', '#E0FFFF', '#AFEEEE', '#00CED1', '#48D1CC']
+    };
+
+    const TIER_BACKGROUNDS = {
+      bronze: '#FFF5E6',
+      silver: '#F5F5F5',
+      gold: '#FFFACD',
+      platinum: '#F5F9FF',
+      diamond: '#E6FFFF'
+    };
+
     function renderLoyaltyDashboard() {
       console.log('Rendering loyalty dashboard with data:', loyaltyData);
       
       document.getElementById('loyalty-loading').style.display = 'none';
       document.getElementById('loyalty-dashboard').style.display = 'block';
 
-      const { loyalty, tier, progress, redemption, tiers } = loyaltyData;
+      const { loyalty, tier, progress, redemption, tiers, yearlySpend } = loyaltyData;
 
-      // Update tier badge
-      const tierBadge = document.getElementById('tier-badge');
-      tierBadge.className = `loyalty-tier-badge ${tier?.slug || 'bronze'}`;
-      document.getElementById('tier-name').textContent = tier?.name || 'Brons';
+      // Render tier slider
+      renderTierSlider(tiers, tier?.id, loyalty?.lifetime_points || 0);
 
-      // Update points (handle 0 points correctly)
+      // Update points summary cards
       const availablePoints = loyalty?.available_points ?? 0;
+      const lifetimePoints = loyalty?.lifetime_points ?? 0;
       document.getElementById('available-points').textContent = availablePoints.toLocaleString('nl-NL');
+      document.getElementById('lifetime-points').textContent = lifetimePoints.toLocaleString('nl-NL');
 
-      // Update progress
-      if (progress && progress.nextTier) {
-        document.getElementById('next-tier-name').textContent = progress.nextTier.name;
-        document.getElementById('points-to-next').textContent = `${progress.pointsToNextTier.toLocaleString('nl-NL')} punten nodig`;
-        document.getElementById('progress-fill').style.width = `${progress.progressPercentage}%`;
-        document.getElementById('tier-progress').style.display = 'block';
-      } else {
-        document.getElementById('tier-progress').style.display = 'none';
-      }
+      // Update yearly spend display
+      const yearlyAmount = yearlySpend?.amount ?? 0;
+      document.getElementById('yearly-spend-display').textContent = `€ ${yearlyAmount.toLocaleString('nl-NL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+      document.getElementById('current-year').textContent = yearlySpend?.currentYear || new Date().getFullYear();
 
-      // Update benefits
-      const benefitsList = document.getElementById('benefits-list');
-      if (tier?.benefits && tier.benefits.length > 0) {
-        benefitsList.innerHTML = tier.benefits.map(b => `<li>${b}</li>`).join('');
-      } else {
-        benefitsList.innerHTML = '<li>Punten sparen bij elke bestelling</li>';
-      }
+      // Update yearly progress bar
+      renderYearlyProgress(yearlySpend, tier);
 
-      // Update redemption value (handle 0 correctly)
+      // Update redemption value
       const redemptionValue = redemption?.availableValue ?? 0;
       document.getElementById('redemption-value').textContent = formatPrice(redemptionValue);
-
-      // Render all tiers
-      if (tiers && tiers.length > 0) {
-        renderTiersGrid(tiers, tier?.id);
-      }
 
       // Load transaction history
       loadTransactionHistory();
     }
 
-    function renderTiersGrid(tiers, currentTierId) {
-      const grid = document.getElementById('tiers-grid');
+    function renderTierSlider(tiers, currentTierId, lifetimePoints) {
+      const track = document.getElementById('tier-slider-track');
+      const dots = document.getElementById('tier-slider-dots');
       
-      grid.innerHTML = tiers.map(t => `
-        <div class="loyalty-tier-item ${t.id === currentTierId ? 'current' : ''}">
-          <svg class="loyalty-tier-item__icon" viewBox="0 0 24 24" fill="none" stroke="${t.color}" stroke-width="2">
-            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-          </svg>
-          <div class="loyalty-tier-item__name" style="color: ${t.color}">${t.name}</div>
-          <div class="loyalty-tier-item__points">${t.min_points.toLocaleString('nl-NL')}${t.max_points ? ` - ${t.max_points.toLocaleString('nl-NL')}` : '+'} punten</div>
-          <div class="loyalty-tier-item__discount">${t.discount_percentage}% korting</div>
-          ${t.points_boost_percentage > 0 ? `<div class="loyalty-tier-item__boost">+${t.points_boost_percentage}% puntenboost</div>` : ''}
-        </div>
+      if (!track || !tiers || tiers.length === 0) return;
+
+      // Sort tiers by sort_order or min_points
+      const sortedTiers = [...tiers].sort((a, b) => (a.sort_order || a.min_points) - (b.sort_order || b.min_points));
+      
+      // Find current tier index
+      let currentIndex = sortedTiers.findIndex(t => t.id === currentTierId);
+      if (currentIndex === -1) currentIndex = 0;
+
+      // Render tier cards
+      track.innerHTML = sortedTiers.map((t, index) => {
+        const isCurrent = t.id === currentTierId;
+        const isLocked = lifetimePoints < t.min_points;
+        const gradientColors = t.gradient_colors?.length > 0 ? t.gradient_colors : (TIER_GRADIENTS[t.slug] || TIER_GRADIENTS.bronze);
+        const bgColor = t.background_color || TIER_BACKGROUNDS[t.slug] || '#FFFFFF';
+        
+        // Create gradient CSS
+        const gradientCSS = `linear-gradient(135deg, ${gradientColors.join(', ')})`;
+        
+        return `
+          <div class="tier-card ${isCurrent ? 'current' : ''} ${isLocked ? 'locked' : ''}" 
+               style="background: ${gradientCSS};"
+               data-tier-index="${index}">
+            ${isCurrent ? '<span class="tier-card__badge">Actief</span>' : ''}
+            
+            <div class="tier-card__avatar">
+              <span class="tier-card__avatar-title">${t.name}</span>
+              <span class="tier-card__avatar-label">Membership</span>
+            </div>
+            
+            <div class="tier-card__content">
+              <div class="tier-card__title">${t.name}</div>
+              
+              ${isLocked ? `
+                <div class="tier-card__locked">
+                  <svg class="tier-card__locked-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span class="tier-card__locked-text">Bestel meer om dit membership vrij te spelen</span>
+                </div>
+              ` : `
+                <div class="tier-card__subtitle">Je voordelen:</div>
+                <ul class="tier-card__benefits">
+                  ${t.discount_percentage > 0 ? `<li><strong>${t.discount_percentage}% korting</strong> op alle bestellingen</li>` : ''}
+                  ${t.points_boost_percentage > 0 ? `<li><strong>+${t.points_boost_percentage}%</strong> extra punten per bestelling</li>` : ''}
+                  ${(t.benefits || []).slice(0, 3).map(b => `<li>${b}</li>`).join('')}
+                </ul>
+              `}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Render dots
+      dots.innerHTML = sortedTiers.map((t, index) => `
+        <button class="tier-slider__dot ${index === currentIndex ? 'active' : ''}" 
+                data-index="${index}" 
+                aria-label="Ga naar ${t.name}"></button>
       `).join('');
+
+      // Add dot click handlers
+      dots.querySelectorAll('.tier-slider__dot').forEach(dot => {
+        dot.addEventListener('click', () => {
+          const index = parseInt(dot.dataset.index);
+          scrollToTier(index);
+          updateActiveDot(index);
+        });
+      });
+
+      // Scroll to current tier
+      setTimeout(() => scrollToTier(currentIndex), 100);
+
+      // Update dots on scroll
+      track.addEventListener('scroll', () => {
+        const cardWidth = 280 + 16; // card width + gap
+        const scrollIndex = Math.round(track.scrollLeft / cardWidth);
+        updateActiveDot(scrollIndex);
+      });
+    }
+
+    function scrollToTier(index) {
+      const track = document.getElementById('tier-slider-track');
+      const cardWidth = 280 + 16; // card width + gap
+      track.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+    }
+
+    function updateActiveDot(activeIndex) {
+      const dots = document.querySelectorAll('.tier-slider__dot');
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === activeIndex);
+      });
+    }
+
+    function renderYearlyProgress(yearlySpend, currentTier) {
+      if (!yearlySpend) return;
+
+      const { amount, amountToKeepTier, tierRetentionMessage } = yearlySpend;
+      
+      // Calculate progress percentage (max at next tier threshold or 5000)
+      const maxAmount = Math.max(amountToKeepTier, 5000);
+      const progressPercent = Math.min(100, (amount / maxAmount) * 100);
+      
+      // Update progress bar
+      document.getElementById('yearly-progress-fill').style.width = `${progressPercent}%`;
+      document.getElementById('yearly-progress-mark').style.left = `${progressPercent}%`;
+
+      // Update tier retention tag (loss aversion message)
+      const retentionTag = document.getElementById('tier-retention-tag');
+      if (tierRetentionMessage) {
+        retentionTag.textContent = tierRetentionMessage;
+        retentionTag.style.display = 'inline-block';
+      } else if (currentTier && currentTier.slug !== 'bronze') {
+        retentionTag.textContent = `${currentTier.name} status behaald!`;
+        retentionTag.style.background = '#D4EDDA';
+        retentionTag.style.color = '#155724';
+        retentionTag.style.display = 'inline-block';
+      } else {
+        retentionTag.style.display = 'none';
+      }
+
+      // Update progress point labels
+      const midPoint = Math.round(maxAmount / 2);
+      document.getElementById('yearly-mid-point').textContent = `€ ${midPoint.toLocaleString('nl-NL')}`;
+      document.getElementById('yearly-max-point').textContent = `€ ${maxAmount.toLocaleString('nl-NL')}`;
     }
 
     async function loadTransactionHistory() {

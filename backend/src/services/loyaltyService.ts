@@ -12,12 +12,21 @@ export const LoyaltyService = {
 
   async getCustomerLoyaltyInfo(customerId: string): Promise<{
     loyalty: CustomerLoyalty;
+    tier: LoyaltyTier | null;
     tiers: LoyaltyTier[];
     progress: {
       currentTier: LoyaltyTier | null;
       nextTier: LoyaltyTier | null;
       pointsToNextTier: number;
       progressPercentage: number;
+    };
+    yearlySpend: {
+      currentYear: number;
+      amount: number;
+      previousYearAmount: number;
+      amountToKeepTier: number;
+      amountToNextTier: number;
+      tierRetentionMessage: string | null;
     };
     redemption: {
       availablePoints: number;
@@ -51,10 +60,40 @@ export const LoyaltyService = {
       availableValue: LoyaltyModel.calculateRedemptionValue(loyalty.available_points || 0)
     };
 
+    // Calculate yearly spend info
+    const currentYear = new Date().getFullYear();
+    const yearlySpendAmount = loyalty.yearly_spend || 0;
+    const previousYearAmount = loyalty.previous_year_spend || 0;
+    
+    // Calculate amount needed to keep current tier (based on points thresholds converted to spend)
+    // Assuming 1 point per €10 spent, so min_points * 10 = min spend needed
+    const currentTier = progress.currentTier;
+    const amountToKeepTier = currentTier ? currentTier.min_points * 10 : 0;
+    const amountNeededToKeep = Math.max(0, amountToKeepTier - yearlySpendAmount);
+    
+    // Calculate amount to next tier
+    const nextTier = progress.nextTier;
+    const amountToNextTier = nextTier ? Math.max(0, (nextTier.min_points * 10) - yearlySpendAmount) : 0;
+    
+    // Generate tier retention message (loss aversion)
+    let tierRetentionMessage: string | null = null;
+    if (currentTier && currentTier.slug !== 'bronze' && amountNeededToKeep > 0) {
+      tierRetentionMessage = `€ ${amountNeededToKeep.toFixed(2).replace('.', ',')} te gaan om ${currentTier.name} te behouden`;
+    }
+
     return {
       loyalty,
+      tier: loyalty.tier || null,
       tiers,
       progress,
+      yearlySpend: {
+        currentYear,
+        amount: yearlySpendAmount,
+        previousYearAmount,
+        amountToKeepTier,
+        amountToNextTier,
+        tierRetentionMessage
+      },
       redemption
     };
   },

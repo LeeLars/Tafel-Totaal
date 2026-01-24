@@ -16,6 +16,9 @@ export interface LoyaltyTier {
   color: string;
   icon: string;
   sort_order: number;
+  gradient_colors: string[];
+  background_color: string;
+  is_locked_default: boolean;
   created_at: Date;
   updated_at: Date;
 }
@@ -30,6 +33,9 @@ export interface CustomerLoyalty {
   tier_start_date: Date | null;
   last_activity_date: Date | null;
   total_orders: number;
+  yearly_spend: number;
+  yearly_spend_year: number;
+  previous_year_spend: number;
   created_at: Date;
   updated_at: Date;
   // Joined fields
@@ -84,7 +90,10 @@ export const LoyaltyModel = {
     );
     return result.map(tier => ({
       ...tier,
-      benefits: typeof tier.benefits === 'string' ? JSON.parse(tier.benefits) : tier.benefits
+      benefits: typeof tier.benefits === 'string' ? JSON.parse(tier.benefits) : (tier.benefits || []),
+      gradient_colors: tier.gradient_colors || [],
+      background_color: tier.background_color || '#FFFFFF',
+      is_locked_default: tier.is_locked_default || false
     }));
   },
 
@@ -129,7 +138,18 @@ export const LoyaltyModel = {
   // ----------------------------------------
 
   async getCustomerLoyalty(customerId: string): Promise<CustomerLoyalty | null> {
-    const loyalty = await queryOne<CustomerLoyalty & { tier_name?: string; tier_slug?: string; tier_discount?: number; tier_boost?: number; tier_benefits?: string[]; tier_color?: string; tier_icon?: string }>(
+    const loyalty = await queryOne<CustomerLoyalty & { 
+      tier_name?: string; 
+      tier_slug?: string; 
+      tier_discount?: number; 
+      tier_boost?: number; 
+      tier_benefits?: string[]; 
+      tier_color?: string; 
+      tier_icon?: string;
+      tier_gradient_colors?: string[];
+      tier_background_color?: string;
+      tier_is_locked_default?: boolean;
+    }>(
       `SELECT cl.*, 
               lt.name as tier_name, 
               lt.slug as tier_slug,
@@ -139,7 +159,10 @@ export const LoyaltyModel = {
               lt.color as tier_color,
               lt.icon as tier_icon,
               lt.min_points as tier_min_points,
-              lt.max_points as tier_max_points
+              lt.max_points as tier_max_points,
+              lt.gradient_colors as tier_gradient_colors,
+              lt.background_color as tier_background_color,
+              lt.is_locked_default as tier_is_locked_default
        FROM customer_loyalty cl
        LEFT JOIN loyalty_tiers lt ON cl.current_tier_id = lt.id
        WHERE cl.customer_id = $1`,
@@ -161,6 +184,9 @@ export const LoyaltyModel = {
           color: loyalty.tier_color!,
           icon: loyalty.tier_icon!,
           sort_order: 0,
+          gradient_colors: loyalty.tier_gradient_colors || [],
+          background_color: loyalty.tier_background_color || '#FFFFFF',
+          is_locked_default: loyalty.tier_is_locked_default || false,
           created_at: new Date(),
           updated_at: new Date()
         };
