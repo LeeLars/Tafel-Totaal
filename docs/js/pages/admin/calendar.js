@@ -7,9 +7,9 @@ import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
 
-const API_BASE_URL = false 
-  ? 'https://tafel-totaal-production.up.railway.app' 
-  : 'http://localhost:3000';
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000'
+  : 'https://tafel-totaal-production.up.railway.app';
 
 let currentDate = new Date();
 let currentView = 'month';
@@ -98,19 +98,29 @@ function initModal() {
  */
 async function loadEvents() {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/admin/orders`, {
+    // Load more orders to show in calendar
+    const response = await fetch(`${API_BASE_URL}/api/admin/orders?limit=100`, {
       credentials: 'include'
     });
     
     const result = await response.json();
+    console.log('Calendar API response:', result);
     
     if (result.success) {
-      const orders = result.data?.orders || result.data || [];
+      const orders = Array.isArray(result.data) ? result.data : (result.data?.orders || []);
+      console.log('Orders for calendar:', orders);
       
       // Convert orders to calendar events
       events = [];
       orders.forEach(order => {
-        // Delivery event
+        // Get customer name from various possible field names
+        const customerName = order.first_name && order.last_name 
+          ? `${order.first_name} ${order.last_name}`.trim()
+          : (order.customer_first_name && order.customer_last_name 
+            ? `${order.customer_first_name} ${order.customer_last_name}`.trim()
+            : 'Onbekend');
+        
+        // Delivery event (start of rental)
         if (order.rental_start_date) {
           events.push({
             id: `${order.id}-delivery`,
@@ -119,12 +129,13 @@ async function loadEvents() {
             type: 'delivery',
             date: new Date(order.rental_start_date),
             title: `Levering ${order.order_number}`,
-            customer: `${order.customer_first_name || ''} ${order.customer_last_name || ''}`.trim(),
-            status: order.status
+            customer: customerName,
+            status: order.status,
+            total: order.total
           });
         }
         
-        // Return event
+        // Return event (end of rental)
         if (order.rental_end_date) {
           events.push({
             id: `${order.id}-return`,
@@ -133,11 +144,30 @@ async function loadEvents() {
             type: 'return',
             date: new Date(order.rental_end_date),
             title: `Retour ${order.order_number}`,
-            customer: `${order.customer_first_name || ''} ${order.customer_last_name || ''}`.trim(),
-            status: order.status
+            customer: customerName,
+            status: order.status,
+            total: order.total
+          });
+        }
+        
+        // Also add rental period as a spanning event
+        if (order.rental_start_date && order.rental_end_date) {
+          events.push({
+            id: `${order.id}-rental`,
+            orderId: order.id,
+            orderNumber: order.order_number,
+            type: 'rental',
+            startDate: new Date(order.rental_start_date),
+            endDate: new Date(order.rental_end_date),
+            title: order.order_number,
+            customer: customerName,
+            status: order.status,
+            total: order.total
           });
         }
       });
+      
+      console.log('Calendar events created:', events);
     }
   } catch (error) {
     console.error('Error loading events:', error);
@@ -379,8 +409,22 @@ function renderDayView() {
  */
 function getEventsForDate(date) {
   return events.filter(event => {
-    const eventDate = new Date(event.date);
-    return eventDate.toDateString() === date.toDateString();
+    // For delivery/return events with single date
+    if (event.date) {
+      const eventDate = new Date(event.date);
+      return eventDate.toDateString() === date.toDateString();
+    }
+    // For rental period events, check if date falls within range
+    if (event.startDate && event.endDate) {
+      const start = new Date(event.startDate);
+      const end = new Date(event.endDate);
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
+      const checkDate = new Date(date);
+      checkDate.setHours(12, 0, 0, 0);
+      return checkDate >= start && checkDate <= end;
+    }
+    return false;
   });
 }
 
@@ -446,10 +490,11 @@ function renderUpcomingEvents() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // Only show delivery and return events (not rental periods)
   const upcoming = events
-    .filter(e => new Date(e.date) >= today)
+    .filter(e => e.date && (e.type === 'delivery' || e.type === 'return') && new Date(e.date) >= today)
     .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 5);
+    .slice(0, 10);
 
   if (upcoming.length === 0) {
     container.innerHTML = `
