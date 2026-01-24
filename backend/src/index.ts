@@ -39,6 +39,8 @@ function isAllowedOrigin(origin: string): boolean {
   try {
     const url = new URL(origin);
     if (url.hostname.endsWith('.netlify.app')) return true;
+    // Allow tafeltotaal.com and www.tafeltotaal.com
+    if (url.hostname === 'tafeltotaal.com' || url.hostname === 'www.tafeltotaal.com') return true;
   } catch {
     return false;
   }
@@ -67,8 +69,24 @@ const limiter = rateLimit({
   message: { success: false, error: 'Too many requests, please try again later.' },
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => {
+    // Skip rate limiting for auth/me endpoint (used for session checks)
+    if (req.path === '/api/auth/me' && req.method === 'GET') return true;
+    return false;
+  }
 });
+
+// Separate stricter limiter for login attempts (prevent brute force)
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // 10 login attempts per 15 minutes
+  message: { success: false, error: 'Te veel inlogpogingen. Probeer het over 15 minuten opnieuw.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
 app.use('/api/', limiter);
+app.use('/api/auth/login', loginLimiter);
 
 app.get('/health', (_req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

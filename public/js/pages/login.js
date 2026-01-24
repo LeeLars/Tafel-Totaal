@@ -37,30 +37,27 @@ async function loadFooter() {
  * Check if user is already logged in
  */
 async function checkAlreadyLoggedIn() {
+  // Prevent redirect loops - if we came from an account page, don't auto-redirect back
+  const returnUrl = getQueryParam('returnUrl') || getQueryParam('redirect');
+  if (returnUrl && returnUrl.includes('/account/')) {
+    // User was redirected here from account page - don't auto-redirect back
+    // They need to actually log in
+    console.log('Came from account page, not auto-redirecting');
+    return;
+  }
+
   try {
     const response = await authAPI.me();
     if (response.success && response.data) {
-      // Already logged in, redirect
-      const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
-      window.location.href = returnUrl;
+      // API confirms logged in, safe to redirect
+      const redirectTo = returnUrl || '/account/overzicht.html';
+      window.location.href = redirectTo;
       return;
     }
   } catch (error) {
-    // API failed, check localStorage fallback
-  }
-  
-  // Fallback: check localStorage
-  const storedUser = localStorage.getItem('user');
-  if (storedUser && localStorage.getItem('isLoggedIn') === 'true') {
-    try {
-      const user = JSON.parse(storedUser);
-      if (user) {
-        const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
-        window.location.href = returnUrl;
-      }
-    } catch (e) {
-      // Invalid stored data, stay on page
-    }
+    // API failed - user is NOT logged in, clear any stale localStorage
+    localStorage.removeItem('user');
+    localStorage.removeItem('isLoggedIn');
   }
 }
 

@@ -634,9 +634,6 @@
       }
     }
 
-    // Prevent redirect loops
-    let hasRedirected = false;
-    
     document.addEventListener('DOMContentLoaded', async () => {
       await loadHeader();
       await loadFooter();
@@ -646,34 +643,17 @@
       
       const user = getCurrentUser();
       
-      // Check if user is logged in
+      // Check if user is logged in - NO AUTO REDIRECT to prevent loops
+      // User must click the login link manually
       if (!user) {
-        // Check localStorage as fallback before redirecting
-        const storedUser = localStorage.getItem('user');
-        const isLoggedIn = localStorage.getItem('isLoggedIn');
-        
-        if (!storedUser || isLoggedIn !== 'true') {
-          // Only redirect once to prevent loops
-          if (!hasRedirected && !sessionStorage.getItem('loyalty_redirect_attempted')) {
-            hasRedirected = true;
-            sessionStorage.setItem('loyalty_redirect_attempted', 'true');
-            window.location.href = '/login.html?redirect=' + encodeURIComponent(window.location.pathname);
-          } else {
-            // Show error instead of infinite redirect
-            showError('Je bent niet ingelogd. <a href="/login.html">Klik hier om in te loggen</a>');
-          }
-          return;
-        }
+        showError('Je bent niet ingelogd. <a href="/login.html">Klik hier om in te loggen</a>');
+        return;
       }
-      
-      // Clear redirect flag on successful load
-      sessionStorage.removeItem('loyalty_redirect_attempted');
 
       // Update sidebar
-      const displayUser = user || JSON.parse(localStorage.getItem('user') || '{}');
-      document.getElementById('user-name').textContent = `${displayUser.first_name || ''} ${displayUser.last_name || ''}`;
-      document.getElementById('user-email').textContent = displayUser.email || '';
-      document.getElementById('user-avatar').textContent = (displayUser.first_name || 'U').charAt(0).toUpperCase();
+      document.getElementById('user-name').textContent = `${user.first_name || ''} ${user.last_name || ''}`;
+      document.getElementById('user-email').textContent = user.email || '';
+      document.getElementById('user-avatar').textContent = (user.first_name || 'U').charAt(0).toUpperCase();
 
       // Logout handler
       document.getElementById('logout-btn').addEventListener('click', (e) => {

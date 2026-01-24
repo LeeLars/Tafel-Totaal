@@ -22,9 +22,23 @@ export async function checkAuth() {
     const response = await authAPI.me();
     if (response.success && response.data) {
       cachedUser = response.data;
+      // Sync to localStorage
+      localStorage.setItem('user', JSON.stringify(cachedUser));
+      localStorage.setItem('isLoggedIn', 'true');
       return cachedUser;
     }
   } catch (error) {
+    // API failed - try localStorage fallback
+    const storedUser = localStorage.getItem('user');
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (storedUser && isLoggedIn === 'true') {
+      try {
+        cachedUser = JSON.parse(storedUser);
+        return cachedUser;
+      } catch (e) {
+        // Invalid JSON
+      }
+    }
     cachedUser = null;
   }
   return null;
@@ -38,13 +52,14 @@ export function clearAuthCache() {
 }
 
 /**
- * Require authentication - redirects to login if not authenticated
+ * Require authentication - returns user or null (NO AUTO REDIRECT to prevent loops)
  * @param {string} returnUrl - URL to return to after login (defaults to current page)
+ * @param {boolean} autoRedirect - Whether to auto-redirect (default: false to prevent loops)
  */
-export async function requireAuth(returnUrl = window.location.pathname + window.location.search) {
+export async function requireAuth(returnUrl = window.location.pathname + window.location.search, autoRedirect = false) {
   const user = await checkAuth();
   
-  if (!user) {
+  if (!user && autoRedirect) {
     const encodedReturn = encodeURIComponent(returnUrl);
     const base = getSiteBasePath();
     window.location.href = `${base}/login.html?returnUrl=${encodedReturn}`;

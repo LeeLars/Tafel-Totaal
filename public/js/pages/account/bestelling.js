@@ -11,11 +11,23 @@ let currentUser = null;
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
-  currentUser = await requireAuth();
-  if (!currentUser) return;
-
   await loadHeader();
   await loadFooter();
+  
+  currentUser = await requireAuth();
+  if (!currentUser) {
+    const content = document.querySelector('.account-content');
+    if (content) {
+      content.innerHTML = `
+        <div class="account-card" style="text-align: center; padding: var(--space-2xl);">
+          <h2>Je bent niet ingelogd</h2>
+          <p style="margin: var(--space-md) 0;">Log in om je bestelling te bekijken.</p>
+          <a href="/login.html" class="btn btn--primary">Inloggen</a>
+        </div>
+      `;
+    }
+    return;
+  }
   
   renderUserInfo();
   await loadOrder();
