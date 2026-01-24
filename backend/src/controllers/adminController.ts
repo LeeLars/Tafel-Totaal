@@ -370,19 +370,68 @@ export async function getAllProducts(req: Request, res: Response): Promise<void>
     const limitNum = Math.min(parseInt(limit as string, 10), 100);
     const offset = (pageNum - 1) * limitNum;
 
-    const filters: any = {};
-    if (search) filters.search = search;
-    if (category_id) filters.category_id = category_id;
-    if (is_active !== undefined) filters.is_active = is_active === 'true';
+    // Build WHERE conditions
+    const conditions: string[] = [];
+    const params: unknown[] = [];
+    let paramIndex = 1;
 
-    const [products, total] = await Promise.all([
-      ProductModel.findAll(filters, limitNum, offset),
-      ProductModel.count(filters)
+    if (search) {
+      conditions.push(`(p.name ILIKE $${paramIndex} OR p.description ILIKE $${paramIndex} OR p.sku ILIKE $${paramIndex})`);
+      params.push(`%${search}%`);
+      paramIndex++;
+    }
+    if (category_id) {
+      conditions.push(`p.category_id = $${paramIndex}`);
+      params.push(category_id);
+      paramIndex++;
+    }
+    if (is_active !== undefined) {
+      conditions.push(`p.is_active = $${paramIndex}`);
+      params.push(is_active === 'true');
+      paramIndex++;
+    }
+
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+
+    // Query products with reserved quantity calculated from active reservations
+    const productsQuery = `
+      SELECT 
+        p.*,
+        c.name as category_name,
+        sc.name as subcategory_name,
+        COALESCE(
+          (SELECT SUM(ir.quantity) 
+           FROM inventory_reservations ir 
+           WHERE ir.product_id = p.id 
+             AND ir.status IN ('PENDING', 'ACTIVE')
+             AND ir.end_date >= CURRENT_DATE), 0
+        )::integer as reserved_quantity
+      FROM products p
+      LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN subcategories sc ON p.subcategory_id = sc.id
+      ${whereClause}
+      ORDER BY p.name ASC
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+    `;
+    params.push(limitNum, offset);
+
+    // Count query
+    const countQuery = `
+      SELECT COUNT(*) as total
+      FROM products p
+      ${whereClause}
+    `;
+
+    const [productsResult, countResult] = await Promise.all([
+      query(productsQuery, params),
+      queryOne<{ total: string }>(countQuery, params.slice(0, -2)) // Exclude limit/offset
     ]);
+
+    const total = parseInt(countResult?.total || '0', 10);
 
     res.json({
       success: true,
-      data: products,
+      data: productsResult,
       pagination: {
         page: pageNum,
         limit: limitNum,

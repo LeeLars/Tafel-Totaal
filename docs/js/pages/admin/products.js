@@ -397,7 +397,9 @@ async function loadProducts() {
  * Create product table row
  */
 function createProductRow(product) {
-  const availableStock = product.stock_total - product.stock_buffer;
+  // Calculate available stock: total - buffer - reserved
+  const reservedQty = product.reserved_quantity || 0;
+  const availableStock = product.stock_total - product.stock_buffer - reservedQty;
   const stockClass = availableStock <= 0 ? 'text-error' : availableStock < 10 ? 'text-warning' : '';
   
   // Get first image or use placeholder
@@ -430,6 +432,7 @@ function createProductRow(product) {
       <td class="${stockClass}">
         <strong>${availableStock}</strong>
         <small style="color: var(--color-gray);">/ ${product.stock_total}</small>
+        ${reservedQty > 0 ? `<br><small style="color: var(--color-warning);">(${reservedQty} gereserveerd)</small>` : ''}
       </td>
       <td>${product.stock_buffer}</td>
       <td>
