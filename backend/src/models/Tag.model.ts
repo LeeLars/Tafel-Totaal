@@ -103,7 +103,7 @@ export const TagModel = {
       
       // Add new tags
       if (tagIds.length > 0) {
-        const values = tagIds.map((tagId, i) => `($1, $${i + 2})`).join(', ');
+        const values = tagIds.map((_tagId, i) => `($1, $${i + 2})`).join(', ');
         await client.query(
           `INSERT INTO product_tags (product_id, tag_id) VALUES ${values}`,
           [productId, ...tagIds]
