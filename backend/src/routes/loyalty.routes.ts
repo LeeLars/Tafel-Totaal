@@ -4,6 +4,7 @@ import { validate } from '../middleware/validate.middleware';
 import { optionalAuth, authenticateToken, requireAdmin } from '../middleware/auth.middleware';
 import * as loyaltyController from '../controllers/loyaltyController';
 
+// Force redeploy - v2 with Authorization header support
 const router = Router();
 
 // ============================================
