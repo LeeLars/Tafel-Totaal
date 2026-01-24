@@ -34,6 +34,17 @@ export function formatDateShort(dateString) {
   }).format(date);
 }
 
+export function formatDateTime(dateString) {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('nl-BE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(date);
+}
+
 export function calculateDays(startDate, endDate) {
   const start = new Date(startDate);
   const end = new Date(endDate);

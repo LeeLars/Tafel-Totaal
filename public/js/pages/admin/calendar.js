@@ -149,22 +149,6 @@ async function loadEvents() {
             total: order.total
           });
         }
-        
-        // Also add rental period as a spanning event
-        if (order.rental_start_date && order.rental_end_date) {
-          events.push({
-            id: `${order.id}-rental`,
-            orderId: order.id,
-            orderNumber: order.order_number,
-            type: 'rental',
-            startDate: new Date(order.rental_start_date),
-            endDate: new Date(order.rental_end_date),
-            title: order.order_number,
-            customer: customerName,
-            status: order.status,
-            total: order.total
-          });
-        }
       });
       
       console.log('Calendar events created:', events);
@@ -409,20 +393,9 @@ function renderDayView() {
  */
 function getEventsForDate(date) {
   return events.filter(event => {
-    // For delivery/return events with single date
     if (event.date) {
       const eventDate = new Date(event.date);
       return eventDate.toDateString() === date.toDateString();
-    }
-    // For rental period events, check if date falls within range
-    if (event.startDate && event.endDate) {
-      const start = new Date(event.startDate);
-      const end = new Date(event.endDate);
-      start.setHours(0, 0, 0, 0);
-      end.setHours(23, 59, 59, 999);
-      const checkDate = new Date(date);
-      checkDate.setHours(12, 0, 0, 0);
-      return checkDate >= start && checkDate <= end;
     }
     return false;
   });
