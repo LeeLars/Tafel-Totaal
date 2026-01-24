@@ -394,6 +394,7 @@ export async function getAllProducts(req: Request, res: Response): Promise<void>
     const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
     // Query products with reserved quantity calculated from active reservations
+    // Only count reservations where TODAY falls within the reservation period
     const productsQuery = `
       SELECT 
         p.*,
@@ -404,6 +405,7 @@ export async function getAllProducts(req: Request, res: Response): Promise<void>
            FROM inventory_reservations ir 
            WHERE ir.product_id = p.id 
              AND ir.status IN ('PENDING', 'ACTIVE')
+             AND ir.start_date <= CURRENT_DATE
              AND ir.end_date >= CURRENT_DATE), 0
         )::integer as reserved_quantity
       FROM products p
