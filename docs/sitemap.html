@@ -275,32 +275,67 @@
             </ul>
           </div>
 
+          <!-- Pakketten (Dynamic) -->
+          <div class="sitemap-card col-6">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-md);">
+              <h2 class="sitemap-title" style="margin-bottom: 0; border: none;">Pakketten</h2>
+              <span class="location-tag" style="margin: 0;">LIVE</span>
+            </div>
+            <p style="color: var(--color-gray); margin-bottom: var(--space-md); font-size: var(--font-size-sm);">
+              Alle beschikbare verhuurpakketten voor jouw evenement.
+            </p>
+            
+            <div id="sitemap-packages-loading" style="padding: var(--space-md); text-align: center;">
+              <div class="spinner" style="width: 20px; height: 20px; border-width: 2px; margin: 0 auto 10px;"></div>
+              <span style="font-family: var(--font-mono); font-size: var(--font-size-xs);">Laden...</span>
+            </div>
+
+            <ul id="sitemap-packages" class="sitemap-list" style="display: none; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm);">
+            </ul>
+          </div>
+
           <!-- Locaties (Dynamic) -->
           <div class="sitemap-card col-6">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-md);">
-              <h2 class="sitemap-title" style="margin-bottom: 0; border: none;">Actieve Locaties</h2>
-              <span class="location-tag" style="margin: 0;">LIVE UPDATED</span>
+              <h2 class="sitemap-title" style="margin-bottom: 0; border: none;">Bezorglocaties</h2>
+              <span class="location-tag" style="margin: 0;">LIVE</span>
             </div>
             <p style="color: var(--color-gray); margin-bottom: var(--space-md); font-size: var(--font-size-sm);">
-              Deze lijst wordt automatisch bijgewerkt op basis van onze actieve bezorgzones.
+              Alle gemeentes waar wij bezorgen in Oost- en West-Vlaanderen.
             </p>
             
             <div id="sitemap-locations-loading" style="padding: var(--space-md); text-align: center;">
               <div class="spinner" style="width: 20px; height: 20px; border-width: 2px; margin: 0 auto 10px;"></div>
-              <span style="font-family: var(--font-mono); font-size: var(--font-size-xs);">Synchroniseren...</span>
+              <span style="font-family: var(--font-mono); font-size: var(--font-size-xs);">Laden...</span>
             </div>
 
-            <!-- Container for dynamic locations -->
-            <ul id="sitemap-locations" class="sitemap-list" style="display: none; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-sm);">
+            <ul id="sitemap-locations" class="sitemap-list" style="display: none; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-xs);">
               <!-- Static Fallback for SEO / No-JS -->
               <li><a href="/locaties/brugge.html" class="sitemap-link">Brugge</a></li>
               <li><a href="/locaties/gent.html" class="sitemap-link">Gent</a></li>
               <li><a href="/locaties/knokke-heist.html" class="sitemap-link">Knokke-Heist</a></li>
               <li><a href="/locaties/oostende.html" class="sitemap-link">Oostende</a></li>
               <li><a href="/locaties/kortrijk.html" class="sitemap-link">Kortrijk</a></li>
-              <li><a href="/locaties/aalst.html" class="sitemap-link">Aalst</a></li>
-              <li><a href="/locaties/roeselare.html" class="sitemap-link">Roeselare</a></li>
             </ul>
+          </div>
+
+          <!-- Producten (Dynamic) -->
+          <div class="sitemap-card col-12">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--space-md);">
+              <h2 class="sitemap-title" style="margin-bottom: 0; border: none;">Alle Producten</h2>
+              <span class="location-tag" style="margin: 0;">LIVE</span>
+            </div>
+            <p style="color: var(--color-gray); margin-bottom: var(--space-md); font-size: var(--font-size-sm);">
+              Ons complete assortiment servies, bestek, glaswerk en decoratie.
+            </p>
+            
+            <div id="sitemap-products-loading" style="padding: var(--space-md); text-align: center;">
+              <div class="spinner" style="width: 20px; height: 20px; border-width: 2px; margin: 0 auto 10px;"></div>
+              <span style="font-family: var(--font-mono); font-size: var(--font-size-xs);">Producten laden...</span>
+            </div>
+
+            <div id="sitemap-products" style="display: none;">
+            </div>
           </div>
 
         </div>
