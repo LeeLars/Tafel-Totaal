@@ -137,6 +137,80 @@
               </div>
             </div>
 
+            <!-- Future Tier Benefits Preview -->
+            <div class="account-card" id="future-benefits-section" style="display: none;">
+              <div class="account-card__header">
+                <h2 class="account-card__title">Ontgrendel Meer Voordelen</h2>
+                <p style="color: var(--color-gray); font-size: var(--font-size-sm); margin-top: var(--space-xs);">
+                  Zie wat je kunt verdienen door je tier te verhogen
+                </p>
+              </div>
+              <div class="future-benefits">
+                <div class="future-benefit-card" id="silver-preview">
+                  <div class="future-benefit-card__header">
+                    <div class="future-benefit-card__icon" style="background: linear-gradient(135deg, #C0C0C0, #E0E0E0);">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 class="future-benefit-card__title">Zilver Tier</h3>
+                      <p class="future-benefit-card__requirement">500 punten nodig</p>
+                    </div>
+                  </div>
+                  <ul class="future-benefit-card__benefits">
+                    <li>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span><strong>5% korting</strong> op alle bestellingen</span>
+                    </li>
+                    <li>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span><strong>+5% extra punten</strong> per bestelling</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="future-benefit-card" id="gold-preview">
+                  <div class="future-benefit-card__header">
+                    <div class="future-benefit-card__icon" style="background: linear-gradient(135deg, #FFD700, #FFC125);">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 class="future-benefit-card__title">Goud Tier</h3>
+                      <p class="future-benefit-card__requirement">1.500 punten nodig</p>
+                    </div>
+                  </div>
+                  <ul class="future-benefit-card__benefits">
+                    <li>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span><strong>10% korting</strong> op alle bestellingen</span>
+                    </li>
+                    <li>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span><strong>+7% extra punten</strong> per bestelling</span>
+                    </li>
+                    <li>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      </svg>
+                      <span><strong>Prioriteit support</strong> (antwoord binnen 1 werkdag)</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
             <!-- Points Summary Cards -->
             <div class="points-summary">
               <div class="points-summary__card">
@@ -588,6 +662,85 @@
       color: var(--color-error);
     }
 
+    /* Future Benefits Preview */
+    .future-benefits {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-lg);
+    }
+
+    .future-benefit-card {
+      background: var(--color-off-white);
+      border: 1px solid var(--color-light-gray);
+      padding: var(--space-lg);
+      border-radius: 8px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .future-benefit-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .future-benefit-card__header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+
+    .future-benefit-card__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .future-benefit-card__title {
+      font-family: var(--font-display);
+      font-size: var(--font-size-lg);
+      margin: 0;
+      color: var(--color-black);
+    }
+
+    .future-benefit-card__requirement {
+      font-size: var(--font-size-sm);
+      color: var(--color-gray);
+      margin: var(--space-xs) 0 0 0;
+    }
+
+    .future-benefit-card__benefits {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .future-benefit-card__benefits li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--color-light-gray);
+    }
+
+    .future-benefit-card__benefits li:last-child {
+      border-bottom: none;
+    }
+
+    .future-benefit-card__benefits svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--color-primary);
+    }
+
+    .future-benefit-card__benefits span {
+      font-size: var(--font-size-sm);
+      line-height: 1.5;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .tier-card {
@@ -806,6 +959,12 @@
 
       // Show empty transaction history
       document.getElementById('history-container').innerHTML = '<p class="loyalty-history__empty">Nog geen transacties. Plaats je eerste bestelling om punten te verdienen!</p>';
+      
+      // Show future benefits section for new users (Bronze tier)
+      const futureBenefitsSection = document.getElementById('future-benefits-section');
+      if (futureBenefitsSection) {
+        futureBenefitsSection.style.display = 'block';
+      }
     }
 
     function renderLoyaltyDashboard() {
@@ -836,6 +995,17 @@
       // Update redemption value
       const redemptionValue = redemption?.availableValue ?? 0;
       document.getElementById('redemption-value').textContent = formatPrice(redemptionValue);
+
+      // Show future benefits section if user is in Bronze tier
+      const currentTierSlug = tier?.slug || 'bronze';
+      const futureBenefitsSection = document.getElementById('future-benefits-section');
+      if (futureBenefitsSection) {
+        if (currentTierSlug === 'bronze') {
+          futureBenefitsSection.style.display = 'block';
+        } else {
+          futureBenefitsSection.style.display = 'none';
+        }
+      }
 
       // Load transaction history
       loadTransactionHistory();
