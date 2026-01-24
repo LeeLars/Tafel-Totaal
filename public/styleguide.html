@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
   
   <title>Styleguide | Tafel Totaal Design System</title>
   
@@ -92,7 +93,14 @@
   </style>
 </head>
 <body>
-
+  <script type="module">
+    import { requireAdmin } from '/js/lib/guards.js';
+    const user = await requireAdmin('/');
+    if (!user) {
+      throw new Error('Unauthorized');
+    }
+  </script>
+  
   <header class="sg-header">
     <div class="container">
       <h1 class="sg-title">Tafel Totaal Styleguide</h1>
