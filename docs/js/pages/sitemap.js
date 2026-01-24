@@ -28,10 +28,20 @@ async function loadLocations() {
 
   if (!loadingEl || !grid) return;
 
+  // Set timeout to show fallback after 5 seconds
+  const timeoutId = setTimeout(() => {
+    loadingEl.style.display = 'none';
+    grid.style.display = 'grid';
+  }, 5000);
+
   try {
-    const response = await fetch(`${API_BASE_URL}/api/bezorgzones/cities`);
+    const response = await fetch(`${API_BASE_URL}/api/bezorgzones/cities`, {
+      signal: AbortSignal.timeout(8000)
+    });
     const data = await response.json();
     const cities = (data && data.success && Array.isArray(data.data)) ? data.data : [];
+
+    clearTimeout(timeoutId);
 
     if (!cities.length) throw new Error('No cities');
 
@@ -55,6 +65,7 @@ async function loadLocations() {
     loadingEl.style.display = 'none';
     grid.style.display = 'grid';
   } catch (e) {
+    clearTimeout(timeoutId);
     // On error, just hide loading and show the static fallback list
     console.warn('Could not load dynamic locations, showing fallback.', e);
     loadingEl.style.display = 'none';
@@ -68,10 +79,23 @@ async function loadPackages() {
 
   if (!loadingEl || !grid) return;
 
+  // Set timeout to show fallback after 5 seconds
+  const timeoutId = setTimeout(() => {
+    loadingEl.innerHTML = '<span style="color: var(--color-gray); font-size: var(--font-size-sm);">Pakketten worden geladen via de API...</span>';
+    grid.innerHTML = `
+      <li><a href="/pakketten.html" class="sitemap-link">Bekijk alle pakketten<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+    `;
+    grid.style.display = 'grid';
+  }, 5000);
+
   try {
-    const response = await fetch(`${API_BASE_URL}/api/packages`);
+    const response = await fetch(`${API_BASE_URL}/api/packages`, { 
+      signal: AbortSignal.timeout(8000) 
+    });
     const data = await response.json();
     const packages = (data && data.success && Array.isArray(data.data)) ? data.data : [];
+
+    clearTimeout(timeoutId);
 
     if (!packages.length) throw new Error('No packages');
 
@@ -94,8 +118,13 @@ async function loadPackages() {
     loadingEl.style.display = 'none';
     grid.style.display = 'grid';
   } catch (e) {
+    clearTimeout(timeoutId);
     console.warn('Could not load packages.', e);
-    loadingEl.innerHTML = '<span style="color: var(--color-gray); font-size: var(--font-size-sm);">Kon pakketten niet laden</span>';
+    loadingEl.style.display = 'none';
+    grid.innerHTML = `
+      <li><a href="/pakketten.html" class="sitemap-link">Bekijk alle pakketten<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+    `;
+    grid.style.display = 'grid';
   }
 }
 
@@ -105,10 +134,27 @@ async function loadProducts() {
 
   if (!loadingEl || !grid) return;
 
+  // Set timeout to show fallback after 5 seconds
+  const timeoutId = setTimeout(() => {
+    loadingEl.innerHTML = '<span style="color: var(--color-gray); font-size: var(--font-size-sm);">Producten worden geladen via de API...</span>';
+    grid.innerHTML = `
+      <div style="margin-bottom: var(--space-lg);">
+        <ul class="sitemap-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs);">
+          <li><a href="/producten.html" class="sitemap-link">Bekijk alle producten<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+        </ul>
+      </div>
+    `;
+    grid.style.display = 'block';
+  }, 5000);
+
   try {
-    const response = await fetch(`${API_BASE_URL}/api/products?limit=500`);
+    const response = await fetch(`${API_BASE_URL}/api/products?limit=500`, {
+      signal: AbortSignal.timeout(8000)
+    });
     const data = await response.json();
     const products = (data && data.success && Array.isArray(data.data)) ? data.data : [];
+
+    clearTimeout(timeoutId);
 
     if (!products.length) throw new Error('No products');
 
@@ -142,8 +188,17 @@ async function loadProducts() {
     loadingEl.style.display = 'none';
     grid.style.display = 'block';
   } catch (e) {
+    clearTimeout(timeoutId);
     console.warn('Could not load products.', e);
-    loadingEl.innerHTML = '<span style="color: var(--color-gray); font-size: var(--font-size-sm);">Kon producten niet laden</span>';
+    loadingEl.style.display = 'none';
+    grid.innerHTML = `
+      <div style="margin-bottom: var(--space-lg);">
+        <ul class="sitemap-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs);">
+          <li><a href="/producten.html" class="sitemap-link">Bekijk alle producten<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+        </ul>
+      </div>
+    `;
+    grid.style.display = 'block';
   }
 }
 
