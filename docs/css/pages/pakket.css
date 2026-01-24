@@ -96,8 +96,7 @@
    ============================================ */
 
 .package-gallery {
-  position: sticky;
-  top: 120px; /* Account for sticky header */
+  position: relative;
   height: fit-content;
 }
 
@@ -713,9 +712,6 @@
 .package-contents-inline {
   background-color: var(--color-white);
   padding: var(--space-lg);
-  position: sticky;
-  top: 80px;
-  z-index: 10;
   border: 1px solid var(--border-color);
   max-height: calc(100vh - 100px);
   overflow-y: auto;

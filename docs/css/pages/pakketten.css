@@ -300,14 +300,15 @@
   min-width: 0;
 }
 
-/* Toolbar */
+/* Toolbar - Brutalist Style */
 .packages-toolbar {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-md);
-  border-bottom: 1px solid var(--color-light-gray);
+  margin-bottom: var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--color-black);
+  background-color: var(--color-white);
 }
 
 @media (min-width: 768px) {
@@ -315,6 +316,8 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    height: 64px; /* Fixed height for consistency */
+    padding: 0 var(--space-xl);
   }
 }
 
@@ -322,7 +325,7 @@
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 500;
-  color: var(--color-dark-gray);
+  color: var(--color-gray);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -335,12 +338,29 @@
 
 .packages-toolbar__actions {
   display: flex;
-  gap: var(--space-md);
   align-items: center;
 }
 
 .packages-toolbar__actions select {
-  min-width: 200px;
+  min-width: 220px;
+  border: none;
+  background-color: transparent;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-black);
+  cursor: pointer;
+  padding-right: 24px;
+  text-align: right;
+  /* Custom arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231A1A1A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+.packages-toolbar__actions select:focus {
+  outline: none;
 }
 
 /* Packages Grid */

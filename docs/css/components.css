@@ -373,8 +373,8 @@ select.form-input {
 }
 
 .badge--primary {
-  background-color: var(--color-primary-light);
-  color: var(--color-primary-dark);
+    background-color: #7a3233;
+    color: #ffffff;
 }
 
 .badge--success {
