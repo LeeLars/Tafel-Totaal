@@ -628,10 +628,9 @@ async function checkAvailability() {
   
   if (!statusEl || !currentPackage) return;
 
-  const startDate = document.getElementById('start-date')?.value;
-  const endDate = document.getElementById('end-date')?.value;
   const persons = parseInt(document.getElementById('persons-select')?.value) || 1;
 
+  // Use global startDate/endDate variables (set by date pickers for both single and multi-day)
   if (!startDate || !endDate) {
     statusEl.style.display = 'none';
     addToCartBtn.disabled = true;
