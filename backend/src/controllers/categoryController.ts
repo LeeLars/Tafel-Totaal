@@ -4,7 +4,7 @@ import { CategoryModel } from '../models/Category.model';
 /**
  * Get all categories
  */
-export async function getAllCategories(req: Request, res: Response): Promise<void> {
+export async function getAllCategories(_req: Request, res: Response): Promise<void> {
   try {
     const categories = await CategoryModel.findAllWithSubcategories(true);
     
