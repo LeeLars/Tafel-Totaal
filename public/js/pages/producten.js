@@ -22,6 +22,8 @@ const SUBCATEGORIES = {
   'servies': [
     { slug: 'dinerborden', name: 'Dinerborden' },
     { slug: 'dessertborden', name: 'Dessertborden' },
+    { slug: 'soepborden-pastaborden', name: 'Soepborden & Pastaborden' },
+    { slug: 'broodbordjes-sideplates', name: 'Broodbordjes & Side Plates' },
     { slug: 'kommen-schalen', name: 'Kommen & Schalen' },
     { slug: 'theesets', name: 'Theesets' },
     { slug: 'serveerschalen-etageres', name: 'Serveerschalen & Etagères' }
@@ -38,7 +40,9 @@ const SUBCATEGORIES = {
     { slug: 'champagneglazen', name: 'Champagneglazen' },
     { slug: 'cocktailglazen', name: 'Cocktailglazen' },
     { slug: 'water-frisdrankglazen', name: 'Water- & Frisdrankglazen' },
-    { slug: 'koffie-theeglazen', name: 'Koffie- & Theeglazen' }
+    { slug: 'bierglazen', name: 'Bierglazen' },
+    { slug: 'koffie-theeglazen', name: 'Koffie- & Theeglazen' },
+    { slug: 'karaffen-kannen', name: 'Karaffen & Kannen' }
   ],
   'decoratie': [
     { slug: 'tafellinnen', name: 'Tafellinnen' },
