@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { query, queryOne } from '../config/database';
 import { Product } from '../types';
+import { TagModel } from '../models/Tag.model';
 
 export async function getAllProducts(req: Request, res: Response): Promise<void> {
   try {
@@ -67,9 +68,17 @@ export async function getAllProducts(req: Request, res: Response): Promise<void>
 
     const total = parseInt(countResult?.total || '0', 10);
 
+    // Fetch tags for all products
+    const productsWithTags = await Promise.all(
+      products.map(async (product) => {
+        const tags = await TagModel.findByProductId(product.id);
+        return { ...product, tags };
+      })
+    );
+
     res.json({
       success: true,
-      data: products,
+      data: productsWithTags,
       pagination: {
         page: pageNum,
         limit: limitNum,

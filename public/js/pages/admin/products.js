@@ -20,6 +20,8 @@ let allProducts = []; // Store products for edit button access
 let isNewProduct = false; // Track if we're creating a new product
 let categories = [];
 let subcategories = [];
+let tagGroups = []; // Tag groups with their tags
+let selectedTags = []; // Currently selected tag IDs for product being edited
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
@@ -43,6 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   console.log('User authenticated, loading data...');
   await loadCategories();
+  await loadTagGroups();
   await loadProducts();
 });
 
@@ -109,6 +112,78 @@ async function loadSubcategories(categoryId) {
   } catch (error) {
     console.error('Error loading subcategories:', error);
   }
+}
+
+/**
+ * Load tag groups for product tagging
+ */
+async function loadTagGroups() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/tags`);
+    const result = await response.json();
+    
+    if (result.success) {
+      tagGroups = result.data || [];
+      renderTagCheckboxes();
+    }
+  } catch (error) {
+    console.error('Error loading tags:', error);
+  }
+}
+
+/**
+ * Render tag checkboxes in the edit modal
+ */
+function renderTagCheckboxes() {
+  tagGroups.forEach(group => {
+    let containerId;
+    if (group.slug === 'moment-beleving') {
+      containerId = 'moment-tags';
+    } else if (group.slug === 'stijl') {
+      containerId = 'stijl-tags';
+    } else {
+      return;
+    }
+    
+    const container = document.getElementById(containerId);
+    if (!container || !group.tags) return;
+    
+    container.innerHTML = group.tags.map(tag => `
+      <label style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--color-light-gray); cursor: pointer; font-size: var(--font-size-sm);">
+        <input type="checkbox" class="tag-checkbox" value="${tag.id}" data-slug="${tag.slug}">
+        ${tag.icon || ''} ${tag.name}
+      </label>
+    `).join('');
+  });
+}
+
+/**
+ * Set selected tags in checkboxes (when editing a product)
+ */
+function setSelectedTags(productTags) {
+  selectedTags = productTags.map(t => t.id);
+  
+  // Uncheck all first
+  document.querySelectorAll('.tag-checkbox').forEach(cb => {
+    cb.checked = false;
+  });
+  
+  // Check the ones that are selected
+  productTags.forEach(tag => {
+    const checkbox = document.querySelector(`.tag-checkbox[value="${tag.id}"]`);
+    if (checkbox) checkbox.checked = true;
+  });
+}
+
+/**
+ * Get selected tag IDs from checkboxes
+ */
+function getSelectedTagIds() {
+  const ids = [];
+  document.querySelectorAll('.tag-checkbox:checked').forEach(cb => {
+    ids.push(cb.value);
+  });
+  return ids;
 }
 
 /**
@@ -220,6 +295,9 @@ function openNewProductModal() {
   
   // Clear images
   clearImages();
+  
+  // Clear tags
+  setSelectedTags([]);
   
   const modal = document.getElementById('edit-modal');
   if (modal) {
@@ -405,6 +483,9 @@ function openEditModal(product) {
   // Load existing images
   setCurrentImages(product.images || []);
   
+  // Set product tags
+  setSelectedTags(product.tags || []);
+  
   const modal = document.getElementById('edit-modal');
   if (modal) {
     modal.classList.add('active');
@@ -450,14 +531,32 @@ async function saveProduct() {
   };
   
   try {
+    let productId = id;
+    
     if (isNewProduct) {
       // Create new product
-      await adminAPI.createProduct(data);
+      const result = await adminAPI.createProduct(data);
+      productId = result.data?.id;
       showToast('Product aangemaakt', 'success');
     } else {
       // Update existing product
       await adminAPI.updateProduct(id, data);
       showToast('Product bijgewerkt', 'success');
+    }
+    
+    // Save tags for the product
+    const tagIds = getSelectedTagIds();
+    if (productId) {
+      try {
+        await fetch(`${API_BASE_URL}/api/tags/product/${productId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ tag_ids: tagIds })
+        });
+      } catch (tagError) {
+        console.error('Error saving tags:', tagError);
+      }
     }
     
     document.getElementById('edit-modal').classList.remove('active');

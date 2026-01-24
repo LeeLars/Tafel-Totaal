@@ -7,13 +7,20 @@ import { productsAPI } from '../lib/api.js';
 import { formatPrice, showToast, debounce, getQueryParam, setQueryParam } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
 
+// API Base URL
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000'
+  : 'https://tafel-totaal-production.up.railway.app';
+
 // State
 let products = [];
 let filteredProducts = [];
+let tagGroups = []; // Tag groups with their tags
 let filters = {
   category: '',
   subcategory: '',
   priceRange: [],
+  tags: [], // Selected tag slugs
   sort: 'name-asc'
 };
 
@@ -67,7 +74,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   initFilters();
   initMobileFilters();
   
-  // Load data
+  // Load tags first, then products
+  await loadTagGroups();
   await loadProducts();
 });
 
@@ -265,6 +273,9 @@ function resetFilters() {
   // Reset price checkboxes
   document.querySelectorAll('input[name="price"]').forEach(cb => cb.checked = false);
   
+  // Reset tag checkboxes
+  document.querySelectorAll('input[name="tag"]').forEach(cb => cb.checked = false);
+  
   // Reset sort
   const sortSelect = document.getElementById('sort-select');
   if (sortSelect) sortSelect.value = 'name-asc';
@@ -274,6 +285,7 @@ function resetFilters() {
     category: '',
     subcategory: '',
     priceRange: [],
+    tags: [],
     sort: 'name-asc'
   };
   
@@ -333,6 +345,77 @@ async function loadProducts() {
 }
 
 /**
+ * Load tag groups from API and render filter UI
+ */
+async function loadTagGroups() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/tags`);
+    const result = await response.json();
+    
+    if (result.success) {
+      tagGroups = result.data || [];
+      renderTagFilters();
+    }
+  } catch (error) {
+    console.error('Error loading tags:', error);
+    // Hide tag filters on error
+    const momentGroup = document.getElementById('moment-filter-group');
+    const stijlGroup = document.getElementById('stijl-filter-group');
+    if (momentGroup) momentGroup.style.display = 'none';
+    if (stijlGroup) stijlGroup.style.display = 'none';
+  }
+}
+
+/**
+ * Render tag filter checkboxes
+ */
+function renderTagFilters() {
+  tagGroups.forEach(group => {
+    let containerId;
+    if (group.slug === 'moment-beleving') {
+      containerId = 'moment-filters';
+    } else if (group.slug === 'stijl') {
+      containerId = 'stijl-filters';
+    } else {
+      return; // Unknown group
+    }
+    
+    const container = document.getElementById(containerId);
+    if (!container || !group.tags || group.tags.length === 0) return;
+    
+    container.innerHTML = group.tags.map(tag => `
+      <label class="filter-checkbox">
+        <input type="checkbox" name="tag" value="${tag.slug}" data-group="${group.slug}">
+        <span class="filter-checkbox__mark"></span>
+        <span class="filter-checkbox__label">${tag.icon || ''} ${tag.name}</span>
+      </label>
+    `).join('');
+    
+    // Add event listeners
+    container.querySelectorAll('input[name="tag"]').forEach(checkbox => {
+      checkbox.addEventListener('change', handleTagChange);
+    });
+  });
+}
+
+/**
+ * Handle tag filter change
+ */
+function handleTagChange(e) {
+  const { value, checked } = e.target;
+  
+  if (checked) {
+    if (!filters.tags.includes(value)) {
+      filters.tags.push(value);
+    }
+  } else {
+    filters.tags = filters.tags.filter(t => t !== value);
+  }
+  
+  applyFilters();
+}
+
+/**
  * Apply filters and sort
  */
 function applyFilters() {
@@ -362,6 +445,14 @@ function applyFilters() {
         return false;
       });
       if (!matchesPrice) return false;
+    }
+
+    // Filter by tags (product must have ALL selected tags)
+    if (filters.tags.length > 0) {
+      const productTags = product.tags || [];
+      const productTagSlugs = productTags.map(t => t.slug || t);
+      const hasAllTags = filters.tags.every(tagSlug => productTagSlugs.includes(tagSlug));
+      if (!hasAllTags) return false;
     }
 
     return true;
