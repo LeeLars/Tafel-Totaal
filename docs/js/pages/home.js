@@ -90,7 +90,7 @@ function createPackageCard(pkg) {
   
   return `
     <article class="package-card">
-      <a href="/pakket.html?id=${pkg.id}" class="package-card__link">
+      <a href="/pakket?id=${pkg.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${imageUrl}" alt="${pkg.name}" loading="lazy">
           ${serviceLevelBadge ? `<span class="package-card__badge">${serviceLevelBadge}</span>` : ''}
@@ -177,7 +177,7 @@ function renderLocations(cities) {
   if (!grid) return;
 
   grid.innerHTML = cities.map(city => `
-    <a href="/locaties/${city.slug}.html" class="location-card">
+    <a href="/locaties/${city.slug}" class="location-card">
       <div class="location-card__icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>

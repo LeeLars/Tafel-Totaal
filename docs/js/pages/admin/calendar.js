@@ -373,7 +373,7 @@ function renderDayView() {
                 ${getStatusText(event.status)}
               </span>
             </div>
-            <a href="order.html?id=${event.orderId}" class="btn btn--ghost btn--sm">Bekijken</a>
+            <a href="order?id=${event.orderId}" class="btn btn--ghost btn--sm">Bekijken</a>
           </div>
         `).join('')}
       </div>
@@ -449,7 +449,7 @@ function showEventModal(eventId) {
     </div>
   `;
 
-  viewBtn.href = `order.html?id=${event.orderId}`;
+  viewBtn.href = `order?id=${event.orderId}`;
   modal.classList.add('active');
 }
 

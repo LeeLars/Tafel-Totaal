@@ -25,13 +25,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 /**
  * Load location data from URL path
- * Supports both /locaties/brugge.html and ?slug=brugge formats
+ * Supports both /locaties/brugge and ?slug=brugge formats
  */
 async function loadLocationData() {
-  // Extract slug from URL path: /locaties/brugge.html -> brugge
+  // Extract slug from URL path: /locaties/brugge -> brugge (with or without trailing slash)
   let slug = null;
   const path = window.location.pathname;
-  const match = path.match(/\/locaties\/([^\/]+)\.html$/);
+  const match = path.match(/\/locaties\/([^\/]+)\/?$/);
   if (match) {
     slug = match[1];
   } else {
@@ -127,7 +127,7 @@ async function loadRelatedLocations() {
       .slice(0, 10);
 
     container.innerHTML = related.map(c => {
-      return `<a class="btn btn--secondary btn--sm" href="/locaties/${encodeURIComponent(c.slug)}.html">Tafelverhuur ${escapeHtml(c.name)}</a>`;
+      return `<a class="btn btn--secondary btn--sm" href="/locaties/${encodeURIComponent(c.slug)}">Tafelverhuur ${escapeHtml(c.name)}</a>`;
     }).join('');
   } catch {
     // ignore
@@ -141,7 +141,7 @@ function injectJsonLd() {
 
     const title = currentCity.meta_title || `Tafelverhuur ${currentCity.name} | Tafel Totaal`;
     const description = currentCity.meta_description || `Professionele tafelverhuur in ${currentCity.name}.`;
-    const url = currentSlug ? `https://tafeltotaal.com/locaties/${encodeURIComponent(currentSlug)}.html` : 'https://tafeltotaal.com/locaties.html';
+    const url = currentSlug ? `https://tafeltotaal.com/locaties/${encodeURIComponent(currentSlug)}` : 'https://tafeltotaal.com/locaties';
 
     const ld = {
       '@context': 'https://schema.org',
@@ -270,7 +270,7 @@ function updateMetaTags() {
   // Canonical
   const canonical = document.getElementById('canonical-link');
   if (canonical && currentSlug) {
-    canonical.setAttribute('href', `https://tafeltotaal.com/locaties/${encodeURIComponent(currentSlug)}.html`);
+    canonical.setAttribute('href', `https://tafeltotaal.com/locaties/${encodeURIComponent(currentSlug)}`);
   }
   
   // Update meta description

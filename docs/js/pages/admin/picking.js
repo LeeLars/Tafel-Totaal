@@ -279,7 +279,7 @@ function createPickingCard(order) {
       <!-- Card Footer: Actions -->
       <div class="admin-card__footer" style="border-top: 1px solid var(--color-light-gray); padding: var(--space-lg); background: var(--color-off-white);">
         <div style="display: flex; gap: var(--space-md); justify-content: flex-end;">
-          <a href="/admin/order.html?id=${order.id}" class="btn btn--ghost">Bekijk Order</a>
+          <a href="/admin/order?id=${order.id}" class="btn btn--ghost">Bekijk Order</a>
           ${progressPercent === 100 && pickingStatus !== 'completed' ? `
             <button class="btn btn--primary" onclick="markOrderComplete('${order.id}')">Markeer als Klaar</button>
           ` : progressPercent > 0 && progressPercent < 100 ? `

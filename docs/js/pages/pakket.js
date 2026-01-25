@@ -796,7 +796,7 @@ document.getElementById('add-to-cart-btn')?.addEventListener('click', async () =
       showToast('Pakket toegevoegd aan winkelwagen!', 'success');
       
       // Optional: redirect to cart
-      // window.location.href = '/winkelwagen.html';
+      // window.location.href = '/winkelwagen';
     } else {
       showToast(result.error || 'Kon niet toevoegen aan winkelwagen', 'error');
     }

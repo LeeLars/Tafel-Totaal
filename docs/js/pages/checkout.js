@@ -1584,7 +1584,7 @@ async function placeOrder() {
       await clearCart();
       
       // Redirect to order confirmation page
-      window.location.href = `/bestelling-bevestigd.html?order=${response.data.order_id}`;
+      window.location.href = `/bestelling-bevestigd?order=${response.data.order_id}`;
     } else {
       throw new Error('Reservering kon niet worden aangemaakt');
     }

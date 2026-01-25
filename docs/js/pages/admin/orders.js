@@ -35,7 +35,7 @@ function initTableInteractions() {
     const id = row.getAttribute('data-order-id');
     if (!id) return;
 
-    window.location.href = `/admin/order.html?id=${id}`;
+    window.location.href = `/admin/order?id=${id}`;
   });
 
   tbody.addEventListener('click', async (e) => {
@@ -237,7 +237,7 @@ function createOrderRow(order) {
       <td class="admin-table__amount">${formatPrice(order.total)}</td>
       <td>
         <div class="admin-table__actions">
-          <a href="/admin/order.html?id=${order.id}" class="btn btn--ghost btn--sm">Details</a>
+          <a href="/admin/order?id=${order.id}" class="btn btn--ghost btn--sm">Details</a>
           ${canCancel ? `<button type="button" class="btn btn--secondary btn--sm" data-action="cancel-order" data-order-id="${order.id}">Annuleren</button>` : ''}
           ${canDelete ? `<button type="button" class="btn btn--primary btn--sm" data-action="delete-order" data-order-id="${order.id}">Verwijderen</button>` : ''}
         </div>

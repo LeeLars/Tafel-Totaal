@@ -101,7 +101,7 @@ function createCartItemHTML(item) {
       </div>
       <div class="cart-item__info">
         <h3 class="cart-item__title">
-          <a href="/${item.type === 'package' ? 'pakket' : 'product'}.html?id=${item.product_id || item.package_id}">${item.name}</a>
+          <a href="/${item.type === 'package' ? 'pakket' : 'product'}?id=${item.product_id || item.package_id}">${item.name}</a>
         </h3>
         <p class="cart-item__meta">${itemType}${personsText ? ` • ${personsText}` : ''}</p>
         ${item.start_date && item.end_date ? `

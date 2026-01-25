@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Rond je reservering af. Betaling volgt via factuur na inleveren.">
+  
+  <title>Reservering Afronden | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Leaflet CSS for maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/checkout.css">
+  
+  <!-- Leaflet JS for maps -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  
+  <!-- Hotjar Tracking Code for Tafel-Totaal -->
+  <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:6629782,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+  </script>
+  <!-- Umami Analytics -->
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="661d9bc3-2dd9-46e2-a9ab-4c0004911092"></script>
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main>
+    <!-- Progress Steps -->
+    <section class="checkout-progress">
+      <div class="container">
+        <ol class="progress-steps">
+          <li class="progress-step active" data-step="1">
+            <span class="progress-step__number">1</span>
+            <span class="progress-step__label">Gegevens</span>
+          </li>
+          <li class="progress-step" data-step="2">
+            <span class="progress-step__number">2</span>
+            <span class="progress-step__label">Levering</span>
+          </li>
+          <li class="progress-step" data-step="3">
+            <span class="progress-step__number">3</span>
+            <span class="progress-step__label">Bevestiging</span>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Checkout Content -->
+    <section class="checkout-section">
+      <div class="container">
+        <!-- Empty Cart Redirect -->
+        <div class="checkout-empty hidden" id="checkout-empty">
+          <h2>Je winkelwagen is leeg</h2>
+          <p>Voeg eerst items toe voordat je kunt afrekenen.</p>
+          <a href="/pakketten" class="btn btn--primary">Bekijk Pakketten</a>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="checkout-layout" id="checkout-layout">
+          <div class="checkout-form">
+            <!-- Step 1: Customer Details -->
+            <div class="checkout-step active" id="step-1">
+              <h2>Jouw Gegevens</h2>
+              
+              <form id="customer-form">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="first_name" class="form-label">Voornaam *</label>
+                    <input type="text" id="first_name" name="first_name" class="form-input" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="last_name" class="form-label">Achternaam *</label>
+                    <input type="text" id="last_name" name="last_name" class="form-input" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="email" class="form-label">E-mailadres *</label>
+                  <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                  <label for="phone" class="form-label">Telefoonnummer *</label>
+                  <input type="tel" id="phone" name="phone" class="form-input" required>
+                </div>
+                <div class="form-group">
+                  <label for="vat_number" class="form-label">BTW-nummer (optioneel)</label>
+                  <input type="text" id="vat_number" name="vat_number" class="form-input" placeholder="Bijv. BE0123.456.789">
+                </div>
+
+                <div class="form-group">
+                  <label for="company_name" class="form-label">Bedrijfsnaam (optioneel)</label>
+                  <input type="text" id="company_name" name="company_name" class="form-input">
+                </div>
+
+                <div class="form-group">
+                  <label class="filter-checkbox">
+                    <input type="checkbox" id="create_account" name="create_account">
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">Account aanmaken voor sneller afrekenen</span>
+                  </label>
+                </div>
+
+                <div class="checkout-step__actions">
+                  <a href="/winkelwagen" class="btn btn--ghost">← Terug naar winkelwagen</a>
+                  <button type="submit" class="btn btn--primary">
+                    Verder naar levering
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Step 2: Delivery -->
+            <div class="checkout-step" id="step-2">
+              <h2>Levering</h2>
+
+              <form id="delivery-form">
+                <!-- Delivery Info Notice -->
+                <div class="delivery-info-notice" style="background: var(--color-concrete); padding: var(--space-md); border-left: 3px solid var(--color-primary); margin-bottom: var(--space-lg);">
+                  <p style="margin: 0; font-size: 14px;"><strong>Levering:</strong> GRATIS binnen 15km (vanaf €150). Buiten 15km: €0,50/km × volledige afstand × 2 (heen+terug).</p>
+                  <p style="margin: var(--space-xs) 0 0; font-size: 14px;"><strong>Afhalen:</strong> Altijd gratis in Beernem. Tot 2 dagen vooraf, terugbrengen binnen 48u (borstelschoon).</p>
+                </div>
+
+                <!-- Delivery Method -->
+                <div class="delivery-options">
+                  <label class="delivery-option" id="delivery-option-delivery">
+                    <input type="radio" name="delivery_method" value="DELIVERY" id="delivery-radio" required>
+                    <div class="delivery-option__content">
+                      <div class="delivery-option__header">
+                        <span class="delivery-option__title">Bezorgen + Ophalen</span>
+                        <span class="delivery-option__price" id="delivery-price">Berekend op adres</span>
+                      </div>
+                      <p class="delivery-option__desc">Wij <strong>bezorgen</strong> tot 2 dagen voor je event én <strong>halen weer op</strong> binnen 48u na afloop.</p>
+                      <div style="display: flex; gap: var(--space-sm); margin-top: 8px; flex-wrap: wrap;">
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: var(--color-concrete); padding: 4px 8px; border: 1px solid var(--border-color);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                          Levering
+                        </span>
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; background: var(--color-concrete); padding: 4px 8px; border: 1px solid var(--border-color);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"></polyline><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                          Ophaling inbegrepen
+                        </span>
+                      </div>
+                      <p class="delivery-option__min" id="delivery-min-notice" style="font-size: 12px; color: var(--color-primary); margin-top: 8px; font-weight: 500;">Min. €150 • GRATIS binnen 15km • Buiten 15km: €0,50/km × afstand × 2 (heen+terug)</p>
+                      <p class="delivery-option__disabled-notice hidden" id="delivery-disabled-notice" style="font-size: 12px; color: var(--color-error); margin-top: 4px; font-weight: 600;">Je bestelling is onder €150 - bezorgen niet beschikbaar</p>
+                    </div>
+                  </label>
+                  <label class="delivery-option" id="delivery-option-pickup">
+                    <input type="radio" name="delivery_method" value="PICKUP" id="pickup-radio" required>
+                    <div class="delivery-option__content">
+                      <div class="delivery-option__header">
+                        <span class="delivery-option__title">Zelf afhalen + Terugbrengen</span>
+                        <span class="delivery-option__price">Gratis</span>
+                      </div>
+                      <p class="delivery-option__desc">Je haalt zelf op tot 2 dagen vooraf en brengt terug binnen 48u na evenement (borstelschoon).</p>
+                      <p style="font-size: 12px; color: var(--color-gray); margin-top: 4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        Parkstraat 44, 8730 Beernem
+                      </p>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Delivery Scheduling (shown when DELIVERY selected) -->
+                <div class="delivery-scheduling hidden" id="delivery-scheduling">
+                  <h3 style="margin-top: var(--space-lg); margin-bottom: var(--space-md);">Planning voor bezorging & ophaling</h3>
+                  
+                  <div class="form-group">
+                    <label class="form-label">
+                      <span class="info-tooltip">
+                        Evenement datum
+                        <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over evenement datum">?</button>
+                        <div class="info-tooltip__content">
+                          <p class="info-tooltip__text">Dit is de datum die je eerder hebt gekozen bij het toevoegen van items aan je winkelwagen.</p>
+                        </div>
+                      </span>
+                    </label>
+                    <input type="text" id="delivery-event-date" class="form-input" readonly style="background: var(--color-concrete); cursor: not-allowed;">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">
+                      <span class="info-tooltip">
+                        Gewenste leverdatum *
+                        <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over leverdatum">?</button>
+                        <div class="info-tooltip__content">
+                          <p class="info-tooltip__text">Kies wanneer we de spullen mogen leveren (tot 2 dagen voor je evenement).</p>
+                        </div>
+                      </span>
+                    </label>
+                    <div class="date-presets" id="delivery-date-options">
+                      <!-- Generated by JS -->
+                    </div>
+                    <input type="hidden" id="delivery-date-selected" name="delivery_date" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="delivery-time" class="form-label">
+                      <span class="info-tooltip">
+                        Gewenst levermoment *
+                        <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over levermoment">?</button>
+                        <div class="info-tooltip__content">
+                          <p class="info-tooltip__text">Let op: Het levermoment kan wijzigen afhankelijk van onze planning en drukte. We nemen contact op bij wijzigingen.</p>
+                        </div>
+                      </span>
+                    </label>
+                    <select id="delivery-time" name="delivery_time" class="form-input" required>
+                      <option value="">Selecteer een tijdslot</option>
+                      <option value="08:00-10:00">08:00 - 10:00</option>
+                      <option value="10:00-12:00">10:00 - 12:00</option>
+                      <option value="12:00-14:00">12:00 - 14:00</option>
+                      <option value="14:00-16:00">14:00 - 16:00</option>
+                      <option value="16:00-18:00">16:00 - 18:00</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">
+                      <span class="info-tooltip">
+                        Gewenste ophaaldatum *
+                        <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over ophaaldatum">?</button>
+                        <div class="info-tooltip__content">
+                          <p class="info-tooltip__text">Kies wanneer we de spullen mogen ophalen (binnen 48u na je evenement, borstelschoon).</p>
+                        </div>
+                      </span>
+                    </label>
+                    <div class="date-presets" id="pickup-date-options">
+                      <!-- Generated by JS -->
+                    </div>
+                    <input type="hidden" id="pickup-date-selected" name="pickup_date" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="pickup-time" class="form-label">Gewenst ophaalmoment *</label>
+                    <select id="pickup-time" name="pickup_time" class="form-input" required>
+                      <option value="">Selecteer een tijdslot</option>
+                      <option value="04:30-06:30">04:30 - 06:30</option>
+                      <option value="08:00-10:00">08:00 - 10:00</option>
+                      <option value="10:00-12:00">10:00 - 12:00</option>
+                      <option value="12:00-14:00">12:00 - 14:00</option>
+                      <option value="14:00-16:00">14:00 - 16:00</option>
+                      <option value="16:00-18:00">16:00 - 18:00</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Pickup Scheduling (shown when PICKUP selected) -->
+                <div class="pickup-scheduling hidden" id="pickup-scheduling">
+                  <h3 style="margin-top: var(--space-lg); margin-bottom: var(--space-md);">Planning voor afhalen & terugbrengen</h3>
+                  
+                  <div class="form-group">
+                    <label class="form-label">
+                      <span class="info-tooltip">
+                        Evenement datum
+                        <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over evenement datum">?</button>
+                        <div class="info-tooltip__content">
+                          <p class="info-tooltip__text">Dit is de datum die je eerder hebt gekozen bij het toevoegen van items aan je winkelwagen.</p>
+                        </div>
+                      </span>
+                    </label>
+                    <input type="text" id="pickup-event-date" class="form-input" readonly style="background: var(--color-concrete); cursor: not-allowed;">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">
+                      <span class="info-tooltip">
+                        Gewenste afhaaldatum *
+                        <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over afhaaldatum">?</button>
+                        <div class="info-tooltip__content">
+                          <p class="info-tooltip__text">Kies wanneer je de spullen komt ophalen (tot 2 dagen voor je evenement in Beernem, Parkstraat 44).</p>
+                        </div>
+                      </span>
+                    </label>
+                    <div class="date-presets" id="self-pickup-date-options">
+                      <!-- Generated by JS -->
+                    </div>
+                    <input type="hidden" id="self-pickup-date-selected" name="self_pickup_date" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="self-pickup-time" class="form-label">Gewenst afhaalmoment *</label>
+                    <select id="self-pickup-time" name="self_pickup_time" class="form-input" required>
+                      <option value="">Selecteer een tijdslot</option>
+                      <option value="08:00-10:00">08:00 - 10:00</option>
+                      <option value="10:00-12:00">10:00 - 12:00</option>
+                      <option value="12:00-14:00">12:00 - 14:00</option>
+                      <option value="14:00-16:00">14:00 - 16:00</option>
+                      <option value="16:00-18:00">16:00 - 18:00</option>
+                    </select>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">
+                      <span class="info-tooltip">
+                        Gewenste terugbrengdatum *
+                        <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over terugbrengdatum">?</button>
+                        <div class="info-tooltip__content">
+                          <p class="info-tooltip__text">Kies wanneer je de spullen terugbrengt (binnen 48u na je evenement, borstelschoon).</p>
+                        </div>
+                      </span>
+                    </label>
+                    <div class="date-presets" id="return-date-options">
+                      <!-- Generated by JS -->
+                    </div>
+                    <input type="hidden" id="return-date-selected" name="return_date" required>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="return-time" class="form-label">Gewenst terugbrengmoment *</label>
+                    <select id="return-time" name="return_time" class="form-input" required>
+                      <option value="">Selecteer een tijdslot</option>
+                      <option value="08:00-10:00">08:00 - 10:00</option>
+                      <option value="10:00-12:00">10:00 - 12:00</option>
+                      <option value="12:00-14:00">12:00 - 14:00</option>
+                      <option value="14:00-16:00">14:00 - 16:00</option>
+                      <option value="16:00-18:00">16:00 - 18:00</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Delivery Address (shown when DELIVERY selected) -->
+                <div class="delivery-address" id="delivery-address">
+                  <h3>Bezorgadres</h3>
+                  
+                  <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                      <label for="street" class="form-label">Straat *</label>
+                      <input type="text" id="street" name="street" class="form-input" required>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                      <label for="house_number" class="form-label">Huisnummer *</label>
+                      <input type="text" id="house_number" name="house_number" class="form-input" required>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                      <label for="postal_code" class="form-label">Postcode *</label>
+                      <input type="text" id="postal_code" name="postal_code" class="form-input" required placeholder="1234">
+                    </div>
+                    <div class="form-group" style="flex: 2;">
+                      <label for="city" class="form-label">Plaats *</label>
+                      <input type="text" id="city" name="city" class="form-input" required>
+                    </div>
+                  </div>
+
+                  <div class="delivery-zone-info" id="delivery-zone-info" style="display: none;">
+                    <div class="delivery-zone-info__icon"></div>
+                    <span class="delivery-zone-info__text"></span>
+                  </div>
+
+                  <!-- Route Map (always visible) -->
+                  <div class="route-map-container" id="route-map-container" style="margin-top: var(--space-md);">
+                    <div class="route-map-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-sm);">
+                      <h4 style="margin: 0; font-size: 0.9rem;">Route vanaf Beernem</h4>
+                      <span class="route-distance" id="route-distance" style="font-size: 0.85rem; color: var(--color-primary); font-weight: 600;"></span>
+                    </div>
+                    <div id="delivery-map" style="height: 280px; border: 1px solid var(--border-color); background: var(--color-concrete); display: flex; align-items: center; justify-content: center;">
+                      <div id="map-placeholder" style="text-align: center; color: var(--color-gray);">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.5; margin-bottom: 8px;">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <p style="margin: 0; font-size: 14px;">Vul je adres in om de route te berekenen</p>
+                      </div>
+                    </div>
+                    <div class="route-info" style="display: flex; gap: var(--space-md); margin-top: var(--space-sm); font-size: 0.8rem; color: var(--color-gray);">
+                      <span id="route-duration"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>-- min</span>
+                      <span id="route-km"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>-- km</span>
+                    </div>
+                    
+                    <!-- Price Breakdown -->
+                    <div class="delivery-price-breakdown" id="delivery-price-breakdown" style="margin-top: var(--space-md); padding: var(--space-md); background: var(--color-concrete); border: 1px solid var(--border-color);">
+                      <h5 style="margin: 0 0 var(--space-sm); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;">Kostenberekening</h5>
+                      <div style="display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem;">
+                        <div style="display: flex; justify-content: space-between;">
+                          <span>🚚 Levering (heen)</span>
+                          <span id="delivery-cost-one-way">€--,--</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                          <span>🔄 Ophaling (terug)</span>
+                          <span id="pickup-cost-one-way">€--,--</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; border-top: 1px solid var(--border-color); padding-top: 8px; margin-top: 4px; font-weight: 700; color: var(--color-primary);">
+                          <span>Totaal bezorgkosten</span>
+                          <span id="delivery-cost-total">€--,--</span>
+                        </div>
+                      </div>
+                      <p style="margin: var(--space-sm) 0 0; font-size: 11px; color: var(--color-gray);">Berekening: afstand × €0,50 per km × 2 (heen + terug)</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Order Notes -->
+                <div class="form-group">
+                  <label for="notes" class="form-label">Opmerkingen (optioneel)</label>
+                  <textarea id="notes" name="notes" class="form-input" rows="3" placeholder="Bijv. speciale instructies voor levering"></textarea>
+                </div>
+
+                <div class="checkout-step__actions">
+                  <button type="button" class="btn btn--ghost" id="back-to-step-1">← Terug</button>
+                  <button type="submit" class="btn btn--primary">
+                    Verder naar bevestiging
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Step 3: Confirmation -->
+            <div class="checkout-step" id="step-3">
+              <h2>Bevestiging</h2>
+
+              <form id="payment-form">
+                <!-- Order Review -->
+                <div class="order-review">
+                  <h3>Besteloverzicht</h3>
+                  <div class="order-review__items" id="order-review-items">
+                    <!-- Items loaded via JS -->
+                  </div>
+                </div>
+
+                <!-- Terms & Conditions -->
+                <div class="form-group">
+                  <label class="filter-checkbox">
+                    <input type="checkbox" id="accept_terms" name="accept_terms" required>
+                    <span class="filter-checkbox__mark"></span>
+                    <span class="filter-checkbox__label">
+                      Ik ga akkoord met de <a href="/algemene-voorwaarden" target="_blank">algemene voorwaarden</a> *
+                    </span>
+                  </label>
+                </div>
+
+                <!-- Invoice Payment Notice -->
+                <div class="invoice-notice" style="background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%); border: 1px solid #2196F3; padding: var(--space-lg); margin: var(--space-lg) 0;">
+                  <div style="display: flex; gap: var(--space-md); align-items: start;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1976D2" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                      <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <div>
+                      <h3 style="margin: 0 0 var(--space-xs); color: #1565C0; font-size: 1.1rem;">Betaling via factuur</h3>
+                      <p style="margin: 0; color: #1976D2; line-height: 1.6;">
+                        Je hoeft nu <strong>niet te betalen</strong>. Na inlevering van het materiaal controleren wij de staat en factureren we het correcte bedrag inclusief eventuele schadevergoeding. Dit zorgt voor een eerlijke en transparante afrekening.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="checkout-step__actions">
+                  <button type="button" class="btn btn--ghost" id="back-to-step-2">← Terug</button>
+                  <button type="submit" class="btn btn--primary btn--lg" id="place-order-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Reservering Bevestigen
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Order Summary Sidebar -->
+          <aside class="checkout-summary">
+            <h3 class="checkout-summary__title">Je bestelling</h3>
+            
+            <div class="checkout-summary__items" id="summary-items">
+              <!-- Items loaded via JS -->
+            </div>
+
+            <div class="checkout-summary__rows">
+              <div class="checkout-summary__row">
+                <span>Subtotaal</span>
+                <span id="checkout-subtotal">€0,00</span>
+              </div>
+              <div class="checkout-summary__row" id="loyalty-discount-row" style="display: none;">
+                <span class="checkout-summary__label">Loyalty korting</span>
+                <span id="checkout-loyalty-discount">-€0,00</span>
+              </div>
+              <div class="checkout-summary__row">
+                <span>Bezorgkosten</span>
+                <span id="checkout-delivery">€0,00</span>
+              </div>
+              <div class="checkout-summary__row checkout-summary__row--deposit">
+                <span class="info-tooltip">
+                  Schadevergoeding (niet vooraf betaald)
+                  <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over schadevergoeding">?</button>
+                  <div class="info-tooltip__content">
+                    <div class="info-tooltip__title">Hoe werkt schadevergoeding?</div>
+                    <p class="info-tooltip__text">Bij Tafel Totaal betaal je geen borg vooraf. De schadevergoeding wordt alleen in rekening gebracht als er daadwerkelijk schade is aan het gehuurde materiaal.</p>
+                    <a href="/borg-schade" class="info-tooltip__link">Meer informatie →</a>
+                  </div>
+                </span>
+                <span id="checkout-deposit">€0,00</span>
+              </div>
+            </div>
+
+            <div class="checkout-summary__total">
+              <span>Totaal</span>
+              <span id="checkout-total">€0,00</span>
+            </div>
+
+            <!--! PAYMENT INTEGRATION DISABLED - Invoice-based payment after return
+            <div class="checkout-summary__secure">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
+              <div>
+                <strong>Veilig betalen</strong>
+                <p>Via Mollie met Bancontact, iDEAL, creditcard en meer.</p>
+              </div>
+            </div>
+            !-->
+            
+            <div class="checkout-summary__secure">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <div>
+                <strong>Betaling via factuur</strong>
+                <p>Betaling volgt na inleveren. Correcte afrekening inclusief eventuele schade.</p>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Simplified Footer -->
+  <footer class="checkout-footer">
+    <div class="container">
+      <p>&copy; 2024 Tafel Totaal. Alle rechten voorbehouden.</p>
+      <nav>
+        <a href="/algemene-voorwaarden">Algemene voorwaarden</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/pages/checkout.js"></script>
+</body>
+</html>
