@@ -438,7 +438,7 @@
 .quote-card__attribution {
   font-family: var(--font-body);
   font-size: var(--font-size-sm);
-  color: var(--color-gray);
+  color: #ffffff;
   font-style: italic;
 }
 
