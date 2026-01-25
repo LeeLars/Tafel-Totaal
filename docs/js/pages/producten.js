@@ -508,15 +508,22 @@ function renderProducts() {
 function createProductCard(product) {
   // Map backend category names to display names if needed
   const categoryName = product.category_name || product.category || 'Overig';
-  const imageUrl = product.image_url || product.images?.[0] || '/images/products/placeholder.jpg';
+  const imageUrl = product.image_url || product.images?.[0];
+  const hasImage = imageUrl && imageUrl !== '/images/products/placeholder.jpg';
   
   return `
     <article class="package-card">
       <a href="/product.html?id=${product.id}" class="package-card__link">
-        <div class="package-card__image">
-          <img src="${imageUrl}" 
-               alt="${product.name}" 
-               loading="lazy">
+        <div class="package-card__image ${!hasImage ? 'package-card__image--no-image' : ''}">
+          ${hasImage ? `
+            <img src="${imageUrl}" 
+                 alt="${product.name}" 
+                 loading="lazy">
+          ` : `
+            <div class="package-card__no-image">
+              <span>Geen afbeelding beschikbaar</span>
+            </div>
+          `}
           <span class="package-card__badge">${categoryName}</span>
         </div>
         <div class="package-card__content">
