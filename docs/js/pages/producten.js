@@ -336,7 +336,7 @@ async function loadProducts() {
   } catch (error) {
     console.error('Error loading products:', error);
     grid.innerHTML = `
-      <div class="packages-error">
+      <div class="products-error">
         <p>Kon producten niet laden. Probeer het later opnieuw.</p>
         <button class="btn btn--secondary btn--sm" onclick="location.reload()">Opnieuw proberen</button>
       </div>

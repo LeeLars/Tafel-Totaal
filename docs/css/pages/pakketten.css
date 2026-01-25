@@ -382,7 +382,6 @@
   }
 }
 
-.packages-loading,
 .packages-empty,
 .packages-error {
   grid-column: 1 / -1;
@@ -393,10 +392,6 @@
   padding: var(--space-xxl);
   text-align: center;
   color: var(--color-dark-gray);
-}
-
-.packages-loading .spinner {
-  margin-bottom: var(--space-md);
 }
 
 /* ============================================

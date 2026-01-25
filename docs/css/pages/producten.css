@@ -391,7 +391,6 @@
   }
 }
 
-.products-loading,
 .products-empty,
 .products-error {
   grid-column: 1 / -1;
@@ -440,12 +439,6 @@
   font-size: var(--font-size-sm);
   color: #ffffff;
   font-style: italic;
-}
-
-.products-loading .spinner {
-  margin-bottom: var(--space-md);
-  border-color: var(--color-light-gray);
-  border-top-color: var(--color-black);
 }
 
 /* ============================================
