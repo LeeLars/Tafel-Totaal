@@ -276,7 +276,7 @@ function renderRelatedProducts(products) {
 
   container.innerHTML = products.map(p => `
     <article class="package-card">
-      <a href="/product?id=${p.id}" class="package-card__link">
+      <a href="/product.html?id=${p.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${p.images?.[0] || '/images/products/placeholder.jpg'}" alt="${p.name}" loading="lazy">
           <span class="package-card__badge">${p.category_name || p.category || 'Overig'}</span>
@@ -693,7 +693,7 @@ function updateTotalPrice() {
       // Update quote link with details
       const subject = `Offerte aanvraag: ${currentProduct.name}`;
       const body = `Ik wil graag een offerte voor:\nProduct: ${currentProduct.name}\nAantal: ${selectedQuantity}\nPeriode: ${formatDateShort(startDate)} tot ${formatDateShort(endDate)} (${billingDays} dagen)`;
-      quoteBtn.href = `/contact?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      quoteBtn.href = `/contact.html?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     }
   } else {
     if (addToCartBtn) {

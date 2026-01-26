@@ -1360,15 +1360,15 @@ async function initializeMap(routeCoordinates, destCoords, destName) {
     opacity: 0.8
   }).addTo(routeLayer);
   
-  // Origin marker (Tafel Totaal - Parkstraat 44, Beernem)
+  // Origin marker (Tafel Totaal - Bedrijfslocatie)
   const originIcon = L.divIcon({
     className: 'custom-marker origin-marker',
     html: `<div style="background: #903D3E; color: white; padding: 6px 10px; border-radius: 0; font-size: 12px; font-weight: bold; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.3);">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: -2px; margin-right: 4px;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-      Parkstraat 44, Beernem
+      Tafel Totaal - Bedrijfslocatie
     </div>`,
-    iconSize: [160, 30],
-    iconAnchor: [80, 30]
+    iconSize: [200, 30],
+    iconAnchor: [100, 30]
   });
   L.marker(ORIGIN_COORDS, { icon: originIcon }).addTo(routeLayer);
   
@@ -1584,7 +1584,7 @@ async function placeOrder() {
       await clearCart();
       
       // Redirect to order confirmation page
-      window.location.href = `/bestelling-bevestigd?order=${response.data.order_id}`;
+      window.location.href = `/bestelling-bevestigd.html?order=${response.data.order_id}`;
     } else {
       throw new Error('Reservering kon niet worden aangemaakt');
     }

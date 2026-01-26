@@ -51,7 +51,7 @@ async function loadLocations() {
 
     // Replace content with dynamic list
     grid.innerHTML = sorted.map(c => {
-      const url = `/locaties/${encodeURIComponent(c.slug)}`;
+      const url = `/locaties/${encodeURIComponent(c.slug)}.html`;
       return `
         <li>
           <a href="${url}" class="sitemap-link">
@@ -83,7 +83,7 @@ async function loadPackages() {
   const timeoutId = setTimeout(() => {
     loadingEl.innerHTML = '<span style="color: var(--color-gray); font-size: var(--font-size-sm);">Pakketten worden geladen via de API...</span>';
     grid.innerHTML = `
-      <li><a href="/pakketten" class="sitemap-link">Bekijk alle pakketten<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+      <li><a href="/pakketten.html" class="sitemap-link">Bekijk alle pakketten<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
     `;
     grid.style.display = 'grid';
   }, 5000);
@@ -104,7 +104,7 @@ async function loadPackages() {
       .sort((a, b) => String(a.name).localeCompare(String(b.name), 'nl', { sensitivity: 'base' }));
 
     grid.innerHTML = sorted.map(p => {
-      const url = `/pakket?slug=${encodeURIComponent(p.slug)}`;
+      const url = `/pakket.html?slug=${encodeURIComponent(p.slug)}`;
       return `
         <li>
           <a href="${url}" class="sitemap-link">
@@ -122,7 +122,7 @@ async function loadPackages() {
     console.warn('Could not load packages.', e);
     loadingEl.style.display = 'none';
     grid.innerHTML = `
-      <li><a href="/pakketten" class="sitemap-link">Bekijk alle pakketten<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+      <li><a href="/pakketten.html" class="sitemap-link">Bekijk alle pakketten<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
     `;
     grid.style.display = 'grid';
   }
@@ -140,7 +140,7 @@ async function loadProducts() {
     grid.innerHTML = `
       <div style="margin-bottom: var(--space-lg);">
         <ul class="sitemap-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs);">
-          <li><a href="/producten" class="sitemap-link">Bekijk alle producten<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+          <li><a href="/producten.html" class="sitemap-link">Bekijk alle producten<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
         </ul>
       </div>
     `;
@@ -177,7 +177,7 @@ async function loadProducts() {
         <h4 style="font-family: var(--font-display); text-transform: uppercase; font-size: var(--font-size-sm); margin-bottom: var(--space-sm); color: var(--color-primary);">${escapeHtml(cat)}</h4>
         <ul class="sitemap-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs);">
           ${prods.map(p => {
-            const url = `/product?slug=${encodeURIComponent(p.slug)}`;
+            const url = `/product.html?slug=${encodeURIComponent(p.slug)}`;
             return `<li><a href="${url}" class="sitemap-link" style="font-size: var(--font-size-sm); padding: var(--space-xs) var(--space-sm);">${escapeHtml(p.name)}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>`;
           }).join('')}
         </ul>
@@ -194,7 +194,7 @@ async function loadProducts() {
     grid.innerHTML = `
       <div style="margin-bottom: var(--space-lg);">
         <ul class="sitemap-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs);">
-          <li><a href="/producten" class="sitemap-link">Bekijk alle producten<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
+          <li><a href="/producten.html" class="sitemap-link">Bekijk alle producten<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
         </ul>
       </div>
     `;

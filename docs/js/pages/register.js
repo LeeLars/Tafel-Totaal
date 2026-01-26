@@ -39,7 +39,7 @@ async function checkAlreadyLoggedIn() {
     const response = await authAPI.me();
     if (response.success && response.data) {
       // Already logged in, redirect
-      const returnUrl = getQueryParam('returnUrl') || '/account/overzicht';
+      const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
       window.location.href = returnUrl;
     }
   } catch (error) {
@@ -131,7 +131,7 @@ function initRegisterForm() {
         showToast('Account succesvol aangemaakt!', 'success');
         
         // Redirect to return URL or account
-        const returnUrl = getQueryParam('returnUrl') || '/account/overzicht';
+        const returnUrl = getQueryParam('returnUrl') || '/account/overzicht.html';
         setTimeout(() => {
           window.location.href = returnUrl;
         }, 500);

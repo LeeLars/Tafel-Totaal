@@ -6,6 +6,7 @@
 import { formatPrice, formatDateShort, showToast } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
 import { getCart, updateCartItem, removeFromCart, clearCart, subscribeToCart } from '../services/cart.js';
+import { availabilityAPI } from '../lib/api.js';
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', async () => {
@@ -79,6 +80,7 @@ function renderCart() {
     itemsList.querySelectorAll('.quantity-control__value').forEach(input => {
       input.addEventListener('change', handleManualQuantityChange);
       input.addEventListener('blur', handleManualQuantityChange);
+      input.addEventListener('input', handleQuantityInput);
     });
   }
 
@@ -101,7 +103,7 @@ function createCartItemHTML(item) {
       </div>
       <div class="cart-item__info">
         <h3 class="cart-item__title">
-          <a href="/${item.type === 'package' ? 'pakket' : 'product'}?id=${item.product_id || item.package_id}">${item.name}</a>
+          <a href="/${item.type === 'package' ? 'pakket' : 'product'}.html?id=${item.product_id || item.package_id}">${item.name}</a>
         </h3>
         <p class="cart-item__meta">${itemType}${personsText ? ` • ${personsText}` : ''}</p>
         ${item.start_date && item.end_date ? `
@@ -262,6 +264,27 @@ async function handleQuantityChange(e) {
   }
 
   if (newQuantity !== item.quantity) {
+    // For products, check availability before increasing
+    if (action === 'increase' && item.type === 'product') {
+      try {
+        const availabilityCheck = await availabilityAPI.check(
+          'product',
+          item.product_id,
+          newQuantity,
+          item.start_date,
+          item.end_date
+        );
+        
+        if (availabilityCheck.success && !availabilityCheck.data.available) {
+          const maxAvailable = availabilityCheck.data.availableQuantity || 0;
+          showToast(`Maximaal ${maxAvailable} stuks beschikbaar voor deze datum`, 'error');
+          return;
+        }
+      } catch (error) {
+        console.error('Availability check failed:', error);
+      }
+    }
+    
     btn.disabled = true;
     const result = await updateCartItem(itemId, newQuantity);
     btn.disabled = false;
@@ -269,6 +292,47 @@ async function handleQuantityChange(e) {
     if (!result.success) {
       showToast(result.error || 'Kon hoeveelheid niet aanpassen', 'error');
     }
+  }
+}
+
+/**
+ * Handle quantity input validation (real-time)
+ */
+async function handleQuantityInput(e) {
+  const input = e.currentTarget;
+  const itemId = input.dataset.itemId;
+  const newQuantity = parseInt(input.value, 10);
+  
+  if (isNaN(newQuantity) || newQuantity < 1) {
+    return;
+  }
+  
+  const cart = getCart();
+  const item = cart.find(i => i.id === itemId);
+  
+  if (!item || item.type !== 'product') return;
+  
+  // Check availability for the new quantity
+  try {
+    const availabilityCheck = await availabilityAPI.check(
+      'product',
+      item.product_id,
+      newQuantity,
+      item.start_date,
+      item.end_date
+    );
+    
+    if (availabilityCheck.success && !availabilityCheck.data.available) {
+      const maxAvailable = availabilityCheck.data.availableQuantity || 0;
+      input.max = maxAvailable;
+      
+      if (newQuantity > maxAvailable) {
+        input.value = maxAvailable;
+        showToast(`Maximaal ${maxAvailable} stuks beschikbaar voor deze datum`, 'error');
+      }
+    }
+  } catch (error) {
+    console.error('Availability check failed:', error);
   }
 }
 
@@ -289,6 +353,44 @@ async function handleManualQuantityChange(e) {
   const item = cart.find(i => i.id === itemId);
   
   if (!item || newQuantity === item.quantity) return;
+  
+  // For products, check availability before updating
+  if (item.type === 'product') {
+    try {
+      const availabilityCheck = await availabilityAPI.check(
+        'product',
+        item.product_id,
+        newQuantity,
+        item.start_date,
+        item.end_date
+      );
+      
+      if (availabilityCheck.success && !availabilityCheck.data.available) {
+        const maxAvailable = availabilityCheck.data.availableQuantity || 0;
+        showToast(`Maximaal ${maxAvailable} stuks beschikbaar voor deze datum`, 'error');
+        input.value = Math.min(newQuantity, maxAvailable);
+        
+        if (maxAvailable === item.quantity) {
+          return;
+        }
+        
+        // Update to max available if different from current
+        if (maxAvailable !== item.quantity) {
+          input.disabled = true;
+          const result = await updateCartItem(itemId, maxAvailable);
+          input.disabled = false;
+          
+          if (!result.success) {
+            showToast(result.error || 'Kon hoeveelheid niet aanpassen', 'error');
+            input.value = item.quantity;
+          }
+        }
+        return;
+      }
+    } catch (error) {
+      console.error('Availability check failed:', error);
+    }
+  }
   
   input.disabled = true;
   const result = await updateCartItem(itemId, newQuantity);

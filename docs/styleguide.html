@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <title>Styleguide | Tafel Totaal Design System</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/home.css"> <!-- For specific home components -->
+
+  <style>
+    /* Styleguide specific styles */
+    .sg-section {
+      padding: 60px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .sg-header {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 40px 0;
+      margin-bottom: 40px;
+    }
+    .sg-title {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+    .sg-subtitle {
+      opacity: 0.7;
+      font-size: 1.2rem;
+    }
+    .sg-label {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #999;
+      margin-bottom: 20px;
+      display: block;
+      margin-top: 40px;
+    }
+    
+    /* Color Swatches */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+    }
+    .color-swatch {
+      border: 1px solid #eee;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .color-preview {
+      height: 100px;
+      width: 100%;
+    }
+    .color-info {
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+    .color-name {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .color-hex {
+      font-family: monospace;
+      color: #666;
+    }
+
+    /* Grid Demo */
+    .grid-demo-col {
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      font-family: monospace;
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <script type="module">
+    import { requireAdmin } from '/js/lib/guards.js';
+    const user = await requireAdmin('/');
+    if (!user) {
+      throw new Error('Unauthorized');
+    }
+  </script>
+  
+  <header class="sg-header">
+    <div class="container">
+      <h1 class="sg-title">Tafel Totaal Styleguide</h1>
+      <p class="sg-subtitle">Brutalist Corporate Design System Documentation</p>
+    </div>
+  </header>
+
+  <div class="container">
+    
+    <!-- ============================================
+         1. TYPOGRAFIE
+         ============================================ -->
+    <section class="sg-section" id="typography">
+      <h2 class="mb-xl">1. Typografie</h2>
+      
+      <div class="bento-grid">
+        <div class="col-12 col-md-6">
+          <span class="sg-label">Headings (Righteous)</span>
+          <h1>Heading 1 - Display</h1>
+          <h2>Heading 2 - Section Title</h2>
+          <h3>Heading 3 - Card Title</h3>
+          <h4>Heading 4 - Subtitle</h4>
+          <h5>Heading 5 - Small</h5>
+          <h6>Heading 6 - Tiny</h6>
+        </div>
+        
+        <div class="col-12 col-md-6">
+          <span class="sg-label">Body Text (Roboto)</span>
+          <p class="lead">Dit is een lead paragraph. Gebruik dit voor introductieteksten die net iets meer op moeten vallen dan de reguliere broodtekst.</p>
+          <p>Dit is de standaard body tekst. Tafel Totaal staat voor kwaliteit en gemak. Wij zorgen voor de afwas, zodat jij kunt genieten van het feest. Ons assortiment is uitgebreid en stijlvol.</p>
+          <p class="text-gray">Dit is gedempte tekst (text-gray).</p>
+          <p><a href="#">Dit is een tekst link</a></p>
+          
+          <span class="sg-label">Labels & UI</span>
+          <div class="label">Label Text</div>
+          <div class="overline">Overline Text</div>
+          <div class="text-uppercase">Uppercase Utility</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         2. KLEUREN
+         ============================================ -->
+    <section class="sg-section" id="colors">
+      <h2 class="mb-xl">2. Kleurenpalet</h2>
+      
+      <span class="sg-label">Brand Colors</span>
+      <div class="color-grid mb-xl">
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-primary);"></div>
+          <div class="color-info">
+            <span class="color-name">Primary</span>
+            <span class="color-hex">#903D3E</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-primary-dark);"></div>
+          <div class="color-info">
+            <span class="color-name">Primary Dark</span>
+            <span class="color-hex">#7A3233</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-primary-light);"></div>
+          <div class="color-info">
+            <span class="color-name">Primary Light</span>
+            <span class="color-hex">#B56B6C</span>
+          </div>
+        </div>
+      </div>
+
+      <span class="sg-label">Neutrals / Brutalist</span>
+      <div class="color-grid mb-xl">
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-black);"></div>
+          <div class="color-info">
+            <span class="color-name">Black</span>
+            <span class="color-hex">#1A1A1A</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-charcoal);"></div>
+          <div class="color-info">
+            <span class="color-name">Charcoal</span>
+            <span class="color-hex">#333333</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-dark-gray);"></div>
+          <div class="color-info">
+            <span class="color-name">Dark Gray</span>
+            <span class="color-hex">#4A4A4A</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-gray);"></div>
+          <div class="color-info">
+            <span class="color-name">Gray</span>
+            <span class="color-hex">#666666</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-light-gray);"></div>
+          <div class="color-info">
+            <span class="color-name">Light Gray</span>
+            <span class="color-hex">#E5E5E5</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-concrete);"></div>
+          <div class="color-info">
+            <span class="color-name">Concrete</span>
+            <span class="color-hex">#F4F4F4</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-off-white);"></div>
+          <div class="color-info">
+            <span class="color-name">Off White</span>
+            <span class="color-hex">#FAFAFA</span>
+          </div>
+        </div>
+      </div>
+
+      <span class="sg-label">Status</span>
+      <div class="color-grid">
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-success);"></div>
+          <div class="color-info">
+            <span class="color-name">Success</span>
+            <span class="color-hex">#2E7D32</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-warning);"></div>
+          <div class="color-info">
+            <span class="color-name">Warning</span>
+            <span class="color-hex">#ED6C02</span>
+          </div>
+        </div>
+        <div class="color-swatch">
+          <div class="color-preview" style="background-color: var(--color-error);"></div>
+          <div class="color-info">
+            <span class="color-name">Error</span>
+            <span class="color-hex">#D32F2F</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         3. BUTTONS
+         ============================================ -->
+    <section class="sg-section" id="buttons">
+      <h2 class="mb-xl">3. Buttons</h2>
+      <p class="mb-lg">Onze buttons gebruiken een "magnetic fill" hover effect. Ze zijn strak, vierkant en industrieel.</p>
+      
+      <span class="sg-label">Primary Actions</span>
+      <div class="btn-group mb-xl">
+        <a href="#" class="btn btn--primary">
+          Primary Button
+        </a>
+        <button class="btn btn--primary" disabled>
+          Disabled
+        </button>
+      </div>
+
+      <span class="sg-label">Secondary Actions</span>
+      <div class="btn-group mb-xl">
+        <a href="#" class="btn btn--secondary">
+          Secondary Button
+        </a>
+        <a href="#" class="btn btn--ghost">
+          Ghost Button
+        </a>
+      </div>
+
+      <span class="sg-label">Dark & White (for contrasting backgrounds)</span>
+      <div class="btn-group mb-xl p-md" style="background: #f4f4f4;">
+        <a href="#" class="btn btn--dark">
+          Dark Button
+        </a>
+      </div>
+      <div class="btn-group mb-xl p-md" style="background: #1a1a1a;">
+        <a href="#" class="btn btn--white">
+          White Button
+        </a>
+      </div>
+
+      <span class="sg-label">Sizes</span>
+      <div class="btn-group">
+        <a href="#" class="btn btn--primary btn--sm">Small</a>
+        <a href="#" class="btn btn--primary">Default</a>
+        <a href="#" class="btn btn--primary btn--lg">Large</a>
+        <a href="#" class="btn btn--primary btn--xl">Extra Large</a>
+      </div>
+    </section>
+
+    <!-- ============================================
+         4. FORMS
+         ============================================ -->
+    <section class="sg-section" id="forms">
+      <h2 class="mb-xl">4. Formulieren</h2>
+      
+      <div class="bento-grid">
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label class="form-label">Standaard Input</label>
+            <input type="text" class="form-input" placeholder="Typ hier...">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Select Box</label>
+            <select class="form-input">
+              <option>Optie 1</option>
+              <option>Optie 2</option>
+              <option>Optie 3</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="col-12 col-md-6">
+          <div class="form-group">
+            <label class="form-label">Textarea</label>
+            <textarea class="form-input" placeholder="Typ uw bericht..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Input met Error</label>
+            <input type="text" class="form-input form-input--error" value="Ongeldige waarde">
+            <div class="form-error">Dit veld is verplicht.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         5. COMPONENTS
+         ============================================ -->
+    <section class="sg-section" id="components">
+      <h2 class="mb-xl">5. Componenten</h2>
+      
+      <span class="sg-label">Badges</span>
+      <div class="d-flex gap-sm mb-xl">
+        <span class="badge badge--primary">Primary</span>
+        <span class="badge badge--success">Success</span>
+        <span class="badge badge--warning">Warning</span>
+        <span class="badge badge--error">Error</span>
+      </div>
+
+      <span class="sg-label">Basic Card</span>
+      <div class="bento-grid mb-xl">
+        <div class="col-12 col-md-4">
+          <article class="card">
+            <div class="card__image-wrapper">
+              <img src="/images/site/hero-table-setting.jpg" alt="Demo" class="card__image">
+            </div>
+            <div class="card__content">
+              <div class="card__overline">Card Category</div>
+              <h3 class="card__title">Standaard Kaart</h3>
+              <p class="card__description">Een eenvoudige kaart component met hover zoom effect op de afbeelding.</p>
+              <a href="#" class="btn btn--secondary btn--sm btn--full">Bekijk Detail</a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <span class="sg-label">Architectural Package Card (Home Style)</span>
+      <div class="bento-grid mb-xl">
+        <div class="col-12 col-md-4">
+          <article class="package-card">
+            <span class="package-card__badge">Most Popular</span>
+            <div class="package-card__image">
+              <img src="/images/site/hero-table-setting.jpg" alt="Demo">
+            </div>
+            <div class="package-card__content">
+              <h3 class="package-card__title">Diner Luxe</h3>
+              <div class="package-card__price">€ 12,50 <span>p.p.</span></div>
+              <p class="package-card__description">Premium servies met gouden accenten voor een onvergetelijk diner.</p>
+              <div class="package-card__footer">
+                <span class="text-uppercase" style="font-size: 0.75rem; font-weight: bold;">Bekijk Pakket</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <span class="sg-label">Marquee (Ticker)</span>
+      <div class="marquee-section mb-xl">
+        <div class="marquee-track">
+          <div class="marquee-content">
+            <span>WIJ DOEN DE AFWAS</span> <span class="separator">•</span>
+            <span>GEEN GEDOE</span> <span class="separator">•</span>
+            <span>VUIL RETOUR</span> <span class="separator">•</span>
+            <span>TAFEL TOTAAL</span> <span class="separator">•</span>
+            <span>WIJ DOEN DE AFWAS</span> <span class="separator">•</span>
+            <span>GEEN GEDOE</span> <span class="separator">•</span>
+            <span>VUIL RETOUR</span> <span class="separator">•</span>
+            <span>TAFEL TOTAAL</span> <span class="separator">•</span>
+          </div>
+        </div>
+      </div>
+
+      <span class="sg-label">Accordion (FAQ)</span>
+      <div class="faq-accordion mb-xl" style="max-width: 600px;">
+        <details class="faq-item">
+          <summary class="faq-summary">
+            Moet ik de borden afwassen?
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-content">
+            <p>Nee! Dat is onze service. Je mag alles vuil weer in de kratten zetten.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary class="faq-summary">
+            Bezorgen jullie ook aan huis?
+            <span class="faq-icon">+</span>
+          </summary>
+          <div class="faq-content">
+            <p>Ja, wij bezorgen in heel West- en Oost-Vlaanderen.</p>
+          </div>
+        </details>
+      </div>
+
+      <span class="sg-label">Category Card (Bento Grid Item)</span>
+      <div class="bento-grid mb-xl">
+        <div class="col-12 col-md-4">
+          <a href="#" class="category-card">
+            <div class="category-card__bg" style="background-image: url('/images/site/hero-table-setting.jpg');"></div>
+            <div class="category-card__overlay"></div>
+            <div class="category-card__content">
+              <img src="/images/site/icon-plate.svg" alt="" class="category-card__icon">
+              <h3 class="category-card__title">Borden</h3>
+              <p class="category-card__desc">Bekijk Collectie</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <span class="sg-label">USP Component</span>
+      <div class="usps__grid mb-xl" style="border: 1px solid #e5e5e5;">
+        <div class="usp">
+          <div class="usp__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="usp__title">Geen Afwas</h3>
+          <p class="usp__text">Wij doen de afwas voor jou. Geniet van je feest zonder zorgen.</p>
+        </div>
+        <div class="usp">
+          <div class="usp__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3 class="usp__title">Snelle Service</h3>
+          <p class="usp__text">Levering binnen 24u mogelijk in heel de regio.</p>
+        </div>
+      </div>
+
+      <span class="sg-label">Step Component (How It Works)</span>
+      <div class="step mb-xl">
+        <div class="step__number">01</div>
+        <div class="step__content">
+          <h3 class="step__title">Bestel Online</h3>
+          <p class="step__text">Kies je favoriete pakket of stel zelf je servies samen via onze webshop.</p>
+        </div>
+      </div>
+
+      <span class="sg-label">Statement Block</span>
+      <div class="statement-section p-xl mb-xl">
+        <div class="statement-content">
+          <h2 class="statement-title" style="font-size: 3rem;">Jij viert feest</h2>
+          <p class="statement-text">
+            Wij zorgen voor de rest.
+            <span class="highlight">Geen Afwas.</span>
+          </p>
+        </div>
+      </div>
+
+      <span class="sg-label">Partners Logobar</span>
+      <div class="partners mb-xl">
+        <div class="partners__label">Trusted By</div>
+        <div class="partners__grid">
+          <div class="partner-cell">LOGO 1</div>
+          <div class="partner-cell">LOGO 2</div>
+          <div class="partner-cell">LOGO 3</div>
+        </div>
+      </div>
+
+      <span class="sg-label">Masonry Gallery Item</span>
+      <div class="gallery__grid mb-xl" style="grid-template-columns: repeat(2, 1fr); grid-auto-rows: 200px;">
+        <div class="gallery-item">
+          <div class="gallery-item__bg" style="background-image: url('/images/site/hero-table-setting.jpg');"></div>
+          <div class="gallery-item__caption">Wedding Set</div>
+        </div>
+        <div class="gallery-item">
+          <div class="gallery-item__bg" style="background-color: #333;"></div>
+          <div class="gallery-item__caption">Corporate Event</div>
+        </div>
+      </div>
+
+      <span class="sg-label">Notifications (Toasts)</span>
+      <div class="d-flex flex-column gap-sm mb-xl" style="position: relative; padding: 20px; background: #f9f9f9; min-height: 200px;">
+        <div class="toast toast--success" style="position: static; transform: none; animation: none;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          Product toegevoegd aan winkelmandje
+        </div>
+        <div class="toast toast--error" style="position: static; transform: none; animation: none;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+          </svg>
+          Er is een fout opgetreden
+        </div>
+      </div>
+
+      <span class="sg-label">Modal Window</span>
+      <div style="position: relative; height: 400px; background: #eee; border: 1px solid #ddd;">
+        <div class="modal active" style="position: absolute;">
+          <div class="modal__header">
+            <h3 class="modal__title">Winkelmandje</h3>
+            <button class="modal__close">✕</button>
+          </div>
+          <div class="modal__body">
+            <p>Je hebt 3 items in je winkelmandje.</p>
+          </div>
+          <div class="modal__footer">
+            <button class="btn btn--secondary btn--sm">Verder winkelen</button>
+            <button class="btn btn--primary btn--sm">Afrekenen</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================
+         6. LAYOUT & GRID
+         ============================================ -->
+    <section class="sg-section" id="layout">
+      <h2 class="mb-xl">6. Layout & Grid</h2>
+      <p>We gebruiken een 12-koloms bento grid systeem. De spacing is fluid en past zich aan de schermgrootte aan.</p>
+      
+      <div class="bento-grid">
+        <div class="col-12 grid-demo-col">.col-12</div>
+        
+        <div class="col-6 grid-demo-col">.col-6</div>
+        <div class="col-6 grid-demo-col">.col-6</div>
+        
+        <div class="col-4 grid-demo-col">.col-4</div>
+        <div class="col-4 grid-demo-col">.col-4</div>
+        <div class="col-4 grid-demo-col">.col-4</div>
+        
+        <div class="col-3 grid-demo-col">.col-3</div>
+        <div class="col-3 grid-demo-col">.col-3</div>
+        <div class="col-3 grid-demo-col">.col-3</div>
+        <div class="col-3 grid-demo-col">.col-3</div>
+      </div>
+    </section>
+
+    <!-- ============================================
+         7. ANIMATIES
+         ============================================ -->
+    <section class="sg-section" id="animations">
+      <h2 class="mb-xl">7. Animaties</h2>
+      <p>Elementen komen binnen met een subtiele scroll reveal animatie.</p>
+      
+      <div class="bento-grid">
+        <div class="col-4">
+          <div class="p-xl bg-concrete text-center" data-animate="fade">
+            Fade In
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="p-xl bg-concrete text-center" data-animate="slide-left" data-delay="1">
+            Slide Left (Delay 1)
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="p-xl bg-concrete text-center" data-animate="slide-right" data-delay="2">
+            Slide Right (Delay 2)
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="sg-header mt-3xl text-center">
+    <p class="mb-0">Tafel Totaal Design System &copy; 2024</p>
+  </footer>
+
+  <!-- Scripts for animations -->
+  <script>
+    // Simple intersection observer for animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

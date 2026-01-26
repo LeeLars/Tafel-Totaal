@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="account-card" style="text-align: center; padding: var(--space-2xl);">
           <h2>Je bent niet ingelogd</h2>
           <p style="margin: var(--space-md) 0;">Log in om je bestellingen te bekijken.</p>
-          <a href="/login" class="btn btn--primary">Inloggen</a>
+          <a href="/login.html" class="btn btn--primary">Inloggen</a>
         </div>
       `;
     }
@@ -81,7 +81,7 @@ async function loadOrders() {
       </div>
       <h3>Nog geen bestellingen</h3>
       <p>Je hebt nog geen bestellingen geplaatst.</p>
-      <a href="/pakketten" class="btn btn--primary">Bekijk Pakketten</a>
+      <a href="/pakketten.html" class="btn btn--primary">Bekijk Pakketten</a>
     </div>
   `;
 
@@ -113,7 +113,7 @@ function createOrderItem(order) {
     : '';
   
   return `
-    <a href="/account/bestelling?id=${order.id}" class="order-item">
+    <a href="/account/bestelling.html?id=${order.id}" class="order-item">
       <div class="order-item__info">
         <div class="order-item__number">${order.order_number}</div>
         <div class="order-item__date">

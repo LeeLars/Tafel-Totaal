@@ -276,7 +276,7 @@ function createCityCard(city) {
   const postalCodesCount = Array.isArray(city.postal_codes) ? city.postal_codes.length : 0;
 
   return `
-    <a href="/locaties/${city.slug}" class="city-card" style="
+    <a href="/locaties/${city.slug}.html" class="city-card" style="
       display: block;
       padding: var(--space-xl);
       background: var(--color-white);

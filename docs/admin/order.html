@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  
+  <title>Bestelling Details | Admin | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto+Mono:wght@400;500;600&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/admin.css">
+  <link rel="stylesheet" href="/css/pages/account.css">
+</head>
+<body>
+  <!-- Mobile Nav -->
+  <nav class="admin-mobile-nav">
+    <a href="index.html">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      </svg>
+      Dashboard
+    </a>
+    <a href="orders.html" class="active">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+      </svg>
+      Bestellingen
+    </a>
+  </nav>
+
+  <main class="admin-page">
+    <div class="admin-layout">
+      <!-- Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar__header">
+          <h2 class="admin-sidebar__title">Admin Panel</h2>
+          <p class="admin-sidebar__subtitle">Tafel Totaal</p>
+        </div>
+        <nav class="admin-nav">
+          <a href="index.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Dashboard
+          </a>
+          <a href="orders.html" class="admin-nav__link active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            Bestellingen
+          </a>
+          <a href="picking.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            Order Picking
+          </a>
+          <a href="calendar.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Kalender
+          </a>
+          <a href="packages.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <path d="M12 8v8"></path>
+              <path d="M8 12h8"></path>
+            </svg>
+            Pakketten
+          </a>
+          <a href="products.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+              <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            Producten
+          </a>
+          <a href="customers.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Klanten
+          </a>
+          <a href="reports.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            Rapporten
+          </a>
+          <div class="admin-nav__divider"></div>
+          <a href="../index.html" class="admin-nav__link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            Naar website
+          </a>
+        </nav>
+      </aside>
+
+      <!-- Content -->
+      <div class="admin-content">
+        <!-- Loading -->
+        <div id="order-loading">
+          <div class="empty-state">
+            <div class="spinner"></div>
+            <p>Bestelling laden...</p>
+          </div>
+        </div>
+
+        <!-- Error -->
+        <div id="order-error" class="hidden">
+          <div class="empty-state">
+            <h3>Bestelling niet gevonden</h3>
+            <p>Deze bestelling bestaat niet.</p>
+            <a href="/admin/orders.html" class="btn btn--primary">Terug naar bestellingen</a>
+          </div>
+        </div>
+
+        <!-- Order Detail -->
+        <div id="order-detail" class="hidden">
+          <div class="admin-content__header">
+            <div>
+              <a href="/admin/orders.html" class="btn btn--ghost btn--sm" style="margin-bottom: var(--space-md);">← Terug naar bestellingen</a>
+              <h1>Bestelling <span id="order-number">-</span></h1>
+            </div>
+          </div>
+
+          <!-- Order Header with Actions -->
+          <div class="admin-order-header">
+            <div class="admin-order-header__info">
+              <h2 id="order-title">-</h2>
+              <p class="admin-order-header__meta">
+                Besteld op <span id="order-date">-</span> • 
+                <span id="order-status-text">-</span>
+              </p>
+            </div>
+            <div class="admin-order-header__actions">
+              <!-- Status Update -->
+              <div class="status-select">
+                <label for="status-select">Status:</label>
+                <select id="status-select" class="form-input">
+                  <option value="pending_payment">Wacht op betaling</option>
+                  <option value="confirmed">Bevestigd</option>
+                  <option value="preparing">In voorbereiding</option>
+                  <option value="ready_for_delivery">Klaar voor levering</option>
+                  <option value="delivered">Geleverd</option>
+                  <option value="returned">Retour ontvangen</option>
+                  <option value="completed">Afgerond</option>
+                  <option value="cancelled">Geannuleerd</option>
+                </select>
+              </div>
+              
+              <!-- Picking Button -->
+              <a href="#picking-section" class="btn btn--primary btn--sm" style="text-decoration: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;">
+                  <path d="M9 11l3 3L22 4"></path>
+                  <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+                Start Picking
+              </a>
+              
+              <!-- PDF Downloads -->
+              <div class="pdf-buttons">
+                <a href="#" id="picking-list-btn" class="btn btn--secondary btn--sm btn--pdf" target="_blank">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                  Picking List
+                </a>
+                <a href="#" id="invoice-btn" class="btn btn--secondary btn--sm btn--pdf" target="_blank">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                  </svg>
+                  Factuur
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer & Delivery Info -->
+          <div class="admin-card" style="margin-bottom: var(--space-xl);">
+            <div class="admin-card__body">
+              <div class="customer-info">
+                <div class="customer-info__section">
+                  <h4>Klantgegevens</h4>
+                  <p id="customer-info">-</p>
+                </div>
+                <div class="customer-info__section">
+                  <h4>Levering</h4>
+                  <p id="delivery-info">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Digital Order Picking -->
+          <div class="admin-card" style="margin-bottom: var(--space-xl);" id="picking-section">
+            <div class="admin-card__header">
+              <h2 class="admin-card__title">📦 Order Picking</h2>
+              <div class="picking-status-badge" id="picking-status-badge">
+                <span class="status-badge status-badge--pending">
+                  <span class="status-badge__dot"></span>
+                  <span id="picking-status-text">Niet gestart</span>
+                </span>
+              </div>
+            </div>
+            <div class="admin-card__body">
+              <!-- Picking Info Grid -->
+              <div class="picking-info-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-xl);">
+                <div class="picking-info-item">
+                  <label style="font-size: var(--font-size-sm); color: var(--color-gray); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--space-xs);">Klaar voor</label>
+                  <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                    <input type="datetime-local" id="preparation-deadline" class="form-input" style="flex: 1;">
+                    <button type="button" id="save-deadline-btn" class="btn btn--secondary btn--sm">Opslaan</button>
+                  </div>
+                </div>
+                <div class="picking-info-item">
+                  <label style="font-size: var(--font-size-sm); color: var(--color-gray); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--space-xs);">Klaarzetten op</label>
+                  <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                    <input type="text" id="preparation-location" class="form-input" placeholder="Bijv. Zone A, Rek 3" style="flex: 1;">
+                    <button type="button" id="save-location-btn" class="btn btn--secondary btn--sm">Opslaan</button>
+                  </div>
+                </div>
+                <div class="picking-info-item">
+                  <label style="font-size: var(--font-size-sm); color: var(--color-gray); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: var(--space-xs);">Picking Status</label>
+                  <select id="picking-status-select" class="form-input">
+                    <option value="not_started">Niet gestart</option>
+                    <option value="in_progress">Bezig</option>
+                    <option value="completed">Klaar</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Picking Checklist -->
+              <div class="picking-checklist">
+                <h3 style="font-family: var(--font-display); font-size: var(--font-size-lg); text-transform: uppercase; margin-bottom: var(--space-md); border-bottom: 1px solid var(--border-color); padding-bottom: var(--space-sm);">Picking Checklist</h3>
+                <div id="picking-items" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                  <!-- Items will be loaded here -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Items -->
+          <div class="admin-card" style="margin-bottom: var(--space-xl);">
+            <div class="admin-card__header">
+              <h2 class="admin-card__title">Bestelde Items</h2>
+            </div>
+            <div class="admin-table-wrapper">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Type</th>
+                    <th>Aantal</th>
+                    <th>Prijs p/s</th>
+                    <th>Totaal</th>
+                  </tr>
+                </thead>
+                <tbody id="order-items">
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="admin-card">
+            <div class="admin-card__header">
+              <h2 class="admin-card__title">Overzicht</h2>
+            </div>
+            <div class="admin-card__body">
+              <div class="order-summary" style="max-width: 400px; margin-left: auto;">
+                <div class="order-summary__row">
+                  <span>Subtotaal</span>
+                  <span id="summary-subtotal">€0,00</span>
+                </div>
+                <div class="order-summary__row">
+                  <span>Bezorgkosten</span>
+                  <span id="summary-delivery">€0,00</span>
+                </div>
+                <div class="order-summary__row">
+                  <span>Schadevergoeding</span>
+                  <span id="summary-deposit">€0,00</span>
+                </div>
+                <div class="order-summary__row order-summary__row--total">
+                  <span>Totaal</span>
+                  <span id="summary-total">€0,00</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="admin-card" style="margin-top: var(--space-xl);" id="notes-section">
+            <div class="admin-card__header">
+              <h2 class="admin-card__title">Opmerkingen</h2>
+            </div>
+            <div class="admin-card__body">
+              <p id="order-notes" style="color: var(--color-gray); font-style: italic;">Geen opmerkingen</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/pages/admin/order.js"></script>
+</body>
+</html>

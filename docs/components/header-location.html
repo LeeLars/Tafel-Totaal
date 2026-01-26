@@ -11,9 +11,9 @@
       <nav class="header__nav d-none d-lg-flex" aria-label="Hoofdnavigatie">
         <ul class="header__menu">
           <li><a href="/" class="header__link">Home</a></li>
-          <li><a href="/locaties" class="header__link">Alle Locaties</a></li>
-          <li><a href="/pakketten" class="header__link">Pakketten</a></li>
-          <li><a href="/contact" class="header__link">Contact</a></li>
+          <li><a href="/locaties.html" class="header__link">Alle Locaties</a></li>
+          <li><a href="/pakketten.html" class="header__link">Pakketten</a></li>
+          <li><a href="/contact.html" class="header__link">Contact</a></li>
         </ul>
       </nav>
 
@@ -21,7 +21,7 @@
       <div class="header__actions">
         <!-- Cart Button with Hover Preview -->
         <div class="header__cart-wrapper">
-          <a href="/winkelwagen" class="header__cart" aria-label="Winkelwagen">
+          <a href="/winkelwagen.html" class="header__cart" aria-label="Winkelwagen">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="9" cy="21" r="1"></circle>
               <circle cx="20" cy="21" r="1"></circle>
@@ -44,14 +44,14 @@
                 <span>Totaal:</span>
                 <strong id="cart-preview-total">€0,00</strong>
               </div>
-              <a href="/winkelwagen" class="btn btn--primary btn--sm btn--full">Bekijk Winkelwagen</a>
+              <a href="/winkelwagen.html" class="btn btn--primary btn--sm btn--full">Bekijk Winkelwagen</a>
             </div>
           </div>
         </div>
 
         <!-- User Menu (Logged Out) -->
         <div class="header__user" data-auth="logged-out">
-          <a href="/login" class="btn btn--sm btn--ghost">Inloggen</a>
+          <a href="/login.html" class="btn btn--sm btn--ghost">Inloggen</a>
         </div>
 
         <!-- User Menu (Logged In) -->
@@ -67,10 +67,10 @@
             </svg>
           </button>
           <div class="header__dropdown">
-            <a href="/account/overzicht" class="header__dropdown-item">Mijn Account</a>
-            <a href="/account/bestellingen" class="header__dropdown-item">Bestellingen</a>
-            <a href="/account/gegevens" class="header__dropdown-item">Gegevens</a>
-            <a href="/account/loyalty" class="header__dropdown-item">Loyalty</a>
+            <a href="/account/overzicht.html" class="header__dropdown-item">Mijn Account</a>
+            <a href="/account/bestellingen.html" class="header__dropdown-item">Bestellingen</a>
+            <a href="/account/gegevens.html" class="header__dropdown-item">Gegevens</a>
+            <a href="/account/loyalty.html" class="header__dropdown-item">Loyalty</a>
             <hr class="header__dropdown-divider">
             <button class="header__dropdown-item" id="logout-btn">Uitloggen</button>
           </div>
@@ -91,7 +91,7 @@
     <div class="container">
       <nav class="category-nav">
         <!-- Step 1: Packages -->
-        <a href="/pakketten" class="category-link">
+        <a href="/pakketten.html" class="category-link">
           <div class="category-link__icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -125,7 +125,7 @@
         </div>
 
         <!-- Call to Action -->
-        <a href="/contact" class="category-link category-link--all">
+        <a href="/contact.html" class="category-link category-link--all">
           <div class="category-link__icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
@@ -142,22 +142,22 @@
   <nav class="header__mobile-nav d-lg-none" aria-label="Mobiele navigatie">
     <ul class="header__mobile-menu">
       <li><a href="/">Home</a></li>
-      <li><a href="/locaties">Alle Locaties</a></li>
-      <li><a href="/pakketten">Pakketten</a></li>
-      <li><a href="/contact">Contact</a></li>
+      <li><a href="/locaties.html">Alle Locaties</a></li>
+      <li><a href="/pakketten.html">Pakketten</a></li>
+      <li><a href="/contact.html">Contact</a></li>
       <li class="header__mobile-divider"></li>
       <li class="header__mobile-category-title">Onze Service</li>
-      <li><a href="/pakketten">1. Kies Pakket</a></li>
+      <li><a href="/pakketten.html">1. Kies Pakket</a></li>
       <li><span style="display: block; padding: var(--space-md); color: var(--color-gray);">2. Wij Leveren</span></li>
       <li><span style="display: block; padding: var(--space-md); color: var(--color-gray);">3. Geen Afwas</span></li>
-      <li><a href="/contact" style="font-weight: bold; color: var(--color-primary);">Vraag Offerte</a></li>
+      <li><a href="/contact.html" style="font-weight: bold; color: var(--color-primary);">Vraag Offerte</a></li>
       <li class="header__mobile-divider"></li>
-      <li data-auth="logged-out"><a href="/login">Inloggen</a></li>
-      <li data-auth="logged-out"><a href="/registreren">Registreren</a></li>
-      <li data-auth="logged-in" style="display: none;"><a href="/account/overzicht">Mijn Account</a></li>
-      <li data-auth="logged-in" style="display: none;"><a href="/account/bestellingen">Bestellingen</a></li>
-      <li data-auth="logged-in" style="display: none;"><a href="/account/gegevens">Gegevens</a></li>
-      <li data-auth="logged-in" style="display: none;"><a href="/account/loyalty">Loyalty</a></li>
+      <li data-auth="logged-out"><a href="/login.html">Inloggen</a></li>
+      <li data-auth="logged-out"><a href="/registreren.html">Registreren</a></li>
+      <li data-auth="logged-in" style="display: none;"><a href="/account/overzicht.html">Mijn Account</a></li>
+      <li data-auth="logged-in" style="display: none;"><a href="/account/bestellingen.html">Bestellingen</a></li>
+      <li data-auth="logged-in" style="display: none;"><a href="/account/gegevens.html">Gegevens</a></li>
+      <li data-auth="logged-in" style="display: none;"><a href="/account/loyalty.html">Loyalty</a></li>
       <li data-auth="logged-in" style="display: none;"><button id="mobile-logout-btn">Uitloggen</button></li>
     </ul>
   </nav>

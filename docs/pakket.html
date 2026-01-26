@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Configureer je pakket en voeg toe aan winkelwagen.">
+  
+  <title>Pakket Details | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/pakket.css">
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main>
+    <!-- Loading State -->
+    <div class="package-loading" id="package-loading">
+      <div class="spinner"></div>
+      <p>Pakket laden...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="package-error hidden" id="package-error">
+      <h2>Pakket niet gevonden</h2>
+      <p>Dit pakket bestaat niet of is niet meer beschikbaar.</p>
+      <a href="/pakketten.html" class="btn btn--primary">Bekijk alle pakketten</a>
+    </div>
+
+    <!-- Package Content -->
+    <div class="package-content hidden" id="package-content">
+      <!-- Breadcrumb -->
+      <section class="breadcrumb-section">
+        <div class="container">
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol>
+              <li><a href="/">Home</a></li>
+              <li><a href="/pakketten.html">Pakketten</a></li>
+              <li aria-current="page" id="breadcrumb-name">-</li>
+            </ol>
+          </nav>
+        </div>
+      </section>
+
+      <!-- Package Detail -->
+      <section class="package-detail">
+        <div class="container">
+          <div class="package-detail__grid">
+            <!-- Left: Images & Content -->
+            <div class="package-left-col">
+              <div class="package-gallery">
+                <div class="package-gallery__main">
+                  <div class="dish-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    Wij doen de afwas!
+                  </div>
+                  <img src="/images/packages/placeholder.jpg" alt="" id="gallery-main" loading="lazy">
+                </div>
+                <div class="package-gallery__thumbs" id="gallery-thumbs">
+                  <!-- Thumbnails loaded via JS -->
+                </div>
+              </div>
+
+              <!-- Package Contents (Moved) -->
+              <div class="package-contents-inline">
+                <h3 class="package-contents__title">In dit pakket</h3>
+                <div class="package-contents__grid" id="package-contents">
+                  <!-- Contents loaded via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Info & Configurator -->
+            <div class="package-info">
+              <div class="package-info__header">
+                <span class="badge badge--primary" id="package-badge"></span>
+                <h1 id="package-title">-</h1>
+                <p class="package-info__description" id="package-description">-</p>
+              </div>
+
+              <!-- Configurator -->
+              <div class="configurator">
+                <h2 class="configurator__title">Configureer je pakket</h2>
+
+                <!-- Event Type Selector -->
+                <div class="configurator__section">
+                  <label class="configurator__label">Type evenement</label>
+                  <div class="event-type-toggle">
+                    <button type="button" class="type-btn active" data-type="single">
+                      Eendaags
+                      <span class="type-btn__sub">Gebruik: 1 dag</span>
+                    </button>
+                    <button type="button" class="type-btn" data-type="multi">
+                      Meerdaags
+                      <span class="type-btn__sub">Gebruik: > 1 dag</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Date Selection -->
+                <div class="configurator__section">
+                  <label class="configurator__label">Verhuurperiode</label>
+                  
+                  <!-- Single Date Picker -->
+                  <div class="configurator__single-date" id="single-date-container">
+                    <div class="form-group">
+                      <label for="event-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Datum evenement</label>
+                      <input type="date" id="event-date" class="form-input">
+                    </div>
+                  </div>
+
+                  <!-- Range Date Picker -->
+                  <div class="configurator__dates hidden" id="range-date-container">
+                    <div class="form-group">
+                      <label for="start-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Startdatum</label>
+                      <input type="date" id="start-date" class="form-input">
+                    </div>
+                    <div class="form-group">
+                      <label for="end-date" class="form-label" style="font-size: 0.8rem; color: var(--color-gray);">Einddatum</label>
+                      <input type="date" id="end-date" class="form-input">
+                    </div>
+                  </div>
+                  <p class="configurator__hint" id="rental-days-hint">Selecteer je datums</p>
+                </div>
+
+                <!-- Persons Selection -->
+                <div class="configurator__section">
+                  <label class="configurator__label" for="persons-select">Aantal personen</label>
+                  <select id="persons-select" class="form-input">
+                    <!-- Options loaded via JS -->
+                  </select>
+                </div>
+
+                <!-- Add-ons -->
+                <div class="configurator__section" id="addons-section" style="display: none;">
+                  <label class="configurator__label">Extra's toevoegen</label>
+                  <div class="addons-list" id="addons-list">
+                    <!-- Add-ons loaded via JS -->
+                  </div>
+                </div>
+
+                <!-- Availability Status -->
+                <div class="availability-status" id="availability-status" style="display: none;">
+                  <div class="availability-status__icon"></div>
+                  <span class="availability-status__text"></span>
+                </div>
+
+                <!-- Price Summary -->
+                <div class="price-summary">
+                  <div class="price-summary__row">
+                    <span>Pakket (<span id="summary-persons">0</span> pers.)</span>
+                    <span id="summary-base-price">€0,00</span>
+                  </div>
+                  <div class="price-summary__row" id="summary-extra-days-row" style="display: none;">
+                    <span>Extra dagen (<span id="summary-extra-days">0</span>)</span>
+                    <span id="summary-extra-days-price">€0,00</span>
+                  </div>
+                  <div class="price-summary__row" id="summary-addons-row" style="display: none;">
+                    <span>Extra's</span>
+                    <span id="summary-addons-price">€0,00</span>
+                  </div>
+                  <div class="price-summary__row price-summary__row--deposit">
+                    <span class="info-tooltip">
+                      Schadevergoeding (niet vooraf betaald)
+                      <button type="button" class="info-tooltip__btn" aria-label="Meer informatie over schadevergoeding">?</button>
+                      <div class="info-tooltip__content">
+                        <div class="info-tooltip__title">Hoe werkt schadevergoeding?</div>
+                        <p class="info-tooltip__text">Bij Tafel Totaal betaal je geen borg vooraf. De schadevergoeding wordt alleen via factuur in rekening gebracht als er daadwerkelijk schade is na inlevering van het materiaal.</p>
+                        <a href="/borg-schade.html" class="info-tooltip__link">Meer informatie →</a>
+                      </div>
+                    </span>
+                    <span id="summary-deposit">€0,00</span>
+                  </div>
+                  <div class="price-summary__total">
+                    <span>Totaal</span>
+                    <span id="summary-total">€0,00</span>
+                  </div>
+                </div>
+
+                <!-- Delivery Info -->
+                <div class="delivery-info" style="padding: var(--space-md); background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border: 1px solid #81C784; margin-bottom: var(--space-md);">
+                  <div style="display: flex; align-items: flex-start; gap: var(--space-sm);">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2E7D32" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;">
+                      <rect x="1" y="3" width="15" height="13"></rect>
+                      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                      <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                      <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                    </svg>
+                    <div>
+                      <p style="margin: 0; font-size: 0.85rem; font-weight: 600; color: #1B5E20;">GRATIS levering binnen 15km</p>
+                      <p style="margin: 4px 0 0; font-size: 0.75rem; color: #2E7D32;">Beernem, Oostkamp, Aalter, Zedelgem, Wingene... Vanaf €150 bestelling.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Add to Cart Button -->
+                <button class="btn btn--primary btn--lg btn--full" id="add-to-cart-btn" disabled>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                  </svg>
+                  Toevoegen aan winkelwagen
+                </button>
+
+                <!-- Quote Button (Hidden by default) -->
+                <a href="/contact.html?subject=Offerte%20aanvraag%20Pakket" class="btn btn--dark btn--lg btn--full hidden" id="quote-btn">
+                  Offerte aanvragen
+                </a>
+
+                <!-- Quote Button (Hidden by default) -->
+                <a href="/contact.html?subject=Offerte%20aanvraag%20Pakket" class="btn btn--dark btn--lg btn--full hidden" id="quote-btn">
+                  Offerte aanvragen
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Toast Container -->
+  <div class="toast-container"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="/js/pages/pakket.js"></script>
+</body>
+</html>

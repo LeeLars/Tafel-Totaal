@@ -288,7 +288,7 @@ async function showCustomerDetail(customerId) {
           ${customer.orders && customer.orders.length > 0 ? `
             <div class="customer-orders">
               ${customer.orders.map(order => `
-                <a href="order?id=${order.id}" class="customer-order">
+                <a href="order.html?id=${order.id}" class="customer-order">
                   <div class="customer-order__info">
                     <span class="customer-order__number">${order.order_number}</span>
                     <span class="customer-order__date">${formatDateShort(order.created_at)}</span>
