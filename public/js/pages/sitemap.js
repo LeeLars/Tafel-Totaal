@@ -15,11 +15,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadFooter();
   
   // Load all dynamic content in parallel
-  await Promise.all([
+  Promise.all([
     loadLocations(),
     loadPackages(),
     loadProducts()
-  ]);
+  ]).catch(e => console.warn('Sitemap loading error:', e));
 });
 
 async function loadLocations() {
@@ -28,16 +28,18 @@ async function loadLocations() {
 
   if (!loadingEl || !grid) return;
 
-  // Set timeout to show fallback after 5 seconds
+  // Set timeout to show fallback after 3 seconds
   const timeoutId = setTimeout(() => {
     loadingEl.style.display = 'none';
     grid.style.display = 'grid';
-  }, 5000);
+  }, 3000);
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/bezorgzones/cities`, {
-      signal: AbortSignal.timeout(8000)
+      credentials: 'include',
+      signal: AbortSignal.timeout(5000)
     });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     const cities = (data && data.success && Array.isArray(data.data)) ? data.data : [];
 
@@ -79,19 +81,21 @@ async function loadPackages() {
 
   if (!loadingEl || !grid) return;
 
-  // Set timeout to show fallback after 5 seconds
+  // Set timeout to show fallback after 3 seconds
   const timeoutId = setTimeout(() => {
-    loadingEl.innerHTML = '<span style="color: var(--color-gray); font-size: var(--font-size-sm);">Pakketten worden geladen via de API...</span>';
+    loadingEl.style.display = 'none';
     grid.innerHTML = `
       <li><a href="/pakketten.html" class="sitemap-link">Bekijk alle pakketten<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></li>
     `;
     grid.style.display = 'grid';
-  }, 5000);
+  }, 3000);
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/packages`, { 
-      signal: AbortSignal.timeout(8000) 
+      credentials: 'include',
+      signal: AbortSignal.timeout(5000) 
     });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     const packages = (data && data.success && Array.isArray(data.data)) ? data.data : [];
 
@@ -134,9 +138,9 @@ async function loadProducts() {
 
   if (!loadingEl || !grid) return;
 
-  // Set timeout to show fallback after 5 seconds
+  // Set timeout to show fallback after 3 seconds
   const timeoutId = setTimeout(() => {
-    loadingEl.innerHTML = '<span style="color: var(--color-gray); font-size: var(--font-size-sm);">Producten worden geladen via de API...</span>';
+    loadingEl.style.display = 'none';
     grid.innerHTML = `
       <div style="margin-bottom: var(--space-lg);">
         <ul class="sitemap-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-xs);">
@@ -145,12 +149,14 @@ async function loadProducts() {
       </div>
     `;
     grid.style.display = 'block';
-  }, 5000);
+  }, 3000);
 
   try {
     const response = await fetch(`${API_BASE_URL}/api/products?limit=500`, {
-      signal: AbortSignal.timeout(8000)
+      credentials: 'include',
+      signal: AbortSignal.timeout(5000)
     });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     const products = (data && data.success && Array.isArray(data.data)) ? data.data : [];
 
