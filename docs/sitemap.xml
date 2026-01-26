@@ -7,91 +7,607 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/pakketten.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/pakketten/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/producten.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/producten/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/hoe-werkt-het.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/hoe-werkt-het/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/over-ons.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/over-ons/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/contact.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/contact/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/faq.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/faq/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
-  <!-- Location Pages -->
+  <!-- Product Detail Pages -->
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/locaties.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/pakket/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/locaties/brugge.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/product/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Location Overview -->
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locatie/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Location Pages (105 cities) -->
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/aalst/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/locaties/gent.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/aalter/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/locaties/knokke-heist.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/alveringem/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/locaties/oostende.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/anzegem/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/locaties/kortrijk.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/ardooie/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/locaties/aalst.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/assenede/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/locaties/roeselare.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/avelgem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/beernem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/berlare/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/beveren/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/blankenberge/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/brakel/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/bredene/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/brugge/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/buggenhout/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/damme/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/de-haan/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/de-panne/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/deerlijk/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/deinze/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/denderleeuw/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/dendermonde/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/dentergem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/destelbergen/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/diksmuide/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/eeklo/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/erpe-mere/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/evergem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/gavere/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/gent/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/geraardsbergen/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/gistel/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/haaltert/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/hamme/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/harelbeke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/herzele/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/hooglede/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/houthulst/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/ichtegem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/ieper/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/ingelmunster/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/izegem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/jabbeke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/kaprijke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/knokke-heist/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/koekelare/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/koksijde/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/kortemark/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/kortrijk/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/kuurne/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/laarne/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/lebbeke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/lede/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/legem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/lendelede/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/lichtervelde/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/lochristi/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/lokeren/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/maldegem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/menen/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/merelbeke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/mesen/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/middelkerke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/moorslede/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/nazareth/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/nieuwpoort/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/ninove/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/oostende/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/oosterzele/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/oostkamp/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/oostrozebeke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/oudenaarde/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/oudenburg/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/pittem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/poperinge/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/roeselare/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/ronse/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/sint-gillis-waas/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/sint-laureins/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/sint-lievens-houtem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/sint-martens-latem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/sint-niklaas/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/staden/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/stekene/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/temse/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/tielt/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/torhout/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/veurne/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/waasmunster/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/waregem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/wervik/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/wetteren/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/wevelgem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/wichelen/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/wielsbeke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/wingene/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/zedelgem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/zele/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/zelzate/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/zonnebeke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/zottegem/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/zuienkerke/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/zulte/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/locaties/zwevegem/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
+  <!-- Information Pages -->
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/levering-retour/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://leelars.github.io/Tafel-Totaal/borg-schade/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
   <!-- Legal Pages -->
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/algemene-voorwaarden.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/algemene-voorwaarden/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/privacy.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/privacy/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://leelars.github.io/Tafel-Totaal/cookies.html</loc>
+    <loc>https://leelars.github.io/Tafel-Totaal/cookies/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
