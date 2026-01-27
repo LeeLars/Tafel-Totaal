@@ -528,7 +528,7 @@ function renderImages(images) {
 }
 
 /**
- * Initialize date pickers
+ * Initialize date pickers with Flatpickr
  */
 function initDatePickers() {
   const startDateInput = document.getElementById('start-date');
@@ -537,70 +537,89 @@ function initDatePickers() {
   
   // Set min date to today
   const today = new Date().toISOString().split('T')[0];
-  if (startDateInput) startDateInput.min = today;
-  if (endDateInput) endDateInput.min = today;
-  if (eventDateInput) eventDateInput.min = today;
+  
+  // Flatpickr config
+  const flatpickrConfig = {
+    locale: 'nl',
+    dateFormat: 'Y-m-d',
+    minDate: 'today',
+    disableMobile: true,
+    animate: true
+  };
 
   // Single Date Picker Logic - for single day events, calculate rental period automatically
-  // NOTE: Event listener must be added BEFORE we dispatch the change event for saved dates
   if (eventDateInput) {
-    eventDateInput.addEventListener('change', () => {
-      const dateVal = eventDateInput.value;
-      if (!dateVal) return;
+    flatpickr(eventDateInput, {
+      ...flatpickrConfig,
+      onChange: (selectedDates, dateStr) => {
+        if (!dateStr) return;
 
-      const eventDate = new Date(dateVal);
-      
-      // Start = 2 days before event (max pickup window)
-      const start = new Date(eventDate);
-      start.setDate(eventDate.getDate() - 2);
-      
-      // End = 2 days after event (48h return window)
-      const end = new Date(eventDate);
-      end.setDate(eventDate.getDate() + 2);
-      
-      startDate = start.toISOString().split('T')[0];
-      endDate = end.toISOString().split('T')[0];
-      
-      // For single-day events, billing is for 1 day only
-      billingDays = 1;
-      
-      // Save event date for other products
-      saveEventDate(dateVal);
-      
-      updateTotalPrice();
+        const eventDate = selectedDates[0];
+        
+        // Start = 2 days before event (max pickup window)
+        const start = new Date(eventDate);
+        start.setDate(eventDate.getDate() - 2);
+        
+        // End = 2 days after event (48h return window)
+        const end = new Date(eventDate);
+        end.setDate(eventDate.getDate() + 2);
+        
+        startDate = start.toISOString().split('T')[0];
+        endDate = end.toISOString().split('T')[0];
+        
+        // For single-day events, billing is for 1 day only
+        billingDays = 1;
+        
+        // Save event date for other products
+        saveEventDate(dateStr);
+        
+        updateTotalPrice();
+      }
     });
   }
 
   // Range Date Picker Logic (for multi-day events)
   if (startDateInput) {
-    startDateInput.addEventListener('change', () => {
-      startDate = startDateInput.value;
-      if (endDateInput) endDateInput.min = startDate;
-      
-      if (endDate && startDate > endDate) {
-        endDate = null;
-        if (endDateInput) endDateInput.value = '';
+    flatpickr(startDateInput, {
+      ...flatpickrConfig,
+      onChange: (selectedDates, dateStr) => {
+        startDate = dateStr;
+        
+        if (endDate && startDate > endDate) {
+          endDate = null;
+          if (endDateInput && endDateInput._flatpickr) {
+            endDateInput._flatpickr.clear();
+          }
+        }
+        
+        // Update end date min date
+        if (endDateInput && endDateInput._flatpickr) {
+          endDateInput._flatpickr.set('minDate', dateStr);
+        }
+        
+        // For multi-day events, billing days = actual rental days
+        if (startDate && endDate) {
+          billingDays = calculateDays(startDate, endDate);
+        }
+        
+        updateTotalPrice();
       }
-      
-      // For multi-day events, billing days = actual rental days
-      if (startDate && endDate) {
-        billingDays = calculateDays(startDate, endDate);
-      }
-      
-      updateTotalPrice();
     });
   }
 
   if (endDateInput) {
-    endDateInput.addEventListener('change', () => {
-      endDate = endDateInput.value;
-      
-      // For multi-day events, billing days = actual rental days
-      if (startDate && endDate) {
-        billingDays = calculateDays(startDate, endDate);
+    flatpickr(endDateInput, {
+      ...flatpickrConfig,
+      onChange: (selectedDates, dateStr) => {
+        endDate = dateStr;
+        
+        // For multi-day events, billing days = actual rental days
+        if (startDate && endDate) {
+          billingDays = calculateDays(startDate, endDate);
+        }
+        
+        updateTotalPrice();
       }
-      
-      updateTotalPrice();
     });
   }
 
@@ -609,22 +628,20 @@ function initDatePickers() {
   const lockedDate = getLockedEventDate();
   
   if (dateLocked && lockedDate) {
-    // Lock the date - disable inputs and set to locked date
-    if (eventDateInput) {
-      eventDateInput.value = lockedDate;
-      eventDateInput.disabled = true;
+    // Lock the date - disable Flatpickr inputs and set to locked date
+    if (eventDateInput && eventDateInput._flatpickr) {
+      eventDateInput._flatpickr.setDate(lockedDate);
+      eventDateInput._flatpickr.set('clickOpens', false);
       eventDateInput.style.cursor = 'not-allowed';
       eventDateInput.title = 'Datum is vergrendeld. Leeg eerst je winkelwagen om de datum te wijzigen.';
-      // Trigger change to calculate prices
-      eventDateInput.dispatchEvent(new Event('change'));
     }
-    if (startDateInput) {
-      startDateInput.disabled = true;
+    if (startDateInput && startDateInput._flatpickr) {
+      startDateInput._flatpickr.set('clickOpens', false);
       startDateInput.style.cursor = 'not-allowed';
       startDateInput.title = 'Datum is vergrendeld. Leeg eerst je winkelwagen om de datum te wijzigen.';
     }
-    if (endDateInput) {
-      endDateInput.disabled = true;
+    if (endDateInput && endDateInput._flatpickr) {
+      endDateInput._flatpickr.set('clickOpens', false);
       endDateInput.style.cursor = 'not-allowed';
       endDateInput.title = 'Datum is vergrendeld. Leeg eerst je winkelwagen om de datum te wijzigen.';
     }

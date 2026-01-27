@@ -244,7 +244,7 @@ function updateSummary(cart) {
         .map(item => `
           <div class="cart-summary__deposit-item">
             <span class="deposit-item__name">${item.name}</span>
-            <span class="deposit-item__amount">${item.quantity}x ${formatPrice(item.perItemAmount)}</span>
+            <span class="deposit-item__amount">${formatPrice(item.perItemAmount)} /stuk</span>
           </div>
         `)
         .join('');

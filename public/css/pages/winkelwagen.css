@@ -393,11 +393,38 @@
   font-weight: 500;
 }
 
-.cart-summary__row--deposit {
+.cart-summary__row--deposit-header {
   border-top: 1px dashed var(--border-color);
   margin-top: var(--space-md);
   padding-top: var(--space-md);
   font-style: italic;
+}
+
+.cart-summary__deposit-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-sm);
+  padding-left: var(--space-lg);
+}
+
+.cart-summary__deposit-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-gray);
+}
+
+.deposit-item__name {
+  flex: 1;
+  padding-right: var(--space-sm);
+}
+
+.deposit-item__amount {
+  color: var(--color-dark-gray);
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .cart-summary__total {
