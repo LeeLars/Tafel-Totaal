@@ -42,13 +42,18 @@ const getProductsValidation = [
 
 const updateProductValidation = [
   param('id').isUUID().withMessage('Valid product ID is required'),
+  body('sku').optional().trim(),
   body('name').optional().trim().notEmpty(),
+  body('description').optional().trim(),
+  body('category_id').optional().isUUID(),
+  body('subcategory_id').optional().isUUID(),
   body('price_per_day').optional().isFloat({ min: 0 }),
   body('damage_compensation_per_item').optional().isFloat({ min: 0 }),
   body('stock_total').optional().isInt({ min: 0 }),
   body('stock_buffer').optional().isInt({ min: 0 }),
   body('turnaround_days').optional().isInt({ min: 0 }),
   body('is_active').optional().isBoolean(),
+  body('images').optional().isArray(),
 ];
 
 const getCustomersValidation = [

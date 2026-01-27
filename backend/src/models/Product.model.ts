@@ -178,6 +178,7 @@ export const ProductModel = {
   },
 
   async update(id: string, data: Partial<{
+    sku: string;
     name: string;
     slug: string;
     description: string;
