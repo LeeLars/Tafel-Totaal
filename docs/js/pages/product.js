@@ -429,6 +429,7 @@ function initQuantitySelector() {
 /**
  * Initialize quantity presets (25, 75, 125 buttons)
  * Clicking multiple times adds to current quantity (additive/cumulative)
+ * Intelligently adds remaining stock if preset would exceed max
  */
 function initQuantityPresets() {
   const qtyInput = document.getElementById('quantity');
@@ -442,10 +443,11 @@ function initQuantityPresets() {
       
       const presetValue = parseInt(btn.dataset.value);
       const currentValue = parseInt(qtyInput.value) || 1;
-      const newValue = currentValue + presetValue;
       const max = parseInt(qtyInput.max) || 9999;
+      const newValue = currentValue + presetValue;
       
       if (newValue <= max) {
+        // Can add full preset amount
         qtyInput.value = newValue;
         selectedQuantity = newValue;
         updateTotalPrice();
@@ -453,10 +455,22 @@ function initQuantityPresets() {
         // Visual feedback - flash the button
         btn.classList.add('active');
         setTimeout(() => btn.classList.remove('active'), 200);
+      } else if (currentValue < max) {
+        // Can't add full amount, but add remaining available stock
+        const remaining = max - currentValue;
+        qtyInput.value = max;
+        selectedQuantity = max;
+        updateTotalPrice();
         
-        showToast(`+${presetValue} stuks toegevoegd (totaal: ${newValue})`, 'success');
+        // Visual feedback - flash the button
+        btn.classList.add('active');
+        setTimeout(() => btn.classList.remove('active'), 200);
+        
+        // Show warning that we hit the max
+        showToast(`+${remaining} stuks toegevoegd. Maximum van ${max} stuks bereikt.`, 'warning');
       } else {
-        showToast(`Maximaal ${max} stuks beschikbaar`, 'warning');
+        // Already at max
+        showToast(`Maximum van ${max} stuks al bereikt`, 'warning');
       }
     });
   });
