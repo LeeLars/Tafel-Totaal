@@ -1,5 +1,5 @@
 /* ============================================
-   LOADER - Brutalist Style
+   LOADER - Brutalist Style with Logo
    ============================================ */
 
 .tt-loader {
@@ -16,27 +16,13 @@
   grid-column: 1 / -1;
 }
 
-.tt-loader__grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2px;
-  width: 64px;
-  height: 64px;
-  transform-origin: 50% 50%;
+.tt-loader__logo {
+  width: 80px;
+  height: 80px;
+  animation: logoRotate 2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+  transform-origin: center center;
   will-change: transform;
-  animation: rotate 3s cubic-bezier(0.77, 0, 0.175, 1) infinite;
 }
-
-.tt-loader__square {
-  background-color: var(--color-black);
-  width: 100%;
-  height: 100%;
-}
-
-.tt-loader__square:nth-child(1) { animation: pulse 1.5s ease-in-out infinite; }
-.tt-loader__square:nth-child(2) { animation: pulse 1.5s ease-in-out infinite 0.2s; background-color: var(--color-primary); }
-.tt-loader__square:nth-child(3) { animation: pulse 1.5s ease-in-out infinite 0.4s; background-color: var(--color-primary); }
-.tt-loader__square:nth-child(4) { animation: pulse 1.5s ease-in-out infinite 0.6s; }
 
 .tt-loader__text {
   font-family: var(--font-display);
@@ -47,14 +33,9 @@
   animation: fade 1.5s ease-in-out infinite alternate;
 }
 
-@keyframes rotate {
+@keyframes logoRotate {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.9); }
 }
 
 @keyframes fade {

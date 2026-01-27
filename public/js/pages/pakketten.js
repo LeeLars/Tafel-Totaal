@@ -43,6 +43,13 @@ async function loadPackages() {
   const grid = document.getElementById('packages-grid');
   if (!grid) return;
 
+  grid.innerHTML = `
+    <div class="tt-loader">
+      <img src="/images/loader-logo.svg" alt="Loading..." class="tt-loader__logo">
+      <div class="tt-loader__text">Pakketten laden...</div>
+    </div>
+  `;
+
   try {
     const response = await packagesAPI.getAll();
     allPackages = response.data || [];

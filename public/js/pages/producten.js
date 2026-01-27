@@ -329,6 +329,13 @@ async function loadProducts() {
   const grid = document.getElementById('products-grid');
   if (!grid) return;
 
+  grid.innerHTML = `
+    <div class="tt-loader">
+      <img src="/images/loader-logo.svg" alt="Loading..." class="tt-loader__logo">
+      <div class="tt-loader__text">Producten laden...</div>
+    </div>
+  `;
+
   try {
     const response = await productsAPI.getAll();
     products = response.data || [];
