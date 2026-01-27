@@ -208,9 +208,11 @@ function updateSummary(cart) {
     
     const itemCompensation = item.damage_compensation || 0;
     if (itemCompensation > 0) {
+      const perItemAmount = item.damage_compensation_per_item || (itemCompensation / (item.quantity || 1));
       compensationItems.push({
         name: item.name,
         amount: itemCompensation,
+        perItemAmount: perItemAmount,
         quantity: item.quantity || 1
       });
       compensation += itemCompensation;
@@ -228,16 +230,27 @@ function updateSummary(cart) {
 
   document.getElementById('summary-subtotal').textContent = formatPrice(subtotal);
   
-  // Build compensation breakdown text
-  const depositEl = document.getElementById('summary-deposit');
-  if (compensationItems.length > 0) {
-    const breakdown = compensationItems
-      .map(item => `${item.name} (${formatPrice(item.amount)})`)
-      .join(' + ');
-    depositEl.innerHTML = `€&nbsp;${compensation.toFixed(2).replace('.', ',')}`;
-    depositEl.title = breakdown;
-  } else {
-    depositEl.textContent = formatPrice(compensation);
+  // Build compensation breakdown - show per product
+  const depositTotalEl = document.getElementById('summary-deposit-total');
+  const depositBreakdownEl = document.getElementById('deposit-breakdown');
+  
+  if (depositTotalEl) {
+    depositTotalEl.textContent = formatPrice(compensation);
+  }
+  
+  if (depositBreakdownEl) {
+    if (compensationItems.length > 0) {
+      depositBreakdownEl.innerHTML = compensationItems
+        .map(item => `
+          <div class="cart-summary__deposit-item">
+            <span class="deposit-item__name">${item.name}</span>
+            <span class="deposit-item__amount">${item.quantity}x ${formatPrice(item.perItemAmount)}</span>
+          </div>
+        `)
+        .join('');
+    } else {
+      depositBreakdownEl.innerHTML = '';
+    }
   }
   
   document.getElementById('summary-total').textContent = formatPrice(total);

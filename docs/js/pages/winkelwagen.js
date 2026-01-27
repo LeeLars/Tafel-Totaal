@@ -208,9 +208,11 @@ function updateSummary(cart) {
     
     const itemCompensation = item.damage_compensation || 0;
     if (itemCompensation > 0) {
+      const perItemAmount = item.damage_compensation_per_item || (itemCompensation / (item.quantity || 1));
       compensationItems.push({
         name: item.name,
         amount: itemCompensation,
+        perItemAmount: perItemAmount,
         quantity: item.quantity || 1
       });
       compensation += itemCompensation;
@@ -242,7 +244,7 @@ function updateSummary(cart) {
         .map(item => `
           <div class="cart-summary__deposit-item">
             <span class="deposit-item__name">${item.name}</span>
-            <span class="deposit-item__amount">${formatPrice(item.amount)}</span>
+            <span class="deposit-item__amount">${item.quantity}x ${formatPrice(item.perItemAmount)}</span>
           </div>
         `)
         .join('');
