@@ -720,7 +720,7 @@ function generateDatePresets(eventDate) {
   }
   
   if (selfPickupDateContainer) {
-    const selfPickupOptions = generateDateOptions(eventDate, -2, 0); // 2 days before to event day
+    const selfPickupOptions = generateDateOptions(eventDate, -1, 0); // 1 day before to event day
     selfPickupDateContainer.innerHTML = selfPickupOptions.map(opt => 
       `<button type="button" class="date-preset-btn" data-date="${opt.value}">${opt.label}</button>`
     ).join('');
@@ -732,7 +732,7 @@ function generateDatePresets(eventDate) {
   }
   
   if (returnDateContainer) {
-    const returnOptions = generateDateOptions(eventDate, 1, 2); // 1-2 days after event
+    const returnOptions = generateDateOptions(eventDate, 0, 1); // Event day to 1 day after
     returnDateContainer.innerHTML = returnOptions.map(opt => 
       `<button type="button" class="date-preset-btn" data-date="${opt.value}">${opt.label}</button>`
     ).join('');
