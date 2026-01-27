@@ -370,7 +370,7 @@
   gap: 0; /* Brutalist grid lines via borders */
   border-top: 1px solid var(--color-black);
   border-left: 1px solid var(--color-black);
-  background-color: var(--color-black); /* Gap color if needed, but we use 0 gap */
+  background-color: var(--color-white);
 }
 
 @media (min-width: 640px) {
