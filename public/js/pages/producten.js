@@ -505,7 +505,13 @@ function renderProducts() {
   }
 
   const productsHTML = filteredProducts.map(product => createProductCard(product)).join('');
-  const quoteCard = createQuoteCard();
+  
+  // Only add quote card if it would be the last item (no empty spaces after)
+  // Grid is 3 columns on desktop, so check if (products + 1) is divisible by 3
+  const totalItems = filteredProducts.length + 1;
+  const shouldAddQuote = totalItems % 3 === 0;
+  
+  const quoteCard = shouldAddQuote ? createQuoteCard() : '';
   grid.innerHTML = productsHTML + quoteCard;
 }
 
