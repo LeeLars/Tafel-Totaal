@@ -62,11 +62,17 @@
   border-radius: 0;
   appearance: none;
   cursor: pointer;
-  padding: 0 4px;
+  padding: 0 20px 0 4px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 4L6 8L10 4' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
 }
 
 .flatpickr-current-month .flatpickr-monthDropdown-months:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 4L6 8L10 4' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
 }
 
 .flatpickr-current-month input.cur-year {
@@ -90,12 +96,13 @@
   align-items: center;
   justify-content: center;
   top: 12px;
+  background: var(--color-primary);
 }
 
 .flatpickr-prev-month:hover,
 .flatpickr-next-month:hover {
-  fill: var(--color-primary);
-  background: var(--color-white);
+  background: var(--color-primary-dark);
+  fill: var(--color-white);
 }
 
 .flatpickr-prev-month svg,
