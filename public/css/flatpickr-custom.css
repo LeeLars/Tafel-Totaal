@@ -85,6 +85,45 @@
   margin: 0;
 }
 
+.flatpickr-current-month .numInputWrapper {
+  width: auto;
+  margin-left: 4px;
+}
+
+.flatpickr-current-month .numInput {
+  background: transparent;
+  color: var(--color-white);
+  font-family: inherit;
+  font-weight: 700;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Year Dropdown Styling */
+.flatpickr-current-month select.cur-year {
+  background: transparent;
+  color: var(--color-white);
+  font-family: inherit;
+  font-weight: 700;
+  border: none;
+  border-radius: 0;
+  appearance: none;
+  cursor: pointer;
+  padding: 0 18px 0 8px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 4L6 8L10 4' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  margin-left: 4px;
+}
+
+.flatpickr-current-month select.cur-year:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M2 4L6 8L10 4' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+}
+
 /* Navigation Arrows */
 .flatpickr-prev-month,
 .flatpickr-next-month {

@@ -734,7 +734,7 @@ function updatePriceSummary() {
     addonsRow.style.display = 'none';
   }
 
-  document.getElementById('summary-deposit').textContent = formatPrice(compensation);
+  document.getElementById('summary-deposit').textContent = formatPrice(compensation) + ' /stuk';
   document.getElementById('summary-total').textContent = formatPrice(total);
 }
 

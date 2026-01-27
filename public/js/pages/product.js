@@ -315,7 +315,7 @@ function renderProduct(product) {
   document.getElementById('product-price').textContent = formatPrice(product.price_per_day);
   document.getElementById('product-sku').textContent = product.sku || '-';
   document.getElementById('product-category-badge').textContent = product.category_name || product.category || 'Overig';
-  document.getElementById('product-deposit').textContent = formatPrice(product.damage_compensation_per_item || 0);
+  document.getElementById('product-deposit').textContent = formatPrice(product.damage_compensation_per_item || 0) + ' /stuk';
   
   // Stock
   const availableStock = product.stock_total - product.stock_buffer;
@@ -539,12 +539,16 @@ function initDatePickers() {
   const today = new Date().toISOString().split('T')[0];
   
   // Flatpickr config
+  const currentYear = new Date().getFullYear();
   const flatpickrConfig = {
     locale: 'nl',
     dateFormat: 'Y-m-d',
     minDate: 'today',
     disableMobile: true,
-    animate: true
+    animate: true,
+    yearSelectorType: 'dropdown',
+    minYear: currentYear,
+    maxYear: currentYear + 5
   };
 
   // Single Date Picker Logic - for single day events, calculate rental period automatically
