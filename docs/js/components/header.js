@@ -12,6 +12,7 @@ export function initHeader() {
   initStickyHeader(header);
   initMobileMenu(header);
   initUserDropdown(header);
+  initVoorWieDropdown(header);
   initLogoutButtons();
   setActiveNavLink();
   initDirectionAwareHover();
@@ -84,6 +85,38 @@ function initUserDropdown(header) {
   if (!dropdown) return;
 
   const btn = dropdown.querySelector('.header__user-btn');
+  
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = dropdown.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Close on click outside
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target)) {
+      dropdown.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Close on escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+      dropdown.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+/**
+ * Voor Wie dropdown menu
+ */
+function initVoorWieDropdown(header) {
+  const dropdown = header.querySelector('.header__menu-dropdown');
+  if (!dropdown) return;
+
+  const btn = dropdown.querySelector('.header__link--dropdown');
   
   btn.addEventListener('click', (e) => {
     e.stopPropagation();

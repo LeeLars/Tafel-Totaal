@@ -12,6 +12,20 @@
         <ul class="header__menu">
           <li><a href="/pakketten.html" class="header__link">Pakketten</a></li>
           <li><a href="/producten.html" class="header__link">Losse Producten</a></li>
+          <li class="header__menu-dropdown">
+            <button class="header__link header__link--dropdown" aria-expanded="false" aria-haspopup="true">
+              Voor Wie
+              <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="header__submenu">
+              <a href="/particulieren.html" class="header__submenu-item">Particulieren</a>
+              <a href="/bedrijven.html" class="header__submenu-item">Bedrijven</a>
+              <a href="/bruiloften.html" class="header__submenu-item">Bruiloften</a>
+              <a href="/evenementen.html" class="header__submenu-item">Evenementen</a>
+            </div>
+          </li>
           <li><a href="/hoe-werkt-het.html" class="header__link">Hoe werkt het?</a></li>
           <li><a href="/over-ons.html" class="header__link">Over Ons</a></li>
           <li><a href="/faq.html" class="header__link">FAQ</a></li>
@@ -160,6 +174,12 @@
     <ul class="header__mobile-menu">
       <li><a href="/pakketten.html">Pakketten</a></li>
       <li><a href="/producten.html">Losse Producten</a></li>
+      <li class="header__mobile-divider"></li>
+      <li class="header__mobile-category-title">Voor Wie</li>
+      <li><a href="/particulieren.html">Particulieren</a></li>
+      <li><a href="/bedrijven.html">Bedrijven</a></li>
+      <li><a href="/bruiloften.html">Bruiloften</a></li>
+      <li><a href="/evenementen.html">Evenementen</a></li>
       <li class="header__mobile-divider"></li>
       <li class="header__mobile-category-title">Categorieën</li>
       <li><a href="/producten.html?category=servies">Servies</a></li>
@@ -563,5 +583,185 @@
 .category-link__icon svg {
   width: 20px;
   height: 20px;
+}
+
+/* Voor Wie Dropdown */
+.header__menu-dropdown {
+  position: relative;
+}
+
+.header__link--dropdown {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.header__link--dropdown .dropdown-arrow {
+  transition: transform var(--transition-fast);
+}
+
+.header__menu-dropdown.open .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.header__submenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 200px;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-8px);
+  transition: all var(--transition-fast);
+  z-index: var(--z-dropdown);
+}
+
+.header__menu-dropdown.open .header__submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.header__submenu-item {
+  display: block;
+  padding: var(--space-md) var(--space-lg);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  color: var(--color-black);
+  text-transform: none;
+  letter-spacing: normal;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.header__submenu-item:hover {
+  background-color: var(--color-off-white);
+  color: var(--color-primary);
+}
+
+.header__submenu-item:first-child {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.header__submenu-item:last-child {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Cart Preview */
+.header__cart-wrapper {
+  position: relative;
+}
+
+.cart-preview {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 400px;
+  max-width: 90vw;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light-gray);
+  box-shadow: var(--shadow-xl);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: all var(--transition-fast);
+  z-index: var(--z-dropdown);
+}
+
+.header__cart-wrapper:hover .cart-preview {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.cart-preview__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+.cart-preview__header h3 {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  margin: 0;
+}
+
+.cart-preview__count {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray);
+}
+
+.cart-preview__items {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.cart-preview__item {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-light-gray);
+}
+
+.cart-preview__item:last-child {
+  border-bottom: none;
+}
+
+.cart-preview__item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border: 1px solid var(--color-light-gray);
+}
+
+.cart-preview__item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cart-preview__item-name {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+}
+
+.cart-preview__item-details {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray);
+  margin-bottom: var(--space-xs);
+}
+
+.cart-preview__item-price {
+  font-size: var(--font-size-sm);
+  color: var(--color-dark-gray);
+}
+
+.cart-preview__footer {
+  padding: var(--space-lg);
+  border-top: 1px solid var(--color-light-gray);
+}
+
+.cart-preview__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-base);
+}
+
+.cart-preview__total strong {
+  color: var(--color-primary);
+  font-size: var(--font-size-lg);
 }
 </style>
