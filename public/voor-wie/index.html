@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Tafel Totaal biedt serviesverhuur en tafelaankleding op maat voor particulieren, bedrijven, bruiloften en evenementen. Ontdek onze oplossingen voor elke doelgroep.">
+  <meta name="keywords" content="servies huren, tafel aankleding, evenementen verhuur, bruiloft styling, bedrijfsfeest materiaal, particulier feest servies">
+  
+  <title>Voor Wie? | Tafel Totaal</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/images/site/Favicon-tafel-totaal.png">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/pages/doelgroep.css">
+  
+  <style>
+    /* Specifieke styles voor de overzichtspagina */
+    .target-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--space-md);
+      margin-bottom: var(--space-4xl);
+    }
+    
+    .target-card {
+      grid-column: span 12;
+      position: relative;
+      height: 400px;
+      overflow: hidden;
+      border: 1px solid var(--color-black);
+      text-decoration: none;
+      color: var(--color-white);
+      transition: all var(--transition-normal);
+    }
+    
+    @media (min-width: 768px) {
+      .target-card {
+        grid-column: span 6;
+      }
+    }
+    
+    .target-card__bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform var(--transition-slow);
+      z-index: 0;
+    }
+    
+    .target-card:hover .target-card__bg {
+      transform: scale(1.05);
+    }
+    
+    .target-card__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
+      z-index: 1;
+    }
+    
+    .target-card__content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--space-xl);
+    }
+    
+    .target-card__title {
+      font-family: 'Righteous', cursive;
+      font-size: var(--font-size-3xl);
+      margin-bottom: var(--space-sm);
+      color: var(--color-white);
+      text-transform: uppercase;
+    }
+    
+    .target-card__desc {
+      font-size: var(--font-size-lg);
+      margin-bottom: var(--space-md);
+      opacity: 0.9;
+      max-width: 90%;
+    }
+    
+    .target-card__arrow {
+      display: inline-flex;
+      align-items: center;
+      font-weight: 700;
+      text-transform: uppercase;
+      gap: var(--space-xs);
+      transition: gap var(--transition-fast);
+    }
+    
+    .target-card:hover .target-card__arrow {
+      gap: var(--space-md);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div id="header-container"></div>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="doelgroep-hero" style="background-color: var(--color-primary);">
+      <div class="container">
+        <div class="doelgroep-hero__content" data-animate="fade">
+          <div class="breadcrumb">
+            <a href="/">Home</a>
+            <span class="breadcrumb__separator">/</span>
+            <span>Voor Wie</span>
+          </div>
+          <h1 class="doelgroep-hero__title">Voor elke gelegenheid de perfecte tafel</h1>
+          <p class="doelgroep-hero__subtitle">Of je nu een intiem diner organiseert of een grootschalig evenement, wij hebben de oplossing die bij jou past.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Grid -->
+    <section class="section">
+      <div class="container">
+        <div class="target-grid">
+          
+          <!-- Particulieren -->
+          <a href="/voor-wie/particulieren.html" class="target-card">
+            <div class="target-card__bg" style="background-image: url('/images/doelgroepen/particulieren-hero.jpg'); background-color: var(--color-dark-gray);"></div>
+            <div class="target-card__overlay"></div>
+            <div class="target-card__content">
+              <h2 class="target-card__title">Particulieren</h2>
+              <p class="target-card__desc">Van verjaardag tot tuinfeest, maak van elke gelegenheid thuis iets bijzonders.</p>
+              <span class="target-card__arrow">
+                Ontdek meer 
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <!-- Bedrijven -->
+          <a href="/voor-wie/bedrijven.html" class="target-card">
+            <div class="target-card__bg" style="background-image: url('/images/doelgroepen/bedrijven-hero.jpg'); background-color: var(--color-charcoal);"></div>
+            <div class="target-card__overlay"></div>
+            <div class="target-card__content">
+              <h2 class="target-card__title">Bedrijven</h2>
+              <p class="target-card__desc">Professionele uitstraling voor uw netwerkborrel, personeelsfeest of congres.</p>
+              <span class="target-card__arrow">
+                Ontdek meer 
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <!-- Bruiloften -->
+          <a href="/voor-wie/bruiloften.html" class="target-card">
+            <div class="target-card__bg" style="background-image: url('/images/doelgroepen/bruiloften-hero.jpg'); background-color: var(--color-primary-light);"></div>
+            <div class="target-card__overlay"></div>
+            <div class="target-card__content">
+              <h2 class="target-card__title">Bruiloften</h2>
+              <p class="target-card__desc">Stijlvolle settings voor de mooiste dag van uw leven, tot in de puntjes verzorgd.</p>
+              <span class="target-card__arrow">
+                Ontdek meer 
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+          <!-- Evenementen -->
+          <a href="/voor-wie/evenementen.html" class="target-card">
+            <div class="target-card__bg" style="background-image: url('/images/doelgroepen/evenementen-hero.jpg'); background-color: var(--color-black);"></div>
+            <div class="target-card__overlay"></div>
+            <div class="target-card__content">
+              <h2 class="target-card__title">Evenementen</h2>
+              <p class="target-card__desc">Schaalbare oplossingen voor festivals, publieksevenementen en grote producties.</p>
+              <span class="target-card__arrow">
+                Ontdek meer 
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section bg-light-gray">
+      <div class="container">
+        <div class="cta-block">
+          <div class="cta-block__content">
+            <h2 class="cta-block__title">Niet zeker wat u nodig heeft?</h2>
+            <p class="cta-block__text">Ons team staat klaar om u te adviseren over de beste oplossing voor uw specifieke situatie.</p>
+            <a href="/contact.html" class="btn btn--primary">Neem Contact Op</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-container"></div>
+
+  <!-- Scripts -->
+  <script src="/js/main.js" type="module"></script>
+  <script src="/js/pages/doelgroep.js" type="module"></script>
+  <script>
+    // Header & Footer Loading
+    fetch('/components/header.html')
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById('header-container').innerHTML = data;
+        import('/js/components/header.js').then(module => {
+          module.initHeader();
+        });
+      });
+
+    fetch('/components/footer.html')
+      .then(response => response.text())
+      .then(data => document.getElementById('footer-container').innerHTML = data);
+  </script>
+</body>
+</html>

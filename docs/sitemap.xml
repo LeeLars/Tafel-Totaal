@@ -716,6 +716,31 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://tafeltotaal.com/voor-wie/bedrijven.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tafeltotaal.com/voor-wie/bruiloften.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tafeltotaal.com/voor-wie/evenementen.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tafeltotaal.com/voor-wie/index.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tafeltotaal.com/voor-wie/particulieren.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tafeltotaal.com/winkelwagen.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
