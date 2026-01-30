@@ -2,16 +2,72 @@
    DOELGROEP PAGES - BRUTALIST CORPORATE STYLE
    ============================================ */
 
-/* Hero Section */
+/* Hero Section - Brutalist Grid */
 .doelgroep-hero {
-  position: relative;
-  min-height: 70vh;
-  display: flex;
-  align-items: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  min-height: 80vh;
   border-bottom: var(--border-width) solid var(--color-black);
+  background-color: var(--color-concrete);
+}
+
+.doelgroep-hero__content {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+}
+
+@media (min-width: 768px) {
+  .doelgroep-hero__content {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Left Content Block */
+.doelgroep-hero__left {
+  grid-column: 1 / -1;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: var(--space-4xl) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: var(--border-width) solid var(--color-black);
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .doelgroep-hero__left {
+    grid-column: 1 / 7;
+    padding: var(--space-5xl) var(--space-3xl);
+  }
+}
+
+/* Right Image Block */
+.doelgroep-hero__right {
+  grid-column: 1 / -1;
+  position: relative;
+  min-height: 400px;
+  overflow: hidden;
+  border-bottom: var(--border-width) solid var(--color-black);
+}
+
+@media (min-width: 768px) {
+  .doelgroep-hero__right {
+    grid-column: 7 / -1;
+    min-height: auto;
+    border-bottom: none;
+  }
+}
+
+.doelgroep-hero__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .doelgroep-hero__overlay {
@@ -20,25 +76,19 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(26, 26, 26, 0.85) 0%, rgba(144, 61, 62, 0.75) 100%);
+  background: linear-gradient(135deg, rgba(144, 61, 62, 0.3) 0%, rgba(26, 26, 26, 0.5) 100%);
   z-index: 1;
 }
 
-.doelgroep-hero__content {
-  position: relative;
-  z-index: 2;
-  color: var(--color-white);
-  max-width: 800px;
-}
-
+/* Breadcrumb */
 .breadcrumb {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-size: var(--font-size-sm);
-  margin-bottom: var(--space-lg);
+  font-size: var(--font-size-xs);
+  margin-bottom: var(--space-xl);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.1em;
   font-family: var(--font-body);
   font-weight: 500;
 }
@@ -46,38 +96,58 @@
 .breadcrumb a {
   color: var(--color-white);
   text-decoration: none;
-  transition: opacity 0.2s ease;
+  transition: color 0.2s ease;
 }
 
 .breadcrumb a:hover {
-  opacity: 0.7;
+  color: var(--color-primary-light);
 }
 
 .breadcrumb__separator {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
+/* Hero Title */
 .doelgroep-hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  line-height: 1.1;
-  margin-bottom: var(--space-md);
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 0.95;
+  margin-bottom: var(--space-lg);
   text-transform: uppercase;
   letter-spacing: -0.02em;
+  color: var(--color-white);
 }
 
+/* Hero Subtitle */
 .doelgroep-hero__subtitle {
-  font-size: clamp(1.125rem, 2vw, 1.5rem);
-  line-height: 1.5;
-  margin-bottom: var(--space-2xl);
-  opacity: 0.95;
-  max-width: 600px;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  margin-bottom: var(--space-3xl);
+  color: var(--color-light-gray);
+  max-width: 500px;
+  font-weight: 400;
 }
 
+/* Hero Actions */
 .doelgroep-hero__actions {
   display: flex;
   gap: var(--space-md);
   flex-wrap: wrap;
+}
+
+/* Tech Label */
+.doelgroep-hero__label {
+  position: absolute;
+  top: var(--space-xl);
+  right: var(--space-xl);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border: var(--border-width) solid var(--color-black);
 }
 
 /* USP Section */
