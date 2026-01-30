@@ -1,0 +1,160 @@
+/* ============================================
+   VOOR WIE SECTION - HOME PAGE
+   Brutalist Corporate Design System
+   ============================================ */
+
+.voor-wie-section {
+  padding: var(--space-6xl) 0;
+  background-color: var(--color-concrete);
+  border-top: var(--border-width) solid var(--color-black);
+  border-bottom: var(--border-width) solid var(--color-black);
+}
+
+.voor-wie-header {
+  text-align: center;
+  margin-bottom: var(--space-4xl);
+}
+
+.voor-wie-header .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-md);
+  line-height: 1.1;
+  color: var(--color-black);
+}
+
+.voor-wie-header .section-subtitle {
+  font-size: var(--font-size-lg);
+  color: var(--color-gray);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.voor-wie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-xl);
+}
+
+@media (min-width: 768px) {
+  .voor-wie-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .voor-wie-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Voor Wie Card */
+.voor-wie-card {
+  display: block;
+  background-color: var(--color-white);
+  border: var(--border-width) solid var(--color-black);
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+
+.voor-wie-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.voor-wie-card__image {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  border-bottom: var(--border-width) solid var(--color-black);
+}
+
+.voor-wie-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.voor-wie-card:hover .voor-wie-card__image img {
+  transform: scale(1.05);
+}
+
+.voor-wie-card__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(26, 26, 26, 0.3) 100%);
+  z-index: 1;
+}
+
+.voor-wie-card__content {
+  padding: var(--space-xl);
+  position: relative;
+}
+
+.voor-wie-card__title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-sm);
+  color: var(--color-black);
+  line-height: 1.2;
+}
+
+.voor-wie-card__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray);
+  line-height: 1.6;
+  margin-bottom: var(--space-md);
+}
+
+.voor-wie-card__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: var(--border-width) solid var(--color-black);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.voor-wie-card:hover .voor-wie-card__arrow {
+  background-color: var(--color-black);
+  transform: translateX(4px);
+}
+
+.voor-wie-card__arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .voor-wie-section {
+    padding: var(--space-4xl) 0;
+  }
+
+  .voor-wie-header {
+    margin-bottom: var(--space-3xl);
+  }
+
+  .voor-wie-card__image {
+    height: 200px;
+  }
+
+  .voor-wie-card__content {
+    padding: var(--space-lg);
+  }
+}
