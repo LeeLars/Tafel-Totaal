@@ -108,7 +108,7 @@ function createPackageCard(pkg) {
   
   return `
     <article class="package-card">
-      <a href="/pakket.html?id=${pkg.id}" class="package-card__link">
+      <a href="/pakket/?id=${pkg.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${imageUrl}" alt="${pkg.name}" loading="lazy">
           ${isFeatured ? `<span class="package-card__badge badge badge--primary">Populair</span>` : ''}

@@ -141,7 +141,7 @@ function injectJsonLd() {
 
     const title = currentCity.meta_title || `Tafelverhuur ${currentCity.name} | Tafel Totaal`;
     const description = currentCity.meta_description || `Professionele tafelverhuur in ${currentCity.name}.`;
-    const url = currentSlug ? `https://tafeltotaal.com/locaties/${encodeURIComponent(currentSlug)}.html` : 'https://tafeltotaal.com/locaties.html';
+    const url = currentSlug ? `https://tafeltotaal.com/locaties/${encodeURIComponent(currentSlug)}.html` : 'https://tafeltotaal.com/locaties/';
 
     const ld = {
       '@context': 'https://schema.org',

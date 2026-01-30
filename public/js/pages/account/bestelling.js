@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="account-card" style="text-align: center; padding: var(--space-2xl);">
           <h2>Je bent niet ingelogd</h2>
           <p style="margin: var(--space-md) 0;">Log in om je bestelling te bekijken.</p>
-          <a href="/login.html" class="btn btn--primary">Inloggen</a>
+          <a href="/login/" class="btn btn--primary">Inloggen</a>
         </div>
       `;
     }

@@ -50,7 +50,7 @@ async function checkAlreadyLoggedIn() {
     const response = await authAPI.me();
     if (response.success && response.data) {
       // API confirms logged in, safe to redirect
-      const redirectTo = returnUrl || '/account/overzicht.html';
+      const redirectTo = returnUrl || '/account/overzicht/';
       window.location.href = redirectTo;
       return;
     }
@@ -131,7 +131,7 @@ function initLoginForm() {
           if (response.data?.role === 'admin') {
             redirectUrl = '/admin/index.html';
           } else {
-            redirectUrl = '/account/overzicht.html';
+            redirectUrl = '/account/overzicht/';
           }
         }
         

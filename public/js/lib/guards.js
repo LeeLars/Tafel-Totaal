@@ -62,7 +62,7 @@ export async function requireAuth(returnUrl = window.location.pathname + window.
   if (!user && autoRedirect) {
     const encodedReturn = encodeURIComponent(returnUrl);
     const base = getSiteBasePath();
-    window.location.href = `${base}/login.html?returnUrl=${encodedReturn}`;
+    window.location.href = `${base}/login/?returnUrl=${encodedReturn}`;
     return null;
   }
   
@@ -79,7 +79,7 @@ export async function requireAdmin(redirectUrl = '/') {
   if (!user) {
     const encodedReturn = encodeURIComponent(window.location.pathname);
     const base = getSiteBasePath();
-    window.location.href = `${base}/login.html?returnUrl=${encodedReturn}`;
+    window.location.href = `${base}/login/?returnUrl=${encodedReturn}`;
     return null;
   }
   

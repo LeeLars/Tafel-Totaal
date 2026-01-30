@@ -519,7 +519,7 @@ function createProductCard(product) {
   
   return `
     <article class="package-card">
-      <a href="/product.html?id=${product.id}" class="package-card__link">
+      <a href="/product/?id=${product.id}" class="package-card__link">
         <div class="package-card__image">
           <img src="${imageUrl}" 
                alt="${product.name}" 
