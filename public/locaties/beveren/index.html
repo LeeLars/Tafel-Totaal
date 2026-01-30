@@ -275,6 +275,12 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.</p>
 
   <!-- Scripts -->
   <script type="module">
+    import { loadLocationProducts } from '/js/lib/location-products.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLocationProducts(4);
+    });
+  </script>
+  <script type="module">
     import { formatPrice } from '/js/lib/utils.js';
     
     // Load header, footer and CTA components
@@ -327,48 +333,6 @@ Ja, wij hebben kindvriendelijk servies en plastic bekers beschikbaar.</p>
     // Initialize on page load
     loadLocationComponents();
     
-    // Load featured products
-    async function loadProducts() {
-      try {
-        const API_BASE = window.location.hostname.includes('github.io')
-          ? 'https://tafel-totaal-production.up.railway.app'
-          : 'http://localhost:3000';
-        
-        const response = await fetch(`${API_BASE}/api/products?limit=4`);
-        const data = await response.json();
-        
-        if (data.success && data.data) {
-          renderProducts(data.data);
-        }
-      } catch (error) {
-        console.error('Error loading products:', error);
-      }
-    }
-    
-    function renderProducts(products) {
-      const grid = document.getElementById('products-grid');
-      if (!grid || !products.length) return;
-      
-      grid.innerHTML = products.map((product, i) => `
-        <article class="product-card" data-animate="scale" style="animation-delay: ${i * 0.1}s;">
-          <a href="/product.html?id=${product.id}" class="product-link">
-            <div class="product-image">
-              <img src="${product.images?.[0] || '/images/products/placeholder.jpg'}" 
-                   alt="${product.name}" 
-                   loading="lazy">
-            </div>
-            <div class="product-info">
-              <span class="product-category">${product.category_name || 'Product'}</span>
-              <h3 class="product-title">${product.name}</h3>
-              <p class="product-price">${formatPrice(product.price_per_day)} <span>/dag</span></p>
-            </div>
-          </a>
-        </article>
-      `).join('');
-    }
-    
-    // Initialize
-    loadProducts();
     
     // Load sub-municipalities for this location
     async function loadSubMunicipalities() {

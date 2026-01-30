@@ -119,6 +119,12 @@
   <div id="footer-container"></div>
 
   <!-- Scripts -->
+  <script type="module">
+    import { loadLocationProducts } from '/js/lib/location-products.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLocationProducts(4);
+    });
+  </script>
   <script type="module" src="/js/pages/locaties.js"></script>
 </body>
 </html>

@@ -227,6 +227,12 @@
 
   <!-- Scripts -->
   <script type="module">
+    import { loadLocationProducts } from '/js/lib/location-products.js';
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLocationProducts(4);
+    });
+  </script>
+  <script type="module">
     import { formatPrice } from '/js/lib/utils.js';
     
     async function loadLocationComponents() {
