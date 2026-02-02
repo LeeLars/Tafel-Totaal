@@ -7,7 +7,7 @@ import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
 import { initCSVUpload, initBulkActions, handleCheckboxChange, updateBulkToolbar } from './products-csv-bulk.js';
 import { initImageUpload, setCurrentImages, getCurrentImages, clearImages } from './product-images.js';
-import { initComponentManagement, getCurrentComponents, clearComponents, saveComponents } from './product-components.js';
+import { initComponentManagement, getCurrentComponents, clearComponents, saveComponents } from './product-components.js?v=20260202';
 
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3000' 
