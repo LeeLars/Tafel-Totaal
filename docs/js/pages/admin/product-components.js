@@ -280,10 +280,20 @@ window.selectComponent = function(productId, name, sku, stockTotal) {
 
   renderComponents();
   
-  // Close modal
-  document.querySelector('.modal')?.remove();
+  // Reset quantity input to 1
+  if (quantityInput) {
+    quantityInput.value = '1';
+  }
   
-  showToast('Component toegevoegd', 'success');
+  // Clear search input
+  const searchInput = document.getElementById('component-search');
+  if (searchInput) {
+    searchInput.value = '';
+    // Trigger search to show "type 2 chars" message
+    window.filterComponentProducts('');
+  }
+  
+  showToast('Component toegevoegd - voeg er nog een toe of sluit de modal', 'success');
 };
 
 /**
