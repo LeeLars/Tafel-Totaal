@@ -12,14 +12,18 @@ const API_BASE_URL = window.location.hostname === 'localhost' || window.location
 let currentComponents = [];
 let availableProducts = [];
 
+let isInitialized = false;
+
 /**
  * Initialize component management
  */
 export async function initComponentManagement(productId) {
   const addBtn = document.getElementById('add-component-btn');
   
-  if (addBtn) {
+  // Only add event listener once
+  if (addBtn && !isInitialized) {
     addBtn.addEventListener('click', () => openComponentSelector());
+    isInitialized = true;
   }
 
   // Load available products for selection
@@ -29,6 +33,7 @@ export async function initComponentManagement(productId) {
   if (productId) {
     await loadProductComponents(productId);
   } else {
+    currentComponents = [];
     renderComponents();
   }
 }
