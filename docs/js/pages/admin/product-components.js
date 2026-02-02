@@ -351,7 +351,8 @@ export async function saveComponents(productId) {
 
     // Add or update components
     for (const component of currentComponents) {
-      await fetch(`${API_BASE_URL}/api/product-components/${productId}/components`, {
+      console.log('Saving component:', component);
+      const response = await fetch(`${API_BASE_URL}/api/product-components/${productId}/components`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -360,9 +361,17 @@ export async function saveComponents(productId) {
           quantity: component.quantity
         })
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Failed to save component:', errorData);
+        throw new Error(`Failed to save component: ${errorData.error || response.statusText}`);
+      }
+      
+      console.log('Component saved:', component.name);
     }
 
-    console.log('Components saved successfully');
+    console.log('All components saved successfully');
   } catch (error) {
     console.error('Error saving components:', error);
     throw error;
