@@ -48,11 +48,25 @@ async function loadAvailableProducts() {
     });
     
     if (response.ok) {
-      const data = await response.json();
-      availableProducts = data.data || [];
+      const result = await response.json();
+      console.log('Products API response:', result);
+      
+      // Handle both paginated and direct array responses
+      if (result.data) {
+        availableProducts = Array.isArray(result.data) ? result.data : (result.data.products || []);
+      } else if (Array.isArray(result)) {
+        availableProducts = result;
+      } else {
+        availableProducts = [];
+      }
+      
+      console.log('Loaded products for components:', availableProducts.length);
+    } else {
+      console.error('Failed to load products:', response.status);
     }
   } catch (error) {
     console.error('Error loading products:', error);
+    availableProducts = [];
   }
 }
 
@@ -228,12 +242,17 @@ window.filterComponentProducts = function(searchTerm) {
     return;
   }
 
+  console.log('Searching for:', searchTerm);
+  console.log('Available products:', availableProducts.length);
+
   const searchLower = searchTerm.toLowerCase();
-  const filtered = availableProducts.filter(p => 
-    p.name.toLowerCase().includes(searchLower) ||
-    (p.sku && p.sku.toLowerCase().includes(searchLower))
-  );
+  const filtered = availableProducts.filter(p => {
+    const nameMatch = p.name && p.name.toLowerCase().includes(searchLower);
+    const skuMatch = p.sku && p.sku.toLowerCase().includes(searchLower);
+    return nameMatch || skuMatch;
+  });
   
+  console.log('Filtered results:', filtered.length);
   list.innerHTML = renderProductsList(filtered);
 };
 
