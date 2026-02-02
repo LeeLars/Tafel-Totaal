@@ -43,7 +43,7 @@ export async function initComponentManagement(productId) {
  */
 async function loadAvailableProducts() {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/admin/products?limit=1000`, {
+    const response = await fetch(`${API_BASE_URL}/api/admin/products?limit=100&page=1`, {
       credentials: 'include'
     });
     
