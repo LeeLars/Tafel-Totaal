@@ -129,7 +129,16 @@ function renderImagePreviews() {
   if (!grid) return;
 
   grid.innerHTML = currentImages.map((url, index) => `
-    <div class="image-preview-item ${index === 0 ? 'image-preview-item--primary' : ''}" data-index="${index}">
+    <div class="image-preview-item ${index === 0 ? 'image-preview-item--primary' : ''}" 
+         data-index="${index}" 
+         draggable="true">
+      <div class="image-preview-item__drag-handle" title="Sleep om te verplaatsen">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="16" y2="6"></line>
+          <line x1="8" y1="12" x2="16" y2="12"></line>
+          <line x1="8" y1="18" x2="16" y2="18"></line>
+        </svg>
+      </div>
       <img src="${url}" alt="Product afbeelding ${index + 1}">
       <button type="button" class="image-preview-item__remove" data-index="${index}" title="Verwijderen">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -149,6 +158,9 @@ function renderImagePreviews() {
       removeImage(index);
     });
   });
+
+  // Add drag and drop handlers
+  initDragAndDrop();
 }
 
 /**
@@ -180,4 +192,67 @@ export function getCurrentImages() {
 export function clearImages() {
   currentImages = [];
   renderImagePreviews();
+}
+
+/**
+ * Initialize drag and drop for image reordering
+ */
+let draggedIndex = null;
+
+function initDragAndDrop() {
+  const items = document.querySelectorAll('.image-preview-item');
+  
+  items.forEach((item, index) => {
+    item.addEventListener('dragstart', (e) => {
+      draggedIndex = index;
+      item.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+
+    item.addEventListener('dragend', (e) => {
+      item.classList.remove('dragging');
+      draggedIndex = null;
+    });
+
+    item.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      
+      const afterElement = getDragAfterElement(item.parentElement, e.clientY);
+      const draggingElement = document.querySelector('.dragging');
+      
+      if (afterElement == null) {
+        item.parentElement.appendChild(draggingElement);
+      } else {
+        item.parentElement.insertBefore(draggingElement, afterElement);
+      }
+    });
+
+    item.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const dropIndex = parseInt(item.dataset.index);
+      
+      if (draggedIndex !== null && draggedIndex !== dropIndex) {
+        // Reorder the images array
+        const [movedImage] = currentImages.splice(draggedIndex, 1);
+        currentImages.splice(dropIndex, 0, movedImage);
+        renderImagePreviews();
+      }
+    });
+  });
+}
+
+function getDragAfterElement(container, y) {
+  const draggableElements = [...container.querySelectorAll('.image-preview-item:not(.dragging)')];
+  
+  return draggableElements.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    
+    if (offset < 0 && offset > closest.offset) {
+      return { offset: offset, element: child };
+    } else {
+      return closest;
+    }
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
 }

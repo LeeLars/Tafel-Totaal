@@ -149,11 +149,27 @@ function renderTagCheckboxes() {
     if (!container || !group.tags) return;
     
     container.innerHTML = group.tags.map(tag => `
-      <label style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--color-light-gray); cursor: pointer; font-size: var(--font-size-sm);">
-        <input type="checkbox" class="tag-checkbox" value="${tag.id}" data-slug="${tag.slug}">
+      <label style="display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--color-light-gray); cursor: pointer; font-size: var(--font-size-sm); user-select: none; transition: all 0.2s ease;">
+        <input type="checkbox" class="tag-checkbox" value="${tag.id}" data-slug="${tag.slug}" style="cursor: pointer;">
         ${tag.name}
       </label>
     `).join('');
+    
+    // Add visual feedback on checkbox change
+    container.querySelectorAll('.tag-checkbox').forEach(checkbox => {
+      checkbox.addEventListener('change', (e) => {
+        const label = e.target.closest('label');
+        if (e.target.checked) {
+          label.style.background = 'var(--color-primary-light)';
+          label.style.borderColor = 'var(--color-primary)';
+          label.style.color = 'var(--color-white)';
+        } else {
+          label.style.background = '';
+          label.style.borderColor = 'var(--color-light-gray)';
+          label.style.color = '';
+        }
+      });
+    });
   });
 }
 
@@ -163,15 +179,29 @@ function renderTagCheckboxes() {
 function setSelectedTags(productTags) {
   selectedTags = productTags.map(t => t.id);
   
-  // Uncheck all first
+  // Uncheck all first and reset styling
   document.querySelectorAll('.tag-checkbox').forEach(cb => {
     cb.checked = false;
+    const label = cb.closest('label');
+    if (label) {
+      label.style.background = '';
+      label.style.borderColor = 'var(--color-light-gray)';
+      label.style.color = '';
+    }
   });
   
-  // Check the ones that are selected
+  // Check the ones that are selected and apply styling
   productTags.forEach(tag => {
     const checkbox = document.querySelector(`.tag-checkbox[value="${tag.id}"]`);
-    if (checkbox) checkbox.checked = true;
+    if (checkbox) {
+      checkbox.checked = true;
+      const label = checkbox.closest('label');
+      if (label) {
+        label.style.background = 'var(--color-primary-light)';
+        label.style.borderColor = 'var(--color-primary)';
+        label.style.color = 'var(--color-white)';
+      }
+    }
   });
 }
 
@@ -537,6 +567,12 @@ async function saveProduct() {
       // Create new product
       const result = await adminAPI.createProduct(data);
       productId = result.data?.id;
+      
+      if (!productId) {
+        throw new Error('Product ID not returned from server');
+      }
+      
+      console.log('Product created with ID:', productId);
       showToast('Product aangemaakt', 'success');
     } else {
       // Update existing product
@@ -546,16 +582,39 @@ async function saveProduct() {
     
     // Save tags for the product
     const tagIds = getSelectedTagIds();
-    if (productId) {
+    console.log('Saving tags for product:', productId, 'Tags:', tagIds);
+    
+    if (productId && tagIds.length > 0) {
       try {
-        await fetch(`${API_BASE_URL}/api/tags/product/${productId}`, {
+        const tagResponse = await fetch(`${API_BASE_URL}/api/tags/product/${productId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify({ tag_ids: tagIds })
         });
+        
+        if (!tagResponse.ok) {
+          const errorData = await tagResponse.json();
+          console.error('Tag save failed:', errorData);
+          showToast('Product opgeslagen maar tags niet: ' + (errorData.error || 'Onbekende fout'), 'error');
+        } else {
+          console.log('Tags saved successfully');
+        }
       } catch (tagError) {
         console.error('Error saving tags:', tagError);
+        showToast('Product opgeslagen maar tags niet', 'error');
+      }
+    } else if (productId) {
+      // Clear all tags if none selected
+      try {
+        await fetch(`${API_BASE_URL}/api/tags/product/${productId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ tag_ids: [] })
+        });
+      } catch (tagError) {
+        console.error('Error clearing tags:', tagError);
       }
     }
     

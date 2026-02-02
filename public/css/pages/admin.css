@@ -1824,3 +1824,37 @@
   font-family: var(--font-mono);
   text-transform: uppercase;
 }
+
+.image-preview-item__drag-handle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 2;
+}
+
+.image-preview-item:hover .image-preview-item__drag-handle {
+  opacity: 1;
+}
+
+.image-preview-item__drag-handle:active {
+  cursor: grabbing;
+}
+
+.image-preview-item.dragging {
+  opacity: 0.5;
+  cursor: grabbing;
+}
+
+.image-preview-item[draggable="true"] {
+  cursor: grab;
+}
