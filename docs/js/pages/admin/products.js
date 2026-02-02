@@ -479,7 +479,7 @@ function createProductRow(product) {
 /**
  * Open edit modal
  */
-function openEditModal(product) {
+async function openEditModal(product) {
   console.log('openEditModal called with product:', product);
   editingProduct = product;
   
@@ -513,8 +513,23 @@ function openEditModal(product) {
   // Load existing images
   setCurrentImages(product.images || []);
   
-  // Set product tags
-  setSelectedTags(product.tags || []);
+  // Fetch and set product tags from API
+  try {
+    const tagResponse = await fetch(`${API_BASE_URL}/api/tags/product/${product.id}`, {
+      credentials: 'include'
+    });
+    if (tagResponse.ok) {
+      const tagData = await tagResponse.json();
+      console.log('Loaded tags for product:', tagData.data);
+      setSelectedTags(tagData.data || []);
+    } else {
+      console.error('Failed to load product tags');
+      setSelectedTags([]);
+    }
+  } catch (error) {
+    console.error('Error loading product tags:', error);
+    setSelectedTags([]);
+  }
   
   const modal = document.getElementById('edit-modal');
   if (modal) {
