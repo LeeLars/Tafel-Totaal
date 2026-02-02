@@ -37,7 +37,7 @@ const getProductsValidation = [
   query('category_id').optional().isUUID(),
   query('is_active').optional().isBoolean(),
   query('page').optional().isInt({ min: 1 }),
-  query('limit').optional().isInt({ min: 1, max: 100 }),
+  query('limit').optional().isInt({ min: 1, max: 1000 }),
 ];
 
 const updateProductValidation = [
