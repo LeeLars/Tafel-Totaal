@@ -385,12 +385,25 @@ async function loadProducts() {
     tbody.innerHTML = allProducts.map(product => createProductRow(product)).join('');
     renderPagination(pagination);
     
+    // Add row click handlers for quick editing
+    const productRows = tbody.querySelectorAll('.product-row');
+    productRows.forEach(row => {
+      row.addEventListener('click', async () => {
+        const productId = row.dataset.id;
+        const product = allProducts.find(p => p.id === productId);
+        if (product) {
+          isNewProduct = false;
+          await openEditModal(product);
+        }
+      });
+    });
+    
     // Add edit button handlers
     const editButtons = tbody.querySelectorAll('.edit-btn');
     console.log('Found edit buttons:', editButtons.length);
     
     editButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', async (e) => {
         e.preventDefault();
         e.stopPropagation();
         console.log('Edit button clicked, product ID:', btn.dataset.id);
@@ -399,7 +412,7 @@ async function loadProducts() {
         console.log('Found product:', product);
         if (product) {
           isNewProduct = false;
-          openEditModal(product);
+          await openEditModal(product);
         } else {
           console.error('Product not found in allProducts array');
         }
@@ -436,8 +449,8 @@ function createProductRow(product) {
   const hasImage = product.images && product.images.length > 0;
   
   return `
-    <tr>
-      <td>
+    <tr class="product-row" data-id="${product.id}" style="cursor: pointer;">
+      <td onclick="event.stopPropagation()">
         <input type="checkbox" class="product-checkbox" data-id="${product.id}" style="cursor: pointer;">
       </td>
       <td>
@@ -469,7 +482,7 @@ function createProductRow(product) {
           ${product.is_active ? 'Actief' : 'Inactief'}
         </span>
       </td>
-      <td>
+      <td onclick="event.stopPropagation()">
         <button class="btn btn--ghost btn--sm edit-btn" data-id="${product.id}">Bewerken</button>
       </td>
     </tr>
@@ -633,11 +646,12 @@ async function saveProduct() {
       }
     }
     
-    document.getElementById('edit-modal').classList.remove('active');
-    editingProduct = null;
-    isNewProduct = false;
-    clearImages();
+    // Reload products list to show updated data
     await loadProducts();
+    
+    // Don't close modal - keep it open for faster workflow
+    // User can close manually or click on another product
+    showToast('Opgeslagen - klik op een ander product of sluit de modal', 'success');
   } catch (error) {
     console.error('Error saving product:', error);
     showToast(isNewProduct ? 'Kon product niet aanmaken' : 'Kon product niet bijwerken', 'error');
