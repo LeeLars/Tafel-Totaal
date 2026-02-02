@@ -133,12 +133,18 @@ function renderComponents() {
 /**
  * Open component selector modal
  */
-function openComponentSelector() {
+async function openComponentSelector() {
+  // Ensure products are loaded
+  if (availableProducts.length === 0) {
+    await loadAvailableProducts();
+  }
+
   // Create a simple modal for selecting a product
   const modal = document.createElement('div');
   modal.className = 'modal active';
+  modal.id = 'component-selector-modal';
   modal.innerHTML = `
-    <div class="modal__backdrop"></div>
+    <div class="modal__backdrop" onclick="this.closest('.modal').remove()"></div>
     <div class="modal__content" style="max-width: 600px;">
       <div class="modal__header">
         <h2>Component Toevoegen</h2>
@@ -151,12 +157,12 @@ function openComponentSelector() {
       </div>
       <div class="modal__body">
         <div class="form-group">
-          <label class="form-label">Zoek product</label>
+          <label class="form-label">Zoek product (min. 2 tekens)</label>
           <input 
             type="text" 
             id="component-search" 
             class="form-input" 
-            placeholder="Zoek op naam of SKU..."
+            placeholder="Typ om te zoeken..."
             oninput="window.filterComponentProducts(this.value)"
           >
         </div>
@@ -171,7 +177,7 @@ function openComponentSelector() {
           >
         </div>
         <div id="component-products-list" style="max-height: 300px; overflow-y: auto; border: 1px solid var(--color-light-gray); margin-top: var(--space-md);">
-          ${renderProductsList(availableProducts)}
+          <div style="padding: var(--space-lg); text-align: center; color: var(--color-gray);">Typ minimaal 2 tekens om te zoeken...</div>
         </div>
       </div>
     </div>
@@ -213,15 +219,22 @@ function renderProductsList(products) {
  * Filter products in selector
  */
 window.filterComponentProducts = function(searchTerm) {
+  const list = document.getElementById('component-products-list');
+  if (!list) return;
+
+  // Require at least 2 characters
+  if (searchTerm.length < 2) {
+    list.innerHTML = '<div style="padding: var(--space-lg); text-align: center; color: var(--color-gray);">Typ minimaal 2 tekens om te zoeken...</div>';
+    return;
+  }
+
+  const searchLower = searchTerm.toLowerCase();
   const filtered = availableProducts.filter(p => 
-    p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.sku.toLowerCase().includes(searchTerm.toLowerCase())
+    p.name.toLowerCase().includes(searchLower) ||
+    (p.sku && p.sku.toLowerCase().includes(searchLower))
   );
   
-  const list = document.getElementById('component-products-list');
-  if (list) {
-    list.innerHTML = renderProductsList(filtered);
-  }
+  list.innerHTML = renderProductsList(filtered);
 };
 
 /**
