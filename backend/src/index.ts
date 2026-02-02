@@ -21,6 +21,7 @@ import bezorgzonesRoutes from './routes/bezorgzones.routes';
 import uploadRoutes from './routes/upload.routes';
 import loyaltyRoutes from './routes/loyalty.routes';
 import tagsRoutes from './routes/tags.routes';
+import productComponentsRoutes from './routes/productComponents.routes';
 
 const app: Express = express();
 
@@ -106,6 +107,7 @@ app.use('/api/bezorgzones', bezorgzonesRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/loyalty', loyaltyRoutes);
 app.use('/api/tags', tagsRoutes);
+app.use('/api/product-components', productComponentsRoutes);
 
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ success: false, error: 'Endpoint not found' });

@@ -7,6 +7,7 @@ import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
 import { initCSVUpload, initBulkActions, handleCheckboxChange, updateBulkToolbar } from './products-csv-bulk.js';
 import { initImageUpload, setCurrentImages, getCurrentImages, clearImages } from './product-images.js';
+import { initComponentManagement, getCurrentComponents, clearComponents, saveComponents } from './product-components.js';
 
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3000' 
@@ -298,7 +299,7 @@ function initModal() {
 /**
  * Open modal for new product
  */
-function openNewProductModal() {
+async function openNewProductModal() {
   console.log('openNewProductModal called');
   editingProduct = null;
   
@@ -327,6 +328,10 @@ function openNewProductModal() {
   
   // Clear tags
   setSelectedTags([]);
+
+  // Clear components
+  clearComponents();
+  await initComponentManagement(null);
   
   const modal = document.getElementById('edit-modal');
   if (modal) {
@@ -543,6 +548,9 @@ async function openEditModal(product) {
     console.error('Error loading product tags:', error);
     setSelectedTags([]);
   }
+
+  // Initialize component management for this product
+  await initComponentManagement(product.id);
   
   const modal = document.getElementById('edit-modal');
   if (modal) {
@@ -643,6 +651,17 @@ async function saveProduct() {
         });
       } catch (tagError) {
         console.error('Error clearing tags:', tagError);
+      }
+    }
+
+    // Save components for the product
+    if (productId) {
+      try {
+        await saveComponents(productId);
+        console.log('Components saved successfully');
+      } catch (componentError) {
+        console.error('Error saving components:', componentError);
+        showToast('Product opgeslagen maar componenten niet', 'error');
       }
     }
     
