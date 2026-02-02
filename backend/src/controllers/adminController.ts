@@ -557,6 +557,43 @@ export async function getProductById(req: Request, res: Response): Promise<void>
   }
 }
 
+export async function createProduct(req: Request, res: Response): Promise<void> {
+  try {
+    const { name, sku, description, category_id, subcategory_id, price_per_day, damage_compensation_per_item, stock_total, stock_buffer, turnaround_days, images, is_active } = req.body;
+
+    // Generate slug from name
+    const slug = name.toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .trim();
+
+    // Generate SKU if not provided
+    const productSku = sku || `PROD-${Date.now()}`;
+
+    const product = await ProductModel.create({
+      sku: productSku,
+      name,
+      slug,
+      description,
+      category_id,
+      subcategory_id,
+      price_per_day: price_per_day || 0,
+      damage_compensation_per_item: damage_compensation_per_item || 0,
+      stock_total: stock_total || 0,
+      stock_buffer: stock_buffer || 5,
+      turnaround_days: turnaround_days || 1,
+      images: images || [],
+      is_active: is_active !== false
+    });
+
+    res.status(201).json({ success: true, data: product });
+  } catch (error) {
+    console.error('Create product error:', error);
+    res.status(500).json({ success: false, error: 'Failed to create product' });
+  }
+}
+
 export async function updateProduct(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;

@@ -78,6 +78,7 @@ router.patch('/orders/:id/items/:itemId/pick', adminController.updateItemPicked)
 // Products
 router.get('/products', validate(getProductsValidation), adminController.getAllProducts);
 router.get('/products/:id', adminController.getProductById);
+router.post('/products', adminController.createProduct);
 router.patch('/products/:id', validate(updateProductValidation), adminController.updateProduct);
 
 // Customers

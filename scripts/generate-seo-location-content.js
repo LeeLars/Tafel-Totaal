@@ -418,7 +418,7 @@ function generateFullPageHTML(city) {
     <section class="products-section">
       <div class="section-header">
         <h2>Populair in ${city.name}</h2>
-        <a href="/Tafel-Totaal/producten.html" class="btn-link">Bekijk Alles →</a>
+        <a href="/Tafel-Totaal/producten/" class="btn-link">Bekijk Alles →</a>
       </div>
       
       <div id="products-grid" class="products-grid">

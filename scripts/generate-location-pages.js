@@ -275,7 +275,7 @@ function generateLocationPage(city) {
           </p>
           <div data-animate="fade-up" class="delay-2" style="display: flex; gap: var(--space-md); justify-content: center; flex-wrap: wrap;">
             <a href="/Tafel-Totaal/pakketten.html" class="btn btn--primary btn--xl">Bekijk Pakketten</a>
-            <a href="/Tafel-Totaal/producten.html" class="btn btn--secondary btn--xl">Losse Producten</a>
+            <a href="/Tafel-Totaal/producten/" class="btn btn--secondary btn--xl">Losse Producten</a>
           </div>
         </div>
       </div>
@@ -376,7 +376,7 @@ function generateLocationPage(city) {
         </div>
         
         <div style="text-align: center; margin-top: var(--space-3xl);">
-          <a href="/Tafel-Totaal/producten.html" class="btn btn--primary btn--lg">Bekijk Alle Producten</a>
+          <a href="/Tafel-Totaal/producten/" class="btn btn--primary btn--lg">Bekijk Alle Producten</a>
         </div>
       </div>
     </section>
