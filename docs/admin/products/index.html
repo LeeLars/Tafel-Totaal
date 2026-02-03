@@ -162,7 +162,7 @@
                 CSV Uploaden
               </button>
               <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
-              <button class="btn btn--ghost" id="csv-export-btn">
+              <button class="btn btn--ghost" id="csv-export-btn" onclick="window.exportCSV && window.exportCSV()">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                   <polyline points="7 10 12 15 17 10"></polyline>
@@ -384,6 +384,6 @@
   <div class="toast-container"></div>
 
   <!-- Scripts -->
-  <script type="module" src="/js/pages/admin/products.js?v=20260202"></script>
+  <script type="module" src="/js/pages/admin/products.js?v=20260203"></script>
 </body>
 </html>

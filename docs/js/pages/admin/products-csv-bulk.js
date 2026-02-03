@@ -38,11 +38,18 @@ export function initCSVUpload() {
   }
   
   if (exportBtn) {
+    console.log('[CSV] Export button found, attaching listener');
     exportBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      e.stopPropagation();
       handleCSVExport();
     });
+  } else {
+    console.warn('[CSV] Export button not found!');
   }
+  
+  // Also attach to window for inline onclick fallback
+  window.exportCSV = handleCSVExport;
   
   if (templateLink) {
     templateLink.href = false
@@ -227,6 +234,7 @@ async function importCSVProducts(products, mode) {
  * Handle CSV export
  */
 async function handleCSVExport() {
+  console.log('[CSV Export] Starting export...');
   try {
     showToast('CSV wordt voorbereid...', 'info');
     

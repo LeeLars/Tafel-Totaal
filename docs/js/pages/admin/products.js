@@ -5,7 +5,7 @@
 import { adminAPI } from '../../lib/api.js';
 import { formatPrice, showToast } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
-import { initCSVUpload, initBulkActions, handleCheckboxChange, updateBulkToolbar } from './products-csv-bulk.js';
+import { initCSVUpload, initBulkActions, handleCheckboxChange, updateBulkToolbar } from './products-csv-bulk.js?v=20260203';
 import { initImageUpload, setCurrentImages, getCurrentImages, clearImages } from './product-images.js';
 import { initComponentManagement, getCurrentComponents, clearComponents, saveComponents } from './product-components.js?v=20260202';
 
