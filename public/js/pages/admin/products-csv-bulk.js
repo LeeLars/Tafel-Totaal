@@ -341,14 +341,7 @@ async function bulkDelete() {
   const productIds = Array.from(selectedProducts);
   
   try {
-    const response = await fetch(`${API_BASE_URL}/api/admin/products/bulk/delete`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ productIds })
-    });
-    
-    const result = await response.json();
+    const result = await adminAPI.bulkDeleteProducts(productIds);
     
     if (result.success) {
       showToast(`${productIds.length} producten verwijderd`, 'success');
@@ -358,7 +351,7 @@ async function bulkDelete() {
     }
   } catch (error) {
     console.error('Bulk delete error:', error);
-    showToast('Bulk delete mislukt', 'error');
+    showToast(error.message || 'Bulk delete mislukt', 'error');
   }
 }
 

@@ -259,6 +259,12 @@ export const adminAPI = {
       body: JSON.stringify(data)
     }),
   
+  bulkDeleteProducts: (productIds) =>
+    apiCall('/api/admin/products/bulk/delete', {
+      method: 'POST',
+      body: JSON.stringify({ productIds })
+    }),
+  
   // Packages
   getPackages: (filters = {}) => {
     const params = new URLSearchParams(filters).toString();
