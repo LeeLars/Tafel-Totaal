@@ -236,27 +236,23 @@ async function importCSVProducts(products, mode) {
 async function handleCSVExport() {
   console.log('[CSV Export] Starting export...');
   
-  // Get auth token
+  // Get auth token from localStorage (fallback for cross-origin)
   const token = localStorage.getItem('authToken');
   console.log('[CSV Export] Token present:', !!token, 'Length:', token?.length || 0);
-  
-  if (!token) {
-    showToast('Je bent niet ingelogd. Log eerst in.', 'error');
-    setTimeout(() => {
-      window.location.href = '/login/?redirect=' + encodeURIComponent(window.location.pathname);
-    }, 1500);
-    return;
-  }
   
   try {
     showToast('CSV wordt voorbereid...', 'info');
     
+    // Build headers - always include token if available
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    
     const response = await fetch(`${API_BASE_URL}/api/admin/products/csv/export?format=labels`, {
       method: 'GET',
-      credentials: 'include',
-      headers: {
-        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-      }
+      credentials: 'include', // This sends cookies (auth_token)
+      headers
     });
     
     if (!response.ok) {
