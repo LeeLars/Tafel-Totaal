@@ -157,12 +157,21 @@ async function openComponentSelector() {
   const modal = document.createElement('div');
   modal.className = 'modal active';
   modal.id = 'component-selector-modal';
+  modal.style.zIndex = '10001'; // Higher than product modal (10000)
   modal.innerHTML = `
-    <div class="modal__backdrop" onclick="this.closest('.modal').remove()"></div>
+    <div class="modal__backdrop"></div>
     <div class="modal__content" style="max-width: 600px;">
       <div class="modal__header">
-        <h2>Component Toevoegen</h2>
-        <button type="button" class="modal__close" onclick="this.closest('.modal').remove()">
+        <div style="flex: 1;">
+          <h2>Component Toevoegen</h2>
+          <p id="component-counter" style="font-size: var(--font-size-sm); color: var(--color-gray); margin: 4px 0 0 0;">
+            ${currentComponents.length} component${currentComponents.length !== 1 ? 'en' : ''} toegevoegd
+          </p>
+        </div>
+        <button type="button" class="btn btn--primary btn--sm" id="component-done-btn" style="margin-right: var(--space-sm);">
+          Klaar
+        </button>
+        <button type="button" class="modal__close" id="component-close-btn">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -177,7 +186,6 @@ async function openComponentSelector() {
             id="component-search" 
             class="form-input" 
             placeholder="Typ om te zoeken..."
-            oninput="window.filterComponentProducts(this.value)"
           >
         </div>
         <div class="form-group">
@@ -199,9 +207,38 @@ async function openComponentSelector() {
   
   document.body.appendChild(modal);
   
+  // Setup event listeners with proper event handling
+  const backdrop = modal.querySelector('.modal__backdrop');
+  const modalContent = modal.querySelector('.modal__content');
+  const closeBtn = modal.querySelector('#component-close-btn');
+  const doneBtn = modal.querySelector('#component-done-btn');
+  const searchInput = modal.querySelector('#component-search');
+  
+  // Prevent clicks inside modal content from closing the modal
+  modalContent?.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+  
+  // Close modal handlers
+  const closeModal = () => {
+    modal.remove();
+  };
+  
+  backdrop?.addEventListener('click', closeModal);
+  closeBtn?.addEventListener('click', closeModal);
+  doneBtn?.addEventListener('click', closeModal);
+  
+  // Search input handler
+  searchInput?.addEventListener('input', (e) => {
+    filterComponentProducts(e.target.value);
+  });
+  
+  // Setup product selection handlers (event delegation)
+  setupProductSelectionHandlers();
+  
   // Focus search input
   setTimeout(() => {
-    document.getElementById('component-search')?.focus();
+    searchInput?.focus();
   }, 100);
 }
 
@@ -213,26 +250,31 @@ function renderProductsList(products) {
     return '<div style="padding: var(--space-lg); text-align: center; color: var(--color-gray);">Geen producten gevonden</div>';
   }
 
-  return products.map(product => `
-    <div 
-      class="product-select-item" 
-      onclick="window.selectComponent('${product.id}', '${product.name}', '${product.sku}', ${product.stock_total})"
-      style="padding: var(--space-md); border-bottom: 1px solid var(--color-light-gray); cursor: pointer; transition: background 0.2s;"
-      onmouseover="this.style.background='var(--color-concrete)'"
-      onmouseout="this.style.background=''"
-    >
-      <strong>${product.name}</strong>
-      <div style="font-size: var(--font-size-sm); color: var(--color-gray); font-family: var(--font-mono);">
-        ${product.sku} • Voorraad: ${product.stock_total}
+  return products.map(product => {
+    // Escape quotes in product name for data attribute
+    const escapedName = product.name.replace(/'/g, "&apos;");
+    return `
+      <div 
+        class="product-select-item" 
+        data-product-id="${product.id}"
+        data-product-name="${escapedName}"
+        data-product-sku="${product.sku}"
+        data-product-stock="${product.stock_total}"
+        style="padding: var(--space-md); border-bottom: 1px solid var(--color-light-gray); cursor: pointer; transition: background 0.2s;"
+      >
+        <strong>${product.name}</strong>
+        <div style="font-size: var(--font-size-sm); color: var(--color-gray); font-family: var(--font-mono);">
+          ${product.sku} • Voorraad: ${product.stock_total}
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 /**
  * Filter products in selector
  */
-window.filterComponentProducts = function(searchTerm) {
+function filterComponentProducts(searchTerm) {
   const list = document.getElementById('component-products-list');
   if (!list) return;
 
@@ -254,12 +296,12 @@ window.filterComponentProducts = function(searchTerm) {
   
   console.log('Filtered results:', filtered.length);
   list.innerHTML = renderProductsList(filtered);
-};
+}
 
 /**
  * Select a component
  */
-window.selectComponent = function(productId, name, sku, stockTotal) {
+function selectComponent(productId, name, sku, stockTotal) {
   const quantityInput = document.getElementById('component-quantity');
   const quantity = parseInt(quantityInput?.value || 1);
 
@@ -278,7 +320,14 @@ window.selectComponent = function(productId, name, sku, stockTotal) {
     quantity
   });
 
+  // Update component list in product modal
   renderComponents();
+  
+  // Scroll to components list in product modal
+  scrollToComponentsList();
+  
+  // Update counter in component selector modal
+  updateComponentCounter();
   
   // Reset quantity input to 1
   if (quantityInput) {
@@ -289,12 +338,11 @@ window.selectComponent = function(productId, name, sku, stockTotal) {
   const searchInput = document.getElementById('component-search');
   if (searchInput) {
     searchInput.value = '';
-    // Trigger search to show "type 2 chars" message
-    window.filterComponentProducts('');
+    filterComponentProducts('');
   }
   
-  showToast('Component toegevoegd - voeg er nog een toe of sluit de modal', 'success');
-};
+  showToast(`Component toegevoegd (${currentComponents.length} totaal)`, 'success');
+}
 
 /**
  * Remove a component
@@ -302,6 +350,7 @@ window.selectComponent = function(productId, name, sku, stockTotal) {
 window.removeComponent = function(index) {
   currentComponents.splice(index, 1);
   renderComponents();
+  updateComponentCounter();
   showToast('Component verwijderd', 'success');
 };
 
@@ -329,6 +378,64 @@ export function getCurrentComponents() {
 export function clearComponents() {
   currentComponents = [];
   renderComponents();
+}
+
+/**
+ * Update component counter in selector modal
+ */
+function updateComponentCounter() {
+  const counter = document.getElementById('component-counter');
+  if (counter) {
+    counter.textContent = `${currentComponents.length} component${currentComponents.length !== 1 ? 'en' : ''} toegevoegd`;
+  }
+}
+
+/**
+ * Scroll to components list in product modal
+ */
+function scrollToComponentsList() {
+  const componentsList = document.getElementById('components-list');
+  if (componentsList && componentsList.style.display !== 'none') {
+    componentsList.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+/**
+ * Setup product selection click handlers
+ */
+function setupProductSelectionHandlers() {
+  const productsList = document.getElementById('component-products-list');
+  if (!productsList) return;
+  
+  // Use event delegation for dynamically added product items
+  productsList.addEventListener('click', (e) => {
+    const productItem = e.target.closest('.product-select-item');
+    if (!productItem) return;
+    
+    const productId = productItem.getAttribute('data-product-id');
+    const name = productItem.getAttribute('data-product-name')?.replace(/&apos;/g, "'") || '';
+    const sku = productItem.getAttribute('data-product-sku') || '';
+    const stockTotal = parseInt(productItem.getAttribute('data-product-stock') || '0');
+    
+    if (productId) {
+      selectComponent(productId, name, sku, stockTotal);
+    }
+  });
+  
+  // Add hover effect
+  productsList.addEventListener('mouseover', (e) => {
+    const productItem = e.target.closest('.product-select-item');
+    if (productItem) {
+      productItem.style.background = 'var(--color-concrete)';
+    }
+  });
+  
+  productsList.addEventListener('mouseout', (e) => {
+    const productItem = e.target.closest('.product-select-item');
+    if (productItem) {
+      productItem.style.background = '';
+    }
+  });
 }
 
 /**
