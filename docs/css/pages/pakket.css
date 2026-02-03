@@ -768,7 +768,6 @@
 .package-content__image {
   width: 100%;
   aspect-ratio: 1;
-  background-color: var(--color-off-white);
   border: 1px solid var(--border-color);
   overflow: hidden;
   display: flex;
