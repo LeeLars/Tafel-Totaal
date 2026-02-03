@@ -243,6 +243,17 @@ async function handleCSVExport() {
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
+      
+      // Handle expired/invalid token
+      if (response.status === 401) {
+        showToast('Sessie verlopen - log opnieuw in', 'error');
+        localStorage.removeItem('authToken');
+        setTimeout(() => {
+          window.location.href = '/login/?redirect=' + encodeURIComponent(window.location.pathname);
+        }, 1500);
+        return;
+      }
+      
       throw new Error(errorData.error || 'Export mislukt');
     }
     
