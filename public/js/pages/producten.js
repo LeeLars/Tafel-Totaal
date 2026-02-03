@@ -323,15 +323,15 @@ function initMobileFilters() {
 }
 
 /**
- * Load products from API
+ * Load all products from API with retry logic
  */
-async function loadProducts() {
+async function loadProducts(retryCount = 0) {
   const grid = document.getElementById('products-grid');
   if (!grid) return;
 
   grid.innerHTML = `
     <div class="tt-loader">
-      <img src="/images/loader-logo.svg" alt="Loading..." class="tt-loader__logo">
+      <img src="/images/Group 39530.svg" alt="Loading..." class="spinner" style="width: 48px; height: 48px;">
       <div class="tt-loader__text">Producten laden...</div>
     </div>
   `;
@@ -342,9 +342,24 @@ async function loadProducts() {
     applyFilters();
   } catch (error) {
     console.error('Error loading products:', error);
+    
+    // Handle rate limit with retry
+    if (error.message && error.message.includes('Too many requests') && retryCount < 2) {
+      const delay = Math.pow(2, retryCount) * 2000; // 2s, 4s
+      console.log(`Rate limited, retrying in ${delay}ms...`);
+      grid.innerHTML = `
+        <div class="tt-loader">
+          <img src="/images/Group 39530.svg" alt="Loading..." class="spinner" style="width: 48px; height: 48px;">
+          <div class="tt-loader__text">Even geduld, producten laden...</div>
+        </div>
+      `;
+      setTimeout(() => loadProducts(retryCount + 1), delay);
+      return;
+    }
+    
     grid.innerHTML = `
       <div class="packages-error">
-        <p>Kon producten niet laden. Probeer het later opnieuw.</p>
+        <p>Kon producten niet laden. ${error.message && error.message.includes('Too many requests') ? 'Te veel verzoeken, probeer het over een paar seconden opnieuw.' : 'Probeer het later opnieuw.'}</p>
         <button class="btn btn--secondary btn--sm" onclick="location.reload()">Opnieuw proberen</button>
       </div>
     `;
@@ -357,6 +372,17 @@ async function loadProducts() {
 async function loadTagGroups() {
   try {
     const response = await fetch(`${API_BASE_URL}/api/tags`);
+    
+    // Handle rate limit
+    if (response.status === 429) {
+      console.warn('Rate limited on tags, hiding tag filters');
+      const momentGroup = document.getElementById('moment-filter-group');
+      const stijlGroup = document.getElementById('stijl-filter-group');
+      if (momentGroup) momentGroup.style.display = 'none';
+      if (stijlGroup) stijlGroup.style.display = 'none';
+      return;
+    }
+    
     const result = await response.json();
     
     if (result.success) {
