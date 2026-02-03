@@ -788,7 +788,7 @@ document.getElementById('add-to-cart-btn')?.addEventListener('click', async () =
   }
 
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Toevoegen...';
+  btn.innerHTML = '<div class="spinner spinner--sm"></div> Toevoegen...';
 
   try {
     // Get the actual event date (for single-day events, this is the date user selected)

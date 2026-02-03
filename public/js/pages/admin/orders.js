@@ -3,7 +3,7 @@
  */
 
 import { adminAPI } from '../../lib/api.js';
-import { formatPrice, formatDateShort, showToast } from '../../lib/utils.js';
+import { formatPrice, formatDateShort, showToast, showConfirm } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
 
 let currentPage = 1;
@@ -67,7 +67,7 @@ function initTableInteractions() {
     }
 
     if (deleteBtn) {
-      const ok = await showConfirmModal('Bestelling verwijderen?', 'Deze actie kan niet ongedaan worden gemaakt. Wil je doorgaan?');
+      const ok = await showConfirm('Deze actie kan niet ongedaan worden gemaakt. Wil je doorgaan?', 'Bestelling Verwijderen', { destructive: true });
       if (!ok) return;
       try {
         await adminAPI.deleteOrder(id);
@@ -81,58 +81,6 @@ function initTableInteractions() {
   });
 }
 
-function showConfirmModal(title, message) {
-  return new Promise((resolve) => {
-    if (!document.getElementById('admin-confirm-modal')) {
-      const modalHtml = `
-        <div id="admin-confirm-modal-backdrop" class="modal-backdrop"></div>
-        <div id="admin-confirm-modal" class="modal">
-          <div class="modal__header">
-            <h3 class="modal__title" style="font-family: var(--font-display); text-transform: uppercase;">${title}</h3>
-            <button class="modal__close" type="button" id="admin-confirm-close">&times;</button>
-          </div>
-          <div class="modal__body">
-            <p id="admin-confirm-message">${message}</p>
-          </div>
-          <div class="modal__footer">
-            <button class="btn btn--secondary" type="button" id="admin-confirm-cancel">Annuleren</button>
-            <button class="btn btn--primary" type="button" id="admin-confirm-ok">Bevestigen</button>
-          </div>
-        </div>
-      `;
-      document.body.insertAdjacentHTML('beforeend', modalHtml);
-    }
-
-    const backdrop = document.getElementById('admin-confirm-modal-backdrop');
-    const modal = document.getElementById('admin-confirm-modal');
-    const msg = document.getElementById('admin-confirm-message');
-    const closeBtn = document.getElementById('admin-confirm-close');
-    const cancelBtn = document.getElementById('admin-confirm-cancel');
-    const okBtn = document.getElementById('admin-confirm-ok');
-    const titleEl = modal?.querySelector('.modal__title');
-
-    if (msg) msg.textContent = message;
-    if (titleEl) titleEl.textContent = title;
-
-    const cleanup = (value) => {
-      backdrop?.classList.remove('active');
-      modal?.classList.remove('active');
-      closeBtn.onclick = null;
-      cancelBtn.onclick = null;
-      okBtn.onclick = null;
-      resolve(value);
-    };
-
-    closeBtn.onclick = () => cleanup(false);
-    cancelBtn.onclick = () => cleanup(false);
-    okBtn.onclick = () => cleanup(true);
-    backdrop.onclick = () => cleanup(false);
-
-    modal?.offsetHeight;
-    backdrop?.classList.add('active');
-    modal?.classList.add('active');
-  });
-}
 
 /**
  * Initialize filters

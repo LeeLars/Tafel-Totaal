@@ -323,25 +323,18 @@ function selectComponent(productId, name, sku, stockTotal) {
   // Update component list in product modal
   renderComponents();
   
-  // Scroll to components list in product modal
-  scrollToComponentsList();
-  
-  // Update counter in component selector modal
-  updateComponentCounter();
-  
-  // Reset quantity input to 1
-  if (quantityInput) {
-    quantityInput.value = '1';
+  // Close the component selector modal
+  const selectorModal = document.getElementById('component-selector-modal');
+  if (selectorModal) {
+    selectorModal.remove();
   }
   
-  // Clear search input
-  const searchInput = document.getElementById('component-search');
-  if (searchInput) {
-    searchInput.value = '';
-    filterComponentProducts('');
-  }
+  // Scroll to components list in product modal after a short delay
+  setTimeout(() => {
+    scrollToComponentsList();
+  }, 100);
   
-  showToast(`Component toegevoegd (${currentComponents.length} totaal)`, 'success');
+  showToast(`Component toegevoegd`, 'success');
 }
 
 /**
@@ -396,7 +389,19 @@ function updateComponentCounter() {
 function scrollToComponentsList() {
   const componentsList = document.getElementById('components-list');
   if (componentsList && componentsList.style.display !== 'none') {
-    componentsList.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // Scroll to the components section in the modal
+    componentsList.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Highlight the last added component briefly
+    const componentItems = componentsList.querySelectorAll('.component-item');
+    if (componentItems.length > 0) {
+      const lastItem = componentItems[componentItems.length - 1];
+      lastItem.style.transition = 'background 0.3s ease';
+      lastItem.style.background = 'var(--color-primary-light)';
+      setTimeout(() => {
+        lastItem.style.background = 'var(--color-off-white)';
+      }, 800);
+    }
   }
 }
 

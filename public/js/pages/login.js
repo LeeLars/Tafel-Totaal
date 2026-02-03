@@ -105,7 +105,7 @@ function initLoginForm() {
 
     // Submit
     btn.disabled = true;
-    btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Inloggen...';
+    btn.innerHTML = '<div class="spinner spinner--sm"></div> Inloggen...';
 
     try {
       const response = await authAPI.login(email, password);

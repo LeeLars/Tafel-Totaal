@@ -4,7 +4,7 @@
  */
 
 import { packagesAPI } from '../lib/api.js';
-import { formatPrice } from '../lib/utils.js';
+import { formatPrice, showAlert } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
 
 const API_BASE_URL = false
@@ -37,10 +37,10 @@ async function loadFooter() {
     // Re-initialize newsletter form listener if present
     const newsletterForm = container.querySelector('#newsletter-form');
     if (newsletterForm) {
-      newsletterForm.addEventListener('submit', (e) => {
+      newsletterForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = newsletterForm.querySelector('input[type="email"]').value;
-        alert('Bedankt voor je aanmelding!');
+        await showAlert('Bedankt voor je aanmelding! We houden je op de hoogte van onze nieuwste producten en aanbiedingen.', 'Nieuwsbrief');
         newsletterForm.reset();
       });
     }

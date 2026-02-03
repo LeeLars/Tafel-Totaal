@@ -128,3 +128,115 @@ export function isValidPhone(phone) {
   const re = /^[\d\s\-\+\(\)]{9,}$/;
   return re.test(phone);
 }
+
+/**
+ * Show custom alert modal (Tafel Totaal style)
+ */
+export function showAlert(message, title = 'Melding') {
+  return new Promise((resolve) => {
+    const backdrop = document.createElement('div');
+    backdrop.className = 'custom-modal-backdrop';
+    
+    const modal = document.createElement('div');
+    modal.className = 'custom-modal custom-modal--alert';
+    modal.innerHTML = `
+      <div class="custom-modal__header">
+        <h3 class="custom-modal__title">${title}</h3>
+      </div>
+      <div class="custom-modal__body">
+        <p>${message}</p>
+      </div>
+      <div class="custom-modal__footer">
+        <button class="btn btn--primary" id="alert-ok-btn">OK</button>
+      </div>
+    `;
+    
+    backdrop.appendChild(modal);
+    document.body.appendChild(backdrop);
+    
+    const cleanup = () => {
+      backdrop.remove();
+      resolve();
+    };
+    
+    const okBtn = modal.querySelector('#alert-ok-btn');
+    okBtn.addEventListener('click', cleanup);
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) cleanup();
+    });
+    
+    // Keyboard support
+    const handleKeydown = (e) => {
+      if (e.key === 'Escape' || e.key === 'Enter') {
+        cleanup();
+        document.removeEventListener('keydown', handleKeydown);
+      }
+    };
+    document.addEventListener('keydown', handleKeydown);
+    
+    // Focus OK button
+    setTimeout(() => okBtn.focus(), 100);
+  });
+}
+
+/**
+ * Show custom confirm modal (Tafel Totaal style)
+ */
+export function showConfirm(message, title = 'Bevestiging', options = {}) {
+  return new Promise((resolve) => {
+    const {
+      confirmText = 'Bevestigen',
+      cancelText = 'Annuleren',
+      destructive = false
+    } = options;
+    
+    const backdrop = document.createElement('div');
+    backdrop.className = 'custom-modal-backdrop';
+    
+    const modal = document.createElement('div');
+    modal.className = 'custom-modal custom-modal--confirm';
+    modal.innerHTML = `
+      <div class="custom-modal__header">
+        <h3 class="custom-modal__title">${title}</h3>
+      </div>
+      <div class="custom-modal__body">
+        <p>${message}</p>
+      </div>
+      <div class="custom-modal__footer">
+        <button class="btn btn--ghost" id="confirm-cancel-btn">${cancelText}</button>
+        <button class="btn ${destructive ? 'btn--error' : 'btn--primary'}" id="confirm-ok-btn">${confirmText}</button>
+      </div>
+    `;
+    
+    backdrop.appendChild(modal);
+    document.body.appendChild(backdrop);
+    
+    const cleanup = (value) => {
+      backdrop.remove();
+      document.removeEventListener('keydown', handleKeydown);
+      resolve(value);
+    };
+    
+    const cancelBtn = modal.querySelector('#confirm-cancel-btn');
+    const okBtn = modal.querySelector('#confirm-ok-btn');
+    
+    cancelBtn.addEventListener('click', () => cleanup(false));
+    okBtn.addEventListener('click', () => cleanup(true));
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) cleanup(false);
+    });
+    
+    // Keyboard support
+    const handleKeydown = (e) => {
+      if (e.key === 'Escape') {
+        cleanup(false);
+      } else if (e.key === 'Enter') {
+        cleanup(true);
+      }
+    };
+    document.addEventListener('keydown', handleKeydown);
+    
+    // Focus confirm button
+    setTimeout(() => okBtn.focus(), 100);
+  });
+}

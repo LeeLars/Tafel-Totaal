@@ -423,7 +423,7 @@ async function handleRemoveItem(e) {
   const itemId = btn.dataset.itemId;
   
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div>';
+  btn.innerHTML = '<div class="spinner spinner--xs"></div>';
   
   const result = await removeFromCart(itemId);
   
@@ -503,11 +503,11 @@ function showClearCartModal() {
     
     if (clearBtn) {
       clearBtn.disabled = true;
-      clearBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div>';
+      clearBtn.innerHTML = '<div class="spinner spinner--xs"></div>';
     }
 
     confirmBtn.disabled = true;
-    confirmBtn.innerHTML = '<div class="spinner" style="width:16px;height:16px;"></div> Legen...';
+    confirmBtn.innerHTML = '<div class="spinner spinner--sm"></div> Legen...';
 
     const result = await clearCart();
 

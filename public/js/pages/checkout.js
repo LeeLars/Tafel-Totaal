@@ -1520,7 +1520,7 @@ async function placeOrder() {
   const btn = document.getElementById('place-order-btn');
   
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Reservering verwerken...';
+  btn.innerHTML = '<div class="spinner spinner--sm"></div> Reservering verwerken...';
 
   try {
     // Prepare order data

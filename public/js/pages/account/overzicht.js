@@ -201,7 +201,7 @@ function initLogout() {
     // Disable button and show loading
     logoutBtn.disabled = true;
     const originalHTML = logoutBtn.innerHTML;
-    logoutBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;display:inline-block;"></div> Uitloggen...';
+    logoutBtn.innerHTML = '<div class="spinner spinner--xs" style="display:inline-block;"></div> Uitloggen...';
     
     // Clear all local data first
     localStorage.clear();

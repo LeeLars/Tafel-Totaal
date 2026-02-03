@@ -116,7 +116,7 @@ function initRegisterForm() {
 
     // Submit
     btn.disabled = true;
-    btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Account aanmaken...';
+    btn.innerHTML = '<div class="spinner spinner--sm"></div> Account aanmaken...';
 
     try {
       const response = await authAPI.register({

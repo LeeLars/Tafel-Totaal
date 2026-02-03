@@ -3,7 +3,7 @@
  */
 
 import { adminAPI } from '../../lib/api.js';
-import { formatPrice, showToast } from '../../lib/utils.js';
+import { formatPrice, showToast, showConfirm } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
 
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
@@ -421,7 +421,7 @@ async function loadPackages() {
         e.preventDefault();
         e.stopPropagation();
         const packageId = btn.dataset.id;
-        if (confirm('Weet je zeker dat je dit pakket wilt verwijderen?')) {
+        if (await showConfirm('Weet je zeker dat je dit pakket wilt verwijderen?', 'Pakket Verwijderen', { destructive: true })) {
           await deletePackage(packageId);
         }
       });
@@ -651,8 +651,25 @@ function renderProductSearch(query = '') {
   const container = document.getElementById('product-results');
   if (!container) return;
 
+  // Require at least 2 characters
+  if (query && query.length < 2) {
+    container.innerHTML = '<p style="color: var(--color-gray); padding: var(--space-md); text-align: center;">Typ minimaal 2 tekens om te zoeken...</p>';
+    return;
+  }
+
+  // Show message if no products loaded yet
+  if (availableProducts.length === 0) {
+    container.innerHTML = '<p style="color: var(--color-gray); padding: var(--space-md); text-align: center;">Producten laden...</p>';
+    return;
+  }
+
   const filtered = query 
-    ? availableProducts.filter(p => p.name.toLowerCase().includes(query))
+    ? availableProducts.filter(p => {
+        const searchLower = query.toLowerCase();
+        const nameMatch = p.name && p.name.toLowerCase().includes(searchLower);
+        const skuMatch = p.sku && p.sku.toLowerCase().includes(searchLower);
+        return nameMatch || skuMatch;
+      })
     : availableProducts;
 
   // Filter out products already in package
@@ -660,7 +677,7 @@ function renderProductSearch(query = '') {
   const available = filtered.filter(p => !existingIds.has(p.id));
 
   if (available.length === 0) {
-    container.innerHTML = '<p style="color: var(--color-gray); padding: var(--space-md);">Geen producten gevonden of alle producten zijn al toegevoegd</p>';
+    container.innerHTML = '<p style="color: var(--color-gray); padding: var(--space-md); text-align: center;">Geen producten gevonden of alle producten zijn al toegevoegd</p>';
     return;
   }
 

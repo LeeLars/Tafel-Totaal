@@ -4,7 +4,7 @@
  */
 
 import { adminAPI } from '../../lib/api.js';
-import { formatPrice, formatDateShort, formatDateTime, showToast } from '../../lib/utils.js';
+import { formatPrice, formatDate, showToast, showConfirm } from '../../lib/utils.js';
 import { requireAdmin } from '../../lib/guards.js';
 
 let allOrders = [];
@@ -370,7 +370,7 @@ window.updatePickingStatus = async function(orderId, status) {
  * Mark order as complete
  */
 window.markOrderComplete = async function(orderId) {
-  if (!confirm('Order markeren als klaar voor levering?')) return;
+  if (!await showConfirm('Order markeren als klaar voor levering?', 'Bevestiging')) return;
   
   try {
     await adminAPI.updatePickingStatus(orderId, { picking_status: 'completed' });

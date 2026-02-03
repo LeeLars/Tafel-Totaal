@@ -3,7 +3,7 @@
  */
 
 import { adminAPI } from '../../lib/api.js';
-import { showToast } from '../../lib/utils.js';
+import { showToast, showConfirm } from '../../lib/utils.js';
 
 const API_BASE_URL = false 
   ? 'https://tafel-totaal-production.up.railway.app' 
@@ -330,7 +330,11 @@ async function bulkUpdateStatus(is_active) {
 async function bulkDelete() {
   if (selectedProducts.size === 0) return;
   
-  if (!confirm(`Weet je zeker dat je ${selectedProducts.size} producten wilt verwijderen? Dit kan niet ongedaan worden gemaakt.`)) {
+  if (!await showConfirm(
+    `Weet je zeker dat je ${selectedProducts.size} producten wilt verwijderen? Dit kan niet ongedaan worden gemaakt.`,
+    'Producten Verwijderen',
+    { destructive: true }
+  )) {
     return;
   }
   
