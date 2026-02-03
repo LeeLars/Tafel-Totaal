@@ -38,7 +38,10 @@ export function initCSVUpload() {
   }
   
   if (exportBtn) {
-    exportBtn.addEventListener('click', handleCSVExport);
+    exportBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleCSVExport();
+    });
   }
   
   if (templateLink) {
