@@ -225,12 +225,43 @@ async function importCSVProducts(products, mode) {
  */
 async function handleCSVExport() {
   try {
-    const url = `${API_BASE_URL}/api/admin/products/csv/export?format=labels`;
-    window.open(url, '_blank');
-    showToast('CSV wordt gedownload...', 'success');
+    showToast('CSV wordt voorbereid...', 'info');
+    
+    // Get auth token
+    const token = localStorage.getItem('authToken');
+    
+    const response = await fetch(`${API_BASE_URL}/api/admin/products/csv/export?format=labels`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+      }
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || 'Export mislukt');
+    }
+    
+    // Get the CSV content as blob
+    const blob = await response.blob();
+    
+    // Create download link
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'products-export.csv';
+    document.body.appendChild(a);
+    a.click();
+    
+    // Cleanup
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    
+    showToast('CSV gedownload!', 'success');
   } catch (error) {
     console.error('Export error:', error);
-    showToast('Export mislukt', 'error');
+    showToast(error.message || 'Export mislukt', 'error');
   }
 }
 
