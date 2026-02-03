@@ -109,6 +109,8 @@ function initLoginForm() {
 
     try {
       const response = await authAPI.login(email, password);
+      console.log('[Login] Response:', response);
+      console.log('[Login] Token in response:', response.token ? 'YES' : 'NO');
 
       if (response.success) {
         // Store user data and token in localStorage for cross-origin cookie issues
@@ -119,6 +121,9 @@ function initLoginForm() {
         // Store token for API Authorization header (cross-origin fallback)
         if (response.token) {
           localStorage.setItem('authToken', response.token);
+          console.log('[Login] Token saved to localStorage');
+        } else {
+          console.warn('[Login] No token in response!');
         }
         
         showToast('Succesvol ingelogd!', 'success');
