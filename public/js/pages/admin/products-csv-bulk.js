@@ -225,7 +225,7 @@ async function importCSVProducts(products, mode) {
  */
 async function handleCSVExport() {
   try {
-    const url = `${API_BASE_URL}/api/admin/products/csv/export`;
+    const url = `${API_BASE_URL}/api/admin/products/csv/export?format=labels`;
     window.open(url, '_blank');
     showToast('CSV wordt gedownload...', 'success');
   } catch (error) {

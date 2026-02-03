@@ -14,6 +14,7 @@ export interface ProductFilters {
 export interface ProductWithCategory extends Product {
   category_name?: string;
   subcategory_name?: string;
+  reserved_quantity?: number;
 }
 
 export const ProductModel = {

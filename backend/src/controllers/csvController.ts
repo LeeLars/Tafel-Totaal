@@ -281,44 +281,67 @@ export async function bulkUpdateStatus(req: Request, res: Response): Promise<voi
  */
 export async function exportProductsCSV(req: Request, res: Response): Promise<void> {
   try {
-    const { filters = {} } = req.query;
+    const { filters = {}, format } = req.query;
     
     const products = await ProductModel.findAll(filters as any, 10000, 0);
 
-    // CSV header
-    const headers = [
-      'sku', 'name', 'description', 'category', 'subcategory', 'service_level',
-      'price_per_day', 'damage_compensation_per_item', 'stock_total', 'stock_buffer', 'turnaround_days',
-      'length_cm', 'width_cm', 'height_cm', 'weight_kg', 'color', 'material',
-      'units_per_pack', 'pack_type', 'supplier', 'supplier_sku', 'notes', 'is_active'
-    ];
+    let headers: string[];
+    let rows: any[][];
 
-    // CSV rows
-    const rows = products.map(p => [
-      p.sku,
-      p.name,
-      p.description || '',
-      p.category_name || '',
-      p.subcategory_name || '',
-      p.service_level,
-      p.price_per_day,
-      p.damage_compensation_per_item,
-      p.stock_total,
-      p.stock_buffer,
-      p.turnaround_days,
-      p.length_cm || '',
-      p.width_cm || '',
-      p.height_cm || '',
-      p.weight_kg || '',
-      p.color || '',
-      p.material || '',
-      p.units_per_pack,
-      p.pack_type || '',
-      p.supplier || '',
-      p.supplier_sku || '',
-      p.notes || '',
-      p.is_active
-    ]);
+    // User-friendly export with Dutch labels
+    if (format === 'labels') {
+      headers = ['Afbeelding', 'Product', 'SKU', 'Categorie', 'Prijs/dag', 'Voorraad', 'Status'];
+      
+      rows = products.map(p => {
+        const imageUrl = Array.isArray(p.images) && p.images.length > 0 ? p.images[0] : '';
+        const availableStock = p.stock_total - (p.reserved_quantity || 0);
+        const status = p.is_active ? 'Actief' : 'Inactief';
+        
+        return [
+          imageUrl,
+          p.name,
+          p.sku,
+          p.category_name || '',
+          p.price_per_day,
+          availableStock,
+          status
+        ];
+      });
+    } else {
+      // Technical export (default)
+      headers = [
+        'sku', 'name', 'description', 'category', 'subcategory', 'service_level',
+        'price_per_day', 'damage_compensation_per_item', 'stock_total', 'stock_buffer', 'turnaround_days',
+        'length_cm', 'width_cm', 'height_cm', 'weight_kg', 'color', 'material',
+        'units_per_pack', 'pack_type', 'supplier', 'supplier_sku', 'notes', 'is_active'
+      ];
+
+      rows = products.map(p => [
+        p.sku,
+        p.name,
+        p.description || '',
+        p.category_name || '',
+        p.subcategory_name || '',
+        p.service_level,
+        p.price_per_day,
+        p.damage_compensation_per_item,
+        p.stock_total,
+        p.stock_buffer,
+        p.turnaround_days,
+        p.length_cm || '',
+        p.width_cm || '',
+        p.height_cm || '',
+        p.weight_kg || '',
+        p.color || '',
+        p.material || '',
+        p.units_per_pack,
+        p.pack_type || '',
+        p.supplier || '',
+        p.supplier_sku || '',
+        p.notes || '',
+        p.is_active
+      ]);
+    }
 
     // Build CSV
     const csv = [headers, ...rows]
