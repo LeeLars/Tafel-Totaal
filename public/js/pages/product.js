@@ -500,10 +500,53 @@ function updatePresetAvailability(availableStock) {
 function renderImages(images) {
   const mainImage = document.getElementById('main-image');
   const thumbsContainer = document.getElementById('image-thumbs');
+  const prevBtn = document.getElementById('gallery-prev');
+  const nextBtn = document.getElementById('gallery-next');
+  
+  let currentImageIndex = 0;
   
   // Set main image
   mainImage.src = images[0];
   mainImage.alt = currentProduct.name;
+  
+  // Show/hide navigation arrows based on number of images
+  if (images.length <= 1) {
+    if (prevBtn) prevBtn.style.display = 'none';
+    if (nextBtn) nextBtn.style.display = 'none';
+  } else {
+    if (prevBtn) prevBtn.style.display = 'flex';
+    if (nextBtn) nextBtn.style.display = 'flex';
+    
+    // Navigation arrow handlers
+    const updateImage = (index) => {
+      currentImageIndex = index;
+      mainImage.src = images[index];
+      
+      // Update active thumbnail
+      const thumbs = thumbsContainer.querySelectorAll('.package-gallery__thumb');
+      thumbs.forEach(t => t.classList.remove('active'));
+      if (thumbs[index]) thumbs[index].classList.add('active');
+    };
+    
+    prevBtn.addEventListener('click', () => {
+      const newIndex = currentImageIndex > 0 ? currentImageIndex - 1 : images.length - 1;
+      updateImage(newIndex);
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      const newIndex = currentImageIndex < images.length - 1 ? currentImageIndex + 1 : 0;
+      updateImage(newIndex);
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        prevBtn.click();
+      } else if (e.key === 'ArrowRight') {
+        nextBtn.click();
+      }
+    });
+  }
   
   // Render thumbnails if multiple images
   if (images.length > 1) {
@@ -518,6 +561,7 @@ function renderImages(images) {
       thumb.addEventListener('click', () => {
         const index = parseInt(thumb.dataset.index);
         mainImage.src = images[index];
+        currentImageIndex = index;
         
         // Update active state
         thumbsContainer.querySelectorAll('.package-gallery__thumb').forEach(t => t.classList.remove('active'));

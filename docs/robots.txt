@@ -1,0 +1,37 @@
+# Robots.txt for tafeltotaal.com
+# https://tafeltotaal.com/robots.txt
+
+User-agent: *
+
+# Allow all public pages
+Allow: /
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /admin
+
+# Disallow account pages (login-gated)
+Disallow: /account/
+Disallow: /account
+
+# Disallow checkout flow
+Disallow: /checkout/
+Disallow: /checkout
+Disallow: /checkout-succes/
+Disallow: /checkout-succes
+Disallow: /winkelwagen/
+Disallow: /winkelwagen
+Disallow: /bestelling-bevestigd
+
+# Disallow development/test pages
+Disallow: /styleguide/
+Disallow: /styleguide
+Disallow: /contact_new
+Disallow: /registreren
+
+# Disallow login page (not useful for SEO)
+Disallow: /login/
+Disallow: /login
+
+# Sitemap location
+Sitemap: https://tafeltotaal.com/sitemap.xml

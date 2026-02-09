@@ -362,14 +362,23 @@
   <!-- Scripts -->
   <script type="module">
     import { loadHeader } from '/js/components/header.js';
-    import { loadFooter } from '/js/components/footer.js';
+    import { initAnimations } from '/js/lib/animations.js';
     
     document.addEventListener('DOMContentLoaded', async () => {
       await loadHeader();
       await loadFooter();
+      initAnimations();
     });
+
+    async function loadFooter() {
+      const container = document.getElementById('footer-container');
+      if (!container) return;
+      try {
+        const response = await fetch('/components/footer.html');
+        if (response.ok) container.innerHTML = await response.text();
+      } catch (e) {}
+    }
   </script>
-  <script type="module" src="/js/lib/animations.js"></script>
   <script type="module" src="/js/pages/doelgroep.js"></script>
 </body>
 </html>
