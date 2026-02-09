@@ -331,7 +331,7 @@ async function loadProducts() {
 
   grid.innerHTML = `
     <div class="tt-loader">
-      <img src="/images/loader-logo.svg" alt="Loading..." class="tt-loader__logo">
+      <img src="/images/Group 39530.svg" alt="Loading..." class="tt-loader__logo">
       <div class="tt-loader__text">Producten laden...</div>
     </div>
   `;
