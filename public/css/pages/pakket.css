@@ -815,11 +815,21 @@
   width: 100%;
   aspect-ratio: 1;
   border: 1px solid var(--border-color);
-  overflow: hidden;
+  background-color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   padding: var(--space-sm);
+  text-decoration: none;
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.package-content__image:hover {
+  border-color: var(--color-primary);
+  box-shadow: 4px 4px 0 var(--color-primary);
+  transform: translate(-2px, -2px);
 }
 
 .package-content__image img {

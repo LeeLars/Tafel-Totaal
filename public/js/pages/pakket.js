@@ -345,12 +345,16 @@ function renderContents() {
 
     // Calculate dynamic quantity based on person count
     const displayQuantity = getQuantityMultiplier(item, persons);
+    
+    // Get product ID for link
+    const productId = item.product_id || item.product?.id || '';
+    const productLink = productId ? `/product/?id=${productId}` : '#';
 
     return `
     <div class="package-content__item">
-      <div class="package-content__image">
+      <a href="${productLink}" class="package-content__image">
         <img src="${imageUrl}" alt="${item.product?.name || item.name}" loading="lazy">
-      </div>
+      </a>
       <div class="package-content__info">
         <span class="package-content__name">${item.product?.name || item.name || 'Product'}</span>
         <span class="package-content__quantity" data-base-qty="${item.quantity || 1}">×${displayQuantity}</span>
@@ -788,7 +792,7 @@ document.getElementById('add-to-cart-btn')?.addEventListener('click', async () =
   }
 
   btn.disabled = true;
-  btn.innerHTML = '<div class="spinner spinner--sm"></div> Toevoegen...';
+  btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;"></div> Toevoegen...';
 
   try {
     // Get the actual event date (for single-day events, this is the date user selected)
