@@ -597,7 +597,7 @@ function initDatePickers() {
 
   // Single Date Picker Logic - for single day events, calculate rental period automatically
   if (eventDateInput) {
-    flatpickr(eventDateInput, {
+    const eventDatePicker = flatpickr(eventDateInput, {
       ...flatpickrConfig,
       onChange: (selectedDates, dateStr) => {
         if (!dateStr) return;
@@ -624,6 +624,9 @@ function initDatePickers() {
         updateTotalPrice();
       }
     });
+    
+    // Store reference for later use
+    eventDateInput._flatpickr = eventDatePicker;
   }
 
   // Range Date Picker Logic (for multi-day events)
@@ -721,10 +724,9 @@ function initDatePickers() {
     // This MUST be after event listeners are set up so the change event works
     const savedEventDate = getSavedEventDate();
     if (savedEventDate && savedEventDate >= today) {
-      if (eventDateInput && eventType === 'single') {
-        eventDateInput.value = savedEventDate;
-        // Trigger the change event to calculate rental period and price
-        eventDateInput.dispatchEvent(new Event('change'));
+      if (eventDateInput && eventDateInput._flatpickr && eventType === 'single') {
+        // Use Flatpickr's setDate method to properly trigger onChange
+        eventDateInput._flatpickr.setDate(savedEventDate, true);
       }
     }
   }
