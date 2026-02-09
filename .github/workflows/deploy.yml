@@ -1,0 +1,40 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to docs branch
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          # Create orphan docs branch if it doesn't exist
+          git fetch origin docs || git checkout --orphan docs
+          git checkout docs || git checkout --orphan docs
+          
+          # Remove all files
+          git rm -rf . || true
+          
+          # Copy public folder contents to root
+          git checkout main -- public
+          cp -r public/* .
+          rm -rf public
+          
+          # Copy CNAME if exists
+          git checkout main -- docs/CNAME || true
+          cp docs/CNAME . 2>/dev/null || true
+          rm -rf docs
+          
+          # Commit and push
+          git add -A
+          git commit -m "Deploy from main branch" || echo "No changes to commit"
+          git push origin docs --force
