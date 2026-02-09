@@ -140,22 +140,27 @@
   <div id="footer-container"></div>
 
   <!-- Scripts -->
-  <script src="/js/main.js" type="module"></script>
-  <script src="/js/pages/doelgroep.js" type="module"></script>
-  <script>
-    // Header & Footer Loading
-    fetch('/components/header.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('header-container').innerHTML = data;
-        import('/js/components/header.js').then(module => {
-          module.initHeader();
-        });
-      });
+  <script type="module">
+    import { loadHeader } from '/js/components/header.js';
+    import { initAnimations } from '/js/lib/animations.js';
 
-    fetch('/components/footer.html')
-      .then(response => response.text())
-      .then(data => document.getElementById('footer-container').innerHTML = data);
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadHeader();
+      await loadFooter();
+      initAnimations();
+    });
+
+    async function loadFooter() {
+      const container = document.getElementById('footer-container');
+      if (!container) return;
+      try {
+        const response = await fetch('/components/footer.html');
+        if (response.ok) container.innerHTML = await response.text();
+      } catch (e) {
+        console.error('Error loading footer:', e);
+      }
+    }
   </script>
+  <script type="module" src="/js/pages/doelgroep.js"></script>
 </body>
 </html>
