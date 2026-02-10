@@ -5,7 +5,7 @@
 import { productsAPI } from '../lib/api.js';
 import { formatPrice, calculateDays, getQueryParam, showToast, formatDateShort } from '../lib/utils.js';
 import { loadHeader } from '../components/header.js';
-import { addToCart, getLockedEventDate, isDateLocked } from '../services/cart.js';
+import { addToCart, getLockedEventDate, getLockedDates, isDateLocked } from '../services/cart.js';
 
 let currentProduct = null;
 let selectedQuantity = 1;
@@ -681,10 +681,23 @@ function initDatePickers() {
   if (dateLocked && lockedDate) {
     // Lock the date - disable Flatpickr inputs and set to locked date
     if (eventDateInput && eventDateInput._flatpickr) {
-      eventDateInput._flatpickr.setDate(lockedDate);
+      eventDateInput._flatpickr.setDate(lockedDate, true);
       eventDateInput._flatpickr.set('clickOpens', false);
       eventDateInput.style.cursor = 'not-allowed';
       eventDateInput.title = 'Datum is vergrendeld. Leeg eerst je winkelwagen om de datum te wijzigen.';
+    }
+    
+    // Ensure startDate/endDate/billingDays are set for locked dates
+    const lockedDates = getLockedDates();
+    if (lockedDates) {
+      startDate = lockedDates.start_date;
+      endDate = lockedDates.end_date;
+      if (lockedDates.event_type === 'single') {
+        billingDays = 1;
+      } else if (startDate && endDate) {
+        billingDays = calculateDays(startDate, endDate);
+      }
+      updateTotalPrice();
     }
     if (startDateInput && startDateInput._flatpickr) {
       startDateInput._flatpickr.set('clickOpens', false);
